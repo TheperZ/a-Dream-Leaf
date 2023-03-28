@@ -17,23 +17,40 @@ class HomeViewController: UIViewController {
     let titleLabel = UILabel()
     let profileButton = UIButton()
     
-    let accountSummaryContainer = UIView()
-    let accountTitleLabel = UILabel()
-    let accountMoreButon = UIButton()
+    private let accountSummaryContainer = UIView()
+    private let accountTitleLabel = UILabel()
+    private let accountMoreButon = UIButton()
     
-    let pieChart = PieChartView()
-    let dataValues = [50000, 12000]
+    private let pieChart = PieChartView()
+    private let dataValues = [50000, 12000]
     
-    let usedAmountColorView = UIView()
-    let usedAmountLabel = UILabel()
+    private let usedAmountColorView = UIView()
+    private let usedAmountLabel = UILabel()
     
-    let balanceColorView = UIView()
-    let balanceLabel = UILabel()
+    private let balanceColorView = UIView()
+    private let balanceLabel = UILabel()
     
-    let nearRestSummaryContainer = UIView()
-    let nearRestTitleLabel = UILabel()
-    let nearRestMoreButon = UIButton()
-    let nearRestSubTitleLabel = UILabel()
+    private let nearRestSummaryContainer = UIView()
+    private let nearRestTitleLabel = UILabel()
+    private let nearRestMoreButon = UIButton()
+    private let nearRestSubTitleLabel = UILabel()
+    
+    private let nearRestCollectionViewLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 140, height: 120)
+        return layout
+    }()
+    
+    private lazy var nearRestCollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: nearRestCollectionViewLayout)
+        collectionView.contentInset = .init(top: 0, left: 15, bottom: 0, right: 15)
+        collectionView.register(RestaurantCell.self, forCellWithReuseIdentifier: K.CollectionViewCellID.RestaurantCell)
+        collectionView.isScrollEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
     
     init() {
         viewModel = HomeViewModel()
@@ -53,6 +70,14 @@ class HomeViewController: UIViewController {
     }
     
     private func bind() {
+        viewModel.nearRests
+            .bind(to: nearRestCollectionView.rx.items) { collectionView, row, element in
+                let indexPath = IndexPath(row: row, section: 0)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CollectionViewCellID.RestaurantCell, for: indexPath) as! RestaurantCell
+                cell.setUp(with: element)
+                return cell
+            }
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -106,6 +131,7 @@ class HomeViewController: UIViewController {
         nearRestSubTitleLabel.text = "우리동네 꿈나무 식당을 소개합니다 :)"
         nearRestSubTitleLabel.font = .systemFont(ofSize: 14, weight: .regular)
         nearRestSubTitleLabel.textColor = .black
+
         
     }
     
@@ -120,7 +146,7 @@ class HomeViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [nearRestTitleLabel, nearRestMoreButon, nearRestSubTitleLabel].forEach {
+        [nearRestTitleLabel, nearRestMoreButon, nearRestSubTitleLabel, nearRestCollectionView].forEach {
             nearRestSummaryContainer.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -179,6 +205,11 @@ class HomeViewController: UIViewController {
             
             nearRestSubTitleLabel.topAnchor.constraint(equalTo: nearRestTitleLabel.bottomAnchor,constant: 15),
             nearRestSubTitleLabel.leadingAnchor.constraint(equalTo: nearRestTitleLabel.leadingAnchor),
+            
+            nearRestCollectionView.topAnchor.constraint(equalTo: nearRestSubTitleLabel.bottomAnchor, constant: 10),
+            nearRestCollectionView.leadingAnchor.constraint(equalTo: nearRestTitleLabel.leadingAnchor),
+            nearRestCollectionView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor),
+            nearRestCollectionView.bottomAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: -10)
             
         ].forEach { $0.isActive = true}
     }

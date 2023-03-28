@@ -12,6 +12,9 @@
 		BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */; };
 		BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */; };
 		BFB0A8F829D17737003D3E6E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFB0A8F729D17737003D3E6E /* LaunchScreen.storyboard */; };
+		BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8FB29D288FA003D3E6E /* RestaurantCell.swift */; };
+		BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8FD29D28906003D3E6E /* RestaurantCellViewModel.swift */; };
+		BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8FF29D28DA7003D3E6E /* Constant.swift */; };
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
@@ -24,6 +27,9 @@
 		BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		BFB0A8F729D17737003D3E6E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BFB0A8FB29D288FA003D3E6E /* RestaurantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCell.swift; sourceTree = "<group>"; };
+		BFB0A8FD29D28906003D3E6E /* RestaurantCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCellViewModel.swift; sourceTree = "<group>"; };
+		BFB0A8FF29D28DA7003D3E6E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aDreamLeaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCF86B029CD56400075D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,10 +88,20 @@
 		BFB0A8F429D13AB6003D3E6E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				BFB0A8F929D288AF003D3E6E /* RestaurantCell */,
 				BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */,
 				BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		BFB0A8F929D288AF003D3E6E /* RestaurantCell */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A8FB29D288FA003D3E6E /* RestaurantCell.swift */,
+				BFB0A8FD29D28906003D3E6E /* RestaurantCellViewModel.swift */,
+			);
+			path = RestaurantCell;
 			sourceTree = "<group>";
 		};
 		BFCF86A429CD56400075D5E6 = {
@@ -114,6 +130,7 @@
 				BFCF86B929CD56410075D5E6 /* Assets.xcassets */,
 				BFCF86BE29CD56410075D5E6 /* Info.plist */,
 				BFB0A8F729D17737003D3E6E /* LaunchScreen.storyboard */,
+				BFB0A8FF29D28DA7003D3E6E /* Constant.swift */,
 			);
 			path = aDreamLeaf;
 			sourceTree = "<group>";
@@ -240,7 +257,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
+				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
+				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
