@@ -8,24 +8,32 @@
 
 /* Begin PBXBuildFile section */
 		5CBBED1D18E2C433F04D5620 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */; };
+		BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */; };
+		BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */; };
+		BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */; };
+		BFB0A8F829D17737003D3E6E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFB0A8F729D17737003D3E6E /* LaunchScreen.storyboard */; };
+		BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8FB29D288FA003D3E6E /* RestaurantCell.swift */; };
+		BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8FD29D28906003D3E6E /* RestaurantCellViewModel.swift */; };
+		BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8FF29D28DA7003D3E6E /* Constant.swift */; };
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
-		BFCF86B529CD56400075D5E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B429CD56400075D5E6 /* ViewController.swift */; };
-		BFCF86B829CD56400075D5E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B629CD56400075D5E6 /* Main.storyboard */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
-		BFCF86BD29CD56410075D5E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86BB29CD56410075D5E6 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB525C44AF9A47DAD1A7E663 /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
+		BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		BFB0A8F729D17737003D3E6E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BFB0A8FB29D288FA003D3E6E /* RestaurantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCell.swift; sourceTree = "<group>"; };
+		BFB0A8FD29D28906003D3E6E /* RestaurantCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCellViewModel.swift; sourceTree = "<group>"; };
+		BFB0A8FF29D28DA7003D3E6E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aDreamLeaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCF86B029CD56400075D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		BFCF86B429CD56400075D5E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		BFCF86B729CD56400075D5E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BFCF86B929CD56410075D5E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		BFCF86BC29CD56410075D5E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BFCF86BE29CD56410075D5E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2EF012196A74CB53DF4F89C /* Pods-aDreamLeaf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.release.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -48,8 +56,52 @@
 				AB525C44AF9A47DAD1A7E663 /* Pods-aDreamLeaf.debug.xcconfig */,
 				E2EF012196A74CB53DF4F89C /* Pods-aDreamLeaf.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A8EE29D13586003D3E6E /* Main */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		BFB0A8EE29D13586003D3E6E /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A8F429D13AB6003D3E6E /* Home */,
+				BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		BFB0A8F329D13715003D3E6E /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				BFCF86B029CD56400075D5E6 /* AppDelegate.swift */,
+				BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
+		BFB0A8F429D13AB6003D3E6E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A8F929D288AF003D3E6E /* RestaurantCell */,
+				BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */,
+				BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		BFB0A8F929D288AF003D3E6E /* RestaurantCell */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A8FB29D288FA003D3E6E /* RestaurantCell.swift */,
+				BFB0A8FD29D28906003D3E6E /* RestaurantCellViewModel.swift */,
+			);
+			path = RestaurantCell;
 			sourceTree = "<group>";
 		};
 		BFCF86A429CD56400075D5E6 = {
@@ -73,13 +125,12 @@
 		BFCF86AF29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXGroup;
 			children = (
-				BFCF86B029CD56400075D5E6 /* AppDelegate.swift */,
-				BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */,
-				BFCF86B429CD56400075D5E6 /* ViewController.swift */,
-				BFCF86B629CD56400075D5E6 /* Main.storyboard */,
+				BFB0A8ED29D13577003D3E6E /* Presentation */,
+				BFB0A8F329D13715003D3E6E /* Delegate */,
 				BFCF86B929CD56410075D5E6 /* Assets.xcassets */,
-				BFCF86BB29CD56410075D5E6 /* LaunchScreen.storyboard */,
 				BFCF86BE29CD56410075D5E6 /* Info.plist */,
+				BFB0A8F729D17737003D3E6E /* LaunchScreen.storyboard */,
+				BFB0A8FF29D28DA7003D3E6E /* Constant.swift */,
 			);
 			path = aDreamLeaf;
 			sourceTree = "<group>";
@@ -152,9 +203,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFCF86BD29CD56410075D5E6 /* LaunchScreen.storyboard in Resources */,
 				BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */,
-				BFCF86B829CD56400075D5E6 /* Main.storyboard in Resources */,
+				BFB0A8F829D17737003D3E6E /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,32 +257,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFCF86B529CD56400075D5E6 /* ViewController.swift in Sources */,
+				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
+				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
+				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
+				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
+				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
+				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		BFCF86B629CD56400075D5E6 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFCF86B729CD56400075D5E6 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		BFCF86BB29CD56410075D5E6 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFCF86BC29CD56410075D5E6 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		BFCF86BF29CD56410075D5E6 /* Debug */ = {
@@ -362,9 +398,10 @@
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -372,9 +409,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.suneom.aDreamLeaf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -391,9 +431,10 @@
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -401,9 +442,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.suneom.aDreamLeaf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
