@@ -44,7 +44,7 @@ class HomeViewController: UIViewController {
     
     private lazy var nearRestCollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: nearRestCollectionViewLayout)
-        collectionView.contentInset = .init(top: 0, left: 15, bottom: 0, right: 15)
+        collectionView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 15)
         collectionView.register(RestaurantCell.self, forCellWithReuseIdentifier: K.CollectionViewCellID.RestaurantCell)
         collectionView.isScrollEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
@@ -78,6 +78,16 @@ class HomeViewController: UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        profileButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                let vc = LoginViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -89,7 +99,6 @@ class HomeViewController: UIViewController {
         
         let profileButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
         let profileButtonImg = UIImage(systemName: "person.circle", withConfiguration: profileButtonConfig)?.withRenderingMode(.alwaysTemplate)
-        profileButton.tintColor = .black
         profileButton.setImage(profileButtonImg, for: .normal)
         profileButton.tintColor = .black
         
@@ -110,10 +119,12 @@ class HomeViewController: UIViewController {
         
         usedAmountColorView.backgroundColor = UIColor.link
         usedAmountLabel.text = "사용액: \(dataValues[0])원"
+        usedAmountLabel.textColor = .black
         usedAmountLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
         balanceColorView.backgroundColor = UIColor.systemMint
         balanceLabel.text = "잔액: \(dataValues[1])원"
+        balanceLabel.textColor = .black
         balanceLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
         
@@ -153,7 +164,7 @@ class HomeViewController: UIViewController {
         
         [
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             profileButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             profileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
