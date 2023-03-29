@@ -78,6 +78,16 @@ class HomeViewController: UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        profileButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                let vc = LoginViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -89,7 +99,6 @@ class HomeViewController: UIViewController {
         
         let profileButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
         let profileButtonImg = UIImage(systemName: "person.circle", withConfiguration: profileButtonConfig)?.withRenderingMode(.alwaysTemplate)
-        profileButton.tintColor = .black
         profileButton.setImage(profileButtonImg, for: .normal)
         profileButton.tintColor = .black
         
@@ -153,7 +162,7 @@ class HomeViewController: UIViewController {
         
         [
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             profileButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             profileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
