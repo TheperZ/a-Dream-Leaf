@@ -44,7 +44,7 @@ class HomeViewController: UIViewController {
     
     private lazy var nearRestCollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: nearRestCollectionViewLayout)
-        collectionView.contentInset = .init(top: 0, left: 15, bottom: 0, right: 15)
+        collectionView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 15)
         collectionView.register(RestaurantCell.self, forCellWithReuseIdentifier: K.CollectionViewCellID.RestaurantCell)
         collectionView.isScrollEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
@@ -119,10 +119,12 @@ class HomeViewController: UIViewController {
         
         usedAmountColorView.backgroundColor = UIColor.link
         usedAmountLabel.text = "사용액: \(dataValues[0])원"
+        usedAmountLabel.textColor = .black
         usedAmountLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
         balanceColorView.backgroundColor = UIColor.systemMint
         balanceLabel.text = "잔액: \(dataValues[1])원"
+        balanceLabel.textColor = .black
         balanceLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
         
