@@ -55,6 +55,8 @@ class HomeViewController: UIViewController {
     init() {
         viewModel = HomeViewModel()
         super.init(nibName: nil, bundle: nil)
+        tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), tag: 1)
+        tabBarItem.imageInsets = .init(top: 10, left: 0, bottom: -10, right: 0)
     }
     
     required init?(coder: NSCoder) {
