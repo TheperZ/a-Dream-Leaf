@@ -82,7 +82,7 @@ class HomeViewController: UIViewController {
         profileButton.rx.tap
             .asDriver()
             .drive(onNext: {
-                let vc = LoginViewController()
+                let vc = UINavigationController(rootViewController: LoginViewController())
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)

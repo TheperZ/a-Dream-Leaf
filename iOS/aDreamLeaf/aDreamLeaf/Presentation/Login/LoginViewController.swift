@@ -13,7 +13,7 @@ class LoginViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: LoginViewModel
     
-    private let backButton = UIButton()
+    private let backButton = UIBarButtonItem()
     
     private let contentView = UIView()
     
@@ -55,6 +55,13 @@ class LoginViewController: UIViewController {
                 self.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
+        
+        signInButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(SignInViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -63,8 +70,9 @@ class LoginViewController: UIViewController {
         
         let backButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
         let backButtonImg = UIImage(systemName: "chevron.left", withConfiguration: backButtonConfig)?.withRenderingMode(.alwaysTemplate)
-        backButton.setImage(backButtonImg, for: .normal)
+        backButton.image = backButtonImg
         backButton.tintColor = .black
+        self.navigationItem.leftBarButtonItem = backButton
         
         titleLabel.text = "꿈나무 한입"
         titleLabel.font = .systemFont(ofSize: 40, weight: .heavy)
@@ -114,7 +122,7 @@ class LoginViewController: UIViewController {
     
     private func layout() {
         
-        [backButton, contentView].forEach {
+        [contentView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -126,9 +134,6 @@ class LoginViewController: UIViewController {
         }
         
         [
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            
             contentView.widthAnchor.constraint(equalToConstant: 300),
             contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
