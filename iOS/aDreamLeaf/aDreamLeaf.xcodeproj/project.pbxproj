@@ -25,6 +25,8 @@
 		BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */; };
 		BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91629D55851003D3E6E /* SearchViewModel.swift */; };
 		BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91829D55870003D3E6E /* SearchViewController.swift */; };
+		BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */; };
+		BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A92029D6B53F003D3E6E /* SearchCell.swift */; };
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
@@ -50,6 +52,8 @@
 		BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		BFB0A91629D55851003D3E6E /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		BFB0A91829D55870003D3E6E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellViewModel.swift; sourceTree = "<group>"; };
+		BFB0A92029D6B53F003D3E6E /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aDreamLeaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCF86B029CD56400075D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +86,7 @@
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				BFB0A91C29D6B4F2003D3E6E /* Components */,
 				BFB0A91029D550C0003D3E6E /* MyPage */,
 				BFB0A90B29D52166003D3E6E /* SignIn */,
 				BFB0A90129D2B9BF003D3E6E /* Login */,
@@ -112,7 +117,6 @@
 		BFB0A8F429D13AB6003D3E6E /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				BFB0A8F929D288AF003D3E6E /* RestaurantCell */,
 				BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */,
 				BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */,
 			);
@@ -171,6 +175,24 @@
 				BFB0A91829D55870003D3E6E /* SearchViewController.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		BFB0A91C29D6B4F2003D3E6E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A91D29D6B4FE003D3E6E /* SearchCell */,
+				BFB0A8F929D288AF003D3E6E /* RestaurantCell */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		BFB0A91D29D6B4FE003D3E6E /* SearchCell */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A92029D6B53F003D3E6E /* SearchCell.swift */,
+				BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */,
+			);
+			path = SearchCell;
 			sourceTree = "<group>";
 		};
 		BFCF86A429CD56400075D5E6 = {
@@ -328,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFB0A90329D2B9CD003D3E6E /* LoginViewController.swift in Sources */,
+				BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */,
 				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
 				BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */,
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
@@ -336,6 +359,7 @@
 				BFB0A90D29D5217B003D3E6E /* SignInViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
+				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
 				BFB0A90F29D5219A003D3E6E /* SignInViewModel.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,

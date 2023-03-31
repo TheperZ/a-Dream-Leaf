@@ -14,6 +14,10 @@ struct K {
         static let height = UIScreen.main.bounds.height
     }
     
+    struct TableViewCellID {
+        static let SearchCell = "SearchCell"
+    }
+    
     struct CollectionViewCellID {
         static let RestaurantCell = "RestaurantCell"
     }

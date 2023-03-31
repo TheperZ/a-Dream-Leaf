@@ -11,4 +11,6 @@ import RxRelay
 
 struct SearchViewModel {
     let disposeBag = DisposeBag()
+    
+    let list = Observable.just([("피자스쿨 염창역점", 0.4, 4.5, true, true), ("다원레스토랑", 1.2, 4.9, true, false), ("할범탕수육 본점", 0.4, 4.2, false, true)])
 }
