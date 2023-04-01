@@ -10,7 +10,8 @@ import UIKit
 class MainViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.setViewControllers([HomeViewController(), UIViewController()], animated: true)
+        self.tabBar.backgroundColor = UIColor(named: "mainColor")
+        self.tabBar.tintColor = UIColor(named: "subColor")
+        self.setViewControllers([HomeViewController(), UINavigationController(rootViewController: SearchViewController())], animated: true)
     }
 }

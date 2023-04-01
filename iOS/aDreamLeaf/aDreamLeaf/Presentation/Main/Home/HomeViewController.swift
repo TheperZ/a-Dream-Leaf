@@ -55,6 +55,8 @@ class HomeViewController: UIViewController {
     init() {
         viewModel = HomeViewModel()
         super.init(nibName: nil, bundle: nil)
+        tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), tag: 1)
+        tabBarItem.imageInsets = .init(top: 10, left: 0, bottom: -10, right: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -82,7 +84,8 @@ class HomeViewController: UIViewController {
         profileButton.rx.tap
             .asDriver()
             .drive(onNext: {
-                let vc = LoginViewController()
+//                let vc = UINavigationController(rootViewController: LoginViewController())
+                let vc = MyPageViewController()
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)
@@ -163,7 +166,7 @@ class HomeViewController: UIViewController {
         }
         
         [
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             profileButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),

@@ -6,8 +6,19 @@
 //
 
 import Foundation
+import UIKit
 
 struct K {
+    struct ScreenSize {
+        static let width = UIScreen.main.bounds.width
+        static let height = UIScreen.main.bounds.height
+    }
+    
+    struct TableViewCellID {
+        static let SearchCell = "SearchCell"
+        static let SimpleReviewCell = "SimpleReviewCell"
+    }
+    
     struct CollectionViewCellID {
         static let RestaurantCell = "RestaurantCell"
     }

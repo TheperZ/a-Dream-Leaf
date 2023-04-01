@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		5CBBED1D18E2C433F04D5620 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */; };
+		BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */; };
+		BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */; };
+		BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */; };
+		BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */; };
 		BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */; };
 		BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */; };
 		BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */; };
@@ -19,6 +23,14 @@
 		BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90429D2B9D4003D3E6E /* LoginViewModel.swift */; };
 		BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90729D2C66D003D3E6E /* UIView.swift */; };
 		BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90929D2C6A7003D3E6E /* UITextField.swift */; };
+		BFB0A90D29D5217B003D3E6E /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */; };
+		BFB0A90F29D5219A003D3E6E /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */; };
+		BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91129D550CD003D3E6E /* MyPageViewModel.swift */; };
+		BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */; };
+		BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91629D55851003D3E6E /* SearchViewModel.swift */; };
+		BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91829D55870003D3E6E /* SearchViewController.swift */; };
+		BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */; };
+		BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A92029D6B53F003D3E6E /* SearchCell.swift */; };
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
@@ -27,6 +39,10 @@
 /* Begin PBXFileReference section */
 		67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB525C44AF9A47DAD1A7E663 /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
+		BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewModel.swift; sourceTree = "<group>"; };
+		BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewController.swift; sourceTree = "<group>"; };
+		BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCell.swift; sourceTree = "<group>"; };
+		BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCellViewModel.swift; sourceTree = "<group>"; };
 		BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +54,14 @@
 		BFB0A90429D2B9D4003D3E6E /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		BFB0A90729D2C66D003D3E6E /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		BFB0A90929D2C6A7003D3E6E /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
+		BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		BFB0A91129D550CD003D3E6E /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
+		BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
+		BFB0A91629D55851003D3E6E /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		BFB0A91829D55870003D3E6E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellViewModel.swift; sourceTree = "<group>"; };
+		BFB0A92029D6B53F003D3E6E /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aDreamLeaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCF86B029CD56400075D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,9 +91,31 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */,
+				BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */,
+			);
+			path = StoreDetail;
+			sourceTree = "<group>";
+		};
+		BF6E4BCF29D7E9AA00D67F22 /* SimpleReviewCell */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */,
+				BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */,
+			);
+			path = SimpleReviewCell;
+			sourceTree = "<group>";
+		};
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */,
+				BFB0A91C29D6B4F2003D3E6E /* Components */,
+				BFB0A91029D550C0003D3E6E /* MyPage */,
+				BFB0A90B29D52166003D3E6E /* SignIn */,
 				BFB0A90129D2B9BF003D3E6E /* Login */,
 				BFB0A8EE29D13586003D3E6E /* Main */,
 			);
@@ -79,6 +125,7 @@
 		BFB0A8EE29D13586003D3E6E /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				BFB0A91529D55844003D3E6E /* Search */,
 				BFB0A8F429D13AB6003D3E6E /* Home */,
 				BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */,
 			);
@@ -97,7 +144,6 @@
 		BFB0A8F429D13AB6003D3E6E /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				BFB0A8F929D288AF003D3E6E /* RestaurantCell */,
 				BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */,
 				BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */,
 			);
@@ -129,6 +175,52 @@
 				BFB0A90929D2C6A7003D3E6E /* UITextField.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		BFB0A90B29D52166003D3E6E /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */,
+				BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */,
+			);
+			path = SignIn;
+			sourceTree = "<group>";
+		};
+		BFB0A91029D550C0003D3E6E /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A91129D550CD003D3E6E /* MyPageViewModel.swift */,
+				BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */,
+			);
+			path = MyPage;
+			sourceTree = "<group>";
+		};
+		BFB0A91529D55844003D3E6E /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A91629D55851003D3E6E /* SearchViewModel.swift */,
+				BFB0A91829D55870003D3E6E /* SearchViewController.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		BFB0A91C29D6B4F2003D3E6E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E4BCF29D7E9AA00D67F22 /* SimpleReviewCell */,
+				BFB0A91D29D6B4FE003D3E6E /* SearchCell */,
+				BFB0A8F929D288AF003D3E6E /* RestaurantCell */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		BFB0A91D29D6B4FE003D3E6E /* SearchCell */ = {
+			isa = PBXGroup;
+			children = (
+				BFB0A92029D6B53F003D3E6E /* SearchCell.swift */,
+				BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */,
+			);
+			path = SearchCell;
 			sourceTree = "<group>";
 		};
 		BFCF86A429CD56400075D5E6 = {
@@ -286,15 +378,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFB0A90329D2B9CD003D3E6E /* LoginViewController.swift in Sources */,
+				BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */,
 				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
+				BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */,
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
+				BFB0A90D29D5217B003D3E6E /* SignInViewController.swift in Sources */,
+				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
+				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
+				BFB0A90F29D5219A003D3E6E /* SignInViewModel.swift in Sources */,
+				BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
+				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
+				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,
+				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
+				BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
+				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,
 			);
@@ -431,7 +535,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -464,7 +568,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
