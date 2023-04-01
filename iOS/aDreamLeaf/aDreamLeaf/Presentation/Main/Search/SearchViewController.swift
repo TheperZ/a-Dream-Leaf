@@ -63,6 +63,12 @@ class SearchViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        tableView.rx.itemSelected
+            .asDriver()
+            .drive(onNext: { _ in
+                self.navigationController?.pushViewController(StoreDetailViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
         
     }    
     
@@ -124,7 +130,7 @@ class SearchViewController: UIViewController {
         }
         
         [
-            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             searchTextField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor),
             
