@@ -29,6 +29,9 @@ class SimpleReviewCell: UITableViewCell {
     }
     
     private func attribute() {
+        
+        contentView.backgroundColor = .white
+        
         nicknameLabel.text = viewModel.nickname
         nicknameLabel.font = .systemFont(ofSize: 16, weight: .light)
         nicknameLabel.textColor = .black

@@ -74,6 +74,7 @@ class SearchViewController: UIViewController {
     
     private func attribute() {
         view.backgroundColor = .white
+        tableView.backgroundColor = .white
         
         searchTextField.textColor = .black
         searchTextField.font = .systemFont(ofSize: 16, weight: .regular)

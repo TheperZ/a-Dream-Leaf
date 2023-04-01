@@ -132,6 +132,7 @@ class StoreDetailViewController: UIViewController {
         reviewTitle.semanticContentAttribute = .forceRightToLeft
         
         reviewTableView.isScrollEnabled = false
+        reviewTableView.backgroundColor = .white
     }
     
     private func layout() {

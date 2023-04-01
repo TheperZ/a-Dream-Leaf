@@ -166,7 +166,7 @@ class HomeViewController: UIViewController {
         }
         
         [
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             profileButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
