@@ -73,6 +73,7 @@ class SearchViewController: UIViewController {
     }    
     
     private func attribute() {
+    
         view.backgroundColor = .white
         tableView.backgroundColor = .white
         
