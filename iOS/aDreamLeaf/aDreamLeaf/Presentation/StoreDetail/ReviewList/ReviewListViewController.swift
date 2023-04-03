@@ -1,5 +1,5 @@
 //
-//  ReviewViewController.swift
+//  ReviewListViewController.swift
 //  aDreamLeaf
 //
 //  Created by 엄태양 on 2023/04/02.
@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ReviewViewController : UIViewController {
+class ReviewListViewController : UIViewController {
     private let disposeBag = DisposeBag()
-    private let viewModel: ReviewViewModel
+    private let viewModel: ReviewListViewModel
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -23,7 +23,7 @@ class ReviewViewController : UIViewController {
     private let rightButton = UIButton()
     
     init() {
-        viewModel = ReviewViewModel()
+        viewModel = ReviewListViewModel()
         super.init(nibName: nil, bundle: nil)
     }
     

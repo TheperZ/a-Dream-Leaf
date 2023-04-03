@@ -67,6 +67,13 @@ class StoreDetailViewController: UIViewController {
         reviewTitle.rx.tap
             .asDriver()
             .drive(onNext: {
+                self.navigationController?.pushViewController(ReviewListViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        reviewButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
                 self.navigationController?.pushViewController(ReviewViewController(), animated: true)
             })
             .disposed(by: disposeBag)
