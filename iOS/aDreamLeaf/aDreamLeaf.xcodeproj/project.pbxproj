@@ -29,8 +29,8 @@
 		BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90429D2B9D4003D3E6E /* LoginViewModel.swift */; };
 		BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90729D2C66D003D3E6E /* UIView.swift */; };
 		BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90929D2C6A7003D3E6E /* UITextField.swift */; };
-		BFB0A90D29D5217B003D3E6E /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */; };
-		BFB0A90F29D5219A003D3E6E /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */; };
+		BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90C29D5217B003D3E6E /* SignUpViewController.swift */; };
+		BFB0A90F29D5219A003D3E6E /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90E29D5219A003D3E6E /* SignUpViewModel.swift */; };
 		BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91129D550CD003D3E6E /* MyPageViewModel.swift */; };
 		BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */; };
 		BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91629D55851003D3E6E /* SearchViewModel.swift */; };
@@ -66,8 +66,8 @@
 		BFB0A90429D2B9D4003D3E6E /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		BFB0A90729D2C66D003D3E6E /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		BFB0A90929D2C6A7003D3E6E /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
-		BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
-		BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		BFB0A90C29D5217B003D3E6E /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		BFB0A90E29D5219A003D3E6E /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		BFB0A91129D550CD003D3E6E /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		BFB0A91629D55851003D3E6E /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 				BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */,
 				BFB0A91C29D6B4F2003D3E6E /* Components */,
 				BFB0A91029D550C0003D3E6E /* MyPage */,
-				BFB0A90B29D52166003D3E6E /* SignIn */,
+				BFB0A90B29D52166003D3E6E /* SignUp */,
 				BFB0A90129D2B9BF003D3E6E /* Login */,
 				BFB0A8EE29D13586003D3E6E /* Main */,
 			);
@@ -218,13 +218,13 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		BFB0A90B29D52166003D3E6E /* SignIn */ = {
+		BFB0A90B29D52166003D3E6E /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */,
-				BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */,
+				BFB0A90C29D5217B003D3E6E /* SignUpViewController.swift */,
+				BFB0A90E29D5219A003D3E6E /* SignUpViewModel.swift */,
 			);
-			path = SignIn;
+			path = SignUp;
 			sourceTree = "<group>";
 		};
 		BFB0A91029D550C0003D3E6E /* MyPage */ = {
@@ -429,12 +429,12 @@
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
-				BFB0A90D29D5217B003D3E6E /* SignInViewController.swift in Sources */,
+				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
-				BFB0A90F29D5219A003D3E6E /* SignInViewModel.swift in Sources */,
+				BFB0A90F29D5219A003D3E6E /* SignUpViewModel.swift in Sources */,
 				BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
