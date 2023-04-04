@@ -120,12 +120,12 @@ class HomeViewController: UIViewController {
         pieChart.legend.enabled = false
         self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: dataValues))
         
-        usedAmountColorView.backgroundColor = UIColor.link
+        usedAmountColorView.backgroundColor = UIColor(white: 0.85, alpha: 1)
         usedAmountLabel.text = "사용액: \(dataValues[0])원"
         usedAmountLabel.textColor = .black
         usedAmountLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
-        balanceColorView.backgroundColor = UIColor.systemMint
+        balanceColorView.backgroundColor = UIColor(named: "subColor")!
         balanceLabel.text = "잔액: \(dataValues[1])원"
         balanceLabel.textColor = .black
         balanceLabel.font = .systemFont(ofSize: 15, weight: .regular)
@@ -259,6 +259,6 @@ extension HomeViewController {
     }
     
     private func colorsOfCharts() -> [UIColor] {
-        return [UIColor.link, UIColor.systemMint]
+        return [UIColor(white: 0.85, alpha: 1), UIColor(named: "subColor")!]
     }
 }
