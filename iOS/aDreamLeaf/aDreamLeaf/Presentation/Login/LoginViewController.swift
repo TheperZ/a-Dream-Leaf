@@ -59,7 +59,7 @@ class LoginViewController: UIViewController {
         signInButton.rx.tap
             .asDriver()
             .drive(onNext: {
-                self.navigationController?.pushViewController(SignInViewController(), animated: true)
+                self.navigationController?.pushViewController(SignUpViewController(), animated: true)
             })
             .disposed(by: disposeBag)
     }

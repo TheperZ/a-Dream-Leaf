@@ -1,5 +1,5 @@
 //
-//  SignInViewController.swift
+//  SignUpViewController.swift
 //  aDreamLeaf
 //
 //  Created by 엄태양 on 2023/03/30.
@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class SignInViewController: UIViewController {
+class SignUpViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    private let viewModel: SignInViewModel
+    private let viewModel: SignUpViewModel
     
     let titleLabel = UILabel()
     
@@ -26,6 +26,8 @@ class SignInViewController: UIViewController {
     private let emailTextField = UITextField()
     private let emailUnderLine = UIView()
     
+    private let emailAuthButton = UIButton()
+    
     private let pwdLabel = UILabel()
     private let pwdTextField = UITextField()
     private let pwdUnderLine = UIView()
@@ -34,10 +36,10 @@ class SignInViewController: UIViewController {
     private let pwdCheckTextField = UITextField()
     private let pwdCheckUnderLine = UIView()
     
-    private let signInButton = UIButton()
+    private let signUpButton = UIButton()
     
     init() {
-        viewModel = SignInViewModel()
+        viewModel = SignUpViewModel()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -87,6 +89,16 @@ class SignInViewController: UIViewController {
         emailTextField.textColor = .black
         emailTextField.font = .systemFont(ofSize: 20, weight: .regular)
         emailTextField.keyboardType = .emailAddress
+        
+        
+        emailAuthButton.backgroundColor = .white
+        emailAuthButton.setTitle("인증", for: .normal)
+        emailAuthButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        emailAuthButton.setTitleColor(.black, for: .normal)
+        emailAuthButton.layer.cornerRadius = 10
+        emailAuthButton.layer.borderColor = UIColor.black.cgColor
+        emailAuthButton.layer.borderWidth = 0.7
+        
         emailUnderLine.backgroundColor = .lightGray
         
         pwdLabel.text = "비밀번호"
@@ -107,11 +119,11 @@ class SignInViewController: UIViewController {
         pwdCheckTextField.keyboardType = .emailAddress
         pwdCheckUnderLine.backgroundColor = .lightGray
         
-        signInButton.backgroundColor = UIColor(named: "mainColor")
-        signInButton.setTitle("회원가입 하기", for: .normal)
-        signInButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        signInButton.setTitleColor(.black, for: .normal)
-        signInButton.layer.cornerRadius = 10
+        signUpButton.backgroundColor = UIColor(named: "mainColor")
+        signUpButton.setTitle("회원가입 하기", for: .normal)
+        signUpButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        signUpButton.setTitleColor(.black, for: .normal)
+        signUpButton.layer.cornerRadius = 10
     }
     
     private func layout() {
@@ -121,7 +133,7 @@ class SignInViewController: UIViewController {
         self.scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [titleLabel, nameLabel, nameTextField, nameUnderLine, emailLabel, emailTextField, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signInButton].forEach {
+        [titleLabel, nameLabel, nameTextField, nameUnderLine, emailLabel, emailTextField, emailAuthButton, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -161,7 +173,12 @@ class SignInViewController: UIViewController {
             
             emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5),
             emailTextField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailTextField.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            emailTextField.trailingAnchor.constraint(equalTo: emailAuthButton.leadingAnchor),
+            
+            emailAuthButton.centerYAnchor.constraint(equalTo: emailTextField.centerYAnchor),
+            emailAuthButton.widthAnchor.constraint(equalToConstant: 60),
+            emailAuthButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            emailAuthButton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor, constant: -10 ),
             
             emailUnderLine.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
             emailUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
@@ -194,11 +211,11 @@ class SignInViewController: UIViewController {
             pwdCheckUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             pwdCheckUnderLine.heightAnchor.constraint(equalToConstant: 1),
             
-            signInButton.topAnchor.constraint(equalTo: pwdCheckUnderLine.bottomAnchor, constant: 30),
-            signInButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            signInButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            signInButton.heightAnchor.constraint(equalToConstant: 45),
-            signInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            signUpButton.topAnchor.constraint(equalTo: pwdCheckUnderLine.bottomAnchor, constant: 30),
+            signUpButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            signUpButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            signUpButton.heightAnchor.constraint(equalToConstant: 45),
+            signUpButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
             
         ].forEach { $0.isActive = true}
     }

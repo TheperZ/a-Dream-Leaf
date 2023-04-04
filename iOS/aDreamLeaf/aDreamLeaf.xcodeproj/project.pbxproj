@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		5CBBED1D18E2C433F04D5620 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */; };
+		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
+		BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */; };
+		BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */; };
+		BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3029D93D1600014E05 /* ReviewCellVIewModel.swift */; };
+		BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3629DA62FD00014E05 /* ReviewViewModel.swift */; };
+		BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3829DA631B00014E05 /* ReviewViewController.swift */; };
 		BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */; };
 		BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */; };
 		BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */; };
@@ -23,8 +29,8 @@
 		BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90429D2B9D4003D3E6E /* LoginViewModel.swift */; };
 		BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90729D2C66D003D3E6E /* UIView.swift */; };
 		BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90929D2C6A7003D3E6E /* UITextField.swift */; };
-		BFB0A90D29D5217B003D3E6E /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */; };
-		BFB0A90F29D5219A003D3E6E /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */; };
+		BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90C29D5217B003D3E6E /* SignUpViewController.swift */; };
+		BFB0A90F29D5219A003D3E6E /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A90E29D5219A003D3E6E /* SignUpViewModel.swift */; };
 		BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91129D550CD003D3E6E /* MyPageViewModel.swift */; };
 		BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */; };
 		BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91629D55851003D3E6E /* SearchViewModel.swift */; };
@@ -39,6 +45,12 @@
 /* Begin PBXFileReference section */
 		67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB525C44AF9A47DAD1A7E663 /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
+		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
+		BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
+		BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
+		BF15AB3029D93D1600014E05 /* ReviewCellVIewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCellVIewModel.swift; sourceTree = "<group>"; };
+		BF15AB3629DA62FD00014E05 /* ReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewModel.swift; sourceTree = "<group>"; };
+		BF15AB3829DA631B00014E05 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewModel.swift; sourceTree = "<group>"; };
 		BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewController.swift; sourceTree = "<group>"; };
 		BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCell.swift; sourceTree = "<group>"; };
@@ -54,8 +66,8 @@
 		BFB0A90429D2B9D4003D3E6E /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		BFB0A90729D2C66D003D3E6E /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		BFB0A90929D2C6A7003D3E6E /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
-		BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
-		BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		BFB0A90C29D5217B003D3E6E /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		BFB0A90E29D5219A003D3E6E /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		BFB0A91129D550CD003D3E6E /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		BFB0A91329D550ED003D3E6E /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		BFB0A91629D55851003D3E6E /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
@@ -91,11 +103,39 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		BF15AB2429D92F2500014E05 /* ReviewList */ = {
+			isa = PBXGroup;
+			children = (
+				BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */,
+				BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */,
+			);
+			path = ReviewList;
+			sourceTree = "<group>";
+		};
+		BF15AB2929D93C0000014E05 /* ReviewCell */ = {
+			isa = PBXGroup;
+			children = (
+				BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */,
+				BF15AB3029D93D1600014E05 /* ReviewCellVIewModel.swift */,
+			);
+			path = ReviewCell;
+			sourceTree = "<group>";
+		};
+		BF15AB3529DA62F700014E05 /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				BF15AB3629DA62FD00014E05 /* ReviewViewModel.swift */,
+				BF15AB3829DA631B00014E05 /* ReviewViewController.swift */,
+			);
+			path = Review;
+			sourceTree = "<group>";
+		};
 		BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */ = {
 			isa = PBXGroup;
 			children = (
 				BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */,
 				BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */,
+				BF15AB2429D92F2500014E05 /* ReviewList */,
 			);
 			path = StoreDetail;
 			sourceTree = "<group>";
@@ -112,10 +152,11 @@
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				BF15AB3529DA62F700014E05 /* Review */,
 				BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */,
 				BFB0A91C29D6B4F2003D3E6E /* Components */,
 				BFB0A91029D550C0003D3E6E /* MyPage */,
-				BFB0A90B29D52166003D3E6E /* SignIn */,
+				BFB0A90B29D52166003D3E6E /* SignUp */,
 				BFB0A90129D2B9BF003D3E6E /* Login */,
 				BFB0A8EE29D13586003D3E6E /* Main */,
 			);
@@ -177,13 +218,13 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		BFB0A90B29D52166003D3E6E /* SignIn */ = {
+		BFB0A90B29D52166003D3E6E /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				BFB0A90C29D5217B003D3E6E /* SignInViewController.swift */,
-				BFB0A90E29D5219A003D3E6E /* SignInViewModel.swift */,
+				BFB0A90C29D5217B003D3E6E /* SignUpViewController.swift */,
+				BFB0A90E29D5219A003D3E6E /* SignUpViewModel.swift */,
 			);
-			path = SignIn;
+			path = SignUp;
 			sourceTree = "<group>";
 		};
 		BFB0A91029D550C0003D3E6E /* MyPage */ = {
@@ -207,6 +248,7 @@
 		BFB0A91C29D6B4F2003D3E6E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BF15AB2929D93C0000014E05 /* ReviewCell */,
 				BF6E4BCF29D7E9AA00D67F22 /* SimpleReviewCell */,
 				BFB0A91D29D6B4FE003D3E6E /* SearchCell */,
 				BFB0A8F929D288AF003D3E6E /* RestaurantCell */,
@@ -379,24 +421,30 @@
 			files = (
 				BFB0A90329D2B9CD003D3E6E /* LoginViewController.swift in Sources */,
 				BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */,
+				BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */,
+				BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */,
 				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
+				BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */,
 				BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */,
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
-				BFB0A90D29D5217B003D3E6E /* SignInViewController.swift in Sources */,
+				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
-				BFB0A90F29D5219A003D3E6E /* SignInViewModel.swift in Sources */,
+				BFB0A90F29D5219A003D3E6E /* SignUpViewModel.swift in Sources */,
 				BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,
 				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
 				BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */,
+				BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */,
+				BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
+				BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */,
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,

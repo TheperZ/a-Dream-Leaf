@@ -30,6 +30,7 @@ class StoreDetailViewController: UIViewController {
     
     private let reviewTitle = UIButton()
     private let reviewTableView = UITableView()
+    private let reviewButton = UIButton()
     
     init() {
         viewModel = StoreDetailViewModel()
@@ -61,6 +62,20 @@ class StoreDetailViewController: UIViewController {
                 
                 return cell
             }
+            .disposed(by: disposeBag)
+        
+        reviewTitle.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(ReviewListViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        reviewButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(ReviewViewController(), animated: true)
+            })
             .disposed(by: disposeBag)
     }
     
@@ -133,6 +148,14 @@ class StoreDetailViewController: UIViewController {
         
         reviewTableView.isScrollEnabled = false
         reviewTableView.backgroundColor = .white
+        
+        reviewButton.backgroundColor = .white
+        reviewButton.setTitle("리뷰 작성", for: .normal)
+        reviewButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        reviewButton.setTitleColor(.black, for: .normal)
+        reviewButton.layer.cornerRadius = 10
+        reviewButton.layer.borderColor = UIColor.black.cgColor
+        reviewButton.layer.borderWidth = 0.5
     }
     
     private func layout() {
@@ -142,7 +165,7 @@ class StoreDetailViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [nameLabel, addressLabel, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView].forEach {
+        [nameLabel, addressLabel, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView, reviewButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -205,7 +228,13 @@ class StoreDetailViewController: UIViewController {
             reviewTableView.leadingAnchor.constraint(equalTo: divider.leadingAnchor),
             reviewTableView.trailingAnchor.constraint(equalTo: divider.trailingAnchor),
             reviewTableView.heightAnchor.constraint(equalToConstant: 150),
-            reviewTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
+            
+            
+            reviewButton.topAnchor.constraint(equalTo: reviewTableView.bottomAnchor, constant: 10),
+            reviewButton.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
+            reviewButton.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),
+            reviewButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
+            
         ].forEach { $0.isActive = true }
     }
 }
