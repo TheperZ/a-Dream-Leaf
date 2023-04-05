@@ -16,7 +16,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene  = (scene as? UIWindowScene) else { return }
         
+        
         self.window = UIWindow(windowScene: windowScene)
+        
+        if #available(iOS 13.0, *) {
+            self.window?.overrideUserInterfaceStyle = .light // 라이트모드만 지원하기
+        //    self.window?.overrideUserInterfaceStyle = .dark // 다크모드만 지원하기
+        }
+        
         let rootViewController = MainViewController()
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()

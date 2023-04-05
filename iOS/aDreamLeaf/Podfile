@@ -10,5 +10,5 @@ target 'aDreamLeaf' do
     pod 'RxSwift', '6.5.0'
     pod 'RxCocoa', '6.5.0'
     pod 'Charts'
-
+    pod "MonthYearPicker", '~> 4.0.2'
 end
