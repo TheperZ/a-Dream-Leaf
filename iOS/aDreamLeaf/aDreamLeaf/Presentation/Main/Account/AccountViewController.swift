@@ -27,7 +27,7 @@ class AccountViewController: UIChartViewController {
     override init() {
         viewModel = AccountViewModel()
         super.init()
-        tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "wonsign"), tag: 1)
+        tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "tree"), tag: 1)
     }
     
     required init?(coder: NSCoder) {
