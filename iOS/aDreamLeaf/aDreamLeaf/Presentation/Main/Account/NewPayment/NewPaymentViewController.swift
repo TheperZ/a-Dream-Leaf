@@ -86,6 +86,7 @@ class NewPaymentViewController: UIViewController {
         datePicker.maximumDate = Date()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .wheels
+        datePicker.locale = Locale(identifier: "ko-KR")
         
         [divider1, divider2].forEach {
             $0.backgroundColor = .white
@@ -122,9 +123,9 @@ class NewPaymentViewController: UIViewController {
             dateLabel.heightAnchor.constraint(equalToConstant: 20),
             
             datePicker.centerYAnchor.constraint(equalTo: dateLabel.centerYAnchor),
-            datePicker.leadingAnchor.constraint(equalTo: dateLabel.trailingAnchor),
             datePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             datePicker.heightAnchor.constraint(equalToConstant: 50),
+            datePicker.widthAnchor.constraint(equalToConstant: 230),
             
             divider1.heightAnchor.constraint(equalToConstant: 0.5),
             divider1.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 15),

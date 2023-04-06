@@ -66,6 +66,8 @@ class AccountViewController: UIChartViewController {
         
         view.backgroundColor = .white
         
+        navigationController?.navigationBar.tintColor = .black
+        
         titleLabel.text = "가계부"
         titleLabel.font = .systemFont(ofSize: 25, weight: .bold)
         titleLabel.textColor = .black
