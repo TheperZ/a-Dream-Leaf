@@ -44,6 +44,7 @@
 		BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A92029D6B53F003D3E6E /* SearchCell.swift */; };
 		BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */; };
 		BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */; };
+		BFCC911129DE9D6A00A37470 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911029DE9D6A00A37470 /* Number.swift */; };
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
@@ -88,6 +89,7 @@
 		BFB0A92029D6B53F003D3E6E /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewModel.swift; sourceTree = "<group>"; };
 		BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewController.swift; sourceTree = "<group>"; };
+		BFCC911029DE9D6A00A37470 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
 		BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aDreamLeaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCF86B029CD56400075D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -290,8 +292,8 @@
 		BFB0A91C29D6B4F2003D3E6E /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				BF6761B829DD3ECF00A47207 /* ExpenditureCell */,
 				BF6761B529DD33B700A47207 /* ChartView */,
+				BF6761B829DD3ECF00A47207 /* ExpenditureCell */,
 				BF15AB2929D93C0000014E05 /* ReviewCell */,
 				BF6E4BCF29D7E9AA00D67F22 /* SimpleReviewCell */,
 				BFB0A91D29D6B4FE003D3E6E /* SearchCell */,
@@ -318,6 +320,14 @@
 			path = NewPayment;
 			sourceTree = "<group>";
 		};
+		BFCC910F29DE9D6300A37470 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				BFCC911029DE9D6A00A37470 /* Number.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		BFCF86A429CD56400075D5E6 = {
 			isa = PBXGroup;
 			children = (
@@ -339,6 +349,7 @@
 		BFCF86AF29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXGroup;
 			children = (
+				BFCC910F29DE9D6300A37470 /* Util */,
 				BFB0A90629D2C664003D3E6E /* Extension */,
 				BFB0A8ED29D13577003D3E6E /* Presentation */,
 				BFB0A8F329D13715003D3E6E /* Delegate */,
@@ -484,6 +495,7 @@
 				BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */,
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
+				BFCC911129DE9D6A00A37470 /* Number.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,

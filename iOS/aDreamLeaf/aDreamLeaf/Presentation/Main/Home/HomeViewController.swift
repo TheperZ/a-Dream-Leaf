@@ -121,12 +121,12 @@ class HomeViewController: UIViewController {
         self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: dataValues))
         
         usedAmountColorView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        usedAmountLabel.text = "사용액: \(dataValues[0])원"
+        usedAmountLabel.text = "사용액: \(NumberUtil.commaString(dataValues[0])!)원"
         usedAmountLabel.textColor = .black
         usedAmountLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
         balanceColorView.backgroundColor = UIColor(named: "subColor")!
-        balanceLabel.text = "잔액: \(dataValues[1])원"
+        balanceLabel.text = "잔액: \(NumberUtil.commaString(dataValues[1])!)원"
         balanceLabel.textColor = .black
         balanceLabel.font = .systemFont(ofSize: 15, weight: .regular)
         

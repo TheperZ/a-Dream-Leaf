@@ -41,7 +41,7 @@ class ExpenditureCell: UITableViewCell {
         titleLabel.textColor = .black
         titleLabel.textAlignment = .left
         
-        costLabel.text = "\(viewModel.cost)원"
+        costLabel.text = "\(NumberUtil.commaString(viewModel.cost)!)원"
         costLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         costLabel.textColor = UIColor(named: "subColor")
         costLabel.textAlignment = .right
