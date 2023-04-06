@@ -15,6 +15,8 @@ class AccountViewController: UIChartViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: AccountViewModel
     
+    private let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: nil, action: nil)
+    
     private let titleLabel = UILabel()
     private let datePicker = MonthYearPickerView(frame: CGRect(x: 0, y: 0, width: 0, height: 70))
     
@@ -54,6 +56,13 @@ class AccountViewController: UIChartViewController {
             }
             .disposed(by: disposeBag)
         
+        settingButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(AccountSettingViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
         addButton.rx.tap
             .asDriver()
             .drive(onNext: {
@@ -66,6 +75,7 @@ class AccountViewController: UIChartViewController {
         
         view.backgroundColor = .white
         
+        navigationItem.rightBarButtonItem = settingButton
         navigationController?.navigationBar.tintColor = .black
         
         titleLabel.text = "가계부"

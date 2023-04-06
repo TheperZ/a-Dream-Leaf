@@ -45,6 +45,8 @@
 		BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */; };
 		BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */; };
 		BFCC911129DE9D6A00A37470 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911029DE9D6A00A37470 /* Number.swift */; };
+		BFCC911429DEDE1C00A37470 /* AccountSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911329DEDE1C00A37470 /* AccountSettingViewModel.swift */; };
+		BFCC911629DEDE2300A37470 /* AccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911529DEDE2300A37470 /* AccountSettingViewController.swift */; };
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
@@ -90,6 +92,8 @@
 		BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewModel.swift; sourceTree = "<group>"; };
 		BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewController.swift; sourceTree = "<group>"; };
 		BFCC911029DE9D6A00A37470 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
+		BFCC911329DEDE1C00A37470 /* AccountSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingViewModel.swift; sourceTree = "<group>"; };
+		BFCC911529DEDE2300A37470 /* AccountSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingViewController.swift; sourceTree = "<group>"; };
 		BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aDreamLeaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCF86B029CD56400075D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +153,7 @@
 		BF6761B029DD315C00A47207 /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				BFCC911229DEDE1200A37470 /* AccountSetting */,
 				BFCC910A29DE929600A37470 /* NewPayment */,
 				BF6761B129DD316600A47207 /* AccountViewModel.swift */,
 				BF6761B329DD31BE00A47207 /* AccountViewController.swift */,
@@ -328,6 +333,15 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		BFCC911229DEDE1200A37470 /* AccountSetting */ = {
+			isa = PBXGroup;
+			children = (
+				BFCC911329DEDE1C00A37470 /* AccountSettingViewModel.swift */,
+				BFCC911529DEDE2300A37470 /* AccountSettingViewController.swift */,
+			);
+			path = AccountSetting;
+			sourceTree = "<group>";
+		};
 		BFCF86A429CD56400075D5E6 = {
 			isa = PBXGroup;
 			children = (
@@ -492,6 +506,7 @@
 				BF6761BC29DD3F5600A47207 /* ExpenditureCell.swift in Sources */,
 				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
 				BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */,
+				BFCC911429DEDE1C00A37470 /* AccountSettingViewModel.swift in Sources */,
 				BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */,
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
@@ -501,6 +516,7 @@
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
+				BFCC911629DEDE2300A37470 /* AccountSettingViewController.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
 				BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */,
 				BFB0A90F29D5219A003D3E6E /* SignUpViewModel.swift in Sources */,
