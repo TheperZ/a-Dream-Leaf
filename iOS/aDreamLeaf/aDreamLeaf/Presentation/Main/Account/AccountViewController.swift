@@ -53,6 +53,13 @@ class AccountViewController: UIChartViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        addButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(NewPaymentViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
