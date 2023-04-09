@@ -14,6 +14,11 @@
 		BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3029D93D1600014E05 /* ReviewCellVIewModel.swift */; };
 		BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3629DA62FD00014E05 /* ReviewViewModel.swift */; };
 		BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3829DA631B00014E05 /* ReviewViewController.swift */; };
+		BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B129DD316600A47207 /* AccountViewModel.swift */; };
+		BF6761B429DD31BE00A47207 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B329DD31BE00A47207 /* AccountViewController.swift */; };
+		BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B629DD33C600A47207 /* UIChartViewController.swift */; };
+		BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */; };
+		BF6761BC29DD3F5600A47207 /* ExpenditureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761BB29DD3F5600A47207 /* ExpenditureCell.swift */; };
 		BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */; };
 		BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */; };
 		BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */; };
@@ -37,6 +42,11 @@
 		BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91829D55870003D3E6E /* SearchViewController.swift */; };
 		BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */; };
 		BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A92029D6B53F003D3E6E /* SearchCell.swift */; };
+		BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */; };
+		BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */; };
+		BFCC911129DE9D6A00A37470 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911029DE9D6A00A37470 /* Number.swift */; };
+		BFCC911429DEDE1C00A37470 /* AccountSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911329DEDE1C00A37470 /* AccountSettingViewModel.swift */; };
+		BFCC911629DEDE2300A37470 /* AccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911529DEDE2300A37470 /* AccountSettingViewController.swift */; };
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
@@ -51,6 +61,11 @@
 		BF15AB3029D93D1600014E05 /* ReviewCellVIewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCellVIewModel.swift; sourceTree = "<group>"; };
 		BF15AB3629DA62FD00014E05 /* ReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewModel.swift; sourceTree = "<group>"; };
 		BF15AB3829DA631B00014E05 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
+		BF6761B129DD316600A47207 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
+		BF6761B329DD31BE00A47207 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		BF6761B629DD33C600A47207 /* UIChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIChartViewController.swift; sourceTree = "<group>"; };
+		BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureCellViewModel.swift; sourceTree = "<group>"; };
+		BF6761BB29DD3F5600A47207 /* ExpenditureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureCell.swift; sourceTree = "<group>"; };
 		BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewModel.swift; sourceTree = "<group>"; };
 		BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewController.swift; sourceTree = "<group>"; };
 		BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCell.swift; sourceTree = "<group>"; };
@@ -74,6 +89,11 @@
 		BFB0A91829D55870003D3E6E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellViewModel.swift; sourceTree = "<group>"; };
 		BFB0A92029D6B53F003D3E6E /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewModel.swift; sourceTree = "<group>"; };
+		BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewController.swift; sourceTree = "<group>"; };
+		BFCC911029DE9D6A00A37470 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
+		BFCC911329DEDE1C00A37470 /* AccountSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingViewModel.swift; sourceTree = "<group>"; };
+		BFCC911529DEDE2300A37470 /* AccountSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingViewController.swift; sourceTree = "<group>"; };
 		BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aDreamLeaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCF86B029CD56400075D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -130,6 +150,34 @@
 			path = Review;
 			sourceTree = "<group>";
 		};
+		BF6761B029DD315C00A47207 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				BFCC911229DEDE1200A37470 /* AccountSetting */,
+				BFCC910A29DE929600A37470 /* NewPayment */,
+				BF6761B129DD316600A47207 /* AccountViewModel.swift */,
+				BF6761B329DD31BE00A47207 /* AccountViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		BF6761B529DD33B700A47207 /* ChartView */ = {
+			isa = PBXGroup;
+			children = (
+				BF6761B629DD33C600A47207 /* UIChartViewController.swift */,
+			);
+			path = ChartView;
+			sourceTree = "<group>";
+		};
+		BF6761B829DD3ECF00A47207 /* ExpenditureCell */ = {
+			isa = PBXGroup;
+			children = (
+				BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */,
+				BF6761BB29DD3F5600A47207 /* ExpenditureCell.swift */,
+			);
+			path = ExpenditureCell;
+			sourceTree = "<group>";
+		};
 		BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +214,7 @@
 		BFB0A8EE29D13586003D3E6E /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				BF6761B029DD315C00A47207 /* Account */,
 				BFB0A91529D55844003D3E6E /* Search */,
 				BFB0A8F429D13AB6003D3E6E /* Home */,
 				BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */,
@@ -248,6 +297,8 @@
 		BFB0A91C29D6B4F2003D3E6E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BF6761B529DD33B700A47207 /* ChartView */,
+				BF6761B829DD3ECF00A47207 /* ExpenditureCell */,
 				BF15AB2929D93C0000014E05 /* ReviewCell */,
 				BF6E4BCF29D7E9AA00D67F22 /* SimpleReviewCell */,
 				BFB0A91D29D6B4FE003D3E6E /* SearchCell */,
@@ -263,6 +314,32 @@
 				BFB0A91E29D6B513003D3E6E /* SearchCellViewModel.swift */,
 			);
 			path = SearchCell;
+			sourceTree = "<group>";
+		};
+		BFCC910A29DE929600A37470 /* NewPayment */ = {
+			isa = PBXGroup;
+			children = (
+				BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */,
+				BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */,
+			);
+			path = NewPayment;
+			sourceTree = "<group>";
+		};
+		BFCC910F29DE9D6300A37470 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				BFCC911029DE9D6A00A37470 /* Number.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		BFCC911229DEDE1200A37470 /* AccountSetting */ = {
+			isa = PBXGroup;
+			children = (
+				BFCC911329DEDE1C00A37470 /* AccountSettingViewModel.swift */,
+				BFCC911529DEDE2300A37470 /* AccountSettingViewController.swift */,
+			);
+			path = AccountSetting;
 			sourceTree = "<group>";
 		};
 		BFCF86A429CD56400075D5E6 = {
@@ -286,6 +363,7 @@
 		BFCF86AF29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXGroup;
 			children = (
+				BFCC910F29DE9D6300A37470 /* Util */,
 				BFB0A90629D2C664003D3E6E /* Extension */,
 				BFB0A8ED29D13577003D3E6E /* Presentation */,
 				BFB0A8F329D13715003D3E6E /* Delegate */,
@@ -421,21 +499,29 @@
 			files = (
 				BFB0A90329D2B9CD003D3E6E /* LoginViewController.swift in Sources */,
 				BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */,
+				BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */,
+				BF6761B429DD31BE00A47207 /* AccountViewController.swift in Sources */,
 				BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */,
 				BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */,
+				BF6761BC29DD3F5600A47207 /* ExpenditureCell.swift in Sources */,
 				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
 				BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */,
+				BFCC911429DEDE1C00A37470 /* AccountSettingViewModel.swift in Sources */,
 				BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */,
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
+				BFCC911129DE9D6A00A37470 /* Number.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
+				BFCC911629DEDE2300A37470 /* AccountSettingViewController.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
+				BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */,
 				BFB0A90F29D5219A003D3E6E /* SignUpViewModel.swift in Sources */,
 				BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */,
+				BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,
@@ -445,7 +531,9 @@
 				BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
 				BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */,
+				BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */,
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
+				BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,

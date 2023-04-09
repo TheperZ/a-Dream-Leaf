@@ -18,6 +18,7 @@ struct K {
         static let SearchCell = "SearchCell"
         static let SimpleReviewCell = "SimpleReviewCell"
         static let ReviewCell = "ReviewCell"
+        static let ExpenditureCell = "ExpenditureCell"
     }
     
     struct CollectionViewCellID {
