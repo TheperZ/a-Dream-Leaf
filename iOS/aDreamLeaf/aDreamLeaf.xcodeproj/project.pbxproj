@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5CBBED1D18E2C433F04D5620 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */; };
+		9F05C7DCF9273327BB618310 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */; };
 		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
 		BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */; };
 		BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */; };
@@ -53,8 +53,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB525C44AF9A47DAD1A7E663 /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
+		0192F08C6E377D04B56FDC3F /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
+		17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A44D9FCDECC8EAD7D6A77BB9 /* Pods-aDreamLeaf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.release.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.release.xcconfig"; sourceTree = "<group>"; };
 		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
 		BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
@@ -99,7 +100,6 @@
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B929CD56410075D5E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFCF86BE29CD56410075D5E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E2EF012196A74CB53DF4F89C /* Pods-aDreamLeaf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.release.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,18 +107,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5CBBED1D18E2C433F04D5620 /* Pods_aDreamLeaf.framework in Frameworks */,
+				9F05C7DCF9273327BB618310 /* Pods_aDreamLeaf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		84C0439267675780D1E6D44D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9D2C06413A16DF0CA62D7221 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AB525C44AF9A47DAD1A7E663 /* Pods-aDreamLeaf.debug.xcconfig */,
-				E2EF012196A74CB53DF4F89C /* Pods-aDreamLeaf.release.xcconfig */,
+				0192F08C6E377D04B56FDC3F /* Pods-aDreamLeaf.debug.xcconfig */,
+				A44D9FCDECC8EAD7D6A77BB9 /* Pods-aDreamLeaf.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -348,7 +356,7 @@
 				BFCF86AF29CD56400075D5E6 /* aDreamLeaf */,
 				BFCF86AE29CD56400075D5E6 /* Products */,
 				9D2C06413A16DF0CA62D7221 /* Pods */,
-				D7D4F3D182597622BB59D214 /* Frameworks */,
+				84C0439267675780D1E6D44D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -375,14 +383,6 @@
 			path = aDreamLeaf;
 			sourceTree = "<group>";
 		};
-		D7D4F3D182597622BB59D214 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				67A6F08B5FE0536326EA064D /* Pods_aDreamLeaf.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -390,11 +390,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BFCF86C129CD56410075D5E6 /* Build configuration list for PBXNativeTarget "aDreamLeaf" */;
 			buildPhases = (
-				376AB73345EAE634A5BF6692 /* [CP] Check Pods Manifest.lock */,
+				AEF2451555F7D02AC8F78B77 /* [CP] Check Pods Manifest.lock */,
 				BFCF86A929CD56400075D5E6 /* Sources */,
 				BFCF86AA29CD56400075D5E6 /* Frameworks */,
 				BFCF86AB29CD56400075D5E6 /* Resources */,
-				C1227649A45FF029DB746FE0 /* [CP] Embed Pods Frameworks */,
+				2406031F154CCE6A46E800F9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -451,7 +451,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		376AB73345EAE634A5BF6692 /* [CP] Check Pods Manifest.lock */ = {
+		2406031F154CCE6A46E800F9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AEF2451555F7D02AC8F78B77 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -471,23 +488,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C1227649A45FF029DB746FE0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -659,7 +659,7 @@
 		};
 		BFCF86C229CD56410075D5E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB525C44AF9A47DAD1A7E663 /* Pods-aDreamLeaf.debug.xcconfig */;
+			baseConfigurationReference = 0192F08C6E377D04B56FDC3F /* Pods-aDreamLeaf.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -692,7 +692,7 @@
 		};
 		BFCF86C329CD56410075D5E6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E2EF012196A74CB53DF4F89C /* Pods-aDreamLeaf.release.xcconfig */;
+			baseConfigurationReference = A44D9FCDECC8EAD7D6A77BB9 /* Pods-aDreamLeaf.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
