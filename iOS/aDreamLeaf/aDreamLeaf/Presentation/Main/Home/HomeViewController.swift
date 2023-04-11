@@ -71,8 +71,8 @@ class HomeViewController: UIChartViewController {
         profileButton.rx.tap
             .asDriver()
             .drive(onNext: {
-//                let vc = UINavigationController(rootViewController: LoginViewController())
-                let vc = MyPageViewController()
+                let vc = UINavigationController(rootViewController: LoginViewController())
+//                let vc = MyPageViewController()
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)
