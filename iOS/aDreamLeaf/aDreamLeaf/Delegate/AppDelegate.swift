@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseCore
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,6 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarApperance.backgroundColor = UIColor(named: "mainColor")
         UITabBar.appearance().scrollEdgeAppearance = tabBarApperance
         UITabBar.appearance().standardAppearance = tabBarApperance
+        
+        
+        FirebaseApp.configure()
         
         
         return true
