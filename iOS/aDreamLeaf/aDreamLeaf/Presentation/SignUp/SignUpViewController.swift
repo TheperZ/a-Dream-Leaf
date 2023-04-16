@@ -18,10 +18,6 @@ class SignUpViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let nameLabel = UILabel()
-    private let nameTextField = UITextField()
-    private let nameUnderLine = UIView()
-    
     private let emailLabel = UILabel()
     private let emailTextField = UITextField()
     private let emailUnderLine = UIView()
@@ -72,15 +68,6 @@ class SignUpViewController: UIViewController {
         titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
         titleLabel.textColor = .black
         titleLabel.textAlignment = .center
-        
-        nameLabel.text = "이름"
-        nameLabel.textColor = .black
-        nameLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        
-        nameTextField.textColor = .black
-        nameTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        nameTextField.keyboardType = .emailAddress
-        nameUnderLine.backgroundColor = .lightGray
         
         emailLabel.text = "이메일"
         emailLabel.textColor = .black
@@ -133,7 +120,7 @@ class SignUpViewController: UIViewController {
         self.scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [titleLabel, nameLabel, nameTextField, nameUnderLine, emailLabel, emailTextField, emailAuthButton, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
+        [titleLabel, emailLabel, emailTextField, emailAuthButton, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -154,20 +141,7 @@ class SignUpViewController: UIViewController {
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.widthAnchor.constraint(equalToConstant: 300),
             
-            nameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
-            nameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor,constant: 10),
-            nameTextField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            nameTextField.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            nameUnderLine.topAnchor.constraint(equalTo: nameTextField.bottomAnchor),
-            nameUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            nameUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            nameUnderLine.heightAnchor.constraint(equalToConstant: 1),
-            
-            emailLabel.topAnchor.constraint(equalTo: nameUnderLine.bottomAnchor, constant: 30),
+            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
             emailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             emailLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
