@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import FirebaseAuth
 
 class SignUpViewController: UIViewController {
     private let disposeBag = DisposeBag()
@@ -56,7 +57,26 @@ class SignUpViewController: UIViewController {
     }
     
     private func bind() {
-        
+//        emailAuthButton.rx.tap
+//            .asDriver()
+//            .drive(onNext: {
+//                guard let email = self.emailTextField.text else { return }
+//                
+//                let actionCodeSettings = ActionCodeSettings()
+//                actionCodeSettings.url = URL(string: "https://adreamleaf.firebaseapp.com/?email=\(email)")
+//                actionCodeSettings.handleCodeInApp = true
+//                actionCodeSettings.setIOSBundleID(Bundle.main.bundleIdentifier!)
+//                
+//                Auth.auth().sendSignInLink(toEmail: email,
+//                                           actionCodeSettings: actionCodeSettings) { error in
+//                    if let error = error {
+//                        print("email not sent \"\(error.localizedDescription)\"")
+//                    } else {
+//                        print("email sent")
+//                    }
+//                }
+//            })
+//            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -76,7 +96,7 @@ class SignUpViewController: UIViewController {
         emailTextField.textColor = .black
         emailTextField.font = .systemFont(ofSize: 20, weight: .regular)
         emailTextField.keyboardType = .emailAddress
-        
+        emailTextField.autocapitalizationType = .none
         
         emailAuthButton.backgroundColor = .white
         emailAuthButton.setTitle("인증", for: .normal)
@@ -147,7 +167,7 @@ class SignUpViewController: UIViewController {
             
             emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5),
             emailTextField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailTextField.trailingAnchor.constraint(equalTo: emailAuthButton.leadingAnchor),
+            emailTextField.trailingAnchor.constraint(equalTo: emailAuthButton.leadingAnchor, constant: -10),
             
             emailAuthButton.centerYAnchor.constraint(equalTo: emailTextField.centerYAnchor),
             emailAuthButton.widthAnchor.constraint(equalToConstant: 60),
