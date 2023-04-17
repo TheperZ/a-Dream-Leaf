@@ -23,8 +23,6 @@ class SignUpViewController: UIViewController {
     private let emailTextField = UITextField()
     private let emailUnderLine = UIView()
     
-    private let emailAuthButton = UIButton()
-    
     private let pwdLabel = UILabel()
     private let pwdTextField = UITextField()
     private let pwdUnderLine = UIView()
@@ -57,26 +55,45 @@ class SignUpViewController: UIViewController {
     }
     
     private func bind() {
-//        emailAuthButton.rx.tap
-//            .asDriver()
-//            .drive(onNext: {
-//                guard let email = self.emailTextField.text else { return }
-//                
-//                let actionCodeSettings = ActionCodeSettings()
-//                actionCodeSettings.url = URL(string: "https://adreamleaf.firebaseapp.com/?email=\(email)")
-//                actionCodeSettings.handleCodeInApp = true
-//                actionCodeSettings.setIOSBundleID(Bundle.main.bundleIdentifier!)
-//                
-//                Auth.auth().sendSignInLink(toEmail: email,
-//                                           actionCodeSettings: actionCodeSettings) { error in
-//                    if let error = error {
-//                        print("email not sent \"\(error.localizedDescription)\"")
-//                    } else {
-//                        print("email sent")
-//                    }
-//                }
-//            })
-//            .disposed(by: disposeBag)
+        
+        emailTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.email)
+            .disposed(by: disposeBag)
+        
+        pwdTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.password)
+            .disposed(by: disposeBag)
+        
+        pwdCheckTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.passwordCheck)
+            .disposed(by: disposeBag)
+    
+        signUpButton.rx.tap
+            .bind(to: viewModel.signUpBtnTap)
+            .disposed(by: disposeBag)
+        
+        viewModel.signUpResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                if $0.success {
+                    let alert = UIAlertController(title: "성공", message: "이메일 인증 후 로그인 해주세요", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                } else {
+                    print($0.msg)
+                    let alert = UIAlertController(title: "실패", message: "오류가 발생했습니다. 잠시후에 다시 시도해주세요", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -98,14 +115,6 @@ class SignUpViewController: UIViewController {
         emailTextField.keyboardType = .emailAddress
         emailTextField.autocapitalizationType = .none
         
-        emailAuthButton.backgroundColor = .white
-        emailAuthButton.setTitle("인증", for: .normal)
-        emailAuthButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
-        emailAuthButton.setTitleColor(.black, for: .normal)
-        emailAuthButton.layer.cornerRadius = 10
-        emailAuthButton.layer.borderColor = UIColor.black.cgColor
-        emailAuthButton.layer.borderWidth = 0.7
-        
         emailUnderLine.backgroundColor = .lightGray
         
         pwdLabel.text = "비밀번호"
@@ -114,7 +123,7 @@ class SignUpViewController: UIViewController {
         
         pwdTextField.textColor = .black
         pwdTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        pwdTextField.keyboardType = .emailAddress
+        pwdTextField.isSecureTextEntry = true
         pwdUnderLine.backgroundColor = .lightGray
         
         pwdCheckLabel.text = "비밀번호 확인"
@@ -123,7 +132,7 @@ class SignUpViewController: UIViewController {
         
         pwdCheckTextField.textColor = .black
         pwdCheckTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        pwdCheckTextField.keyboardType = .emailAddress
+        pwdCheckTextField.isSecureTextEntry = true
         pwdCheckUnderLine.backgroundColor = .lightGray
         
         signUpButton.backgroundColor = UIColor(named: "mainColor")
@@ -140,7 +149,7 @@ class SignUpViewController: UIViewController {
         self.scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [titleLabel, emailLabel, emailTextField, emailAuthButton, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
+        [titleLabel, emailLabel, emailTextField, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -167,12 +176,8 @@ class SignUpViewController: UIViewController {
             
             emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5),
             emailTextField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailTextField.trailingAnchor.constraint(equalTo: emailAuthButton.leadingAnchor, constant: -10),
+            emailTextField.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            emailAuthButton.centerYAnchor.constraint(equalTo: emailTextField.centerYAnchor),
-            emailAuthButton.widthAnchor.constraint(equalToConstant: 60),
-            emailAuthButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            emailAuthButton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor, constant: -10 ),
             
             emailUnderLine.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
             emailUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),

@@ -11,4 +11,29 @@ import RxRelay
 
 struct SignUpViewModel {
     let disposeBag = DisposeBag()
+    let email = PublishSubject<String>()
+    let password = PublishSubject<String>()
+    let passwordCheck = PublishSubject<String>()
+    
+    let signUpBtnTap = PublishRelay<Void>()
+    
+    let signUpResult = PublishSubject<RequestResult>()
+    
+    init(_ repo: SignUpRepository = SignUpRepository()) {
+        
+        signUpBtnTap
+            .withLatestFrom(Observable.combineLatest(email, password, passwordCheck))
+            .flatMap(repo.signUp)
+            .bind(to: signUpResult)
+            .disposed(by: disposeBag)
+        
+        signUpResult
+            .filter { $0.success }
+            .withLatestFrom(Observable.combineLatest(email, password))
+            .subscribe(onNext: { (email, pwd) in
+                repo.sendEmailValification(email: email, pwd: pwd)
+            })
+            .disposed(by: disposeBag)
+        
+    }
 }

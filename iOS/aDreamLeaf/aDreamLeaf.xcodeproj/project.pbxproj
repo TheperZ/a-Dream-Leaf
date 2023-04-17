@@ -51,6 +51,9 @@
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
+		BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */; };
+		BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */; };
+		BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D329ECCBA600590CC0 /* RequestResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,6 +106,9 @@
 		BFCF86B929CD56410075D5E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFCF86BE29CD56410075D5E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFEB30CB29EB89D400590CC0 /* aDreamLeaf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = aDreamLeaf.entitlements; sourceTree = "<group>"; };
+		BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepository.swift; sourceTree = "<group>"; };
+		BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNetwork.swift; sourceTree = "<group>"; };
+		BFEB30D329ECCBA600590CC0 /* RequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -374,6 +380,9 @@
 		BFCF86AF29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXGroup;
 			children = (
+				BFEB30D229ECCB9F00590CC0 /* Domain */,
+				BFEB30CF29ECCAF700590CC0 /* Network */,
+				BFEB30CC29ECCAE200590CC0 /* Repository */,
 				BFEB30CB29EB89D400590CC0 /* aDreamLeaf.entitlements */,
 				BFCC910F29DE9D6300A37470 /* Util */,
 				BFB0A90629D2C664003D3E6E /* Extension */,
@@ -386,6 +395,30 @@
 				BFB0A8FF29D28DA7003D3E6E /* Constant.swift */,
 			);
 			path = aDreamLeaf;
+			sourceTree = "<group>";
+		};
+		BFEB30CC29ECCAE200590CC0 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		BFEB30CF29ECCAF700590CC0 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		BFEB30D229ECCB9F00590CC0 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				BFEB30D329ECCBA600590CC0 /* RequestResult.swift */,
+			);
+			path = Domain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -521,6 +554,7 @@
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
+				BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
 				BFCC911629DEDE2300A37470 /* AccountSettingViewController.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
@@ -531,6 +565,7 @@
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,
+				BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */,
 				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
 				BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */,
 				BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */,
@@ -538,6 +573,7 @@
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
 				BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */,
 				BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */,
+				BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */,
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
 				BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
