@@ -14,7 +14,10 @@ class SignUpViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: SignUpViewModel
     
-    let titleLabel = UILabel()
+    private let keyboard = PublishRelay<Bool>()
+    private var keyboardHeight: CGFloat!
+    
+    private let titleLabel = UILabel()
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -45,13 +48,16 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
+        keyboardConfig()
         bind()
         attribute()
         layout()
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func bind() {
@@ -94,6 +100,7 @@ class SignUpViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
     }
     
     private func attribute() {
@@ -219,14 +226,34 @@ class SignUpViewController: UIViewController {
         ].forEach { $0.isActive = true}
     }
     
+    
+}
+
+//MARK: - Keyboard Config
+extension SignUpViewController {
+    
+    func keyboardConfig() {
+        keyboard
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                if $0 {
+                    self.view.frame.size.height -= self.keyboardHeight
+                } else {
+                    self.view.frame.size.height += self.keyboardHeight
+                }
+            })
+            .disposed(by: disposeBag)
+    }
     @objc func keyboardWillShow(notification: NSNotification) {
-             
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
             // if keyboard size is not available for some reason, dont do anything
             return
         }
+        self.keyboardHeight = keyboardSize.height
        // move the root view up by the distance of keyboard height
-        self.view.frame.size.height -= keyboardSize.height
+        self.keyboard.accept(true)
+        
      }
 
      @objc func keyboardWillHide(notification: NSNotification) {
@@ -235,6 +262,7 @@ class SignUpViewController: UIViewController {
              return
          }
        // move back the root view origin to zero
-         self.view.frame.size.height += keyboardSize.height
+         self.keyboardHeight = keyboardSize.height
+         self.keyboard.accept(false)
      }
 }
