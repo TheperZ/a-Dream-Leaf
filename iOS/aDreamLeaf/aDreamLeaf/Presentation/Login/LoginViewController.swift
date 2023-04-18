@@ -62,6 +62,36 @@ class LoginViewController: UIViewController {
                 self.navigationController?.pushViewController(SignUpViewController(), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        loginButton.rx.tap
+            .bind(to: viewModel.loginBtnTap)
+            .disposed(by: disposeBag)
+        
+        emailTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.email)
+            .disposed(by: disposeBag)
+        
+        passwordTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.pwd)
+            .disposed(by: disposeBag)
+        
+        viewModel.loginResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                if $0.success {
+                    self.dismiss(animated: true)
+                } else {
+                    let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        
     }
     
     private func attribute() {

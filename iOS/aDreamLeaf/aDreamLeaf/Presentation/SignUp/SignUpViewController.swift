@@ -245,7 +245,9 @@ extension SignUpViewController {
             })
             .disposed(by: disposeBag)
     }
+    
     @objc func keyboardWillShow(notification: NSNotification) {
+        print("show")
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
             // if keyboard size is not available for some reason, dont do anything
             return
@@ -257,6 +259,7 @@ extension SignUpViewController {
      }
 
      @objc func keyboardWillHide(notification: NSNotification) {
+         print("hide")
          guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
              // if keyboard size is not available for some reason, dont do anything
              return
