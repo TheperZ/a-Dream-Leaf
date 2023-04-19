@@ -121,6 +121,8 @@ class SignUpViewController: UIViewController {
         emailTextField.font = .systemFont(ofSize: 20, weight: .regular)
         emailTextField.keyboardType = .emailAddress
         emailTextField.autocapitalizationType = .none
+        emailTextField.textContentType = .oneTimeCode
+        
         
         emailUnderLine.backgroundColor = .lightGray
         
@@ -233,6 +235,10 @@ class SignUpViewController: UIViewController {
 extension SignUpViewController {
     
     func keyboardConfig() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
         keyboard
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
