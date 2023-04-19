@@ -17,6 +17,8 @@
 		BF3CDB0E29E3DBB100C5FC5E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF3CDB0D29E3DBB100C5FC5E /* GoogleService-Info.plist */; };
 		BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D529ED99EE008DB52A /* LoginRepository.swift */; };
 		BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D729ED99FD008DB52A /* LoginNetwork.swift */; };
+		BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DA29EFFE97008DB52A /* UserManager.swift */; };
+		BF6439DD29EFFEED008DB52A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DC29EFFEED008DB52A /* User.swift */; };
 		BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B129DD316600A47207 /* AccountViewModel.swift */; };
 		BF6761B429DD31BE00A47207 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B329DD31BE00A47207 /* AccountViewController.swift */; };
 		BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B629DD33C600A47207 /* UIChartViewController.swift */; };
@@ -71,6 +73,8 @@
 		BF3CDB0D29E3DBB100C5FC5E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BF6439D529ED99EE008DB52A /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		BF6439D729ED99FD008DB52A /* LoginNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetwork.swift; sourceTree = "<group>"; };
+		BF6439DA29EFFE97008DB52A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		BF6439DC29EFFEED008DB52A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		BF6761B129DD316600A47207 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		BF6761B329DD31BE00A47207 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		BF6761B629DD33C600A47207 /* UIChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIChartViewController.swift; sourceTree = "<group>"; };
@@ -169,6 +173,14 @@
 				BF15AB3829DA631B00014E05 /* ReviewViewController.swift */,
 			);
 			path = Review;
+			sourceTree = "<group>";
+		};
+		BF6439D929EFFE8F008DB52A /* User */ = {
+			isa = PBXGroup;
+			children = (
+				BF6439DA29EFFE97008DB52A /* UserManager.swift */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		BF6761B029DD315C00A47207 /* Account */ = {
@@ -384,7 +396,8 @@
 		BFCF86AF29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXGroup;
 			children = (
-				BFEB30D229ECCB9F00590CC0 /* Domain */,
+				BF6439D929EFFE8F008DB52A /* User */,
+				BFEB30D229ECCB9F00590CC0 /* Entity */,
 				BFEB30CF29ECCAF700590CC0 /* Network */,
 				BFEB30CC29ECCAE200590CC0 /* Repository */,
 				BFEB30CB29EB89D400590CC0 /* aDreamLeaf.entitlements */,
@@ -419,12 +432,13 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
-		BFEB30D229ECCB9F00590CC0 /* Domain */ = {
+		BFEB30D229ECCB9F00590CC0 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
 				BFEB30D329ECCBA600590CC0 /* RequestResult.swift */,
+				BF6439DC29EFFEED008DB52A /* User.swift */,
 			);
-			path = Domain;
+			path = Entity;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -544,6 +558,7 @@
 			files = (
 				BFB0A90329D2B9CD003D3E6E /* LoginViewController.swift in Sources */,
 				BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */,
+				BF6439DD29EFFEED008DB52A /* User.swift in Sources */,
 				BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */,
 				BF6761B429DD31BE00A47207 /* AccountViewController.swift in Sources */,
 				BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */,
@@ -572,6 +587,7 @@
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */,
 				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,
+				BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */,
 				BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */,
 				BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */,
 				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
