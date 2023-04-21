@@ -81,6 +81,7 @@ class LoginViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 if $0.success {
+                    UserManager.login(userData: $0.userData)
                     self.dismiss(animated: true)
                 } else {
                     let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
@@ -115,6 +116,7 @@ class LoginViewController: UIViewController {
         
         emailTextField.textColor = .black
         emailTextField.font = .systemFont(ofSize: 20, weight: .regular)
+        emailTextField.autocapitalizationType = .none
         emailTextField.keyboardType = .emailAddress
         emailTextField.attributedPlaceholder =
         NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])

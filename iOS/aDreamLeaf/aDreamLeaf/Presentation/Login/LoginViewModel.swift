@@ -14,7 +14,7 @@ struct LoginViewModel {
     let email = PublishRelay<String>()
     let pwd = PublishRelay<String>()
     let loginBtnTap = PublishRelay<Void>()
-    let loginResult = PublishSubject<RequestResult>()
+    let loginResult = PublishSubject<LoginResult>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
         loginBtnTap
@@ -22,5 +22,9 @@ struct LoginViewModel {
             .flatMap(repo.login)
             .bind(to: loginResult)
             .disposed(by: disposeBag)
+        
+        /* 서버로부터 닉네임 가져오기 및 저장
+        
+         */
     }
 }
