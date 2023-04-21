@@ -52,6 +52,14 @@ class MyPageViewController: UIViewController {
                 self.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
+        
+        logoutButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                UserManager.logout()
+                self.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
