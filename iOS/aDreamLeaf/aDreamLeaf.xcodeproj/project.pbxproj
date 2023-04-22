@@ -20,6 +20,8 @@
 		BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DA29EFFE97008DB52A /* UserManager.swift */; };
 		BF6439DD29EFFEED008DB52A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DC29EFFEED008DB52A /* User.swift */; };
 		BF6439E029F25597008DB52A /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DF29F25597008DB52A /* LoginResult.swift */; };
+		BF6439E329F40CFD008DB52A /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439E229F40CFD008DB52A /* StartViewModel.swift */; };
+		BF6439E529F40D13008DB52A /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439E429F40D13008DB52A /* StartViewController.swift */; };
 		BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B129DD316600A47207 /* AccountViewModel.swift */; };
 		BF6761B429DD31BE00A47207 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B329DD31BE00A47207 /* AccountViewController.swift */; };
 		BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B629DD33C600A47207 /* UIChartViewController.swift */; };
@@ -77,6 +79,8 @@
 		BF6439DA29EFFE97008DB52A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		BF6439DC29EFFEED008DB52A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		BF6439DF29F25597008DB52A /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
+		BF6439E229F40CFD008DB52A /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
+		BF6439E429F40D13008DB52A /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		BF6761B129DD316600A47207 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		BF6761B329DD31BE00A47207 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		BF6761B629DD33C600A47207 /* UIChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIChartViewController.swift; sourceTree = "<group>"; };
@@ -194,6 +198,15 @@
 			path = RequestResult;
 			sourceTree = "<group>";
 		};
+		BF6439E129F40CF0008DB52A /* Start */ = {
+			isa = PBXGroup;
+			children = (
+				BF6439E229F40CFD008DB52A /* StartViewModel.swift */,
+				BF6439E429F40D13008DB52A /* StartViewController.swift */,
+			);
+			path = Start;
+			sourceTree = "<group>";
+		};
 		BF6761B029DD315C00A47207 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +257,7 @@
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				BF6439E129F40CF0008DB52A /* Start */,
 				BF15AB3529DA62F700014E05 /* Review */,
 				BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */,
 				BFB0A91C29D6B4F2003D3E6E /* Components */,
@@ -595,6 +609,7 @@
 				BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */,
 				BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
+				BF6439E329F40CFD008DB52A /* StartViewModel.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */,
 				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,
@@ -611,6 +626,7 @@
 				BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */,
 				BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */,
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
+				BF6439E529F40D13008DB52A /* StartViewController.swift in Sources */,
 				BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,

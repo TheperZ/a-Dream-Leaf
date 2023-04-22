@@ -25,7 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //    self.window?.overrideUserInterfaceStyle = .dark // 다크모드만 지원하기
         }
         
-        let rootViewController = MainViewController()
+//        let rootViewController = MainViewController()
+        let rootViewController = StartViewController()
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
     }

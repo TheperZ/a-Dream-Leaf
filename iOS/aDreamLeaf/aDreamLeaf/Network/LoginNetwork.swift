@@ -28,7 +28,9 @@ struct LoginNetwork {
                 
                 if let authResult = authResult {
                     if authResult.user.isEmailVerified {
-                        observer.onNext(LoginResult(success: true, msg: nil, userData: User(email: email, password: pwd, uid: authResult.user.uid, nickname: "")))
+                        let userData = User(email: email, password: pwd, uid: authResult.user.uid, nickname: "")
+                        UserManager.login(userData: userData)
+                        observer.onNext(LoginResult(success: true, msg: nil, userData: userData))
                     } else {
                         observer.onNext(LoginResult(success: false, msg: "이메일 인증 후 로그인 해주세요"))
                     }

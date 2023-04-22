@@ -10,11 +10,21 @@ import RxSwift
 
 struct LoginRepository {
     private let network = LoginNetwork()
+    
     func login(email: String, pwd: String) -> Observable<LoginResult> {
         if let emailValidationResult = validateInput(email: email, pwd: pwd) {
             return emailValidationResult
         }
         return network.loginRequestFB(email: email, pwd: pwd)
+    }
+    
+    func localLogIn() -> Observable<LoginResult> {
+        if let email = UserDefaults.standard.string(forKey: "email"), let password = UserDefaults.standard.string(forKey: "password") {
+            return self.login(email: email, pwd: password)
+        } else {
+            return Observable.just(LoginResult(success: false))
+        }
+        
     }
     
     private func validateInput(email: String, pwd: String) -> Observable<LoginResult>? {

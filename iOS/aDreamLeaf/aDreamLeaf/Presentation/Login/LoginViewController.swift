@@ -81,7 +81,6 @@ class LoginViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 if $0.success {
-                    UserManager.login(userData: $0.userData)
                     self.dismiss(animated: true)
                 } else {
                     let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
