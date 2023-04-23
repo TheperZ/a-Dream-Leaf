@@ -10,5 +10,7 @@ import RxSwift
 import RxRelay
 
 struct MyPageViewModel {
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    let email = UserManager.getInstance().map{ $0?.email ?? "" }
+    let nickname = UserManager.getInstance().map{ $0?.nickname ?? "" }
 }

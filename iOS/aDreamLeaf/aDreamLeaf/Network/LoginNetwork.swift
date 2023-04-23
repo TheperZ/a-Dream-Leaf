@@ -28,7 +28,7 @@ struct LoginNetwork {
                 
                 if let authResult = authResult {
                     if authResult.user.isEmailVerified {
-                        let userData = User(email: email, password: pwd, uid: authResult.user.uid, nickname: "")
+                        let userData = User(email: email, password: pwd, uid: authResult.user.uid, nickname: "밝은 햇살") // 닉네임 값 이후 수정
                         UserManager.login(userData: userData)
                         observer.onNext(LoginResult(success: true, msg: nil, userData: userData))
                     } else {

@@ -16,9 +16,9 @@ class MyPageViewController: UIViewController {
     private let backButton = UIButton()
     
     private let titleLabel = UILabel()
-    private let nameLabel = UILabel()
-    private let nameContentLabel = UILabel()
-    private let nameUnderLine = UIView()
+    private let nicknameLabel = UILabel()
+    private let nicknameContentLabel = UILabel()
+    private let nicknameUnderLine = UIView()
     
     private let emailLabel = UILabel()
     private let emailContentLabel = UILabel()
@@ -60,6 +60,16 @@ class MyPageViewController: UIViewController {
                 self.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
+        
+        viewModel.email
+            .observe(on: MainScheduler.instance)
+            .bind(to: emailContentLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.nickname
+            .observe(on: MainScheduler.instance)
+            .bind(to: nicknameContentLabel.rx.text)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -76,25 +86,22 @@ class MyPageViewController: UIViewController {
         titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         
-        [nameLabel, emailLabel].forEach {
+        [nicknameLabel, emailLabel].forEach {
             $0.textColor = .black
             $0.font = .systemFont(ofSize: 15, weight: .semibold)
         }
         
-        nameLabel.text = "이름"
+        nicknameLabel.text = "닉네임"
         emailLabel.text = "이메일"
         
-        [nameContentLabel, emailContentLabel].forEach {
+        [nicknameContentLabel, emailContentLabel].forEach {
             $0.textColor = .gray
             $0.font = .systemFont(ofSize: 17, weight: .semibold)
             $0.textAlignment = .right
             
         }
         
-        nameContentLabel.text = "김상명"
-        emailContentLabel.text = "kim@smu.ac.kr"
-        
-        [nameUnderLine, emailUnderLine].forEach {
+        [nicknameUnderLine, emailUnderLine].forEach {
             $0.backgroundColor = .lightGray
         }
         
@@ -113,7 +120,7 @@ class MyPageViewController: UIViewController {
     }
     
     private func layout() {
-        [backButton,titleLabel, nameLabel, nameContentLabel, nameUnderLine, emailLabel, emailContentLabel, emailUnderLine, logoutButton, exitButton].forEach {
+        [backButton,titleLabel, nicknameLabel, nicknameContentLabel, nicknameUnderLine, emailLabel, emailContentLabel, emailUnderLine, logoutButton, exitButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -126,19 +133,19 @@ class MyPageViewController: UIViewController {
             titleLabel.widthAnchor.constraint(equalToConstant: 300),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            nameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
-            nameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: nameContentLabel.leadingAnchor),
+            nicknameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
+            nicknameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            nicknameLabel.trailingAnchor.constraint(equalTo: nicknameContentLabel.leadingAnchor),
             
-            nameContentLabel.topAnchor.constraint(equalTo: nameLabel.topAnchor),
-            nameContentLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            nicknameContentLabel.topAnchor.constraint(equalTo: nicknameLabel.topAnchor),
+            nicknameContentLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            nameUnderLine.topAnchor.constraint(equalTo: nameContentLabel.bottomAnchor, constant: 15),
-            nameUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            nameUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            nameUnderLine.heightAnchor.constraint(equalToConstant: 0.5),
+            nicknameUnderLine.topAnchor.constraint(equalTo: nicknameContentLabel.bottomAnchor, constant: 15),
+            nicknameUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            nicknameUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            nicknameUnderLine.heightAnchor.constraint(equalToConstant: 0.5),
             
-            emailLabel.topAnchor.constraint(equalTo: nameUnderLine.bottomAnchor, constant: 30),
+            emailLabel.topAnchor.constraint(equalTo: nicknameUnderLine.bottomAnchor, constant: 30),
             emailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             emailLabel.trailingAnchor.constraint(equalTo: emailContentLabel.leadingAnchor),
             
