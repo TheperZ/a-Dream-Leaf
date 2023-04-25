@@ -61,6 +61,46 @@ class MyPageViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        exitButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                let alert = UIAlertController(title: "경고", message: "한번 삭제한 계정은 복구할 수 없습니다.\n삭제하시겠습니까?", preferredStyle: .alert)
+                let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                    self.viewModel.deleteAccountBtnTap.onNext(Void())
+                }
+                let cancel = UIAlertAction(title: "취소", style: .cancel)
+                
+                alert.addAction(confirm)
+                alert.addAction(cancel)
+                
+                self.present(alert, animated: true)
+                
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.deleteResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                if result.success {
+                    let alert = UIAlertController(title: "성공", message: "그 동안 이용해주셔서 감사합니다.", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.dismiss(animated: true)
+                    }
+                    
+                    alert.addAction(confirm)
+                    
+                    self.present(alert, animated: true)
+                } else {
+                    let alert = UIAlertController(title: "실패", message: result.msg , preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    
+                    alert.addAction(confirm)
+                    
+                    self.present(alert, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+        
         viewModel.email
             .observe(on: MainScheduler.instance)
             .bind(to: emailContentLabel.rx.text)
