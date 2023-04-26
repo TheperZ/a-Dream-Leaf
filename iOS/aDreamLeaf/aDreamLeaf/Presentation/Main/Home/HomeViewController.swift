@@ -69,13 +69,20 @@ class HomeViewController: UIChartViewController {
             .disposed(by: disposeBag)
         
         profileButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                let vc = UINavigationController(rootViewController: LoginViewController())
-//                let vc = MyPageViewController()
-                vc.modalTransitionStyle = .crossDissolve
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(UserManager.getInstance())
+            .subscribe(onNext: { user in
+                if user != nil {
+                    let vc = MyPageViewController()
+                    vc.modalTransitionStyle = .crossDissolve
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true)
+                } else {
+                    let vc = UINavigationController(rootViewController: LoginViewController())
+                    vc.modalTransitionStyle = .crossDissolve
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true)
+                }
             })
             .disposed(by: disposeBag)
     }

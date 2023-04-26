@@ -115,6 +115,7 @@ class LoginViewController: UIViewController {
         
         emailTextField.textColor = .black
         emailTextField.font = .systemFont(ofSize: 20, weight: .regular)
+        emailTextField.autocapitalizationType = .none
         emailTextField.keyboardType = .emailAddress
         emailTextField.attributedPlaceholder =
         NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])

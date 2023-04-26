@@ -10,5 +10,16 @@ import RxSwift
 import RxRelay
 
 struct MyPageViewModel {
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    let email = UserManager.getInstance().map{ $0?.email ?? "" }
+    let nickname = UserManager.getInstance().map{ $0?.nickname ?? "" }
+    let deleteAccountBtnTap = PublishSubject<Void>()
+    let deleteResult = PublishSubject<RequestResult>()
+    
+    init(_ repo: ProfileRepository = ProfileRepository()) {
+        deleteAccountBtnTap
+            .flatMapLatest(repo.deleteAccount)
+            .bind(to: deleteResult)
+            .disposed(by: disposeBag)
+    }
 }
