@@ -60,7 +60,7 @@ class StartViewController: UIViewController {
         
         stackView.axis = .vertical
         
-        titleLabel.text = "꿈나무 한입"
+        titleLabel.text = "꿈나무 한잎"
         titleLabel.textColor = UIColor(red: 0.71, green: 0.87, blue: 0.46, alpha: 1.00)
         titleLabel.font = .systemFont(ofSize: 35, weight: .bold)
         titleLabel.textAlignment = .center
