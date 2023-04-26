@@ -11,6 +11,9 @@ import RxRelay
 
 struct MyPageViewModel {
     private let disposeBag = DisposeBag()
+    
+    let loading = BehaviorSubject<Bool>(value: false)
+    
     let email = UserManager.getInstance().map{ $0?.email ?? "" }
     let nickname = UserManager.getInstance().map{ $0?.nickname ?? "" }
     let deleteAccountBtnTap = PublishSubject<Void>()
@@ -20,6 +23,18 @@ struct MyPageViewModel {
         deleteAccountBtnTap
             .flatMapLatest(repo.deleteAccount)
             .bind(to: deleteResult)
+            .disposed(by: disposeBag)
+        
+        //MARK: - Loading
+        
+        deleteAccountBtnTap
+            .map { return true }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
+        
+        deleteResult
+            .map { _ in return false }
+            .bind(to: loading)
             .disposed(by: disposeBag)
     }
 }

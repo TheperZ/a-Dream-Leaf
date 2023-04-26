@@ -14,6 +14,8 @@ class SignUpViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: SignUpViewModel
     
+    private let loadingView = UIActivityIndicatorView(style: .medium)
+    
     private let keyboard = PublishRelay<Bool>()
     private var keyboardHeight: CGFloat!
     
@@ -49,6 +51,7 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         
         keyboardConfig()
+        loadingSetting()
         bind()
         attribute()
         layout()
@@ -92,7 +95,6 @@ class SignUpViewController: UIViewController {
                     alert.addAction(confirm)
                     self.present(alert, animated: true)
                 } else {
-                    print($0.msg)
                     let alert = UIAlertController(title: "실패", message: "오류가 발생했습니다. 잠시후에 다시 시도해주세요", preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default)
                     alert.addAction(confirm)
@@ -158,12 +160,17 @@ class SignUpViewController: UIViewController {
         self.scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [titleLabel, emailLabel, emailTextField, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
+        [loadingView, titleLabel, emailLabel, emailTextField, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
@@ -274,4 +281,24 @@ extension SignUpViewController {
          self.keyboardHeight = keyboardSize.height
          self.keyboard.accept(false)
      }
+}
+
+extension SignUpViewController {
+    func loadingSetting() {
+        
+        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        
+        viewModel.loading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loading in
+                if loading {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                } else {
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+    }
 }

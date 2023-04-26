@@ -11,6 +11,9 @@ import RxRelay
 
 struct SignUpViewModel {
     let disposeBag = DisposeBag()
+    
+    let loading = BehaviorSubject<Bool>(value: false)
+    
     let email = PublishSubject<String>()
     let password = PublishSubject<String>()
     let passwordCheck = PublishSubject<String>()
@@ -35,5 +38,16 @@ struct SignUpViewModel {
             })
             .disposed(by: disposeBag)
         
+        //MARK: - Loading
+        
+        signUpBtnTap
+            .map { return true }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
+        
+        signUpResult
+            .map { _ in return false }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
     }
 }
