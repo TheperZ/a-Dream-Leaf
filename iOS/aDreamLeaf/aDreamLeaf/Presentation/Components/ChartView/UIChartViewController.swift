@@ -7,8 +7,10 @@
 
 import UIKit
 import Charts
+import RxSwift
 
 class UIChartViewController: UIViewController {
+    private let disposeBag = DisposeBag()
     let accountSummaryContainer = UIView()
     private let accountTitleLabel = UILabel()
     
@@ -18,6 +20,7 @@ class UIChartViewController: UIViewController {
     private let usedAmountColorView = UIView()
     private let usedAmountLabel = UILabel()
     private let accountMoreButton = UIButton()
+    let accountMoreButtonTap = PublishSubject<Void>()
     
     private let balanceColorView = UIView()
     private let balanceLabel = UILabel()
@@ -33,6 +36,11 @@ class UIChartViewController: UIViewController {
     }
     
     func chartSetting() {
+        
+        accountMoreButton.rx.tap
+            .bind(to: accountMoreButtonTap)
+            .disposed(by: disposeBag)
+        
         accountSummaryContainer.backgroundColor = UIColor(white: 0.95, alpha: 1)
         accountSummaryContainer.layer.cornerRadius = 10
         

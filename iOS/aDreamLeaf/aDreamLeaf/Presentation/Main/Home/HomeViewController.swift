@@ -85,6 +85,13 @@ class HomeViewController: UIChartViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
+        accountMoreButtonTap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext:{
+                self.tabBarController?.selectedIndex = 2
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
