@@ -13,6 +13,8 @@ class MyPageViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: MyPageViewModel
     
+    private let loadingView = UIActivityIndicatorView(style: .medium)
+    
     private let backButton = UIButton()
     
     private let titleLabel = UILabel()
@@ -166,6 +168,12 @@ class MyPageViewController: UIViewController {
         }
         
         [
+            
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
@@ -210,4 +218,24 @@ class MyPageViewController: UIViewController {
         ].forEach { $0.isActive = true }
     }
     
+}
+
+extension MyPageViewController {
+    func loadingSetting() {
+        
+        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        
+        viewModel.loading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loading in
+                if loading {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                } else {
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+    }
 }

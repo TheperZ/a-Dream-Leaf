@@ -13,6 +13,8 @@ class LoginViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: LoginViewModel
     
+    private let loadingView = UIActivityIndicatorView(style: .medium)
+    
     private let backButton = UIBarButtonItem()
     
     private let contentView = UIView()
@@ -42,6 +44,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loadingSetting()
         
         bind()
         attribute()
@@ -90,7 +94,6 @@ class LoginViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
-        
         
     }
     
@@ -159,12 +162,17 @@ class LoginViewController: UIViewController {
         }
         
         
-        [titleLabel, emailLabel, emailTextField, emailUnderLine, passwordLabel, passwordTextField, passwordUnderLine, loginButton, signInButton, pwdFindButton].forEach {
+        [loadingView, titleLabel, emailLabel, emailTextField, emailUnderLine, passwordLabel, passwordTextField, passwordUnderLine, loginButton, signInButton, pwdFindButton].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             contentView.widthAnchor.constraint(equalToConstant: 300),
             contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -217,5 +225,25 @@ class LoginViewController: UIViewController {
             
             
         ].forEach{ $0.isActive = true }
+    }
+}
+
+extension LoginViewController {
+    func loadingSetting() {
+        
+        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        
+        viewModel.loading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loading in
+                if loading {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                } else {
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }

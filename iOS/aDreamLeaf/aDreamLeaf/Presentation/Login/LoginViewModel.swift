@@ -11,12 +11,14 @@ import RxRelay
 
 struct LoginViewModel {
     let disposeBag = DisposeBag()
+    let loading = BehaviorSubject<Bool>(value: false)
     let email = PublishRelay<String>()
     let pwd = PublishRelay<String>()
     let loginBtnTap = PublishRelay<Void>()
     let loginResult = PublishSubject<LoginResult>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
+        
         loginBtnTap
             .withLatestFrom(Observable.combineLatest(email, pwd))
             .flatMap(repo.login)
@@ -26,5 +28,19 @@ struct LoginViewModel {
         /* 서버로부터 닉네임 가져오기 및 저장
         
          */
+        
+        //MARK: - Loading
+        
+        loginBtnTap
+            .map { return true }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
+        
+        loginResult
+            .map { _ in return false }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
+        
+        
     }
 }
