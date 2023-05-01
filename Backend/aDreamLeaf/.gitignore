@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### ServiceAccountKey ###
+src/main/resources/serviceAccountKey.json
