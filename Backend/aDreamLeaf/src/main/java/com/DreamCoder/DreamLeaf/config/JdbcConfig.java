@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 @Configuration
 public class JdbcConfig {
 
+    @Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUsername("root");
@@ -22,6 +23,6 @@ public class JdbcConfig {
 
     @Bean
     public JdbcTemplate jdbcTemplate(){
-        return new JdbcTemplate(this.dataSource());
+        return new JdbcTemplate(dataSource());
     }
 }
