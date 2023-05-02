@@ -771,7 +771,7 @@
 				DEVELOPMENT_TEAM = KB3R84Q4BQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한잎";
+				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한입";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
@@ -806,7 +806,7 @@
 				DEVELOPMENT_TEAM = KB3R84Q4BQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한잎";
+				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한입";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;

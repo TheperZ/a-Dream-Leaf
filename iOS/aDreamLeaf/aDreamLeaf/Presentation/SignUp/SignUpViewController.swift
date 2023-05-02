@@ -95,8 +95,11 @@ class SignUpViewController: UIViewController {
                     alert.addAction(confirm)
                     self.present(alert, animated: true)
                 } else {
-                    let alert = UIAlertController(title: "실패", message: "오류가 발생했습니다. 잠시후에 다시 시도해주세요", preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    
+                    let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.viewModel.loading.onNext(false)
+                    }
                     alert.addAction(confirm)
                     self.present(alert, animated: true)
                 }
