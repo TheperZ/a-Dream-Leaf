@@ -11,17 +11,18 @@ import javax.sql.DataSource;
 @Configuration
 public class JdbcConfig {
 
+    @Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUsername("root");
         dataSource.setPassword("root");
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/adreamleaf");
-        return dataSource();
+        return dataSource;
     }
 
     @Bean
     public JdbcTemplate jdbcTemplate(){
-        return new JdbcTemplate(this.dataSource());
+        return new JdbcTemplate(dataSource());
     }
 }
