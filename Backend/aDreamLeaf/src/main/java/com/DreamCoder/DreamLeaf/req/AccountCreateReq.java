@@ -13,6 +13,6 @@ public class AccountCreateReq {
     private String firebaseToken;
     private String restaurant;
     private int price;
-    private LocalDate date;
+    private String date;
     private String body;
 }

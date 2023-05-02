@@ -4,14 +4,11 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-
 @Data
 @AllArgsConstructor
 @Getter
-@ToString
 @Builder
-public class AccountDto {
-    private int accountId;
+public class AccountCreateDto {
     private String restaurant;
     private int price;
     private String date;
