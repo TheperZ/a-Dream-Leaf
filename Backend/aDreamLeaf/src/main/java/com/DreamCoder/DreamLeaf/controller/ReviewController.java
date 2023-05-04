@@ -43,6 +43,4 @@ public class ReviewController {
         List<ReviewDto> reviewDtoList = reviewService.findReviewPage(reviewSearchDto);
         return ResponseEntity.status(200).body(reviewDtoList);
     }
-
-
 }

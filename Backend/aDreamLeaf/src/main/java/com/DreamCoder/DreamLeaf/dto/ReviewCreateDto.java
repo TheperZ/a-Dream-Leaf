@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ReviewCreateDto {
-    private String storeId;
+    private int storeId;
     private String date;
     private String body;
     private int rating;
