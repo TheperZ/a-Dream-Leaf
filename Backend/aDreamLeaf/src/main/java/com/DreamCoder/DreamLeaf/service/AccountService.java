@@ -1,6 +1,7 @@
 package com.DreamCoder.DreamLeaf.service;
 
 import com.DreamCoder.DreamLeaf.dto.AccountCreateDto;
+import com.DreamCoder.DreamLeaf.dto.AccountDelDto;
 import com.DreamCoder.DreamLeaf.dto.AccountDto;
 import com.DreamCoder.DreamLeaf.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,4 +19,7 @@ public class AccountService {
         return AccountRepositoryImpl.save(accountCreateDto);
     }
 
+    public String delete(AccountDelDto accountDelDto){
+        return AccountRepositoryImpl.delete(accountDelDto);
+    }
 }

@@ -2,8 +2,10 @@ package com.DreamCoder.DreamLeaf.controller;
 
 import com.DreamCoder.DreamLeaf.Util.AuthUtil;
 import com.DreamCoder.DreamLeaf.dto.AccountCreateDto;
+import com.DreamCoder.DreamLeaf.dto.AccountDelDto;
 import com.DreamCoder.DreamLeaf.dto.AccountDto;
 import com.DreamCoder.DreamLeaf.req.AccountCreateReq;
+import com.DreamCoder.DreamLeaf.req.AccountDelReq;
 import com.DreamCoder.DreamLeaf.service.AccountService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +36,12 @@ public class AccountController {
     }
 
     @PostMapping("/account/delete")
-    public ResponseEntity deleteAccount(){
-        return null;
+    public ResponseEntity deleteAccount(@RequestBody AccountDelReq accountDelReq) throws FirebaseAuthException{
+        String firebaseToken = accountDelReq.getFirebaseToken();
+        int id = authUtil.findUserId(firebaseToken);
+        AccountDelDto accountDelDto = new AccountDelDto(id, accountDelReq.getAccountId());
+        String result = accountService.delete(accountDelDto);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/account/update")
