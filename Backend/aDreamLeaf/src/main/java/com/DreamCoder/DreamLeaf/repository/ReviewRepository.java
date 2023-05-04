@@ -9,7 +9,11 @@ import java.util.List;
 public interface ReviewRepository {
     public ReviewDto save(ReviewCreateDto reviewCreateDto);
 
+    public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto);
+
     public Integer CountReview(int storeId);
 
-    public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto);
+    public String findUserName(int userId);
+
+    public String findStoreName(int storeId);
 }

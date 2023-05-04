@@ -19,10 +19,6 @@ public class ReviewRepositoryImpl implements ReviewRepository{
 
     private final JdbcTemplate jdbcTemplate;
     
-//    반환 내용 중 UserName, StoreName를 구하기 위해서는 필요함
-//    private final UserRepository userRepository;
-//    private final StoreRepository storeRepository;
-
     private final RowMapper<ReviewDto> reviewRowMapper = new RowMapper<ReviewDto>() {
         @Override
         public ReviewDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -50,15 +46,9 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                 "' AND storeId = "+reviewCreateDto.getStoreId()+
                 " AND userId = "+reviewCreateDto.getUserId(), reviewRowMapper);
 
-//        reviewDto.setNameData(userRepository.findById(reviewDto.getUserId()).getUserName(), storeRepository.findById(reviewDto.getStoreId()).getStoreName());
+        reviewDto.setNameData(findUserName(reviewDto.getUserId()), findStoreName(reviewDto.getStoreId()));
 
         return reviewDto;
-    }
-
-    @Override
-    public Integer CountReview(int storeId) {
-        Integer count =  jdbcTemplate.queryForObject("SELECT count(*) FROM REVIEW WHERE storeId="+storeId, Integer.class);
-        return count;
     }
 
     @Override
@@ -68,5 +58,21 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                         + " OFFSET " + reviewSearchDto.getReviewPagination().getLimitStart()
                 , reviewRowMapper);
         return reviewDtoList;
+    }
+
+    @Override
+    public Integer CountReview(int storeId) {
+        Integer count =  jdbcTemplate.queryForObject("SELECT count(*) FROM REVIEW WHERE storeId="+storeId, Integer.class);
+        return count;
+    }
+
+    @Override
+    public String findUserName(int userId) {
+        return jdbcTemplate.queryForObject("SELECT userName FROM USER WHERE userId="+userId, String.class);
+    }
+
+    @Override
+    public String findStoreName(int storeId) {
+        return jdbcTemplate.queryForObject("SELECT storeName FROM STORE WHERE storeId="+storeId, String.class);
     }
 }
