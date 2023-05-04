@@ -1,23 +1,22 @@
 package com.DreamCoder.DreamLeaf.controller;
 
 import com.DreamCoder.DreamLeaf.Util.AuthUtil;
-import com.DreamCoder.DreamLeaf.dto.AccountCreateDto;
-import com.DreamCoder.DreamLeaf.dto.AccountDelDto;
-import com.DreamCoder.DreamLeaf.dto.AccountDto;
-import com.DreamCoder.DreamLeaf.dto.AccountUpDto;
+import com.DreamCoder.DreamLeaf.dto.*;
 import com.DreamCoder.DreamLeaf.req.AccountCreateReq;
 import com.DreamCoder.DreamLeaf.req.AccountDelReq;
+import com.DreamCoder.DreamLeaf.req.AccountSetReq;
 import com.DreamCoder.DreamLeaf.req.AccountUpReq;
 import com.DreamCoder.DreamLeaf.service.AccountService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -61,12 +60,19 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    public ResponseEntity getSimpleAccount(){
-        return null;
+    public ResponseEntity getSimpleAccount(@RequestBody Map<String,String> req) throws FirebaseAuthException{
+        String firebaseToken = req.get("firebaseToken");
+        int id = authUtil.findUserId(firebaseToken);
+        SimpleAccountDto simpleAccountDto = accountService.simpleInquire(id);
+        return ResponseEntity.ok().body(simpleAccountDto);
     }
 
     @PostMapping("/account/setting")
-    public ResponseEntity settingAccount(){
-        return null;
+    public ResponseEntity settingAccount(@RequestBody AccountSetReq accountSetReq) throws FirebaseAuthException{
+        String firebaseToken = accountSetReq.getFirebaseToken();
+        int id = authUtil.findUserId(firebaseToken);
+        AccountSetDto accountSetDto = new AccountSetDto(id,accountSetReq.getAmount());
+        String result = accountService.setAccount(accountSetDto);
+        return ResponseEntity.ok().body(result);
     }
 }

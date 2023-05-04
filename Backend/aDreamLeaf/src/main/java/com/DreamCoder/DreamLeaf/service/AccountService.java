@@ -1,9 +1,6 @@
 package com.DreamCoder.DreamLeaf.service;
 
-import com.DreamCoder.DreamLeaf.dto.AccountCreateDto;
-import com.DreamCoder.DreamLeaf.dto.AccountDelDto;
-import com.DreamCoder.DreamLeaf.dto.AccountDto;
-import com.DreamCoder.DreamLeaf.dto.AccountUpDto;
+import com.DreamCoder.DreamLeaf.dto.*;
 import com.DreamCoder.DreamLeaf.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,5 +25,13 @@ public class AccountService {
 
     public AccountDto update(AccountUpDto accountUpDto){
         return AccountRepositoryImpl.update(accountUpDto);
+    }
+
+    public SimpleAccountDto simpleInquire(int id){
+        return AccountRepositoryImpl.inquire(id);
+    }
+
+    public String setAccount(AccountSetDto accountSetDto){
+        return AccountRepositoryImpl.set(accountSetDto);
     }
 }
