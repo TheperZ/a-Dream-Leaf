@@ -4,6 +4,7 @@ package com.DreamCoder.DreamLeaf.repository;
 import com.DreamCoder.DreamLeaf.dto.AccountCreateDto;
 import com.DreamCoder.DreamLeaf.dto.AccountDelDto;
 import com.DreamCoder.DreamLeaf.dto.AccountDto;
+import com.DreamCoder.DreamLeaf.dto.AccountUpDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -47,7 +48,17 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Transactional(rollbackFor = Exception.class)
     public String delete(AccountDelDto accountDelDto) { //삭제 권한 확인 추가 필요 및 예외처리 필요
         String sql = "DELETE FROM ACCOUNT WHERE accountId = "+accountDelDto.getAccountId();
-        jdbcTemplate.execute(sql);
+        jdbcTemplate.update(sql);
         return "삭제가 완료 되었습니다.";
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public AccountDto update(AccountUpDto accountUpDto) { //수정 권한 확인 추가 필요 및 예외처리 필요
+        String sql = "UPDATE ACCOUNT SET restaurant = ?, price = ?, date = ?, body = ? WHERE accountId = ?";
+        jdbcTemplate.update(sql,accountUpDto.getRestaurant(),accountUpDto.getPrice(),accountUpDto.getDate(),accountUpDto.getBody(),accountUpDto.getUserId());
+        String sql2 = "SELECT * FROM ACCOUNT WHERE accountId = ?";
+        AccountDto result = jdbcTemplate.queryForObject(sql2,accountRowMapper,accountUpDto.getAccountId());
+        return result;
     }
 }

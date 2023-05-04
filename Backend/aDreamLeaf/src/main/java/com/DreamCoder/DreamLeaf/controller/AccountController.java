@@ -4,8 +4,10 @@ import com.DreamCoder.DreamLeaf.Util.AuthUtil;
 import com.DreamCoder.DreamLeaf.dto.AccountCreateDto;
 import com.DreamCoder.DreamLeaf.dto.AccountDelDto;
 import com.DreamCoder.DreamLeaf.dto.AccountDto;
+import com.DreamCoder.DreamLeaf.dto.AccountUpDto;
 import com.DreamCoder.DreamLeaf.req.AccountCreateReq;
 import com.DreamCoder.DreamLeaf.req.AccountDelReq;
+import com.DreamCoder.DreamLeaf.req.AccountUpReq;
 import com.DreamCoder.DreamLeaf.service.AccountService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +47,12 @@ public class AccountController {
     }
 
     @PostMapping("/account/update")
-    public ResponseEntity updateAccount(){
-        return null;
+    public ResponseEntity updateAccount(@RequestBody AccountUpReq accountUpReq) throws FirebaseAuthException{
+        String firebaseToken = accountUpReq.getFirebaseToken();
+        int id = authUtil.findUserId(firebaseToken);
+        AccountUpDto accountUpDto = new AccountUpDto(accountUpReq.getAccountId(), accountUpReq.getRestaurant(), accountUpReq.getPrice(), accountUpReq.getDate(), accountUpReq.getBody(), id);
+        AccountDto result = accountService.update(accountUpDto);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/account/list")
