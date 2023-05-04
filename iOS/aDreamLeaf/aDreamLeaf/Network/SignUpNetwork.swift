@@ -23,7 +23,12 @@ struct SignUpNetwork {
 
             Auth.auth().createUser(withEmail: email, password: pwd){ authData, error in
                 if let error = error {
-                    observer.onNext(RequestResult(success: false, msg: "\(error.localizedDescription)"))
+                    if error.localizedDescription == "The email address is already in use by another account." {
+                        observer.onNext(RequestResult(success: false, msg: "이미 가입된 이메일입니다."))
+                    } else {
+                        observer.onNext(RequestResult(success: false, msg: "\(error.localizedDescription)"))
+                    }
+                    
                 } else {
                     observer.onNext(RequestResult(success: true, msg: nil))
                 }
