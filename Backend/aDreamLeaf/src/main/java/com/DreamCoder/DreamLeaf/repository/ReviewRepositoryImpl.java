@@ -57,6 +57,9 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                         + " ORDER BY created_date DESC LIMIT " + reviewSearchDto.getDisplay()
                         + " OFFSET " + reviewSearchDto.getReviewPagination().getLimitStart()
                 , reviewRowMapper);
+        for (ReviewDto reviewDto : reviewDtoList){
+            reviewDto.setNameData(findUserName(reviewDto.getUserId()), findStoreName(reviewDto.getStoreId()));
+        }
         return reviewDtoList;
     }
 
