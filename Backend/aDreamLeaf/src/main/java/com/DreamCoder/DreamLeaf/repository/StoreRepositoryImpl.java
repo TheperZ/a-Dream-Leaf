@@ -29,7 +29,18 @@ public class StoreRepositoryImpl implements StoreRepository{
 
     @Override
     public StoreDto save(StoreDto storeDto) {
-        return null;
+        String sql="insert into store(storeName, zipCode, roadAddr, lotAddr, wgs84Lat, wgs84Logt, payment, prodName, prodTarget) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        template.update(sql,
+                storeDto.getStoreName(),
+                storeDto.getZipCode(),
+                storeDto.getRoadAddr(),
+                storeDto.getLotAddr(),
+                storeDto.getWgs84Lat(),
+                storeDto.getWgs84Logt(),
+                storeDto.isPayment(),
+                storeDto.getProdName(),
+                storeDto.getProdTarget());
+        return storeDto;
     }
 
     @Override
