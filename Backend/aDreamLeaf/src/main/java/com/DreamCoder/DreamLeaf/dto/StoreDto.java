@@ -10,9 +10,9 @@ import lombok.ToString;
 @ToString
 @Builder
 public class StoreDto {
-    private int storeId;
-    private String storeName;
-    private int zipCode;
+    private int storeId;            //store 고유 id
+    private String storeName;       //store 이름
+    private int zipCode;            //
     private String roadAddr;
     private String lotAddr;
     private double wgs84Lat;
