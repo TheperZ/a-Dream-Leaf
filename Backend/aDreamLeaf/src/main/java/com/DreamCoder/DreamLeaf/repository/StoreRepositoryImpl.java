@@ -1,6 +1,7 @@
 package com.DreamCoder.DreamLeaf.repository;
 
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
+import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -50,13 +51,19 @@ public class StoreRepositoryImpl implements StoreRepository{
     }
 
     @Override
-    public StoreDto findByKeyword(String keyword) {
-        return null;
+    public StoreDto findByKeyword(String keyword, UserCurReq userCurReq) {
+        String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
+                "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
+                "AS distance from store where storeName like ? having distance<2 order by distance";
+        return template.queryForObject(sql, storeDtoRowMapper, userCurReq.getUserLat(), userCurReq.getUserLogt(), userCurReq.getUserLat(),"%"+keyword+"%");
     }
 
     @Override
-    public StoreDto findByCur(double curLat, double curLogt) {
-        return null;
+    public StoreDto findByCur(UserCurReq userCurReq) {
+        String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
+                "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
+                "AS distance from store where storeName like ? having distance<2 order by distance";
+        return template.queryForObject(sql, storeDtoRowMapper, userCurReq.getUserLat(), userCurReq.getUserLogt(), userCurReq.getUserLat());
     }
 
 

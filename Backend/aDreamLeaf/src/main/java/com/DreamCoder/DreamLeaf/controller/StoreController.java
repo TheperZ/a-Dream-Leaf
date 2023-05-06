@@ -25,8 +25,8 @@ public class StoreController {
     }
 
     @GetMapping("/findByKeyword")
-    public StoreDto findByKeyword(@RequestParam String q){
-        return storeService.findByKeyword(q);
+    public StoreDto findByKeyword(@RequestParam String q, @RequestBody UserCurReq userCurReq){       //거리 순으로 정렬
+        return storeService.findByKeyword(q, userCurReq);
     }
 
     @GetMapping("/findByCur")

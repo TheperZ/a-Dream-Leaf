@@ -24,12 +24,12 @@ public class StoreService {
         return storeRepository.findById(storeId);
     }
 
-    public StoreDto findByKeyword(String keyword){
-        return storeRepository.findByKeyword(keyword);
+    public StoreDto findByKeyword(String keyword, UserCurReq userCurReq){
+        return storeRepository.findByKeyword(keyword, userCurReq);
     }
 
     public StoreDto findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산?
-        return storeRepository.findByCur(userCurReq.getUserLat(), userCurReq.getUserLogt());
+        return storeRepository.findByCur(userCurReq);
     }
 
 }
