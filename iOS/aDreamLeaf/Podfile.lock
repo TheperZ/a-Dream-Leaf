@@ -596,6 +596,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - Alamofire (5.6.4)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
     - BoringSSL-GRPC/Interface (= 0.0.24)
@@ -711,6 +712,11 @@ PODS:
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
   - PromisesObjC (2.2.0)
+  - RxAlamofire (6.1.1):
+    - RxAlamofire/Core (= 6.1.1)
+  - RxAlamofire/Core (6.1.1):
+    - Alamofire (~> 5.4)
+    - RxSwift (~> 6.0)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -724,12 +730,14 @@ DEPENDENCIES:
   - FirebaseAuth
   - FirebaseFirestore
   - MonthYearPicker (~> 4.0.2)
+  - RxAlamofire
   - RxCocoa (= 6.5.0)
   - RxSwift (= 6.5.0)
 
 SPEC REPOS:
   trunk:
     - abseil
+    - Alamofire
     - BoringSSL-GRPC
     - Charts
     - FirebaseAuth
@@ -745,6 +753,7 @@ SPEC REPOS:
     - MonthYearPicker
     - nanopb
     - PromisesObjC
+    - RxAlamofire
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -752,6 +761,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
+  Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   Charts: 354f86803d11d9c35de280587fef50d1af063978
   FirebaseAuth: dd64c01631df724b09f33e584625775c52f7d71f
@@ -767,11 +777,12 @@ SPEC CHECKSUMS:
   MonthYearPicker: 91f77106e6806d8c93c69e943ab0795fd420657f
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
+  RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 
-PODFILE CHECKSUM: a28ad783aaf39b1b801d79713cffcb536b07cfa7
+PODFILE CHECKSUM: 303763d74d2231e320c044a9be5f5e24831da551
 
 COCOAPODS: 1.11.3
