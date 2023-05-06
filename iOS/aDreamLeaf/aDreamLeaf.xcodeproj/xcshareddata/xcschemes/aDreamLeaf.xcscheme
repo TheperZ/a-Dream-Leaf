@@ -49,13 +49,6 @@
             ReferencedContainer = "container:aDreamLeaf.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "KAKAO_API_KEY"
-            value = "31fac504d07655362289e969066e9aa2"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

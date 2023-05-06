@@ -14,8 +14,8 @@ struct KakaoNetwork {
         let urlString = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=\(lon)&y=\(lat)"
         let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: encodedString)!
-
-        return RxAlamofire.requestData(.get, url, headers: ["Authorization": "KakaoAK \(ProcessInfo.processInfo.environment["KAKAO_API_KEY"]!)"])
+        
+        return RxAlamofire.requestData(.get, url, headers: ["Authorization": "KakaoAK \(Bundle.main.object(forInfoDictionaryKey: "KAKAO_API_KEY") as! String)"])
            .map { (r, data) in
                do {
                    let decodedData = try JSONDecoder().decode(KakaoAddressResponse.self, from: data)

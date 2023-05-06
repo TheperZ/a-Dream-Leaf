@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,swift,cocoapods,macos,windows,firebase
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,swift,cocoapods,macos,windows,firebase
 
+*.xcconfig
+
 ### CocoaPods ###
 ## CocoaPods GitIgnore Template
 
@@ -81,6 +83,8 @@ Temporary Items
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+
 
 ## User settings
 xcuserdata/
@@ -186,5 +190,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
 
 # End of https://www.toptal.com/developers/gitignore/api/java,swift,cocoapods,macos,windows,firebase
