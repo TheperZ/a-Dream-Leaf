@@ -5,13 +5,15 @@
 //  Created by 엄태양 on 2023/04/22.
 //
 
-import Foundation
+import UIKit
 import RxSwift
 import RxCocoa
+import CoreLocation
 
 class StartViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: StartViewModel
+    
     
     private let stackView = UIStackView()
     private let imageView = UIImageView(image: UIImage(named: "Icon"))
@@ -28,6 +30,8 @@ class StartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        LocationManager.config()
         
         bind()
         attribute()
@@ -56,12 +60,12 @@ class StartViewController: UIViewController {
     }
     
     private func attribute() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "launchColor")
         
         stackView.axis = .vertical
         
-        titleLabel.text = "꿈나무 한잎"
-        titleLabel.textColor = UIColor(red: 0.71, green: 0.87, blue: 0.46, alpha: 1.00)
+        titleLabel.text = "꿈나무 한입"
+        titleLabel.textColor = .white
         titleLabel.font = .systemFont(ofSize: 35, weight: .bold)
         titleLabel.textAlignment = .center
     }

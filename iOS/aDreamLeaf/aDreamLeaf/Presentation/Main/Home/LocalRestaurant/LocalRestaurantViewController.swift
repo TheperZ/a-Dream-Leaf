@@ -49,12 +49,15 @@ class LocalRestaurantViewController : UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        viewModel.address
+            .bind(to: addressLabel.rx.text)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
         view.backgroundColor = .white
         
-        addressLabel.text = "서울특별시 종로구 사직로 161"
         addressLabel.textColor = .black
         addressLabel.textAlignment = .left
         
