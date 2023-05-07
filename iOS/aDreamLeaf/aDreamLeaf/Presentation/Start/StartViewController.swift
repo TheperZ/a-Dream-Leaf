@@ -33,9 +33,6 @@ class StartViewController: UIViewController {
         
         LocationManager.config()
         
-        LocationManager.getLatitude()
-        LocationManager.getLongitude()
-        
         bind()
         attribute()
         layout()
