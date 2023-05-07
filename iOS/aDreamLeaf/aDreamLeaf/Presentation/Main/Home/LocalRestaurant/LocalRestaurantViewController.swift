@@ -16,7 +16,14 @@ class LocalRestaurantViewController : UIViewController {
     private let imageView = UIImageView(image: UIImage(systemName: "location.fill"))
     private let addressLabel = UILabel()
     
+    private let checkBoxView = UIView()
+    private let buttonStackView = UIStackView()
+    private let allButton = UIButton()
+    private let cardButton = UIButton()
+    private let goodButton = UIButton()
+    
     private let tableView = UITableView()
+    
     
     init() {
         viewModel = LocalRestaurantViewModel()
@@ -61,13 +68,47 @@ class LocalRestaurantViewController : UIViewController {
         addressLabel.textColor = .black
         addressLabel.textAlignment = .left
         
+        checkBoxView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        checkBoxView.layer.cornerRadius = 5
+        
+        buttonStackView.spacing = 15
+        
+        allButton.setTitle("전체", for: .normal)
+        allButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+        allButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        allButton.setTitleColor(.black, for: .normal)
+        allButton.tintColor = .black
+        allButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
+        
+        cardButton.setTitle("아동급식카드 가맹점", for: .normal)
+        cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+        cardButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        cardButton.setTitleColor(.black, for: .normal)
+        cardButton.tintColor = .black
+        cardButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
+        
+        goodButton.setTitle("선한영향력 가게", for: .normal)
+        goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+        goodButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        goodButton.setTitleColor(.black, for: .normal)
+        goodButton.tintColor = .black
+        goodButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
+        
         tableView.backgroundColor = .white
     }
     
     private func layout() {
         
-        [imageView, addressLabel, tableView].forEach {
+        [imageView, addressLabel, tableView, buttonStackView, checkBoxView].forEach {
             view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        checkBoxView.addSubview(buttonStackView)
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        [allButton, cardButton, goodButton].forEach {
+            buttonStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -81,7 +122,15 @@ class LocalRestaurantViewController : UIViewController {
             addressLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
             addressLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
             
-            tableView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15),
+            checkBoxView.heightAnchor.constraint(equalToConstant: 30),
+            checkBoxView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            checkBoxView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            checkBoxView.trailingAnchor.constraint(equalTo: addressLabel.trailingAnchor),
+            
+            buttonStackView.centerXAnchor.constraint(equalTo: checkBoxView.centerXAnchor),
+            buttonStackView.centerYAnchor.constraint(equalTo: checkBoxView.centerYAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 15),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
