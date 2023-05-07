@@ -24,10 +24,10 @@ public class StoreController {
     @Autowired
     private final StoreService storeService;
 
-    @PostMapping("/save")    //for test
-    public ResponseEntity save(@RequestBody StoreReq storeReq){
-        return ResponseEntity.status(HttpStatus.CREATED).body(storeService.create(storeReq));
-    }
+//    @PostMapping("/save")    //for test
+//    public ResponseEntity save(@RequestBody StoreReq storeReq){
+//        return ResponseEntity.status(HttpStatus.CREATED).body(storeService.create(storeReq));
+//    }
 
     @GetMapping("/{storeId}")
     public Optional<StoreDto> showStoreDetail(@PathVariable int storeId){
