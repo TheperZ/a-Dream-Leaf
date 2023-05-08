@@ -11,6 +11,11 @@ import RxSwift
 
 class UIChartViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    
+    private var blurEffect: UIBlurEffect!
+    private var cover: UIVisualEffectView!
+    private let coverMessageTextView = UITextView()
+    
     let accountSummaryContainer = UIView()
     private let accountTitleLabel = UILabel()
     
@@ -28,11 +33,43 @@ class UIChartViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         
+        coverSetting()
         chartLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        bind()
+    }
+    
+    private func bind() {
+        UserManager.getInstance()
+            .subscribe(onNext: { user in
+                if user == nil {
+                    self.cover.isHidden = false
+                } else {
+                    self.cover.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func coverSetting() {
+        blurEffect = UIBlurEffect(style: .regular)
+        cover = UIVisualEffectView(effect: blurEffect)
+        cover.layer.cornerRadius = 10
+        cover.clipsToBounds = true
+        
+        coverMessageTextView.backgroundColor = .clear
+        coverMessageTextView.text = "로그인이 필요한 기능입니다!\n로그인을 해주세요!"
+        coverMessageTextView.font = .systemFont(ofSize: 15, weight: .semibold)
+        coverMessageTextView.textColor = .darkGray
+        coverMessageTextView.textAlignment = .center
     }
     
     func chartSetting() {
@@ -97,10 +134,13 @@ class UIChartViewController: UIViewController {
     
     private func chartLayout() {
         
-        [accountTitleLabel, accountMoreButton, pieChart, usedAmountColorView, usedAmountLabel, balanceColorView, balanceLabel].forEach {
+        [accountTitleLabel, accountMoreButton, pieChart, usedAmountColorView, usedAmountLabel, balanceColorView, balanceLabel, cover].forEach {
             accountSummaryContainer.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        cover.contentView.addSubview(coverMessageTextView)
+        coverMessageTextView.translatesAutoresizingMaskIntoConstraints = false
         
         [
             accountSummaryContainer.heightAnchor.constraint(equalToConstant: 200),
@@ -132,6 +172,16 @@ class UIChartViewController: UIViewController {
             
             balanceLabel.leadingAnchor.constraint(equalTo: balanceColorView.trailingAnchor, constant: 10),
             balanceLabel.centerYAnchor.constraint(equalTo: balanceColorView.centerYAnchor),
+            
+            cover.topAnchor.constraint(equalTo: accountSummaryContainer.topAnchor),
+            cover.leadingAnchor.constraint(equalTo: accountSummaryContainer.leadingAnchor),
+            cover.trailingAnchor.constraint(equalTo: accountSummaryContainer.trailingAnchor),
+            cover.bottomAnchor.constraint(equalTo: accountSummaryContainer.bottomAnchor),
+            
+            coverMessageTextView.heightAnchor.constraint(equalToConstant: 50),
+            coverMessageTextView.widthAnchor.constraint(equalToConstant: 200),
+            coverMessageTextView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
+            coverMessageTextView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
         ].forEach { $0.isActive = true }
     }
     
