@@ -46,7 +46,7 @@ class LocalRestaurantViewController : UIViewController {
     }
     
     private func bind() {
-        viewModel.list
+        viewModel.tableItem
             .bind(to: tableView.rx.items) { tv, row, element in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = self.tableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SearchCell, for: indexPath) as! SearchCell
@@ -60,6 +60,37 @@ class LocalRestaurantViewController : UIViewController {
         viewModel.address
             .bind(to: addressLabel.rx.text)
             .disposed(by: disposeBag)
+        
+        allButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.allButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+                self.cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                self.goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                self.viewModel.allButtonTap.accept(Void())
+            })
+            .disposed(by: disposeBag)
+        
+        cardButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.cardButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+                self.allButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                self.goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                self.viewModel.cardButtonTap.accept(Void())
+            })
+            .disposed(by: disposeBag)
+        
+        goodButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.goodButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+                self.cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                self.allButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                self.viewModel.goodButtonTap.accept(Void())
+            })
+            .disposed(by: disposeBag)
+        
     }
     
     private func attribute() {
