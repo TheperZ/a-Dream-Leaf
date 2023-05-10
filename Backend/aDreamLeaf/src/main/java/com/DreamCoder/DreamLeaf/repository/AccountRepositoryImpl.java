@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -26,6 +27,17 @@ public class AccountRepositoryImpl implements AccountRepository{
                     .date(rs.getString("created_date"))
                     .body(rs.getString("accountBody"))
                     .userId(rs.getInt("userId"))
+                    .build();
+
+    private final RowMapper<AccountListResultDto> accountResultRowMapper = (rs, rowNum) ->
+            AccountListResultDto.builder()
+                    .accountId(rs.getInt("accountId"))
+                    .restaurant(rs.getString("restaurant"))
+                    .price(rs.getInt("price"))
+                    .date(rs.getString("created_date"))
+                    .body(rs.getString("accountBody"))
+                    .userId(rs.getInt("userId"))
+                    .remain(0)
                     .build();
 
     private final RowMapper<SimpleAccountDto> simpleAccountDtoRowMapper = (rs, rowNum) ->
@@ -79,7 +91,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         price = jdbcTemplate.queryForObject(sql3,Integer.class,accountDelDto.getAccountId());
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
-        endDate = currentDate+"-30";
+        endDate = currentDate+"-31";
         remain = jdbcTemplate.queryForObject(sql4,Integer.class,accountDelDto.getUserId(),startDate,endDate);
         remain += price;
         jdbcTemplate.update(sql5,remain,accountDelDto.getUserId(),startDate,endDate);
@@ -101,7 +113,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         String currentDate = jdbcTemplate.queryForObject(sql3,String.class,accountUpDto.getAccountId());
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
-        endDate = currentDate+"-30";
+        endDate = currentDate+"-31";
         int price = jdbcTemplate.queryForObject(sql4,Integer.class,accountUpDto.getAccountId());
         int remain = jdbcTemplate.queryForObject(sql5,Integer.class,accountUpDto.getUserId(),startDate,endDate);
         remain += price;
@@ -109,7 +121,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         currentDate = accountUpDto.getDate();
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
-        endDate = currentDate+"-30";
+        endDate = currentDate+"-31";
         remain = jdbcTemplate.queryForObject(sql5,Integer.class,accountUpDto.getUserId(),startDate,endDate);
         if(remain >= accountUpDto.getPrice()){
             jdbcTemplate.update(sql6,remain- accountUpDto.getPrice(),accountUpDto.getUserId(),startDate,endDate);
@@ -118,6 +130,23 @@ public class AccountRepositoryImpl implements AccountRepository{
             // Custom Exception 발생
         }
         return "수정이 완료 되었습니다.";
+    }
+
+    @Override
+    public List<AccountListResultDto> search(AccountListDto accountListDto) {
+        List<AccountListResultDto> results = new ArrayList<>();
+        String Date = accountListDto.getYearMonth();
+        String startDate = Date+"-01";
+        String endDate = Date+"-31";
+        String sql = "SELECT * FROM account WHERE userId = ? and created_date LIKE ?  ORDER BY created_date DESC"; // 이것도 없을 수도 있어서 오류 처리 필요
+        String sql2 = "SELECT remain from accountlog where userId = ? and createdDate >= ? and createdDate <= ?"; // 이것도 없을 수도 있어서 오류 처리 필요
+        int remain = jdbcTemplate.queryForObject(sql2,Integer.class,accountListDto.getId(),startDate,endDate);
+        results = jdbcTemplate.query(sql,accountResultRowMapper,accountListDto.getId(),Date+"%");
+        for(AccountListResultDto result : results){
+            result.setRemain(remain);
+            remain += result.getPrice();
+        }
+        return results;
     }
 
     @Override

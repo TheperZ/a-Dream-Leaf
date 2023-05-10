@@ -2,10 +2,7 @@ package com.DreamCoder.DreamLeaf.controller;
 
 import com.DreamCoder.DreamLeaf.Util.AuthUtil;
 import com.DreamCoder.DreamLeaf.dto.*;
-import com.DreamCoder.DreamLeaf.req.AccountCreateReq;
-import com.DreamCoder.DreamLeaf.req.AccountDelReq;
-import com.DreamCoder.DreamLeaf.req.AccountSetReq;
-import com.DreamCoder.DreamLeaf.req.AccountUpReq;
+import com.DreamCoder.DreamLeaf.req.*;
 import com.DreamCoder.DreamLeaf.service.AccountService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -55,8 +53,12 @@ public class AccountController {
     }
 
     @PostMapping("/account/list")
-    public ResponseEntity getAccountList(){
-        return null;
+    public ResponseEntity getAccountList(@RequestBody AccountListReq accountListReq) throws FirebaseAuthException{
+        String firebaseToken = accountListReq.getFirebaseToken();
+        int id = authUtil.findUserId(firebaseToken);
+        AccountListDto accountListDto = new AccountListDto(id,accountListReq.getYearMonth());
+        List<AccountListResultDto> results = accountService.readAccount(accountListDto);
+        return ResponseEntity.ok().body(results);
     }
 
     @PostMapping("/account")
