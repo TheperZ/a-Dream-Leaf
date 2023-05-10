@@ -92,6 +92,13 @@ class HomeViewController: UIChartViewController {
                 self.tabBarController?.selectedIndex = 2
             })
             .disposed(by: disposeBag)
+        
+        nearRestMoreButon.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                self.navigationController?.pushViewController(LocalRestaurantViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -138,7 +145,7 @@ class HomeViewController: UIChartViewController {
         }
         
         [
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             profileButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
