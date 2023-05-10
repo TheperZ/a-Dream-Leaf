@@ -1,8 +1,7 @@
 package com.DreamCoder.DreamLeaf.repository;
 
-import com.DreamCoder.DreamLeaf.dto.ReviewCreateDto;
-import com.DreamCoder.DreamLeaf.dto.ReviewDto;
-import com.DreamCoder.DreamLeaf.dto.ReviewSearchDto;
+import com.DreamCoder.DreamLeaf.dto.*;
+import com.DreamCoder.DreamLeaf.req.ReviewDelReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -61,6 +60,22 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             reviewDto.setNameData(findUserName(reviewDto.getUserId()), findStoreName(reviewDto.getStoreId()));
         }
         return reviewDtoList;
+    }
+
+    @Override
+    public String update(ReviewUpDto reviewUpDto) {
+        jdbcTemplate.update("UPDATE REVIEW SET created_date='"+reviewUpDto.getDate()+
+                "', body='"+reviewUpDto.getBody()+
+                "', rating="+reviewUpDto.getRating()+
+                " WHERE reviewId="+reviewUpDto.getReviewId()
+                );
+        return "수정이 완료되었습니다.";
+    }
+
+    @Override
+    public String delete(ReviewDelDto reviewDelDto) {
+        jdbcTemplate.update("DELETE FROM REVIEW WHERE reviewId="+reviewDelDto.getReviewId());
+        return "삭제가 완료되었습니다.";
     }
 
     @Override

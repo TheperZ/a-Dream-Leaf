@@ -8,12 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		9F05C7DCF9273327BB618310 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */; };
+		BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */; };
 		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
 		BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */; };
 		BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */; };
 		BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3029D93D1600014E05 /* ReviewCellVIewModel.swift */; };
 		BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3629DA62FD00014E05 /* ReviewViewModel.swift */; };
 		BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB3829DA631B00014E05 /* ReviewViewController.swift */; };
+		BF219DC92A021044005DBAC6 /* LocalRestaurantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DC82A021044005DBAC6 /* LocalRestaurantViewModel.swift */; };
+		BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */; };
+		BF219DCE2A034FE0005DBAC6 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCD2A034FE0005DBAC6 /* LocationManager.swift */; };
+		BF219DD02A060C70005DBAC6 /* KakaoNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */; };
 		BF3CDB0E29E3DBB100C5FC5E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF3CDB0D29E3DBB100C5FC5E /* GoogleService-Info.plist */; };
 		BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D529ED99EE008DB52A /* LoginRepository.swift */; };
 		BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D729ED99FD008DB52A /* LoginNetwork.swift */; };
@@ -69,12 +74,17 @@
 		0192F08C6E377D04B56FDC3F /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
 		17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A44D9FCDECC8EAD7D6A77BB9 /* Pods-aDreamLeaf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.release.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.release.xcconfig"; sourceTree = "<group>"; };
+		BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoRepository.swift; sourceTree = "<group>"; };
 		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
 		BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		BF15AB3029D93D1600014E05 /* ReviewCellVIewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCellVIewModel.swift; sourceTree = "<group>"; };
 		BF15AB3629DA62FD00014E05 /* ReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewModel.swift; sourceTree = "<group>"; };
 		BF15AB3829DA631B00014E05 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
+		BF219DC82A021044005DBAC6 /* LocalRestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRestaurantViewModel.swift; sourceTree = "<group>"; };
+		BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRestaurantViewController.swift; sourceTree = "<group>"; };
+		BF219DCD2A034FE0005DBAC6 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoNetwork.swift; sourceTree = "<group>"; };
 		BF3CDB0D29E3DBB100C5FC5E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BF6439D529ED99EE008DB52A /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		BF6439D729ED99FD008DB52A /* LoginNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetwork.swift; sourceTree = "<group>"; };
@@ -183,6 +193,15 @@
 				BF15AB3829DA631B00014E05 /* ReviewViewController.swift */,
 			);
 			path = Review;
+			sourceTree = "<group>";
+		};
+		BF219DC72A021010005DBAC6 /* LocalRestaurant */ = {
+			isa = PBXGroup;
+			children = (
+				BF219DC82A021044005DBAC6 /* LocalRestaurantViewModel.swift */,
+				BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */,
+			);
+			path = LocalRestaurant;
 			sourceTree = "<group>";
 		};
 		BF6439D929EFFE8F008DB52A /* User */ = {
@@ -296,6 +315,7 @@
 		BFB0A8F429D13AB6003D3E6E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				BF219DC72A021010005DBAC6 /* LocalRestaurant */,
 				BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */,
 				BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */,
 			);
@@ -391,6 +411,7 @@
 			isa = PBXGroup;
 			children = (
 				BFCC911029DE9D6A00A37470 /* Number.swift */,
+				BF219DCD2A034FE0005DBAC6 /* LocationManager.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -449,6 +470,7 @@
 				BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */,
 				BF6439D529ED99EE008DB52A /* LoginRepository.swift */,
 				BF83F17629F7F9A600EA07AD /* ProfileRepository.swift */,
+				BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -459,6 +481,7 @@
 				BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */,
 				BF6439D729ED99FD008DB52A /* LoginNetwork.swift */,
 				BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */,
+				BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -599,6 +622,7 @@
 				BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */,
 				BFCC911429DEDE1C00A37470 /* AccountSettingViewModel.swift in Sources */,
 				BFB0A91229D550CD003D3E6E /* MyPageViewModel.swift in Sources */,
+				BF219DCE2A034FE0005DBAC6 /* LocationManager.swift in Sources */,
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
 				BFCC911129DE9D6A00A37470 /* Number.swift in Sources */,
@@ -608,6 +632,7 @@
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
+				BF219DD02A060C70005DBAC6 /* KakaoNetwork.swift in Sources */,
 				BFCC911629DEDE2300A37470 /* AccountSettingViewController.swift in Sources */,
 				BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */,
 				BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */,
@@ -625,7 +650,9 @@
 				BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */,
 				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
 				BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */,
+				BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */,
 				BF6439E029F25597008DB52A /* LoginResult.swift in Sources */,
+				BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */,
 				BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */,
 				BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
@@ -636,6 +663,7 @@
 				BF6439E529F40D13008DB52A /* StartViewController.swift in Sources */,
 				BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
+				BF219DC92A021044005DBAC6 /* LocalRestaurantViewModel.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,
 				BF83F17729F7F9A600EA07AD /* ProfileRepository.swift in Sources */,
@@ -771,7 +799,7 @@
 				DEVELOPMENT_TEAM = KB3R84Q4BQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한잎";
+				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한입";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
@@ -806,7 +834,7 @@
 				DEVELOPMENT_TEAM = KB3R84Q4BQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한잎";
+				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한입";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
