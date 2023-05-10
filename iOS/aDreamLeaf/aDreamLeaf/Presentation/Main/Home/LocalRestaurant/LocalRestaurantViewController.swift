@@ -95,6 +95,7 @@ class LocalRestaurantViewController : UIViewController {
     
     private func attribute() {
         view.backgroundColor = .white
+        self.navigationController?.navigationBar.tintColor = .black
         
         addressLabel.textColor = .black
         addressLabel.textAlignment = .left
