@@ -23,7 +23,7 @@ public class AccountService {
         return AccountRepositoryImpl.delete(accountDelDto);
     }
 
-    public AccountDto update(AccountUpDto accountUpDto){
+    public String update(AccountUpDto accountUpDto){
         return AccountRepositoryImpl.update(accountUpDto);
     }
 

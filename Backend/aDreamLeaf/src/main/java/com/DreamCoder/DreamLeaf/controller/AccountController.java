@@ -50,7 +50,7 @@ public class AccountController {
         String firebaseToken = accountUpReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
         AccountUpDto accountUpDto = new AccountUpDto(accountUpReq.getAccountId(), accountUpReq.getRestaurant(), accountUpReq.getPrice(), accountUpReq.getDate(), accountUpReq.getBody(), id);
-        AccountDto result = accountService.update(accountUpDto);
+        String result = accountService.update(accountUpDto);
         return ResponseEntity.ok().body(result);
     }
 
