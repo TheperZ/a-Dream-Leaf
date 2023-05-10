@@ -1,10 +1,8 @@
 package com.DreamCoder.DreamLeaf.service;
 
-import com.DreamCoder.DreamLeaf.dto.ReviewCreateDto;
-import com.DreamCoder.DreamLeaf.dto.ReviewDto;
-import com.DreamCoder.DreamLeaf.dto.ReviewPagination;
-import com.DreamCoder.DreamLeaf.dto.ReviewSearchDto;
+import com.DreamCoder.DreamLeaf.dto.*;
 import com.DreamCoder.DreamLeaf.repository.ReviewRepository;
+import com.DreamCoder.DreamLeaf.req.ReviewDelReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,4 +30,12 @@ public class ReviewService {
         List<ReviewDto> reviewDtoList = reviewRepositoryImpl.findReviewPage(reviewSearchDto);
         return reviewDtoList;
     }
+
+    public String update(ReviewUpDto reviewUpDto) { return reviewRepositoryImpl.update(reviewUpDto);}
+
+    public String delete(ReviewDelDto reviewDelDto){
+        return reviewRepositoryImpl.delete(reviewDelDto);
+    }
+
+
 }
