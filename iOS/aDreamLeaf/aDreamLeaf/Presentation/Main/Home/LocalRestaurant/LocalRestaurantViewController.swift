@@ -13,6 +13,8 @@ class LocalRestaurantViewController : UIViewController {
     private let disposeBag = DisposeBag()
     private var viewModel: LocalRestaurantViewModel!
     
+    private let loadingView = UIActivityIndicatorView(style: .medium)
+    
     private let imageView = UIImageView(image: UIImage(systemName: "location.fill"))
     private let addressLabel = UILabel()
     
@@ -40,6 +42,7 @@ class LocalRestaurantViewController : UIViewController {
         
         tableView.register(SearchCell.self, forCellReuseIdentifier: K.TableViewCellID.SearchCell)
         
+        loadingSetting()
         bind()
         attribute()
         layout()
@@ -169,4 +172,24 @@ class LocalRestaurantViewController : UIViewController {
         ].forEach { $0.isActive = true}
     }
     
+}
+
+extension LocalRestaurantViewController {
+    func loadingSetting() {
+        
+        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        
+        viewModel.loading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loading in
+                if loading {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                } else {
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+    }
 }
