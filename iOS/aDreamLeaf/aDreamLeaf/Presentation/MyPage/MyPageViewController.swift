@@ -48,6 +48,16 @@ class MyPageViewController: UIViewController {
     }
     
     private func bind() {
+        viewModel.loading
+            .subscribe(onNext: { isLoading in
+                if isLoading {
+                    self.loadingView.startAnimating()
+                } else {
+                    self.loadingView.stopAnimating()
+                }
+            })
+            .disposed(by: disposeBag)
+        
         backButton.rx.tap
             .asDriver()
             .drive(onNext: {
@@ -162,7 +172,7 @@ class MyPageViewController: UIViewController {
     }
     
     private func layout() {
-        [backButton,titleLabel, nicknameLabel, nicknameContentLabel, nicknameUnderLine, emailLabel, emailContentLabel, emailUnderLine, logoutButton, exitButton].forEach {
+        [loadingView, backButton,titleLabel, nicknameLabel, nicknameContentLabel, nicknameUnderLine, emailLabel, emailContentLabel, emailUnderLine, logoutButton, exitButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
