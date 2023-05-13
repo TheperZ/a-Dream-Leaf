@@ -15,6 +15,10 @@ class AccountViewController: UIChartViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: AccountViewModel
     
+    private var blurEffect: UIBlurEffect!
+    private var cover: UIVisualEffectView!
+    private let coverMessageTextView = UITextView()
+    
     private let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: nil, action: nil)
     
     private let titleLabel = UILabel()
@@ -39,12 +43,38 @@ class AccountViewController: UIChartViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bind()
         attribute()
+        coverSetting()
+        bind()
         layout()
+        
+    }
+    
+    private func coverSetting() {
+        blurEffect = UIBlurEffect(style: .regular)
+        cover = UIVisualEffectView(effect: blurEffect)
+        
+        coverMessageTextView.backgroundColor = .clear
+        coverMessageTextView.text = "로그인이 필요한 기능입니다!\n로그인을 해주세요!"
+        coverMessageTextView.font = .systemFont(ofSize: 15, weight: .semibold)
+        coverMessageTextView.textColor = .darkGray
+        coverMessageTextView.textAlignment = .center
     }
     
     private func bind() {
+        
+        UserManager.getInstance()
+            .subscribe(onNext: { user in
+                if user == nil {
+                    self.cover.isHidden = false
+                    self.navigationItem.rightBarButtonItem = nil
+                } else {
+                    self.cover.isHidden = true
+                    self.navigationItem.rightBarButtonItem = self.settingButton
+                }
+            })
+            .disposed(by: disposeBag)
+        
         viewModel.list
             .bind(to: tableView.rx.items) { tv, row, element in
                 let indexPath = IndexPath(row: row, section: 0)
@@ -102,10 +132,13 @@ class AccountViewController: UIChartViewController {
     }
     
     private func layout() {
-        [titleLabel, datePicker, accountSummaryContainer,divider, tableView, addButton].forEach {
+        [titleLabel, datePicker, accountSummaryContainer,divider, tableView, addButton, cover].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        cover.contentView.addSubview(coverMessageTextView)
+        coverMessageTextView.translatesAutoresizingMaskIntoConstraints = false
         
         [
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -134,7 +167,17 @@ class AccountViewController: UIChartViewController {
             addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             addButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             addButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            addButton.heightAnchor.constraint(equalToConstant: 40)
+            addButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            cover.topAnchor.constraint(equalTo: view.topAnchor),
+            cover.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cover.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            cover.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            coverMessageTextView.heightAnchor.constraint(equalToConstant: 50),
+            coverMessageTextView.widthAnchor.constraint(equalToConstant: 200),
+            coverMessageTextView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
+            coverMessageTextView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
         ].forEach { $0.isActive = true }
     }
 }
