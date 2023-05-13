@@ -10,7 +10,9 @@ import java.time.LocalDate;
 @ToString
 @Builder
 public class SignUpDto {
-    private int uid;
-    private String email;
     private int userId;
+    private String uid;
+    private String userName;
+    private String email;
+
 }
