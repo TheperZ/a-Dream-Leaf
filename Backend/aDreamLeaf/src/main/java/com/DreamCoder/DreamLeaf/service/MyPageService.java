@@ -1,5 +1,6 @@
 package com.DreamCoder.DreamLeaf.service;
 
+import com.DreamCoder.DreamLeaf.dto.MyPageDto;
 import com.DreamCoder.DreamLeaf.dto.MyPageDelDto;
 import com.DreamCoder.DreamLeaf.repository.MyPageRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,10 @@ public class MyPageService {
     private final MyPageRepository MyPageRepositoryImpl;
     public String delete(MyPageDelDto myPageDelDto){
         return MyPageRepositoryImpl.delete(myPageDelDto);
+    }
+
+    public MyPageDto myPageInquire(String id){
+        return MyPageRepositoryImpl.inquire(id);
     }
 
 }
