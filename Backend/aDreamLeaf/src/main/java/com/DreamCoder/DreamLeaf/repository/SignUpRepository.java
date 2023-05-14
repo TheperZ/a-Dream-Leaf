@@ -5,7 +5,8 @@ import com.DreamCoder.DreamLeaf.dto.SignUpCreateDto;
 import com.DreamCoder.DreamLeaf.dto.LoginDto;
 
 public interface SignUpRepository {
-    public SignUpDto save(SignUpCreateDto signUpCreateDto);
+    //public SignUpDto save(SignUpCreateDto signUpCreateDto);
+    public String save(SignUpCreateDto signUpCreateDto);
 
     public LoginDto inquire(String id);
 }

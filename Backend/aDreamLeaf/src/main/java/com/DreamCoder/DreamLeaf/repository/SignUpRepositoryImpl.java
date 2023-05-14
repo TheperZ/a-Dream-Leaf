@@ -32,7 +32,7 @@ public class SignUpRepositoryImpl implements SignUpRepository{
                     .userName(rs.getString("userName"))
                     .build();
 
-    @Override
+    /*@Override
     public SignUpDto save(SignUpCreateDto signUpCreateDto) {
         jdbcTemplate.execute("INSERT INTO USER(email,uid,userName) VALUES('"+
                 signUpCreateDto.getEmail()+
@@ -41,6 +41,14 @@ public class SignUpRepositoryImpl implements SignUpRepository{
         SignUpDto signUpDto = jdbcTemplate.queryForObject("SELECT * FROM user WHERE email = '"+signUpCreateDto.getEmail()+
                 "' AND uid = "+ signUpCreateDto.getUid(),signUpRowMapper);
         return signUpDto;
+    }*/
+    @Override
+    public String save(SignUpCreateDto signUpCreateDto) {
+        jdbcTemplate.execute("INSERT INTO USER(email,uid,userName) VALUES('"+
+                signUpCreateDto.getEmail()+
+                "','"+signUpCreateDto.getUid()+
+                "','"+signUpCreateDto.getUserName()+"')");
+        return "Created. 회원가입 완료";
     }
 
     @Override

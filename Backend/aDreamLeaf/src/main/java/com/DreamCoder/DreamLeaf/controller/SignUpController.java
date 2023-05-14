@@ -34,20 +34,22 @@ public class SignUpController {
         String firebaseToken = signUpCreateReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
         String newId = Integer.toString(id);   // uid
-        String[] a = {"good", "bad", "great", "floating", "happy"}; // 예시
+        String[] a = {"good", "brilliant", "great", "excellent", "happy"}; // 닉네임 임의 부여 조합 예시
         String[] b = {"dog", "cat", "dolphin", "racoon", "horse"};
         Random random = new Random();
         String userName = a[random.nextInt(a.length)] + " " + b[random.nextInt(b.length)];
         SignUpCreateDto signUpCreateDto = new SignUpCreateDto(userName, signUpCreateReq.getEmail(), newId);
-        SignUpDto signUpDto = signUpService.create(signUpCreateDto);
-        return ResponseEntity.status(201).body(signUpDto);
+        /*SignUpDto signUpDto = signUpService.create(signUpCreateDto);
+        return ResponseEntity.status(201).body(signUpDto);*/
+        String result = signUpService.create(signUpCreateDto);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/login")             // 로그인
     public ResponseEntity getLogin(@RequestBody LoginReq loginReq) throws FirebaseAuthException{
         String firebaseToken = loginReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
-        String newId = Integer.toString(id);  // uid
+        String newId = Integer.toString(id);
         LoginDto loginDto = signUpService.loginInquire(newId);
         return ResponseEntity.ok().body(loginDto);
     }

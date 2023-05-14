@@ -15,7 +15,10 @@ public class SignUpService {
 
     private final SignUpRepository SignUpRepositoryImpl;
 
-    public SignUpDto create(SignUpCreateDto signUpCreateDto){
+    /*public SignUpDto create(SignUpCreateDto signUpCreateDto){
+        return SignUpRepositoryImpl.save(signUpCreateDto);
+    }*/
+    public String create(SignUpCreateDto signUpCreateDto){
         return SignUpRepositoryImpl.save(signUpCreateDto);
     }
 
