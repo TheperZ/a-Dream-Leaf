@@ -2,6 +2,7 @@ package com.DreamCoder.DreamLeaf.service;
 
 import com.DreamCoder.DreamLeaf.dto.SignUpCreateDto;
 import com.DreamCoder.DreamLeaf.dto.SignUpDto;
+import com.DreamCoder.DreamLeaf.dto.LoginDto;
 import com.DreamCoder.DreamLeaf.repository.SignUpRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,4 +19,7 @@ public class SignUpService {
         return SignUpRepositoryImpl.save(signUpCreateDto);
     }
 
+    public LoginDto loginInquire(String id){
+        return SignUpRepositoryImpl.inquire(id);
+    }
 }

@@ -2,11 +2,13 @@ package com.DreamCoder.DreamLeaf.repository;
 
 import com.DreamCoder.DreamLeaf.dto.SignUpCreateDto;
 import com.DreamCoder.DreamLeaf.dto.SignUpDto;
+import com.DreamCoder.DreamLeaf.dto.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.YearMonth;
 import java.util.List;
 
 @Repository
@@ -23,6 +25,13 @@ public class SignUpRepositoryImpl implements SignUpRepository{
                     .email(rs.getString("email"))
                     .build();
 
+    private final RowMapper<LoginDto> loginDtoRowMapper = (rs, rowNum) ->
+            LoginDto.builder()
+                    .userId(rs.getInt("userId"))
+                    .email(rs.getString("email"))
+                    .userName(rs.getString("userName"))
+                    .build();
+
     @Override
     public SignUpDto save(SignUpCreateDto signUpCreateDto) {
         jdbcTemplate.execute("INSERT INTO USER(email,uid,userName) VALUES('"+
@@ -33,4 +42,12 @@ public class SignUpRepositoryImpl implements SignUpRepository{
                 "' AND uid = "+ signUpCreateDto.getUid(),signUpRowMapper);
         return signUpDto;
     }
+
+    @Override
+    public LoginDto inquire(String id) {
+        LoginDto loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE uid = "+ id
+                ,loginDtoRowMapper);
+        return loginDto;
+    }
+
 }
