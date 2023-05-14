@@ -5,6 +5,7 @@ import com.DreamCoder.DreamLeaf.dto.SignUpCreateDto;
 import com.DreamCoder.DreamLeaf.dto.SignUpDto;
 import com.DreamCoder.DreamLeaf.dto.LoginDto;
 import com.DreamCoder.DreamLeaf.req.SignUpCreateReq;
+import com.DreamCoder.DreamLeaf.req.LoginReq;
 import com.DreamCoder.DreamLeaf.service.SignUpService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +44,8 @@ public class SignUpController {
     }
 
     @PostMapping("/login")             // 로그인
-    public ResponseEntity getLogin(@RequestBody Map<String,String> req) throws FirebaseAuthException{
-        String firebaseToken = req.get("firebaseToken");
+    public ResponseEntity getLogin(@RequestBody LoginReq loginReq) throws FirebaseAuthException{
+        String firebaseToken = loginReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
         String newId = Integer.toString(id);  // uid
         LoginDto loginDto = signUpService.loginInquire(newId);
