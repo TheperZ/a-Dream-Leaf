@@ -30,8 +30,8 @@ public class MyPageController {
     private final AuthUtil authUtil;
 
     @PostMapping("/myPage/delete")          // 사용자 계정 삭제
-    public ResponseEntity deleteMyPage(@RequestBody MyPageDelReq myPageDelReq) throws FirebaseAuthException{
-        String firebaseToken = myPageDelReq.getFirebaseToken();
+    public ResponseEntity deleteMyPage(@RequestBody Map<String,String> req) throws FirebaseAuthException{
+        String firebaseToken = req.get("firebaseToken");
         int id = authUtil.findUserId(firebaseToken);
         MyPageDelDto myPageDelDto = new MyPageDelDto(id);
         String result = myPageService.delete(myPageDelDto);
@@ -39,8 +39,8 @@ public class MyPageController {
     }
 
     @PostMapping("/myPage")                 // 현재 사용자 데이터 조회
-    public ResponseEntity getMyPage(@RequestBody MyPageReq myPageReq) throws FirebaseAuthException{
-        String firebaseToken = myPageReq.getFirebaseToken();
+    public ResponseEntity getMyPage(@RequestBody Map<String,String> req) throws FirebaseAuthException{
+        String firebaseToken = req.get("firebaseToken");
         int id = authUtil.findUserId(firebaseToken);
         MyPageDto myPageDto = myPageService.myPageInquire(id);
         return ResponseEntity.ok().body(myPageDto);

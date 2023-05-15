@@ -50,8 +50,8 @@ public class SignUpController {
     }
 
     @PostMapping("/login")             // 로그인
-    public ResponseEntity getLogin(@RequestBody LoginReq loginReq) throws FirebaseAuthException{
-        String firebaseToken = loginReq.getFirebaseToken();
+    public ResponseEntity getLogin(@RequestBody Map<String,String> req) throws FirebaseAuthException{
+        String firebaseToken = req.get("firebaseToken");
         int id = authUtil.findUserId(firebaseToken);
         LoginDto loginDto = signUpService.loginInquire(id);
         return ResponseEntity.ok().body(loginDto);
