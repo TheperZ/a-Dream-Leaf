@@ -54,6 +54,9 @@ class AccountViewController: UIChartViewController {
         blurEffect = UIBlurEffect(style: .regular)
         cover = UIVisualEffectView(effect: blurEffect)
         
+        coverMessageTextView.isScrollEnabled = false
+        coverMessageTextView.isSelectable = false
+        coverMessageTextView.isEditable = false
         coverMessageTextView.backgroundColor = .clear
         coverMessageTextView.text = "로그인이 필요한 기능입니다!\n로그인을 해주세요!"
         coverMessageTextView.font = .systemFont(ofSize: 15, weight: .semibold)
