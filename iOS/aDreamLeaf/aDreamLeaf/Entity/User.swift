@@ -10,6 +10,5 @@ import Foundation
 struct User {
     let email: String
     let password: String
-    let uid: String
     let nickname: String
 }
