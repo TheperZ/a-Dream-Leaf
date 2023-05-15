@@ -18,11 +18,7 @@ struct KakaoNetwork {
         return RxAlamofire.requestData(.get, url, headers: ["Authorization": "KakaoAK \(Bundle.main.object(forInfoDictionaryKey: "KAKAO_API_KEY") as! String)"])
            .map { (r, data) in
                do {
-                   print("a")
-                   print(data)
-                   print(urlString)
                    let decodedData = try JSONDecoder().decode(KakaoAddressResponse.self, from: data)
-                   print(decodedData.documents)
                    return decodedData.documents
                } catch {
                    return nil

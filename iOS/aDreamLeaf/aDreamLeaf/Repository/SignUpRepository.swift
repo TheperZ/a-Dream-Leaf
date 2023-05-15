@@ -18,7 +18,16 @@ struct SignUpRepository {
             return inputValidationResult!
         }
         
-        return network.signUpRequestFB(email: email, pwd: pwd)
+        let FBSignUpResult = network.signUpRequestFB(email: email, pwd: pwd)
+        
+        return FBSignUpResult
+            .flatMap { result in
+                if result.success {
+                    return network.signUpRequestServer(email: email, pwd: pwd)
+                } else {
+                    return FBSignUpResult
+                }
+            }
     }
     
     func sendEmailValification(email: String, pwd: String) {

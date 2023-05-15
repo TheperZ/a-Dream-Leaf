@@ -24,4 +24,6 @@ struct K {
     struct CollectionViewCellID {
         static let RestaurantCell = "RestaurantCell"
     }
+    
+    static let serverURL = "http://localhost:8080"
 }
