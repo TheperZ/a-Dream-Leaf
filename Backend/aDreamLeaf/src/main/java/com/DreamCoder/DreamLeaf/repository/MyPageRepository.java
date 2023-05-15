@@ -8,5 +8,5 @@ public interface MyPageRepository {
 
     public String delete(MyPageDelDto myPageDelDto);
 
-    public MyPageDto inquire(String id);
+    public MyPageDto inquire(int id);
 }

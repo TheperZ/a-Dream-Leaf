@@ -53,8 +53,7 @@ public class SignUpController {
     public ResponseEntity getLogin(@RequestBody LoginReq loginReq) throws FirebaseAuthException{
         String firebaseToken = loginReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
-        String newId = Integer.toString(id);
-        LoginDto loginDto = signUpService.loginInquire(newId);
+        LoginDto loginDto = signUpService.loginInquire(id);
         return ResponseEntity.ok().body(loginDto);
     }
 }

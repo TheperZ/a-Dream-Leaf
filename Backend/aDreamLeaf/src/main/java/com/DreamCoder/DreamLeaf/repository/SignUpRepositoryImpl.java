@@ -52,8 +52,8 @@ public class SignUpRepositoryImpl implements SignUpRepository{
     }
 
     @Override
-    public LoginDto inquire(String id) {
-        LoginDto loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE uid = "+ id
+    public LoginDto inquire(int id) {
+        LoginDto loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE userId = "+ id
                 ,loginDtoRowMapper);
         return loginDto;
     }

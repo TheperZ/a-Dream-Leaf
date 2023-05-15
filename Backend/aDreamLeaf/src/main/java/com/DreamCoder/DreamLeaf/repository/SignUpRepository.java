@@ -8,5 +8,5 @@ public interface SignUpRepository {
     //public SignUpDto save(SignUpCreateDto signUpCreateDto);
     public String save(SignUpCreateDto signUpCreateDto);
 
-    public LoginDto inquire(String id);
+    public LoginDto inquire(int id);
 }

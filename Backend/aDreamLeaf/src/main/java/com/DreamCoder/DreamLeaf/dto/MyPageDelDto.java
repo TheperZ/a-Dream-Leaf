@@ -8,5 +8,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class MyPageDelDto {
-    private String uid;
+    private int userId;
 }
