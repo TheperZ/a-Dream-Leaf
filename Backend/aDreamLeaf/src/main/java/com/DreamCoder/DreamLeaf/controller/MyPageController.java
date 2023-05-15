@@ -6,7 +6,9 @@ import com.DreamCoder.DreamLeaf.dto.MyPageDelDto;
 import com.DreamCoder.DreamLeaf.req.MyPageDelReq;
 import com.DreamCoder.DreamLeaf.req.MyPageReq;
 import com.DreamCoder.DreamLeaf.service.MyPageService;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.A;
@@ -31,8 +33,7 @@ public class MyPageController {
     public ResponseEntity deleteMyPage(@RequestBody MyPageDelReq myPageDelReq) throws FirebaseAuthException{
         String firebaseToken = myPageDelReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
-        String newId = Integer.toString(id);
-        MyPageDelDto myPageDelDto = new MyPageDelDto(newId);
+        MyPageDelDto myPageDelDto = new MyPageDelDto(id);
         String result = myPageService.delete(myPageDelDto);
         return ResponseEntity.ok().body(result);
     }
@@ -41,8 +42,7 @@ public class MyPageController {
     public ResponseEntity getMyPage(@RequestBody MyPageReq myPageReq) throws FirebaseAuthException{
         String firebaseToken = myPageReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
-        String newId = Integer.toString(id);
-        MyPageDto myPageDto = myPageService.myPageInquire(newId);
+        MyPageDto myPageDto = myPageService.myPageInquire(id);
         return ResponseEntity.ok().body(myPageDto);
     }
 

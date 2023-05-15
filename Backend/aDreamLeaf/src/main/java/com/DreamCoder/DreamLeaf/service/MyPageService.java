@@ -21,7 +21,7 @@ public class MyPageService {
         return MyPageRepositoryImpl.delete(myPageDelDto);
     }
 
-    public MyPageDto myPageInquire(String id){
+    public MyPageDto myPageInquire(int id){
         return MyPageRepositoryImpl.inquire(id);
     }
 

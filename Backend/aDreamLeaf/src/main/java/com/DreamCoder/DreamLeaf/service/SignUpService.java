@@ -22,7 +22,7 @@ public class SignUpService {
         return SignUpRepositoryImpl.save(signUpCreateDto);
     }
 
-    public LoginDto loginInquire(String id){
+    public LoginDto loginInquire(int id){
         return SignUpRepositoryImpl.inquire(id);
     }
 }

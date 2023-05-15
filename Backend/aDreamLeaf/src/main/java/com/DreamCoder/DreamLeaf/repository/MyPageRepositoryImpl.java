@@ -21,17 +21,17 @@ public class MyPageRepositoryImpl implements MyPageRepository{
                     .email(rs.getString("email"))
                     .build();
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    //@Transactional(rollbackFor = Exception.class)
     public String delete(MyPageDelDto myPageDelDto) {
 
-        String sql = "DELETE FROM USER WHERE uid = "+myPageDelDto.getUid();
+        String sql = "DELETE FROM USER WHERE userId = "+myPageDelDto.getUserId();
         jdbcTemplate.update(sql);
         return "No Content. 사용자 계정 삭제 완료";
     }
 
     @Override
-    public MyPageDto inquire(String id) {
-        MyPageDto myPageDto = jdbcTemplate.queryForObject("SELECT userId, userName, email FROM USER WHERE uid = "+ id
+    public MyPageDto inquire(int id) {
+        MyPageDto myPageDto = jdbcTemplate.queryForObject("SELECT userId, userName, email FROM USER WHERE userId = "+ id
                 ,myPageDtoRowMapper);
         return myPageDto;
     }
