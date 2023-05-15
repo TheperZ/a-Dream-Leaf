@@ -123,12 +123,12 @@ public class StoreController {
         return storeService.findById(storeId);
     }
 
-    @GetMapping("/findByKeyword")
+    @PostMapping("/findByKeyword")
     public List<StoreDto> findByKeyword(@RequestParam String keyword, @RequestBody UserCurReq userCurReq){       //거리 순으로 정렬
         return storeService.findByKeyword(keyword, userCurReq);
     }
 
-    @GetMapping("/findByCur")
+    @PostMapping("/findByCur")
     public List<StoreDto> findByCur(@RequestBody UserCurReq userCurReq){
         return storeService.findByCur(userCurReq);
     }
