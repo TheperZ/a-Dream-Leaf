@@ -192,4 +192,6 @@ $RECYCLE.BIN/
 *.lnk
 
 
+GoogleService-Info.plist
+
 # End of https://www.toptal.com/developers/gitignore/api/java,swift,cocoapods,macos,windows,firebase
