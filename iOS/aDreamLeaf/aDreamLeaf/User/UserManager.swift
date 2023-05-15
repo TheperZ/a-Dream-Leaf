@@ -23,7 +23,6 @@ struct UserManager {
     
     static func login(userData: User?) {
         if let userData = userData {
-            UserDefaults.standard.setValue(userData.uid, forKey: "uid")
             UserDefaults.standard.setValue(userData.email, forKey: "email")
             UserDefaults.standard.setValue(userData.password, forKey: "password")
             UserDefaults.standard.setValue(userData.nickname, forKey: "nickname")

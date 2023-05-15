@@ -15,7 +15,16 @@ struct LoginRepository {
         if let emailValidationResult = validateInput(email: email, pwd: pwd) {
             return emailValidationResult
         }
-        return network.loginRequestFB(email: email, pwd: pwd)
+        
+        let FBLoginResult = network.loginRequestFB(email: email, pwd: pwd)
+        
+        return FBLoginResult.flatMap { result in
+            if result.success {
+                return network.loginRequestServer(email: email, pwd: pwd)
+            } else {
+                return FBLoginResult
+            }
+        }
     }
     
     func localLogIn() -> Observable<LoginResult> {
