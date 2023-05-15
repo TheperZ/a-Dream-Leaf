@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserCurReq {
-    private int userLat;
-    private int userLogt;
+    private double curLat;
+    private double curLogt;
 }
