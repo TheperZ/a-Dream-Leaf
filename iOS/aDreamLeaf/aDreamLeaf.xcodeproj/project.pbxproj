@@ -59,6 +59,8 @@
 		BFBD102B2A1217BB002EE950 /* SignUpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD102A2A1217BB002EE950 /* SignUpResponse.swift */; };
 		BFBD102D2A1218C7002EE950 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFBD102C2A1218C7002EE950 /* GoogleService-Info.plist */; };
 		BFBD102F2A128537002EE950 /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD102E2A128537002EE950 /* LoginResponse.swift */; };
+		BFBD10322A131D5B002EE950 /* PwdResetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10312A131D5B002EE950 /* PwdResetViewModel.swift */; };
+		BFBD10342A131D7C002EE950 /* PwdResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10332A131D7C002EE950 /* PwdResetViewController.swift */; };
 		BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */; };
 		BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */; };
 		BFCC911129DE9D6A00A37470 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911029DE9D6A00A37470 /* Number.swift */; };
@@ -127,6 +129,8 @@
 		BFBD102A2A1217BB002EE950 /* SignUpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpResponse.swift; sourceTree = "<group>"; };
 		BFBD102C2A1218C7002EE950 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BFBD102E2A128537002EE950 /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		BFBD10312A131D5B002EE950 /* PwdResetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetViewModel.swift; sourceTree = "<group>"; };
+		BFBD10332A131D7C002EE950 /* PwdResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetViewController.swift; sourceTree = "<group>"; };
 		BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewModel.swift; sourceTree = "<group>"; };
 		BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewController.swift; sourceTree = "<group>"; };
 		BFCC911029DE9D6A00A37470 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
@@ -338,6 +342,7 @@
 		BFB0A90129D2B9BF003D3E6E /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				BFBD10302A131D41002EE950 /* PwdReset */,
 				BFB0A90229D2B9CD003D3E6E /* LoginViewController.swift */,
 				BFB0A90429D2B9D4003D3E6E /* LoginViewModel.swift */,
 			);
@@ -409,6 +414,15 @@
 				BFBD102E2A128537002EE950 /* LoginResponse.swift */,
 			);
 			path = Response;
+			sourceTree = "<group>";
+		};
+		BFBD10302A131D41002EE950 /* PwdReset */ = {
+			isa = PBXGroup;
+			children = (
+				BFBD10312A131D5B002EE950 /* PwdResetViewModel.swift */,
+				BFBD10332A131D7C002EE950 /* PwdResetViewController.swift */,
+			);
+			path = PwdReset;
 			sourceTree = "<group>";
 		};
 		BFCC910A29DE929600A37470 /* NewPayment */ = {
@@ -643,6 +657,7 @@
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
+				BFBD10342A131D7C002EE950 /* PwdResetViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
@@ -672,6 +687,7 @@
 				BFBD102F2A128537002EE950 /* LoginResponse.swift in Sources */,
 				BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
+				BFBD10322A131D5B002EE950 /* PwdResetViewModel.swift in Sources */,
 				BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */,
 				BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */,
 				BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */,
