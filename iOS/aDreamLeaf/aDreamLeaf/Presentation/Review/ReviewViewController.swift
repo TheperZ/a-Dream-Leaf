@@ -44,11 +44,32 @@ class ReviewViewController: UIViewController {
     }
     
     private func bind() {
+        let starButtonList = [starButton1, starButton2, starButton3, starButton4, starButton5]
         
+        starButtonList.forEach { btn in
+            btn.rx.tap
+                .asDriver()
+                .drive(onNext: {
+                    var p = false
+                    for b in starButtonList {
+                        if p == false {
+                            b.tintColor = UIColor(red: 1, green: 0.8, blue: 0.1, alpha: 1)
+                            if b == btn {
+                                p = true
+                            }
+                        } else {
+                            b.tintColor = .gray
+                        }
+                        
+                    }
+                })
+                .disposed(by: disposeBag)
+        }
     }
     
     private func attribute() {
         view.backgroundColor = .white
+        view.addTapGesture()
         
         titleLabel.text = "리뷰 작성"
         titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
@@ -65,14 +86,16 @@ class ReviewViewController: UIViewController {
         [starButton1, starButton2, starButton3, starButton4, starButton5].forEach {
             $0.setImage(UIImage(systemName: "star.fill"), for: .normal)
             $0.tintColor = UIColor(red: 1, green: 0.8, blue: 0.1, alpha: 1)
+            $0.adjustsImageWhenHighlighted = false
         }
-        starButton5.tintColor = .gray
         
         textView.backgroundColor = UIColor(white: 0.95, alpha: 1)
         textView.text = "최소 10자 이상 입력해주세요."
         textView.textColor = .black
-        textView.layer.cornerRadius = 10
+        textView.layer.cornerRadius = 10    
         textView.contentInset = .init(top: 15, left: 15, bottom: 15, right: 15)
+        textView.textColor = UIColor.lightGray
+        textView.delegate = self
         
         photoButton.setImage(UIImage(systemName: "camera"), for: .normal)
         photoButton.setTitle("사진 추가", for: .normal)
@@ -126,5 +149,21 @@ class ReviewViewController: UIViewController {
             saveButton.heightAnchor.constraint(equalToConstant: 40),
             
         ].forEach { $0.isActive = true}
+    }
+}
+
+extension ReviewViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "최소 10자 이상 입력해주세요."
+            textView.textColor = UIColor.lightGray
+        }
     }
 }
