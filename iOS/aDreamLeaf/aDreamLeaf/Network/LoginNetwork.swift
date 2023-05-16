@@ -104,4 +104,26 @@ struct LoginNetwork {
             return Disposables.create()
         }
     }
+    
+    func sendPwdResetMailFB(_ email: String) -> Observable<RequestResult> {
+        return Observable.create { observer in
+            
+            Auth.auth().sendPasswordReset(withEmail: email) { error in
+                if let error = error {
+                   if error.localizedDescription == "The email address is badly formatted." {
+                        observer.onNext(RequestResult(success: false, msg: "이메일 형식이 잘못되었습니다."))
+                    } else if error.localizedDescription == "There is no user record corresponding to this identifier. The user may have been deleted." {
+                        observer.onNext(RequestResult(success: false, msg: "등록되지 않은 사용자입니다."))
+                    } else {
+                        observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                    }
+                    
+                }
+                
+                observer.onNext(RequestResult(success: true, msg: nil))
+            }
+            
+            return Disposables.create()
+        }
+    }
 }
