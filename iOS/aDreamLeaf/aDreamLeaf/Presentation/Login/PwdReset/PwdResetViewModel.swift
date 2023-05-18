@@ -1,42 +1,41 @@
 //
-//  LoginViewModel.swift
+//  PwdResetViewModel.swift
 //  aDreamLeaf
 //
-//  Created by 엄태양 on 2023/03/28.
+//  Created by 엄태양 on 2023/05/16.
 //
 
 import Foundation
-import RxSwift
 import RxRelay
+import RxSwift
 
-struct LoginViewModel {
+struct PwdResetViewModel {
     let disposeBag = DisposeBag()
+    
     let loading = BehaviorSubject<Bool>(value: false)
+    
     let email = PublishRelay<String>()
-    let pwd = PublishRelay<String>()
-    let loginBtnTap = PublishRelay<Void>()
-    let loginResult = PublishSubject<LoginResult>()
+    let resetBtnTap = PublishRelay<Void>()
+    let resetResult = PublishSubject<RequestResult>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
         
-        loginBtnTap
-            .withLatestFrom(Observable.combineLatest(email, pwd))
-            .flatMap(repo.login)
-            .bind(to: loginResult)
+        resetBtnTap
+            .withLatestFrom(email)
+            .flatMap(repo.sendPwdResetMail)
+            .bind(to: resetResult)
             .disposed(by: disposeBag)
         
         //MARK: - Loading
         
-        loginBtnTap
+        resetBtnTap
             .map { return true }
             .bind(to: loading)
             .disposed(by: disposeBag)
         
-        loginResult
+        resetResult
             .map { _ in return false }
             .bind(to: loading)
             .disposed(by: disposeBag)
-        
-        
     }
 }

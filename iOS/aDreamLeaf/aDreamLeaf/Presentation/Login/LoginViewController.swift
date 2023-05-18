@@ -67,6 +67,13 @@ class LoginViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        pwdFindButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(PwdResetViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
         loginButton.rx.tap
             .bind(to: viewModel.loginBtnTap)
             .disposed(by: disposeBag)

@@ -77,6 +77,20 @@ class StoreDetailViewController: UIViewController {
                 self.navigationController?.pushViewController(ReviewViewController(), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        UserManager.getInstance()
+            .observe(on: MainScheduler.instance)
+            .map { userData in
+                if userData != nil {
+                    self.reviewButton.alpha = 1
+                    return true
+                } else {
+                    self.reviewButton.alpha = 0.3
+                    return false
+                }
+            }
+            .bind(to: reviewButton.rx.isEnabled)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -149,7 +163,6 @@ class StoreDetailViewController: UIViewController {
         reviewTableView.isScrollEnabled = false
         reviewTableView.backgroundColor = .white
         
-        reviewButton.backgroundColor = .white
         reviewButton.setTitle("리뷰 작성", for: .normal)
         reviewButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
         reviewButton.setTitleColor(.black, for: .normal)
