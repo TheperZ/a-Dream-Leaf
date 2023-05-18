@@ -22,10 +22,15 @@ class NewPaymentViewController: UIViewController {
     
     private let divider1 = UIView()
     
+    private let storeNameLabel = UILabel()
+    private let storeNameTextField = UITextField()
+    
+    private let divider2 = UIView()
+    
     private let contentLabel = UILabel()
     private let contentTextField = UITextField()
     
-    private let divider2 = UIView()
+    private let divider3 = UIView()
     
     private let costLabel = UILabel()
     private let costTextField = UITextField()
@@ -64,22 +69,23 @@ class NewPaymentViewController: UIViewController {
         contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
         contentView.layer.cornerRadius = 10
         
-        [dateLabel, contentLabel, costLabel].forEach {
+        [dateLabel, contentLabel, costLabel, storeNameLabel].forEach {
             $0.font = .systemFont(ofSize: 15, weight: .semibold)
             $0.textColor = .black
         }
         
         dateLabel.text = "날짜"
+        storeNameLabel.text = "가게명"
         contentLabel.text = "항목"
         costLabel.text = "지출 비용"
         
-        [contentTextField, costTextField].forEach {
+        [contentTextField, costTextField, storeNameTextField].forEach {
             $0.textColor = .gray
             $0.textAlignment = .right
             $0.font = .systemFont(ofSize: 15, weight: .semibold)
         }
         
-        
+        storeNameTextField.placeholder = "가게명을 입력해주세요."
         contentTextField.placeholder = "내용을 입력해주세요."
         costTextField.placeholder = "금액을 입력해주세요."
         
@@ -88,7 +94,7 @@ class NewPaymentViewController: UIViewController {
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.locale = Locale(identifier: "ko-KR")
         
-        [divider1, divider2].forEach {
+        [divider1, divider2, divider3].forEach {
             $0.backgroundColor = .white
         }
         
@@ -103,7 +109,7 @@ class NewPaymentViewController: UIViewController {
         }
         
         
-        [dateLabel, datePicker, divider1, contentLabel, contentTextField, divider2, costLabel, costTextField].forEach {
+        [dateLabel, datePicker, divider1, storeNameLabel, storeNameTextField, divider2, contentLabel, contentTextField, divider3, costLabel, costTextField].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -132,7 +138,21 @@ class NewPaymentViewController: UIViewController {
             divider1.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             divider1.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            contentLabel.topAnchor.constraint(equalTo: divider1.bottomAnchor, constant: 15),
+            storeNameLabel.topAnchor.constraint(equalTo: divider1.bottomAnchor, constant: 15),
+            storeNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            storeNameLabel.widthAnchor.constraint(equalToConstant: 70),
+            storeNameLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+            storeNameTextField.centerYAnchor.constraint(equalTo: storeNameLabel.centerYAnchor),
+            storeNameTextField.leadingAnchor.constraint(equalTo: storeNameLabel.trailingAnchor),
+            storeNameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            
+            divider2.heightAnchor.constraint(equalToConstant: 0.5),
+            divider2.topAnchor.constraint(equalTo: storeNameLabel.bottomAnchor, constant: 15),
+            divider2.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            divider2.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            contentLabel.topAnchor.constraint(equalTo: divider2.bottomAnchor, constant: 15),
             contentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             contentLabel.widthAnchor.constraint(equalToConstant: 70),
             contentLabel.heightAnchor.constraint(equalToConstant: 20),
@@ -141,12 +161,12 @@ class NewPaymentViewController: UIViewController {
             contentTextField.leadingAnchor.constraint(equalTo: contentLabel.trailingAnchor),
             contentTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
-            divider2.heightAnchor.constraint(equalToConstant: 0.5),
-            divider2.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 15),
-            divider2.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            divider2.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            divider3.heightAnchor.constraint(equalToConstant: 0.5),
+            divider3.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 15),
+            divider3.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            divider3.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            costLabel.topAnchor.constraint(equalTo: divider2.bottomAnchor, constant: 15),
+            costLabel.topAnchor.constraint(equalTo: divider3.bottomAnchor, constant: 15),
             costLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             costLabel.widthAnchor.constraint(equalToConstant: 70),
             costLabel.heightAnchor.constraint(equalToConstant: 20),
