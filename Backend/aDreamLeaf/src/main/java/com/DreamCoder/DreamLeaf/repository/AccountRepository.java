@@ -15,4 +15,5 @@ public interface AccountRepository {
     public int getAmount(int userId,String startDate, String endDate);
     public String getCreatedDate(int accountId);
     public int getPrice(int accountId);
+    public int getWriteId(int accountId);
 }
