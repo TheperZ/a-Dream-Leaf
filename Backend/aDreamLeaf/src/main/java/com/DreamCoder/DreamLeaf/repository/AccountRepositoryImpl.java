@@ -2,6 +2,7 @@ package com.DreamCoder.DreamLeaf.repository;
 
 
 import com.DreamCoder.DreamLeaf.dto.*;
+import com.DreamCoder.DreamLeaf.exception.AccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +68,7 @@ public class AccountRepositoryImpl implements AccountRepository{
             jdbcTemplate.execute(sql);
             jdbcTemplate.update(updateSql,(remain- accountCreateDto.getPrice()),accountCreateDto.getUserId(),startDate,endDate);
         } else{
-            // Custom Exception 발생
+            throw new AccountException("예산이 초과 되었습니다.",400); // 오류처리
         }
         AccountDto accountDto = jdbcTemplate.queryForObject("SELECT * FROM account WHERE accountBody = '"+accountCreateDto.getBody()+
                 "' AND created_date = '"+accountCreateDto.getDate()+"' AND userId = "+ accountCreateDto.getUserId(),accountRowMapper);
@@ -119,7 +121,7 @@ public class AccountRepositoryImpl implements AccountRepository{
             jdbcTemplate.update(sql6,remain- accountUpDto.getPrice(),accountUpDto.getUserId(),startDate,endDate);
             jdbcTemplate.update(sql,accountUpDto.getRestaurant(),accountUpDto.getPrice(),accountUpDto.getDate(),accountUpDto.getBody(),accountUpDto.getAccountId()); //내용 업데이트
         } else{
-            // Custom Exception 발생
+            throw new AccountException("예산이 초과 되었습니다.",400); // 오류처리
         }
         return "수정이 완료 되었습니다.";
     }
@@ -130,7 +132,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         String Date = accountListDto.getYearMonth();
         String startDate = Date+"-01";
         String endDate = Date+"-31";
-        String sql = "SELECT * FROM account WHERE userId = ? and created_date LIKE ?  ORDER BY created_date DESC"; // 이것도 없을 수도 있어서 오류 처리 필요
+        String sql = "SELECT * FROM account WHERE userId = ? and created_date LIKE ?  ORDER BY created_date DESC";
         int remain = getRemain(accountListDto.getId(),startDate,endDate);
         results = jdbcTemplate.query(sql,accountResultRowMapper,accountListDto.getId(),Date+"%");
         for(AccountListResultDto result : results){
@@ -146,12 +148,18 @@ public class AccountRepositoryImpl implements AccountRepository{
         YearMonth currentDate = YearMonth.now();
         String startDate = currentDate.toString()+"-01";
         String endDate = currentDate.toString()+"-31";
-        SimpleAccountDto simpleAccountDto =  jdbcTemplate.queryForObject(sql,simpleAccountDtoRowMapper,id,startDate,endDate);
+        SimpleAccountDto simpleAccountDto;
+        try{
+            simpleAccountDto =  jdbcTemplate.queryForObject(sql,simpleAccountDtoRowMapper,id,startDate,endDate);
+        } catch(EmptyResultDataAccessException ex){
+            throw new AccountException("가계부 예산 설정을 먼저 진행해주세요.",400); // 오류처리
+        }
         simpleAccountDto.setCharge(simpleAccountDto.getCharge()- simpleAccountDto.getBalance());
         return simpleAccountDto;
     }
 
     @Override
+    @Transactional(rollbackFor = AccountException.class)
     public String set(AccountSetDto accountSetDto) {
         String sql = "SELECT userId FROM accountsetting WHERE userId = ?";
         int id;
@@ -176,6 +184,8 @@ public class AccountRepositoryImpl implements AccountRepository{
             int amount = getAmount(accountSetDto.getUserId(),startDate,endDate);
             int remain = getRemain(accountSetDto.getUserId(),startDate,endDate);
             remain += (accountSetDto.getAmount()-amount);
+            if(remain < 0)
+                throw new AccountException("예산 초과입니다.",400);
             jdbcTemplate.update(sql4,accountSetDto.getAmount(),remain,accountSetDto.getUserId(),startDate,endDate);
         }
         return "설정이 완료 되었습니다.";
@@ -188,8 +198,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         try{
             remain = jdbcTemplate.queryForObject(sql,Integer.class,userId,startDate,endDate);
         } catch(Exception ex){
-            ex.printStackTrace(); // 오류처리
-            remain = 0;
+            throw new AccountException("가계부 예산 설정을 먼저 진행해주세요.",403); // 오류처리
         }
         return remain;
     }
@@ -202,7 +211,7 @@ public class AccountRepositoryImpl implements AccountRepository{
             amount = jdbcTemplate.queryForObject(sql,Integer.class,userId,startDate,endDate);
         } catch(Exception ex){
             ex.printStackTrace(); // 오류처리
-            amount = 0;
+            throw new AccountException("가계부 예산 설정을 먼저 진행해주세요.",400); // 오류처리
         }
         return amount;
     }
@@ -214,7 +223,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         try{
             createdDate = jdbcTemplate.queryForObject(sql,String.class,accountId);
         } catch(Exception ex){
-            ex.printStackTrace(); // 오류처리
+            throw new AccountException("조회하려는 가계부 내역이 존재하지 않습니다.",404); // 오류처리
         }
         return createdDate;
     }
@@ -226,7 +235,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         try{
             price = jdbcTemplate.queryForObject(sql,Integer.class,accountId);
         } catch(Exception ex){
-            ex.printStackTrace(); // 오류처리
+            throw new AccountException("조회하려는 가계부 내역이 존재하지 않습니다.",404); // 오류처리
         }
         return price;
     }
