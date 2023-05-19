@@ -60,12 +60,11 @@ public class AccountRepositoryImpl implements AccountRepository{
         currentDate = currentDate.substring(0,currentDate.length()-3);
         String startDate = currentDate+"-01";
         String endDate = currentDate+"-31";
-        String sql2 = "SELECT remain FROM ACCOUNTLOG WHERE userId = ? AND createdDate BETWEEN ? AND ?";
-        String sql3 = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
-        int remain = jdbcTemplate.queryForObject(sql2,Integer.class,accountCreateDto.getUserId(),startDate,endDate); // 만약 accountlog가 없으면? 오류처리 필수.
+        String updateSql = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
+        int remain = getRemain(accountCreateDto.getUserId(),startDate,endDate);
         if(remain>= accountCreateDto.getPrice()){
             jdbcTemplate.execute(sql);
-            jdbcTemplate.update(sql3,(remain- accountCreateDto.getPrice()),accountCreateDto.getUserId(),startDate,endDate);
+            jdbcTemplate.update(updateSql,(remain- accountCreateDto.getPrice()),accountCreateDto.getUserId(),startDate,endDate);
         } else{
             // Custom Exception 발생
         }
@@ -83,18 +82,15 @@ public class AccountRepositoryImpl implements AccountRepository{
         int price;
         int remain;
         String sql = "DELETE FROM ACCOUNT WHERE accountId = "+accountDelDto.getAccountId();
-        String sql2 = "SELECT created_date FROM account WHERE accountId = ?";
-        String sql3 = "SELECT price FROM account WHERE accountId = ?";
-        String sql4 = "SELECT remain FROM ACCOUNTLOG WHERE userId = ? AND createdDate BETWEEN ? AND ?";
-        String sql5 = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
-        currentDate = jdbcTemplate.queryForObject(sql2,String.class,accountDelDto.getAccountId());
-        price = jdbcTemplate.queryForObject(sql3,Integer.class,accountDelDto.getAccountId());
+        String updateLogSql = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
+        currentDate = getCreatedDate(accountDelDto.getAccountId());
+        price = getPrice(accountDelDto.getAccountId());
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
         endDate = currentDate+"-31";
-        remain = jdbcTemplate.queryForObject(sql4,Integer.class,accountDelDto.getUserId(),startDate,endDate);
+        remain = getRemain(accountDelDto.getUserId(),startDate,endDate);
         remain += price;
-        jdbcTemplate.update(sql5,remain,accountDelDto.getUserId(),startDate,endDate);
+        jdbcTemplate.update(updateLogSql,remain,accountDelDto.getUserId(),startDate,endDate);
         jdbcTemplate.update(sql);
         return "삭제가 완료 되었습니다.";
     }
@@ -103,26 +99,22 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Transactional(rollbackFor = Exception.class)
     public String update(AccountUpDto accountUpDto) { //수정 권한 확인 추가 필요 및 예외처리 필요
         String sql = "UPDATE ACCOUNT SET restaurant = ?, price = ?, Created_date = ?, accountBody = ? WHERE accountId = ?";
-        String sql2 = "SELECT * FROM ACCOUNT WHERE accountId = ?";
-        String sql3 = "SELECT created_date FROM account WHERE accountId = ?";
-        String sql4 = "SELECT price FROM account WHERE accountId = ?";
-        String sql5 = "SELECT remain FROM ACCOUNTLOG WHERE userId = ? AND createdDate BETWEEN ? AND ?";
         String sql6 = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
         String startDate;
         String endDate;
-        String currentDate = jdbcTemplate.queryForObject(sql3,String.class,accountUpDto.getAccountId());
+        String currentDate = getCreatedDate(accountUpDto.getAccountId());
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
         endDate = currentDate+"-31";
-        int price = jdbcTemplate.queryForObject(sql4,Integer.class,accountUpDto.getAccountId());
-        int remain = jdbcTemplate.queryForObject(sql5,Integer.class,accountUpDto.getUserId(),startDate,endDate);
+        int price = getPrice(accountUpDto.getAccountId());
+        int remain = getRemain(accountUpDto.getUserId(),startDate,endDate);
         remain += price;
         jdbcTemplate.update(sql6,remain,accountUpDto.getUserId(),startDate,endDate); // accountlog를 account 작성 전으로 수정
         currentDate = accountUpDto.getDate();
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
         endDate = currentDate+"-31";
-        remain = jdbcTemplate.queryForObject(sql5,Integer.class,accountUpDto.getUserId(),startDate,endDate);
+        remain = getRemain(accountUpDto.getUserId(),startDate,endDate);
         if(remain >= accountUpDto.getPrice()){
             jdbcTemplate.update(sql6,remain- accountUpDto.getPrice(),accountUpDto.getUserId(),startDate,endDate);
             jdbcTemplate.update(sql,accountUpDto.getRestaurant(),accountUpDto.getPrice(),accountUpDto.getDate(),accountUpDto.getBody(),accountUpDto.getAccountId()); //내용 업데이트
@@ -139,8 +131,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         String startDate = Date+"-01";
         String endDate = Date+"-31";
         String sql = "SELECT * FROM account WHERE userId = ? and created_date LIKE ?  ORDER BY created_date DESC"; // 이것도 없을 수도 있어서 오류 처리 필요
-        String sql2 = "SELECT remain from accountlog where userId = ? and createdDate >= ? and createdDate <= ?"; // 이것도 없을 수도 있어서 오류 처리 필요
-        int remain = jdbcTemplate.queryForObject(sql2,Integer.class,accountListDto.getId(),startDate,endDate);
+        int remain = getRemain(accountListDto.getId(),startDate,endDate);
         results = jdbcTemplate.query(sql,accountResultRowMapper,accountListDto.getId(),Date+"%");
         for(AccountListResultDto result : results){
             result.setRemain(remain);
@@ -151,7 +142,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     @Override
     public SimpleAccountDto inquire(int id) {
-        String sql = "SELECT amount, remain FROM ACCOUNTLOG WHERE userId = ? and createdDate BETWEEN ? AND ?";
+        String sql = "SELECT amount, remain FROM ACCOUNTLOG WHERE userId = ? and createdDate >= ? AND createdDate <= ?";
         YearMonth currentDate = YearMonth.now();
         String startDate = currentDate.toString()+"-01";
         String endDate = currentDate.toString()+"-31";
@@ -164,6 +155,10 @@ public class AccountRepositoryImpl implements AccountRepository{
     public String set(AccountSetDto accountSetDto) {
         String sql = "SELECT userId FROM accountsetting WHERE userId = ?";
         int id;
+        YearMonth now = YearMonth.now();
+        String current = now.toString();
+        String startDate = current + "-01";
+        String endDate = current + "-31";
         try{
             id = jdbcTemplate.queryForObject(sql,Integer.class,accountSetDto.getUserId());
         } catch(EmptyResultDataAccessException e){
@@ -172,17 +167,67 @@ public class AccountRepositoryImpl implements AccountRepository{
         if(id == -1){
             String sql2 = "INSERT INTO accountsetting VALUES ("+accountSetDto.getUserId()+","+accountSetDto.getAmount()+",NOW())";
             jdbcTemplate.execute(sql2);
-            String sql3 = "INSERT INTO accountlog VALUES ("+accountSetDto.getUserId()+","+accountSetDto.getAmount()+",NOW(),"+accountSetDto.getAmount()+")";
+            String sql3 = "INSERT INTO accountlog(userId,amount,createdDate,remain) VALUES ("+accountSetDto.getUserId()+","+accountSetDto.getAmount()+",NOW(),"+accountSetDto.getAmount()+")";
             jdbcTemplate.execute(sql3);
         } else{
             String sql2 = "UPDATE accountsetting SET amount = ?, createdDate = NOW() WHERE userId = ?";
             jdbcTemplate.update(sql2,accountSetDto.getAmount(),accountSetDto.getUserId());
-            String sql4 = "UPDATE accountlog SET amount = ?, createdDate = NOW(), remain = ? WHERE userId = ?";
-            int amount = jdbcTemplate.queryForObject("SELECT amount FROM accountlog WHERE userId = ?",Integer.class,accountSetDto.getUserId());
-            int remain = jdbcTemplate.queryForObject("SELECT remain FROM accountlog WHERE userId = ?",Integer.class,accountSetDto.getUserId());
+            String sql4 = "UPDATE accountlog SET amount = ?, createdDate = NOW(), remain = ? WHERE userId = ? and createdDate >= ? and createdDate <= ?";
+            int amount = getAmount(accountSetDto.getUserId(),startDate,endDate);
+            int remain = getRemain(accountSetDto.getUserId(),startDate,endDate);
             remain += (accountSetDto.getAmount()-amount);
-            jdbcTemplate.update(sql4,accountSetDto.getAmount(),remain,accountSetDto.getUserId());
+            jdbcTemplate.update(sql4,accountSetDto.getAmount(),remain,accountSetDto.getUserId(),startDate,endDate);
         }
         return "설정이 완료 되었습니다.";
+    }
+
+    @Override
+    public int getRemain(int userId,String startDate, String endDate) {
+        String sql = "SELECT remain from accountlog where userId = ? and createdDate >= ? and createdDate <= ?";
+        int remain;
+        try{
+            remain = jdbcTemplate.queryForObject(sql,Integer.class,userId,startDate,endDate);
+        } catch(Exception ex){
+            ex.printStackTrace(); // 오류처리
+            remain = 0;
+        }
+        return remain;
+    }
+
+    @Override
+    public int getAmount(int userId,String startDate, String endDate) {
+        String sql = "SELECT amount FROM accountlog WHERE userId = ? and createdDate >= ? and createdDate <= ?";
+        int amount;
+        try{
+            amount = jdbcTemplate.queryForObject(sql,Integer.class,userId,startDate,endDate);
+        } catch(Exception ex){
+            ex.printStackTrace(); // 오류처리
+            amount = 0;
+        }
+        return amount;
+    }
+
+    @Override
+    public String getCreatedDate(int accountId) {
+        String sql = "SELECT created_date FROM account WHERE accountId = ?";
+        String createdDate = "";
+        try{
+            createdDate = jdbcTemplate.queryForObject(sql,String.class,accountId);
+        } catch(Exception ex){
+            ex.printStackTrace(); // 오류처리
+        }
+        return createdDate;
+    }
+
+    @Override
+    public int getPrice(int accountId) {
+        String sql = "SELECT price FROM account WHERE accountId = ?";
+        int price = -1;
+        try{
+            price = jdbcTemplate.queryForObject(sql,Integer.class,accountId);
+        } catch(Exception ex){
+            ex.printStackTrace(); // 오류처리
+        }
+        return price;
     }
 }
