@@ -78,6 +78,9 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String delete(AccountDelDto accountDelDto) { //삭제 권한 확인 추가 필요 및 예외처리 필요
+        int writerId = getWriteId(accountDelDto.getAccountId());
+        if(writerId != accountDelDto.getUserId())
+            throw new AccountException("삭제 권한이 없습니다.", 403);
         String currentDate;
         String startDate;
         String endDate;
@@ -100,6 +103,9 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String update(AccountUpDto accountUpDto) { //수정 권한 확인 추가 필요 및 예외처리 필요
+        int writerId = getWriteId(accountUpDto.getAccountId());
+        if(writerId != accountUpDto.getAccountId())
+            throw new AccountException("수정 권한이 없습니다.", 403);
         String sql = "UPDATE ACCOUNT SET restaurant = ?, price = ?, Created_date = ?, accountBody = ? WHERE accountId = ?";
         String sql6 = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
         String startDate;
@@ -238,5 +244,17 @@ public class AccountRepositoryImpl implements AccountRepository{
             throw new AccountException("조회하려는 가계부 내역이 존재하지 않습니다.",404); // 오류처리
         }
         return price;
+    }
+
+    @Override
+    public int getWriteId(int accountId) {
+        String sql = "SELECT userId FROM account WHERE accountId = ?";
+        int id;
+        try {
+            id = jdbcTemplate.queryForObject(sql,Integer.class,accountId);
+        } catch(EmptyResultDataAccessException ex){
+            throw new AccountException("조회하려는 가계부 내역이 존재하지 않습니다.",404);
+        }
+        return id;
     }
 }
