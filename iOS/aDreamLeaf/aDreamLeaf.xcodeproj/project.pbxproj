@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		9F05C7DCF9273327BB618310 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */; };
 		BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */; };
+		BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB42A19309E0083880F /* StoreNetwork.swift */; };
+		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
+		BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB82A1931BC0083880F /* StoreRepository.swift */; };
+		BF09DBBB2A1933400083880F /* StoreListRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */; };
 		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
 		BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */; };
 		BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */; };
@@ -90,6 +94,10 @@
 		17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A44D9FCDECC8EAD7D6A77BB9 /* Pods-aDreamLeaf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.release.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.release.xcconfig"; sourceTree = "<group>"; };
 		BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoRepository.swift; sourceTree = "<group>"; };
+		BF09DBB42A19309E0083880F /* StoreNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreNetwork.swift; sourceTree = "<group>"; };
+		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		BF09DBB82A1931BC0083880F /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
+		BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListRequestResult.swift; sourceTree = "<group>"; };
 		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
 		BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
@@ -249,6 +257,7 @@
 				BF6439DF29F25597008DB52A /* LoginResult.swift */,
 				BFBD10552A18DF82002EE950 /* ExpenditureListResult.swift */,
 				BFBD105B2A192554002EE950 /* AccountSummaryResult.swift */,
+				BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */,
 			);
 			path = RequestResult;
 			sourceTree = "<group>";
@@ -543,6 +552,7 @@
 				BF83F17629F7F9A600EA07AD /* ProfileRepository.swift */,
 				BFBD103D2A163FCB002EE950 /* AccountRepository.swift */,
 				BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */,
+				BF09DBB82A1931BC0083880F /* StoreRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -555,6 +565,7 @@
 				BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */,
 				BFBD103F2A163FD9002EE950 /* AccountNetwork.swift */,
 				BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */,
+				BF09DBB42A19309E0083880F /* StoreNetwork.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -568,6 +579,7 @@
 				BF6439DC29EFFEED008DB52A /* User.swift */,
 				BFBD10532A18DE94002EE950 /* Expenditure.swift */,
 				BFBD10592A1924E4002EE950 /* AccountSummary.swift */,
+				BF09DBB62A1930E40083880F /* Store.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -735,9 +747,11 @@
 				BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */,
 				BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */,
 				BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */,
+				BF09DBBB2A1933400083880F /* StoreListRequestResult.swift in Sources */,
 				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
 				BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */,
 				BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */,
+				BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */,
 				BF6439E029F25597008DB52A /* LoginResult.swift in Sources */,
 				BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */,
 				BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */,
@@ -751,12 +765,14 @@
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
 				BF6439E529F40D13008DB52A /* StartViewController.swift in Sources */,
 				BFBD10522A18DB98002EE950 /* ExpenditureListRequest.swift in Sources */,
+				BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */,
 				BFBD103E2A163FCB002EE950 /* AccountRepository.swift in Sources */,
 				BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BF219DC92A021044005DBAC6 /* LocalRestaurantViewModel.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,
+				BF09DBB72A1930E40083880F /* Store.swift in Sources */,
 				BFBD10562A18DF82002EE950 /* ExpenditureListResult.swift in Sources */,
 				BF83F17729F7F9A600EA07AD /* ProfileRepository.swift in Sources */,
 			);
