@@ -55,7 +55,30 @@ class NewPaymentViewController: UIViewController {
     }
     
     private func bind() {
+        datePicker.rx.date
+            .map(Date.dateToString)
+            .bind(to: viewModel.date)
+            .disposed(by: disposeBag)
         
+        storeNameTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.storeName)
+            .disposed(by: disposeBag)
+        
+        contentTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.body)
+            .disposed(by: disposeBag)
+        
+        costTextField.rx.text
+            .orEmpty
+            .map { Int($0) ?? -1 }
+            .bind(to: viewModel.price)
+            .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .bind(to: viewModel.saveBtnTap)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -88,6 +111,8 @@ class NewPaymentViewController: UIViewController {
         storeNameTextField.placeholder = "가게명을 입력해주세요."
         contentTextField.placeholder = "내용을 입력해주세요."
         costTextField.placeholder = "금액을 입력해주세요."
+        costTextField.keyboardType = .decimalPad
+        costTextField.delegate = self
         
         datePicker.maximumDate = Date()
         datePicker.datePickerMode = .date
@@ -178,5 +203,13 @@ class NewPaymentViewController: UIViewController {
             
             
         ].forEach { $0.isActive = true }
+    }
+}
+
+extension NewPaymentViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
     }
 }

@@ -43,7 +43,15 @@ class AccountSettingViewController: UIViewController {
     }
     
     private func bind() {
-
+        budgetButton.rx.tap
+            .bind(to: viewModel.saveBtnTap)
+            .disposed(by: disposeBag)
+        
+        budgetTextField.rx.text
+            .orEmpty
+            .map { Int($0) ?? -1 }
+            .bind(to: viewModel.amount)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
