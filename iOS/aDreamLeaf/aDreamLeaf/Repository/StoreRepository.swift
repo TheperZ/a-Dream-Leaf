@@ -14,4 +14,8 @@ struct StoreRepository {
     func searchStores(with keyword: String) -> Observable<StoreListRequestResult> {
         return network.searchStore(with: keyword)
     }
+    
+    func fetchDetail(storeId: Int) -> Observable<StoreDetailRequestResult> {
+        return network.fetchStoreDetail(storeId: storeId)
+    }
 }

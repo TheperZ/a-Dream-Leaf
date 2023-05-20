@@ -13,6 +13,7 @@
 		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
 		BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB82A1931BC0083880F /* StoreRepository.swift */; };
 		BF09DBBB2A1933400083880F /* StoreListRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */; };
+		BF09DBBD2A19360E0083880F /* StoreDetailRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBBC2A19360E0083880F /* StoreDetailRequestResult.swift */; };
 		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
 		BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */; };
 		BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */; };
@@ -98,6 +99,7 @@
 		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		BF09DBB82A1931BC0083880F /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
 		BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListRequestResult.swift; sourceTree = "<group>"; };
+		BF09DBBC2A19360E0083880F /* StoreDetailRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailRequestResult.swift; sourceTree = "<group>"; };
 		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
 		BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				BFBD10552A18DF82002EE950 /* ExpenditureListResult.swift */,
 				BFBD105B2A192554002EE950 /* AccountSummaryResult.swift */,
 				BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */,
+				BF09DBBC2A19360E0083880F /* StoreDetailRequestResult.swift */,
 			);
 			path = RequestResult;
 			sourceTree = "<group>";
@@ -702,6 +705,7 @@
 				BFB0A90329D2B9CD003D3E6E /* LoginViewController.swift in Sources */,
 				BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */,
 				BF6439DD29EFFEED008DB52A /* User.swift in Sources */,
+				BF09DBBD2A19360E0083880F /* StoreDetailRequestResult.swift in Sources */,
 				BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */,
 				BF6761B429DD31BE00A47207 /* AccountViewController.swift in Sources */,
 				BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */,

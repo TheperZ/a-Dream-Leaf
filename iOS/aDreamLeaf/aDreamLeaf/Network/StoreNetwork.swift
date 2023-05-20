@@ -58,4 +58,42 @@ struct StoreNetwork {
             return Disposables.create()
         }
     }
+    
+    func fetchStoreDetail(storeId: Int) -> Observable<StoreDetailRequestResult> {
+        return Observable.create { observer in
+            
+            let url = K.serverURL + "/restaurant/\(storeId)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            var request = URLRequest(url: URL(string: url)!)
+            
+            request.httpMethod = "GET"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.timeoutInterval = 10
+            
+            AF.request(request).responseJSON{ (response) in
+                 switch response.result {
+                     case .success:
+                         do {
+                             guard let result = response.data else {return}
+                             
+                             let decoder = JSONDecoder()
+                             let data = try decoder.decode(Store.self, from: result)
+                             
+                             print(data)
+                             
+                             observer.onNext(StoreDetailRequestResult(success: true, msg: nil, data: data))
+                         } catch {
+                             observer.onNext(StoreDetailRequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                         }
+                             
+                     case .failure(let error):
+                             print("error : \(error.errorDescription!)")
+                             observer.onNext(StoreDetailRequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                 }
+             }
+                
+            
+            
+            return Disposables.create()
+        }
+    }
 }
