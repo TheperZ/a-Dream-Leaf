@@ -61,7 +61,7 @@ class NewPaymentViewController: UIViewController {
     
     private func bind() {
         datePicker.rx.date
-            .map(Date.dateToString)
+            .map { Date.dateToString(with: $0) }
             .bind(to: viewModel.date)
             .disposed(by: disposeBag)
         

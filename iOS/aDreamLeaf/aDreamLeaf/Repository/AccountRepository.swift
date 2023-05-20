@@ -25,6 +25,10 @@ struct AccountRepository {
         return network.createAccountServer(date: date, storeName: storeName, body: body, price: price)
     }
     
+    func getExpenditureList(when: String) -> Observable<ExpenditureListResult> {
+        return network.getExpenditureList(when: when)
+    }
+    
     private func inputValidation(date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult>? {
         if storeName == "" {
             return Observable.just(RequestResult(success: false, msg: "가게명을 입력해주세요."))
