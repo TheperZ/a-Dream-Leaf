@@ -24,6 +24,8 @@ struct AccountNetwork {
                 
                 guard let token = token else { return }
                 
+                print(token)
+                
                 let url = K.serverURL + "/account/setting"
                 var request = URLRequest(url: URL(string: url)!)
                 request.httpMethod = "POST"
@@ -40,12 +42,11 @@ struct AccountNetwork {
                     observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                 }
                 
-                AF.request(request).responseJSON{ (response) in
+                AF.request(request).response{ (response) in
                      switch response.result {
                          case .success:
                              do {
                                  print(response.response?.statusCode)
-                                 
                                  observer.onNext(RequestResult(success: true, msg: nil))
                              } catch {
                                  observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))

@@ -43,6 +43,7 @@ class AccountViewController: UIChartViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         attribute()
         coverSetting()
         bind()

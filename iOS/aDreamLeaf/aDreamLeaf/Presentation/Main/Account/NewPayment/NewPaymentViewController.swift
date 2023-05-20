@@ -13,6 +13,8 @@ class NewPaymentViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: NewPaymentViewModel
     
+    private let loadingView = UIActivityIndicatorView(style: .medium)
+    
     private let titleLabel = UILabel()
     
     private let contentView = UIView()
@@ -49,6 +51,9 @@ class NewPaymentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        loadingSetting()
+        
         bind()
         attribute()
         layout()
@@ -78,6 +83,26 @@ class NewPaymentViewController: UIViewController {
         
         saveButton.rx.tap
             .bind(to: viewModel.saveBtnTap)
+            .disposed(by: disposeBag)
+        
+        viewModel.createResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                if result.success {
+                    let alert = UIAlertController(title: "성공", message: "지출 내역이 추가되었습니다", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                } else {
+                    self.loadingView.stopAnimating()
+                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
+            })
             .disposed(by: disposeBag)
     }
     
@@ -128,7 +153,7 @@ class NewPaymentViewController: UIViewController {
     
     private func layout() {
         
-        [titleLabel, contentView].forEach {
+        [loadingView, titleLabel, contentView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -140,6 +165,11 @@ class NewPaymentViewController: UIViewController {
         }
         
         [
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.widthAnchor.constraint(equalToConstant: 330),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -211,5 +241,25 @@ extension NewPaymentViewController: UITextFieldDelegate {
         let allowedCharacters = CharacterSet.decimalDigits
         let characterSet = CharacterSet(charactersIn: string)
         return allowedCharacters.isSuperset(of: characterSet)
+    }
+}
+
+extension NewPaymentViewController {
+    func loadingSetting() {
+        
+        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        
+        viewModel.loading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loading in
+                if loading {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                } else {
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
