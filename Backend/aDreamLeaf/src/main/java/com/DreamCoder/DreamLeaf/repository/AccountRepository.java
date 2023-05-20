@@ -11,4 +11,9 @@ public interface AccountRepository {
     public SimpleAccountDto inquire(int id);
     public String set(AccountSetDto accountSetDto);
     public List<AccountListResultDto> search(AccountListDto accountListDto);
+    public int getRemain(int userId,String startDate, String endDate);
+    public int getAmount(int userId,String startDate, String endDate);
+    public String getCreatedDate(int accountId);
+    public int getPrice(int accountId);
+    public int getWriteId(int accountId);
 }
