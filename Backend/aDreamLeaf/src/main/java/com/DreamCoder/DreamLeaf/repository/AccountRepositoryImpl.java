@@ -104,7 +104,7 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Transactional(rollbackFor = Exception.class)
     public String update(AccountUpDto accountUpDto) { //수정 권한 확인 추가 필요 및 예외처리 필요
         int writerId = getWriteId(accountUpDto.getAccountId());
-        if(writerId != accountUpDto.getAccountId())
+        if(writerId != accountUpDto.getUserId())
             throw new AccountException("수정 권한이 없습니다.", 403);
         String sql = "UPDATE ACCOUNT SET restaurant = ?, price = ?, Created_date = ?, accountBody = ? WHERE accountId = ?";
         String sql6 = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
