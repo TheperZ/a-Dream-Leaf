@@ -39,6 +39,12 @@ class HomeViewController: UIChartViewController {
         return collectionView
     }()
     
+    private let infoStackView = UIStackView()
+    private let goodInfoImageView = UIImageView()
+    private let goodInfoTextLabel = UILabel()
+    private let cardInfoImageView = UIImageView()
+    private let cardInfoTextLabel = UILabel()
+    
     override init() {
         viewModel = HomeViewModel()
         super.init()
@@ -132,16 +138,43 @@ class HomeViewController: UIChartViewController {
         
         nearRestCollectionView.contentInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
         
+        infoStackView.axis = .horizontal
+        infoStackView.spacing = 5
+        
+        let goodConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .regular, scale: .default)
+        let goodImg = UIImage(systemName: "leaf", withConfiguration: goodConfig)?.withRenderingMode(.alwaysTemplate)
+        goodInfoImageView.image = goodImg
+        goodInfoImageView.tintColor = UIColor(named: "subColor")
+        goodInfoImageView.contentMode = .scaleAspectFit
+        
+        goodInfoTextLabel.text = "선한 영향력 /"
+        goodInfoTextLabel.font = .systemFont(ofSize: 12, weight: .regular)
+        goodInfoTextLabel.textColor = .gray
+        
+        let cardConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .regular, scale: .default)
+        let cardImg = UIImage(systemName: "creditcard", withConfiguration: cardConfig)?.withRenderingMode(.alwaysTemplate)
+        cardInfoImageView.image = cardImg
+        cardInfoImageView.tintColor = UIColor(named: "subColor")
+        cardInfoImageView.contentMode = .scaleAspectFit
+        
+        cardInfoTextLabel.text = "꿈나무 카드"
+        cardInfoTextLabel.font = .systemFont(ofSize: 12, weight: .regular)
+        cardInfoTextLabel.textColor = .gray
     }
     
     private func layout() {
-        [titleLabel, profileButton, accountSummaryContainer, nearRestSummaryContainer].forEach {
+        [titleLabel, profileButton, accountSummaryContainer, nearRestSummaryContainer, infoStackView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
     
         [nearRestTitleLabel, nearRestMoreButon, nearRestSubTitleLabel, nearRestCollectionView].forEach {
             nearRestSummaryContainer.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [goodInfoImageView, goodInfoTextLabel, cardInfoImageView, cardInfoTextLabel].forEach {
+            infoStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -174,7 +207,11 @@ class HomeViewController: UIChartViewController {
             nearRestCollectionView.topAnchor.constraint(equalTo: nearRestSubTitleLabel.bottomAnchor, constant: 15),
             nearRestCollectionView.leadingAnchor.constraint(equalTo: nearRestSummaryContainer.leadingAnchor),
             nearRestCollectionView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor),
-            nearRestCollectionView.bottomAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: -10)
+            nearRestCollectionView.bottomAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: -10),
+            
+            infoStackView.topAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: 5),
+            infoStackView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor, constant: -15),
+            
             
         ].forEach { $0.isActive = true}
     }
