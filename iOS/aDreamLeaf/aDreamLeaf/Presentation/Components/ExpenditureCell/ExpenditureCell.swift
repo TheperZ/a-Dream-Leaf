@@ -16,10 +16,10 @@ class ExpenditureCell: UITableViewCell {
     private let dateLabel = UILabel()
     private let titleLabel = UILabel()
     private let costLabel = UILabel()
-    private let balanceLabel = UILabel()
+    private let bodyLabel = UILabel()
     
-    func setUp(with: (date: Date, title: String, cost: Int)) {
-        viewModel = ExpenditureCellViewModel(date: with.date, title: with.title, cost: with.cost)
+    func setUp(with: Expenditure) {
+        viewModel = ExpenditureCellViewModel(date: with.date, title: with.restaurant, cost: with.price, body: with.body)
         
         attribute()
         layout()
@@ -28,10 +28,7 @@ class ExpenditureCell: UITableViewCell {
     private func attribute() {
         contentView.backgroundColor = .white
         
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM.dd."
-        dateLabel.text = dateFormatter.string(from: viewModel.date)
+        dateLabel.text = viewModel.date
         dateLabel.font = .systemFont(ofSize: 16, weight: .medium)
         dateLabel.textColor = .gray
         dateLabel.textAlignment = .left
@@ -46,14 +43,14 @@ class ExpenditureCell: UITableViewCell {
         costLabel.textColor = UIColor(named: "subColor")
         costLabel.textAlignment = .right
         
-        balanceLabel.text = "12,000원"
-        balanceLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        balanceLabel.textColor = .lightGray
-        balanceLabel.textAlignment = .right
+        bodyLabel.text = viewModel.body
+        bodyLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        bodyLabel.textColor = .lightGray
+        bodyLabel.textAlignment = .left
     }
     
     private func layout() {
-        [dateLabel, titleLabel, costLabel, balanceLabel].forEach{
+        [dateLabel, titleLabel, costLabel, bodyLabel].forEach{
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -69,11 +66,12 @@ class ExpenditureCell: UITableViewCell {
             
             costLabel.topAnchor.constraint(equalTo: dateLabel.topAnchor),
             costLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            costLabel.widthAnchor.constraint(equalToConstant: 70),
+            costLabel.widthAnchor.constraint(equalToConstant: 120),
             
-            balanceLabel.topAnchor.constraint(equalTo: costLabel.bottomAnchor, constant: 10),
-            balanceLabel.trailingAnchor.constraint(equalTo: costLabel.trailingAnchor),
-            balanceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
+            bodyLabel.topAnchor.constraint(equalTo: costLabel.bottomAnchor, constant: 10),
+            bodyLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            bodyLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            bodyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
         ].forEach { $0.isActive = true }
     }
     

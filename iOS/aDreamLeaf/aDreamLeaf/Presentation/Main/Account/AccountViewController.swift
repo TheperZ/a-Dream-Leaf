@@ -30,6 +30,8 @@ class AccountViewController: UIChartViewController {
     
     private let addButton = UIButton()
     
+    private let emptyWarningLabel = UILabel()
+    
     override init() {
         viewModel = AccountViewModel()
         super.init()
@@ -48,6 +50,12 @@ class AccountViewController: UIChartViewController {
         bind()
         layout()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.refreshRequest.onNext(Void())
     }
     
     private func coverSetting() {
@@ -102,6 +110,12 @@ class AccountViewController: UIChartViewController {
                 self.navigationController?.pushViewController(NewPaymentViewController(), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        viewModel.list
+            .map { $0.count == 0 ? false : true}
+            .bind(to: emptyWarningLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+            
     }
     
     private func attribute() {
@@ -110,6 +124,8 @@ class AccountViewController: UIChartViewController {
         
         navigationItem.rightBarButtonItem = settingButton
         navigationController?.navigationBar.tintColor = .black
+        
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         
         titleLabel.text = "가계부"
         titleLabel.font = .systemFont(ofSize: 25, weight: .bold)
@@ -132,10 +148,16 @@ class AccountViewController: UIChartViewController {
         tableView.register(ExpenditureCell.self, forCellReuseIdentifier: K.TableViewCellID.ExpenditureCell)
         tableView.backgroundColor = .white
         
+        emptyWarningLabel.text = "해당 기간의 지출 내역이 없습니다!"
+        emptyWarningLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        emptyWarningLabel.textColor = .black
+        emptyWarningLabel.textAlignment = .center
+        emptyWarningLabel.isHidden = true
+        
     }
     
     private func layout() {
-        [titleLabel, datePicker, accountSummaryContainer,divider, tableView, addButton, cover].forEach {
+        [titleLabel, datePicker, accountSummaryContainer,divider, tableView, addButton, cover, emptyWarningLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -181,6 +203,17 @@ class AccountViewController: UIChartViewController {
             coverMessageTextView.widthAnchor.constraint(equalToConstant: 200),
             coverMessageTextView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
             coverMessageTextView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
+            
+            emptyWarningLabel.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 80),
+            emptyWarningLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            emptyWarningLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            
         ].forEach { $0.isActive = true }
     }
+}
+
+extension AccountViewController {
+    @objc func dateChanged(_ picker: MonthYearPickerView) {
+        viewModel.yearMonth.onNext(picker.date)
+     }
 }

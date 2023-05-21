@@ -100,6 +100,15 @@ class SearchViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        searchTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.keyword)
+            .disposed(by: disposeBag)
+        
+        searchButton.rx.tap
+            .bind(to: viewModel.searchButtonTap)
+            .disposed(by: disposeBag)
+        
     }    
     
     private func attribute() {

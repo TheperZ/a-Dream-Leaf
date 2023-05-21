@@ -12,6 +12,8 @@ import RxSwift
 class UIChartViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
+    private let viewModel = UIChartViewModel()
+    
     private var blurEffect: UIBlurEffect!
     private var cover: UIVisualEffectView!
     private let coverMessageTextView = UITextView()
@@ -20,7 +22,6 @@ class UIChartViewController: UIViewController {
     private let accountTitleLabel = UILabel()
     
     private let pieChart = PieChartView()
-    private let dataValues = [50000, 12000]
     
     private let usedAmountColorView = UIView()
     private let usedAmountLabel = UILabel()
@@ -47,6 +48,12 @@ class UIChartViewController: UIViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.fetchDataRequest.onNext(Void())
+    }
+    
     private func bind() {
         UserManager.getInstance()
             .subscribe(onNext: { user in
@@ -55,6 +62,15 @@ class UIChartViewController: UIViewController {
                 } else {
                     self.cover.isHidden = true
                 }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.dataValues
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: $0))
+                self.usedAmountLabel.text = "사용액: \(NumberUtil.commaString($0[0])!)원"
+                self.balanceLabel.text = "잔액: \(NumberUtil.commaString($0[1])!)원"
             })
             .disposed(by: disposeBag)
     }
@@ -94,15 +110,13 @@ class UIChartViewController: UIViewController {
         
         pieChart.drawEntryLabelsEnabled = false
         pieChart.legend.enabled = false
-        self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: dataValues))
+        
         
         usedAmountColorView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        usedAmountLabel.text = "사용액: \(NumberUtil.commaString(dataValues[0])!)원"
         usedAmountLabel.textColor = .black
         usedAmountLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
         balanceColorView.backgroundColor = UIColor(named: "subColor")!
-        balanceLabel.text = "잔액: \(NumberUtil.commaString(dataValues[1])!)원"
         balanceLabel.textColor = .black
         balanceLabel.font = .systemFont(ofSize: 15, weight: .regular)
     }
@@ -124,7 +138,7 @@ class UIChartViewController: UIViewController {
         var dataEntries = [PieChartDataEntry]()
         
         for i in 0..<values.count {
-            let dataEntry = PieChartDataEntry(value: Double(dataValues[i]))
+            let dataEntry = PieChartDataEntry(value: Double(values[i]))
             dataEntries.append(dataEntry)
         }
         
