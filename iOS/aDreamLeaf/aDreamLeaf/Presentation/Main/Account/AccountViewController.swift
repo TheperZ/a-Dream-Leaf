@@ -79,6 +79,7 @@ class AccountViewController: UIChartViewController {
                 if user == nil {
                     self.cover.isHidden = false
                     self.navigationItem.rightBarButtonItem = nil
+                    self.emptyWarningLabel.isHidden = true
                 } else {
                     self.cover.isHidden = true
                     self.navigationItem.rightBarButtonItem = self.settingButton

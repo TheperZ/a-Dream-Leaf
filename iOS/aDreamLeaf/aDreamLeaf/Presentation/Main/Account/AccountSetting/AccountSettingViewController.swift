@@ -52,6 +52,24 @@ class AccountSettingViewController: UIViewController {
             .map { Int($0) ?? -1 }
             .bind(to: viewModel.amount)
             .disposed(by: disposeBag)
+        
+        viewModel.budgetSettingResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                if result.success {
+                    let alert = UIAlertController(title: "성공", message: "예산이 정상적으로 저장되었습니다!", preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(cancel)
+                    self.present(alert, animated: true)
+                } else {
+                    print(result.msg)
+                    let alert = UIAlertController(title: "실패", message: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(cancel)
+                    self.present(alert, animated: true)
+                }
+                
+            })
     }
     
     private func attribute() {
