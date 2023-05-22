@@ -6,6 +6,7 @@ import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -55,7 +56,8 @@ public class AlarmService {
         return "알림이 해제 되었습니다.";
     }
 
-    public void sending(){
+    @Scheduled(cron = "0 0 20 * * *")
+    public void sending() throws FirebaseMessagingException {
         String topic = "account";
         Message message = Message.builder().setNotification(
                         Notification.builder()
@@ -64,12 +66,8 @@ public class AlarmService {
                                 .build())
                 .setTopic(topic)
                 .build();
-        try{
-            String response = FirebaseMessaging.getInstance().send(message);
-            System.out.println("Successfully sent message: " + response);
-        } catch(FirebaseMessagingException ex){
-            // 예외처리 할 예정
-        }
+        String response = FirebaseMessaging.getInstance().send(message);
+        System.out.println("Successfully sent message: " + response);
     }
 
 }

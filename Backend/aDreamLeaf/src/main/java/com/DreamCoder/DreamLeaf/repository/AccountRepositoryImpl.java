@@ -149,16 +149,16 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public SimpleAccountDto inquire(int id) {
+    public SimpleAccountDto inquire(AccountInqDto accountInqDto) {
         String sql = "SELECT amount, remain FROM ACCOUNTLOG WHERE userId = ? and createdDate >= ? AND createdDate <= ?";
-        YearMonth currentDate = YearMonth.now();
-        String startDate = currentDate.toString()+"-01";
-        String endDate = currentDate.toString()+"-31";
+        String currentDate = accountInqDto.getYearMonth();
+        String startDate = currentDate+"-01";
+        String endDate = currentDate+"-31";
         SimpleAccountDto simpleAccountDto;
         try{
-            simpleAccountDto =  jdbcTemplate.queryForObject(sql,simpleAccountDtoRowMapper,id,startDate,endDate);
+            simpleAccountDto =  jdbcTemplate.queryForObject(sql,simpleAccountDtoRowMapper,accountInqDto.getId(),startDate,endDate);
         } catch(EmptyResultDataAccessException ex){
-            throw new AccountException("가계부 예산 설정을 먼저 진행해주세요.",400); // 오류처리
+            throw new AccountException("조회하고자 하는 기간에 대한 예산 설정 값 및 가계부 작성 내역이 존재하지 않습니다.",404); // 오류처리
         }
         simpleAccountDto.setCharge(simpleAccountDto.getCharge()- simpleAccountDto.getBalance());
         return simpleAccountDto;

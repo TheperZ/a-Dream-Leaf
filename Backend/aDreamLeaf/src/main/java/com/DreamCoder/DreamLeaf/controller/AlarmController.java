@@ -41,10 +41,4 @@ public class AlarmController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/alarm")
-    public ResponseEntity doAlarm(){
-        alarmService.sending();
-        return ResponseEntity.ok().body("");
-    }
-
 }

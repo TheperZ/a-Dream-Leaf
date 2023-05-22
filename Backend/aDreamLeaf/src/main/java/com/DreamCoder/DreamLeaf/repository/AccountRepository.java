@@ -8,7 +8,7 @@ public interface AccountRepository {
     public AccountDto save(AccountCreateDto accountCreateDto);
     public String delete(AccountDelDto accountDelDto);
     public String update(AccountUpDto accountUpDto);
-    public SimpleAccountDto inquire(int id);
+    public SimpleAccountDto inquire(AccountInqDto accountInqDto);
     public String set(AccountSetDto accountSetDto);
     public List<AccountListResultDto> search(AccountListDto accountListDto);
     public int getRemain(int userId,String startDate, String endDate);
