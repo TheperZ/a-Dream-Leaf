@@ -90,6 +90,9 @@
 		BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D329ECCBA600590CC0 /* RequestResult.swift */; };
 		BFF042DD2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */; };
 		BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */; };
+		BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */; };
+		BFF042E32A1BA183001FCB88 /* CreateReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */; };
+		BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -181,6 +184,9 @@
 		BFEB30D329ECCBA600590CC0 /* RequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestResult.swift; sourceTree = "<group>"; };
 		BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewModel.swift; sourceTree = "<group>"; };
 		BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewController.swift; sourceTree = "<group>"; };
+		BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewNetwork.swift; sourceTree = "<group>"; };
+		BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReviewRequest.swift; sourceTree = "<group>"; };
+		BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -481,6 +487,7 @@
 				BFBD10422A16530B002EE950 /* AccountRequest.swift */,
 				BFBD10472A1749FC002EE950 /* BudgetRequest.swift */,
 				BFBD10512A18DB98002EE950 /* ExpenditureListRequest.swift */,
+				BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -561,6 +568,7 @@
 				BFBD103D2A163FCB002EE950 /* AccountRepository.swift */,
 				BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */,
 				BF09DBB82A1931BC0083880F /* StoreRepository.swift */,
+				BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -574,6 +582,7 @@
 				BFBD103F2A163FD9002EE950 /* AccountNetwork.swift */,
 				BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */,
 				BF09DBB42A19309E0083880F /* StoreNetwork.swift */,
+				BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -771,6 +780,7 @@
 				BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */,
 				BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */,
 				BF6439E029F25597008DB52A /* LoginResult.swift in Sources */,
+				BFF042E32A1BA183001FCB88 /* CreateReviewRequest.swift in Sources */,
 				BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */,
 				BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */,
 				BFBD102F2A128537002EE950 /* LoginResponse.swift in Sources */,
@@ -790,11 +800,13 @@
 				BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BF219DC92A021044005DBAC6 /* LocalRestaurantViewModel.swift in Sources */,
+				BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,
 				BF09DBB72A1930E40083880F /* Store.swift in Sources */,
 				BFBD10562A18DF82002EE950 /* ExpenditureListResult.swift in Sources */,
 				BF83F17729F7F9A600EA07AD /* ProfileRepository.swift in Sources */,
+				BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
