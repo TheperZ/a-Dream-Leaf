@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
         MessagingErrorCode messagingErrorCode = e.getMessagingErrorCode();
         Map<String,String> result = new HashMap<>();
         result.put("message","파이어베이스 메세지 전송에 실패하였습니다.");
-        result.put("authErrorCode", messagingErrorCode.toString());
+        result.put("MessagingErrorCode", messagingErrorCode.toString());
         return ResponseEntity.status(500).body(result);
     }
 }
