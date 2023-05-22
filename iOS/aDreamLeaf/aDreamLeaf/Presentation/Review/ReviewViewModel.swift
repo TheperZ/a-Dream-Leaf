@@ -17,7 +17,7 @@ struct ReviewViewModel {
     
     let saveBtnTap = PublishSubject<Void>()
     
-    let createRequestResult = PublishSubject<RequestResult>()
+    let createRequestResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: ReviewRepository = ReviewRepository()) {
         saveBtnTap

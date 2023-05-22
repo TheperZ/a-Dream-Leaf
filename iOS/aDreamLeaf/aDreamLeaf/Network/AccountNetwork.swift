@@ -12,7 +12,7 @@ import Alamofire
 
 struct AccountNetwork {
     
-    func setAccountBudget(to budget: Int) -> Observable<RequestResult> {
+    func setAccountBudget(to budget: Int) -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
@@ -64,7 +64,7 @@ struct AccountNetwork {
         }
     }
     
-    func createAccountServer(date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult> {
+    func createAccountServer(date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
@@ -115,14 +115,14 @@ struct AccountNetwork {
         }
     }
     
-    func getExpenditureList(when : String) -> Observable<ExpenditureListResult> {
+    func getExpenditureList(when : String) -> Observable<RequestResult<[Expenditure]>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(ExpenditureListResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", list: nil))
+                    observer.onNext(RequestResult<[Expenditure]>(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
                 }
                 
                 guard let token = token else { return }
@@ -140,7 +140,7 @@ struct AccountNetwork {
                     try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
                 } catch {
                     print("http Body Error")
-                    observer.onNext(ExpenditureListResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!", list: nil))
+                    observer.onNext(RequestResult<[Expenditure]>(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!", data: nil))
                 }
                 
                 AF.request(request).responseJSON{ (response) in
@@ -152,15 +152,15 @@ struct AccountNetwork {
                                  let decoder = JSONDecoder()
                                  let data = try decoder.decode([Expenditure].self, from: result)
                                  
-                                 observer.onNext(ExpenditureListResult(success: true, msg: nil, list: data))
+                                 observer.onNext(RequestResult<[Expenditure]>(success: true, msg: nil, data: data))
                              } catch(let err) {
                                  print(err)
-                                 observer.onNext(ExpenditureListResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", list: nil))
+                                 observer.onNext(RequestResult<[Expenditure]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                              }
                                  
                          case .failure(let error):
                                  print("error : \(error.errorDescription!)")
-                                 observer.onNext(ExpenditureListResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", list: nil))
+                                 observer.onNext(RequestResult<[Expenditure]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                      }
                  }
                 
@@ -170,14 +170,14 @@ struct AccountNetwork {
         }
     }
     
-    func getAccountSummary(yearMonth: String) -> Observable<AccountSummaryResult> {
+    func getAccountSummary(yearMonth: String) -> Observable<RequestResult<AccountSummary>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(AccountSummaryResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", summary: nil))
+                    observer.onNext(RequestResult<AccountSummary>(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
                 }
                 
                 guard let token = token else { return }
@@ -195,7 +195,7 @@ struct AccountNetwork {
                     try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
                 } catch {
                     print("http Body Error")
-                    observer.onNext(AccountSummaryResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!", summary: nil))
+                    observer.onNext(RequestResult<AccountSummary>(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!", data: nil))
                 }
                 
                 AF.request(request).responseJSON{ (response) in
@@ -207,15 +207,15 @@ struct AccountNetwork {
                                  let decoder = JSONDecoder()
                                  let data = try decoder.decode(AccountSummary.self, from: result)
                                  
-                                 observer.onNext(AccountSummaryResult(success: true, msg: nil, summary: data))
+                                 observer.onNext(RequestResult<AccountSummary>(success: true, msg: nil, data: data))
                              } catch(let err) {
                                  print(err)
-                                 observer.onNext(AccountSummaryResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", summary: nil))
+                                 observer.onNext(RequestResult<AccountSummary>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                              }
                                  
                          case .failure(let error):
                                  print("error : \(error.errorDescription!)")
-                                 observer.onNext(AccountSummaryResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", summary: nil))
+                                 observer.onNext(RequestResult<AccountSummary>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                      }
                  }
                 

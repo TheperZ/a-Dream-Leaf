@@ -12,7 +12,7 @@ import RxRelay
 struct StartViewModel {
     private let disposeBag = DisposeBag()
     let loginCheckRequest = PublishRelay<Void>()
-    let isLogInChecked = PublishSubject<LoginResult>()
+    let isLogInChecked = PublishSubject<RequestResult<User>>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
         loginCheckRequest

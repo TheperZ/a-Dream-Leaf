@@ -16,7 +16,7 @@ struct AccountSettingViewModel {
     
     let saveBtnTap = PublishRelay<Void>()
     
-    let budgetSettingResult = PublishSubject<RequestResult>()
+    let budgetSettingResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: AccountRepository = AccountRepository()) {
         saveBtnTap

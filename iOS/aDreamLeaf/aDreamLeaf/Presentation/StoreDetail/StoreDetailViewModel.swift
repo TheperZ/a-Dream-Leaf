@@ -16,7 +16,7 @@ struct StoreDetailViewModel {
     let detail = PublishSubject<Store?>()
     
     let fetchReviewRequest = BehaviorSubject(value: Void())
-    let fetchReviewResult = PublishSubject<ListRequestResult<Review>>()
+    let fetchReviewResult = PublishSubject<RequestResult<[Review]>>()
     
     init(_ storeRepo: StoreRepository = StoreRepository(), _ reviewRepo: ReviewRepository = ReviewRepository()) {
         storeRepo.fetchDetail(storeId: 1)

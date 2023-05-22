@@ -10,7 +10,7 @@ import RxSwift
 import Alamofire
 
 struct StoreNetwork {
-    func searchStore(with keyword: String) -> Observable<StoreListRequestResult> {
+    func searchStore(with keyword: String) -> Observable<RequestResult<[Store]>> {
         return Observable.create { observer in
             
             let url = K.serverURL + "/restaurant/findByKeyword?keyword=\(keyword)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -28,7 +28,7 @@ struct StoreNetwork {
                 try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
             } catch {
                 print("http Body Error")
-                observer.onNext(StoreListRequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", list: nil))
+                observer.onNext(RequestResult<[Store]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
             }
             
             AF.request(request).responseJSON{ (response) in
@@ -42,14 +42,14 @@ struct StoreNetwork {
                              
                              print(data)
                              
-                             observer.onNext(StoreListRequestResult(success: true, msg: nil, list: data))
+                             observer.onNext(RequestResult<[Store]>(success: true, msg: nil, data: data))
                          } catch {
-                             observer.onNext(StoreListRequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", list: nil))
+                             observer.onNext(RequestResult<[Store]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                          }
                              
                      case .failure(let error):
                              print("error : \(error.errorDescription!)")
-                             observer.onNext(StoreListRequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", list: nil))
+                             observer.onNext(RequestResult<[Store]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                  }
              }
                 
@@ -59,7 +59,7 @@ struct StoreNetwork {
         }
     }
     
-    func fetchStoreDetail(storeId: Int) -> Observable<StoreDetailRequestResult> {
+    func fetchStoreDetail(storeId: Int) -> Observable<RequestResult<Store>> {
         return Observable.create { observer in
             
             let url = K.serverURL + "/restaurant/\(storeId)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -80,14 +80,14 @@ struct StoreNetwork {
                              
                              print(data)
                              
-                             observer.onNext(StoreDetailRequestResult(success: true, msg: nil, data: data))
+                             observer.onNext(RequestResult<Store>(success: true, msg: nil, data: data))
                          } catch {
-                             observer.onNext(StoreDetailRequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                             observer.onNext(RequestResult<Store>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                          }
                              
                      case .failure(let error):
                              print("error : \(error.errorDescription!)")
-                             observer.onNext(StoreDetailRequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                             observer.onNext(RequestResult<Store>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                  }
              }
                 

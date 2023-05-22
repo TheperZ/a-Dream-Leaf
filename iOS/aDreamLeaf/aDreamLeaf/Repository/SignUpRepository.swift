@@ -11,7 +11,7 @@ import RxSwift
 struct SignUpRepository {
     let network = SignUpNetwork()
     
-    func signUp(email: String, pwd: String, pwdCheck: String) -> Observable<RequestResult> {
+    func signUp(email: String, pwd: String, pwdCheck: String) -> Observable<RequestResult<Void>> {
         let inputValidationResult = validateInput(email: email, pwd: pwd, pwdCheck: pwdCheck)
         
         if inputValidationResult != nil {
@@ -34,7 +34,7 @@ struct SignUpRepository {
         network.sendEmailVerificationFB(email: email, pwd: pwd)
     }
     
-    private func validateInput(email: String, pwd: String, pwdCheck: String) -> Observable<RequestResult>? {
+    private func validateInput(email: String, pwd: String, pwdCheck: String) -> Observable<RequestResult<Void>>? {
         if email == "" {
             return Observable.just(RequestResult(success: false, msg: "이메일을 입력해주세요."))
         } else if !email.contains("@") {

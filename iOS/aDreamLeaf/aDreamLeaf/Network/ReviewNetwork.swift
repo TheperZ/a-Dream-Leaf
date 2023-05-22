@@ -11,7 +11,7 @@ import Alamofire
 import FirebaseAuth
 
 struct ReviewNetwork {
-    func createRequest(storeId: Int, body: String, rating: Int) -> Observable<RequestResult> {
+    func createRequest(storeId: Int, body: String, rating: Int) -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
@@ -61,14 +61,14 @@ struct ReviewNetwork {
         }
     }
     
-    func fetchRecentRequest(storeId: Int) -> Observable<ListRequestResult<Review>> {
+    func fetchRecentRequest(storeId: Int) -> Observable<RequestResult<[Review]>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(ListRequestResult<Review>(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(RequestResult<[Review]>(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
                 }
                 
                 guard let token = token else { return }
@@ -92,15 +92,15 @@ struct ReviewNetwork {
                                  let decoder = JSONDecoder()
                                  let data = try decoder.decode([Review].self, from: result)
                                  
-                                 observer.onNext(ListRequestResult<Review>(success: true, msg: nil, data: data))
+                                 observer.onNext(RequestResult<[Review]>(success: true, msg: nil, data: data))
                              } catch(let err) {
                                  print(err)
-                                 observer.onNext(ListRequestResult<Review>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                                 observer.onNext(RequestResult<[Review]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                              }
                                  
                          case .failure(let error):
                                  print("error : \(error.errorDescription!)")
-                                 observer.onNext(ListRequestResult<Review>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                                 observer.onNext(RequestResult<[Review]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                      }
                  }
                 

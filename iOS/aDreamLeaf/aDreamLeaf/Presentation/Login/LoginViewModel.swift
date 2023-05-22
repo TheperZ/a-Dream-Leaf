@@ -15,7 +15,7 @@ struct LoginViewModel {
     let email = PublishRelay<String>()
     let pwd = PublishRelay<String>()
     let loginBtnTap = PublishRelay<Void>()
-    let loginResult = PublishSubject<LoginResult>()
+    let loginResult = PublishSubject<RequestResult<User>>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
         

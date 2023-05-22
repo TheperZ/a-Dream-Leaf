@@ -23,7 +23,7 @@ struct AccountViewModel {
             .withLatestFrom(yearMonth)
             .map { Date.dateToString(with: $0, format: "yyyy-MM")}
             .flatMap(repo.getExpenditureList)
-            .map { $0.list ?? [] }
+            .map { $0.data ?? [] }
             .bind(to: list)
             .disposed(by: disposeBag)
     }

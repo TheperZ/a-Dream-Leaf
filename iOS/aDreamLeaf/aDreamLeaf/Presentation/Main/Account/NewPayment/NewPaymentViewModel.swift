@@ -21,7 +21,7 @@ struct NewPaymentViewModel {
     
     let saveBtnTap = PublishRelay<Void>()
     
-    let createResult = PublishSubject<RequestResult>()
+    let createResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: AccountRepository = AccountRepository()) {
         

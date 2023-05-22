@@ -12,8 +12,6 @@
 		BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB42A19309E0083880F /* StoreNetwork.swift */; };
 		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
 		BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB82A1931BC0083880F /* StoreRepository.swift */; };
-		BF09DBBB2A1933400083880F /* StoreListRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */; };
-		BF09DBBD2A19360E0083880F /* StoreDetailRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBBC2A19360E0083880F /* StoreDetailRequestResult.swift */; };
 		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
 		BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */; };
 		BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */; };
@@ -28,7 +26,6 @@
 		BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D729ED99FD008DB52A /* LoginNetwork.swift */; };
 		BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DA29EFFE97008DB52A /* UserManager.swift */; };
 		BF6439DD29EFFEED008DB52A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DC29EFFEED008DB52A /* User.swift */; };
-		BF6439E029F25597008DB52A /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DF29F25597008DB52A /* LoginResult.swift */; };
 		BF6439E329F40CFD008DB52A /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439E229F40CFD008DB52A /* StartViewModel.swift */; };
 		BF6439E529F40D13008DB52A /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439E429F40D13008DB52A /* StartViewController.swift */; };
 		BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B129DD316600A47207 /* AccountViewModel.swift */; };
@@ -73,10 +70,8 @@
 		BFBD10482A1749FC002EE950 /* BudgetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10472A1749FC002EE950 /* BudgetRequest.swift */; };
 		BFBD10522A18DB98002EE950 /* ExpenditureListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10512A18DB98002EE950 /* ExpenditureListRequest.swift */; };
 		BFBD10542A18DE94002EE950 /* Expenditure.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10532A18DE94002EE950 /* Expenditure.swift */; };
-		BFBD10562A18DF82002EE950 /* ExpenditureListResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10552A18DF82002EE950 /* ExpenditureListResult.swift */; };
 		BFBD10582A192345002EE950 /* UIChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10572A192345002EE950 /* UIChartViewModel.swift */; };
 		BFBD105A2A1924E4002EE950 /* AccountSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10592A1924E4002EE950 /* AccountSummary.swift */; };
-		BFBD105C2A192554002EE950 /* AccountSummaryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD105B2A192554002EE950 /* AccountSummaryResult.swift */; };
 		BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */; };
 		BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */; };
 		BFCC911129DE9D6A00A37470 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCC911029DE9D6A00A37470 /* Number.swift */; };
@@ -94,7 +89,6 @@
 		BFF042E32A1BA183001FCB88 /* CreateReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */; };
 		BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */; };
 		BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E62A1BA79D001FCB88 /* Review.swift */; };
-		BFF042E92A1BAACA001FCB88 /* ListRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E82A1BAACA001FCB88 /* ListRequestResult.swift */; };
 		BFF042EB2A1BBCE4001FCB88 /* AccountSummaryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */; };
 /* End PBXBuildFile section */
 
@@ -106,8 +100,6 @@
 		BF09DBB42A19309E0083880F /* StoreNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreNetwork.swift; sourceTree = "<group>"; };
 		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		BF09DBB82A1931BC0083880F /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
-		BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListRequestResult.swift; sourceTree = "<group>"; };
-		BF09DBBC2A19360E0083880F /* StoreDetailRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailRequestResult.swift; sourceTree = "<group>"; };
 		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
 		BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
@@ -122,7 +114,6 @@
 		BF6439D729ED99FD008DB52A /* LoginNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetwork.swift; sourceTree = "<group>"; };
 		BF6439DA29EFFE97008DB52A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		BF6439DC29EFFEED008DB52A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		BF6439DF29F25597008DB52A /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
 		BF6439E229F40CFD008DB52A /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
 		BF6439E429F40D13008DB52A /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		BF6761B129DD316600A47207 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
@@ -167,10 +158,8 @@
 		BFBD10472A1749FC002EE950 /* BudgetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetRequest.swift; sourceTree = "<group>"; };
 		BFBD10512A18DB98002EE950 /* ExpenditureListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureListRequest.swift; sourceTree = "<group>"; };
 		BFBD10532A18DE94002EE950 /* Expenditure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expenditure.swift; sourceTree = "<group>"; };
-		BFBD10552A18DF82002EE950 /* ExpenditureListResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureListResult.swift; sourceTree = "<group>"; };
 		BFBD10572A192345002EE950 /* UIChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIChartViewModel.swift; sourceTree = "<group>"; };
 		BFBD10592A1924E4002EE950 /* AccountSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummary.swift; sourceTree = "<group>"; };
-		BFBD105B2A192554002EE950 /* AccountSummaryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryResult.swift; sourceTree = "<group>"; };
 		BFCC910B29DE92A300A37470 /* NewPaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewModel.swift; sourceTree = "<group>"; };
 		BFCC910D29DE92B900A37470 /* NewPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewController.swift; sourceTree = "<group>"; };
 		BFCC911029DE9D6A00A37470 /* Number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
@@ -191,7 +180,6 @@
 		BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReviewRequest.swift; sourceTree = "<group>"; };
 		BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRepository.swift; sourceTree = "<group>"; };
 		BFF042E62A1BA79D001FCB88 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
-		BFF042E82A1BAACA001FCB88 /* ListRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRequestResult.swift; sourceTree = "<group>"; };
 		BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -266,20 +254,6 @@
 				BF6439DA29EFFE97008DB52A /* UserManager.swift */,
 			);
 			path = User;
-			sourceTree = "<group>";
-		};
-		BF6439DE29F25582008DB52A /* RequestResult */ = {
-			isa = PBXGroup;
-			children = (
-				BFEB30D329ECCBA600590CC0 /* RequestResult.swift */,
-				BF6439DF29F25597008DB52A /* LoginResult.swift */,
-				BFBD10552A18DF82002EE950 /* ExpenditureListResult.swift */,
-				BFBD105B2A192554002EE950 /* AccountSummaryResult.swift */,
-				BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */,
-				BF09DBBC2A19360E0083880F /* StoreDetailRequestResult.swift */,
-				BFF042E82A1BAACA001FCB88 /* ListRequestResult.swift */,
-			);
-			path = RequestResult;
 			sourceTree = "<group>";
 		};
 		BF6439E129F40CF0008DB52A /* Start */ = {
@@ -483,6 +457,7 @@
 		BFBD10412A1652FE002EE950 /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				BFF042EC2A1BC431001FCB88 /* Review */,
 				BFBD10462A1749E8002EE950 /* Account */,
 			);
 			path = Request;
@@ -494,7 +469,6 @@
 				BFBD10422A16530B002EE950 /* AccountRequest.swift */,
 				BFBD10472A1749FC002EE950 /* BudgetRequest.swift */,
 				BFBD10512A18DB98002EE950 /* ExpenditureListRequest.swift */,
-				BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */,
 				BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */,
 			);
 			path = Account;
@@ -600,8 +574,8 @@
 			children = (
 				BFBD10412A1652FE002EE950 /* Request */,
 				BFBD10292A1217B0002EE950 /* Response */,
-				BF6439DE29F25582008DB52A /* RequestResult */,
 				BF6439DC29EFFEED008DB52A /* User.swift */,
+				BFEB30D329ECCBA600590CC0 /* RequestResult.swift */,
 				BFBD10532A18DE94002EE950 /* Expenditure.swift */,
 				BFBD10592A1924E4002EE950 /* AccountSummary.swift */,
 				BF09DBB62A1930E40083880F /* Store.swift */,
@@ -617,6 +591,14 @@
 				BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */,
 			);
 			path = ExpenditureDetail;
+			sourceTree = "<group>";
+		};
+		BFF042EC2A1BC431001FCB88 /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */,
+			);
+			path = Review;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -737,7 +719,6 @@
 				BFB0A90329D2B9CD003D3E6E /* LoginViewController.swift in Sources */,
 				BFB0A92129D6B53F003D3E6E /* SearchCell.swift in Sources */,
 				BF6439DD29EFFEED008DB52A /* User.swift in Sources */,
-				BF09DBBD2A19360E0083880F /* StoreDetailRequestResult.swift in Sources */,
 				BFCC910E29DE92B900A37470 /* NewPaymentViewController.swift in Sources */,
 				BF6761B429DD31BE00A47207 /* AccountViewController.swift in Sources */,
 				BF15AB3929DA631B00014E05 /* ReviewViewController.swift in Sources */,
@@ -757,7 +738,6 @@
 				BFCC911129DE9D6A00A37470 /* Number.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
-				BFF042E92A1BAACA001FCB88 /* ListRequestResult.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFBD10342A131D7C002EE950 /* PwdResetViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
@@ -776,7 +756,6 @@
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
 				BFBD105A2A1924E4002EE950 /* AccountSummary.swift in Sources */,
 				BF6439E329F40CFD008DB52A /* StartViewModel.swift in Sources */,
-				BFBD105C2A192554002EE950 /* AccountSummaryResult.swift in Sources */,
 				BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */,
@@ -786,12 +765,10 @@
 				BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */,
 				BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */,
 				BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */,
-				BF09DBBB2A1933400083880F /* StoreListRequestResult.swift in Sources */,
 				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
 				BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */,
 				BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */,
 				BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */,
-				BF6439E029F25597008DB52A /* LoginResult.swift in Sources */,
 				BFF042E32A1BA183001FCB88 /* CreateReviewRequest.swift in Sources */,
 				BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */,
 				BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */,
@@ -816,7 +793,6 @@
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,
 				BF09DBB72A1930E40083880F /* Store.swift in Sources */,
-				BFBD10562A18DF82002EE950 /* ExpenditureListResult.swift in Sources */,
 				BF83F17729F7F9A600EA07AD /* ProfileRepository.swift in Sources */,
 				BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */,
 			);

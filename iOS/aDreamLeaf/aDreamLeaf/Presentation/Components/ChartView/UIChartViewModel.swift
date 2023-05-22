@@ -20,7 +20,7 @@ struct UIChartViewModel {
         
         date
             .flatMap(repo.getAccountSummary)
-            .map { $0.summary != nil ? [$0.summary!.charge, $0.summary!.balance] : [0,0]}
+            .map { $0.data != nil ? [$0.data!.charge, $0.data!.balance] : [0,0]}
             .bind(to: dataValues)
             .disposed(by: disposeBag)
 
