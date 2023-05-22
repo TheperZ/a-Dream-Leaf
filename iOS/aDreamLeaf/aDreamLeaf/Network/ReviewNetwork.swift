@@ -43,8 +43,6 @@ struct ReviewNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 print(response.response?.statusCode)
-                                 
                                  observer.onNext(RequestResult(success: true, msg: nil))
                              } catch(let err) {
                                  print(err)
@@ -54,6 +52,55 @@ struct ReviewNetwork {
                          case .failure(let error):
                                  print("error : \(error.errorDescription!)")
                                  observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                     }
+                 }
+                
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
+    func fetchRecentRequest(storeId: Int) -> Observable<ListRequestResult<Review>> {
+        return Observable.create { observer in
+            
+            Auth.auth().currentUser?.getIDToken() { token, error in
+                
+                if error != nil {
+                    print(error)
+                    observer.onNext(ListRequestResult<Review>(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                }
+                
+                guard let token = token else { return }
+                
+                let url = K.serverURL + "/review/\(storeId)?page=1&display=3".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                var request = URLRequest(url: URL(string: url)!)
+                
+                request.httpMethod = "GET"
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.timeoutInterval = 10
+            
+                
+                AF.request(request).responseJSON{ (response) in
+                     switch response.result {
+                         case .success:
+                             do {
+                                 print(response.response?.statusCode)
+                                 
+                                 guard let result = response.data else {return}
+                                 
+                                 let decoder = JSONDecoder()
+                                 let data = try decoder.decode([Review].self, from: result)
+                                 
+                                 observer.onNext(ListRequestResult<Review>(success: true, msg: nil, data: data))
+                             } catch(let err) {
+                                 print(err)
+                                 observer.onNext(ListRequestResult<Review>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                             }
+                                 
+                         case .failure(let error):
+                                 print("error : \(error.errorDescription!)")
+                                 observer.onNext(ListRequestResult<Review>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                      }
                  }
                 

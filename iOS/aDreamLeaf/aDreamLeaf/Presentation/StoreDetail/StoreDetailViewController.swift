@@ -51,6 +51,13 @@ class StoreDetailViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.fetchReviewRequest.onNext(Void())
+    }
+    
+    
     private func bind() {
         viewModel.reviews
             .take(2)

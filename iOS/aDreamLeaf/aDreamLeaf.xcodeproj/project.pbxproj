@@ -93,6 +93,8 @@
 		BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */; };
 		BFF042E32A1BA183001FCB88 /* CreateReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */; };
 		BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */; };
+		BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E62A1BA79D001FCB88 /* Review.swift */; };
+		BFF042E92A1BAACA001FCB88 /* ListRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E82A1BAACA001FCB88 /* ListRequestResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,6 +189,8 @@
 		BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewNetwork.swift; sourceTree = "<group>"; };
 		BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReviewRequest.swift; sourceTree = "<group>"; };
 		BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRepository.swift; sourceTree = "<group>"; };
+		BFF042E62A1BA79D001FCB88 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		BFF042E82A1BAACA001FCB88 /* ListRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRequestResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +275,7 @@
 				BFBD105B2A192554002EE950 /* AccountSummaryResult.swift */,
 				BF09DBBA2A1933400083880F /* StoreListRequestResult.swift */,
 				BF09DBBC2A19360E0083880F /* StoreDetailRequestResult.swift */,
+				BFF042E82A1BAACA001FCB88 /* ListRequestResult.swift */,
 			);
 			path = RequestResult;
 			sourceTree = "<group>";
@@ -597,6 +602,7 @@
 				BFBD10532A18DE94002EE950 /* Expenditure.swift */,
 				BFBD10592A1924E4002EE950 /* AccountSummary.swift */,
 				BF09DBB62A1930E40083880F /* Store.swift */,
+				BFF042E62A1BA79D001FCB88 /* Review.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -747,6 +753,7 @@
 				BFCC911129DE9D6A00A37470 /* Number.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
+				BFF042E92A1BAACA001FCB88 /* ListRequestResult.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFBD10342A131D7C002EE950 /* PwdResetViewController.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
@@ -766,6 +773,7 @@
 				BFBD105A2A1924E4002EE950 /* AccountSummary.swift in Sources */,
 				BF6439E329F40CFD008DB52A /* StartViewModel.swift in Sources */,
 				BFBD105C2A192554002EE950 /* AccountSummaryResult.swift in Sources */,
+				BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */,
 				BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */,

@@ -16,8 +16,8 @@ class SimpleReviewCell: UITableViewCell {
     private let nicknameLabel = UILabel()
     private let contentLabel = UILabel()
     
-    func setUp(with: (nickname: String, content: String)) {
-        viewModel = SimpleReviewCellViewModel(nickname: with.nickname, content: with.content)
+    func setUp(with: Review) {
+        viewModel = SimpleReviewCellViewModel(with)
         
         bind()
         attribute()
@@ -33,12 +33,12 @@ class SimpleReviewCell: UITableViewCell {
         contentView.backgroundColor = .white
         
         nicknameLabel.text = viewModel.nickname
-        nicknameLabel.font = .systemFont(ofSize: 16, weight: .light)
+        nicknameLabel.font = .systemFont(ofSize: 13, weight: .semibold)
         nicknameLabel.textColor = .black
         nicknameLabel.textAlignment = .left
         
         contentLabel.text = viewModel.content
-        contentLabel.font = .systemFont(ofSize: 15, weight: .light)
+        contentLabel.font = .systemFont(ofSize: 13, weight: .regular)
         contentLabel.textColor = .gray
         contentLabel.textAlignment = .left
     }
