@@ -170,7 +170,7 @@ struct AccountNetwork {
         }
     }
     
-    func getAccountSummary() -> Observable<AccountSummaryResult> {
+    func getAccountSummary(yearMonth: String) -> Observable<AccountSummaryResult> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
@@ -188,7 +188,7 @@ struct AccountNetwork {
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.timeoutInterval = 10
                 // POST 로 보낼 정보
-                let params = ["firebaseToken" : token]
+                let params = AccountSummaryRequest(firebaseToken: token, yearMonth: yearMonth).toDict()
                  
                  // httpBody 에 parameters 추가
                 do {

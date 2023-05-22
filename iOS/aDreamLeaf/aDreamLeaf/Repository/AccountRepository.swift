@@ -29,8 +29,8 @@ struct AccountRepository {
         return network.getExpenditureList(when: when)
     }
     
-    func getAccountSummary() -> Observable<AccountSummaryResult> {
-        return network.getAccountSummary()
+    func getAccountSummary(yearMonth: String) -> Observable<AccountSummaryResult> {
+        return network.getAccountSummary(yearMonth: yearMonth)
     }
     
     private func inputValidation(date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult>? {

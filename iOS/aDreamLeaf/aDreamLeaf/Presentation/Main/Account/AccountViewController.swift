@@ -227,5 +227,6 @@ class AccountViewController: UIChartViewController {
 extension AccountViewController {
     @objc func dateChanged(_ picker: MonthYearPickerView) {
         viewModel.yearMonth.onNext(picker.date)
+        chartViewModel.date.onNext(Date.dateToString(with: picker.date, format: "yyyy-MM"))
      }
 }
