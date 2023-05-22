@@ -88,6 +88,8 @@
 		BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */; };
 		BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */; };
 		BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D329ECCBA600590CC0 /* RequestResult.swift */; };
+		BFF042DD2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */; };
+		BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -177,6 +179,8 @@
 		BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepository.swift; sourceTree = "<group>"; };
 		BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNetwork.swift; sourceTree = "<group>"; };
 		BFEB30D329ECCBA600590CC0 /* RequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestResult.swift; sourceTree = "<group>"; };
+		BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewModel.swift; sourceTree = "<group>"; };
+		BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +281,7 @@
 		BF6761B029DD315C00A47207 /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				BFF042DB2A1B943A001FCB88 /* ExpenditureDetail */,
 				BFCC911229DEDE1200A37470 /* AccountSetting */,
 				BFCC910A29DE929600A37470 /* NewPayment */,
 				BF6761B129DD316600A47207 /* AccountViewModel.swift */,
@@ -587,6 +592,15 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		BFF042DB2A1B943A001FCB88 /* ExpenditureDetail */ = {
+			isa = PBXGroup;
+			children = (
+				BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */,
+				BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */,
+			);
+			path = ExpenditureDetail;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -766,12 +780,14 @@
 				BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */,
 				BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */,
 				BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */,
+				BFF042DD2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift in Sources */,
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
 				BF6439E529F40D13008DB52A /* StartViewController.swift in Sources */,
 				BFBD10522A18DB98002EE950 /* ExpenditureListRequest.swift in Sources */,
 				BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */,
 				BFBD103E2A163FCB002EE950 /* AccountRepository.swift in Sources */,
 				BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */,
+				BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BF219DC92A021044005DBAC6 /* LocalRestaurantViewModel.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
