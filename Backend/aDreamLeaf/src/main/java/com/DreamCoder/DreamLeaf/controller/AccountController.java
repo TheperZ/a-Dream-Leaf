@@ -62,10 +62,11 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    public ResponseEntity getSimpleAccount(@RequestBody Map<String,String> req) throws FirebaseAuthException{
-        String firebaseToken = req.get("firebaseToken");
+    public ResponseEntity getSimpleAccount(@RequestBody AccountInqReq accountInqReq) throws FirebaseAuthException{
+        String firebaseToken = accountInqReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
-        SimpleAccountDto simpleAccountDto = accountService.simpleInquire(id);
+        AccountInqDto accountInqDto = new AccountInqDto(id,accountInqReq.getYearMonth());
+        SimpleAccountDto simpleAccountDto = accountService.simpleInquire(accountInqDto);
         return ResponseEntity.ok().body(simpleAccountDto);
     }
 
