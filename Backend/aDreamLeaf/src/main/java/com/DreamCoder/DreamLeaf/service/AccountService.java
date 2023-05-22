@@ -29,8 +29,8 @@ public class AccountService {
         return AccountRepositoryImpl.update(accountUpDto);
     }
 
-    public SimpleAccountDto simpleInquire(int id){
-        return AccountRepositoryImpl.inquire(id);
+    public SimpleAccountDto simpleInquire(AccountInqDto accountInqDto){
+        return AccountRepositoryImpl.inquire(accountInqDto);
     }
 
     public String setAccount(AccountSetDto accountSetDto){
