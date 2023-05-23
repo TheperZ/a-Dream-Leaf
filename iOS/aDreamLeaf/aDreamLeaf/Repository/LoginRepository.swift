@@ -15,7 +15,16 @@ struct LoginRepository {
         if let emailValidationResult = validateInput(email: email, pwd: pwd) {
             return emailValidationResult
         }
-        return network.loginRequestFB(email: email, pwd: pwd)
+        
+        let FBLoginResult = network.loginRequestFB(email: email, pwd: pwd)
+        
+        return FBLoginResult.flatMap { result in
+            if result.success {
+                return network.loginRequestServer(email: email, pwd: pwd)
+            } else {
+                return FBLoginResult
+            }
+        }
     }
     
     func localLogIn() -> Observable<LoginResult> {
@@ -27,6 +36,14 @@ struct LoginRepository {
         
     }
     
+    func sendPwdResetMail(to email: String) -> Observable<RequestResult> {
+        if let validationResult = validateEmail(email: email) {
+            return validationResult
+        }
+        
+        return network.sendPwdResetMailFB(email)
+    }
+    
     private func validateInput(email: String, pwd: String) -> Observable<LoginResult>? {
         if email == "" {
             return Observable.just(LoginResult(success: false, msg: "이메일을 입력해주세요."))
@@ -36,6 +53,16 @@ struct LoginRepository {
             return Observable.just(LoginResult(success: false, msg: "올바르지 못한 이메일 형식입니다."))
         }  else if pwd.count < 6 {
             return Observable.just(LoginResult(success: false, msg: "비밀번호는 최소 6자리 이상 입력해주세요."))
+        } else {
+            return nil
+        }
+    }
+    
+    private func validateEmail(email: String) -> Observable<RequestResult>? {
+        if email == "" {
+            return Observable.just(RequestResult(success: false, msg: "이메일을 입력해주세요."))
+        } else if !email.contains("@") {
+            return Observable.just(RequestResult(success: false, msg: "올바르지 못한 이메일 형식입니다."))
         } else {
             return nil
         }

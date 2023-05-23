@@ -25,7 +25,7 @@ class HomeViewController: UIChartViewController {
     private let nearRestCollectionViewLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 140, height: 120)
+        layout.itemSize = CGSize(width: 140, height: 110)
         return layout
     }()
     
@@ -115,7 +115,7 @@ class HomeViewController: UIChartViewController {
         
         chartSetting()
         
-        nearRestSummaryContainer.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        nearRestSummaryContainer.backgroundColor = .white
         nearRestSummaryContainer.layer.cornerRadius = 10
         
         nearRestTitleLabel.text = "주변 음식점"
@@ -129,7 +129,8 @@ class HomeViewController: UIChartViewController {
         nearRestSubTitleLabel.text = "우리동네 꿈나무 식당을 소개합니다 :)"
         nearRestSubTitleLabel.font = .systemFont(ofSize: 14, weight: .regular)
         nearRestSubTitleLabel.textColor = .black
-
+        
+        nearRestCollectionView.contentInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
         
     }
     
@@ -151,27 +152,27 @@ class HomeViewController: UIChartViewController {
             profileButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             profileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            accountSummaryContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            accountSummaryContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
             accountSummaryContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             accountSummaryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             nearRestSummaryContainer.topAnchor.constraint(equalTo: accountSummaryContainer.bottomAnchor, constant: 40),
-            nearRestSummaryContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            nearRestSummaryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            nearRestSummaryContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            nearRestSummaryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             nearRestSummaryContainer.heightAnchor.constraint(equalToConstant: 200),
             
-            nearRestTitleLabel.topAnchor.constraint(equalTo: nearRestSummaryContainer.topAnchor, constant: 10),
-            nearRestTitleLabel.leadingAnchor.constraint(equalTo: nearRestSummaryContainer.leadingAnchor, constant: 15),
+            nearRestTitleLabel.topAnchor.constraint(equalTo: nearRestSummaryContainer.topAnchor, constant: 20),
+            nearRestTitleLabel.leadingAnchor.constraint(equalTo: nearRestSummaryContainer.leadingAnchor, constant: 30),
             
-            nearRestMoreButon.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor, constant: -10),
+            nearRestMoreButon.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor, constant: -15),
             nearRestMoreButon.centerYAnchor.constraint(equalTo: nearRestTitleLabel.centerYAnchor),
             nearRestMoreButon.widthAnchor.constraint(equalToConstant: 60),
             
             nearRestSubTitleLabel.topAnchor.constraint(equalTo: nearRestTitleLabel.bottomAnchor,constant: 15),
             nearRestSubTitleLabel.leadingAnchor.constraint(equalTo: nearRestTitleLabel.leadingAnchor),
             
-            nearRestCollectionView.topAnchor.constraint(equalTo: nearRestSubTitleLabel.bottomAnchor, constant: 10),
-            nearRestCollectionView.leadingAnchor.constraint(equalTo: nearRestTitleLabel.leadingAnchor),
+            nearRestCollectionView.topAnchor.constraint(equalTo: nearRestSubTitleLabel.bottomAnchor, constant: 15),
+            nearRestCollectionView.leadingAnchor.constraint(equalTo: nearRestSummaryContainer.leadingAnchor),
             nearRestCollectionView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor),
             nearRestCollectionView.bottomAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: -10)
             

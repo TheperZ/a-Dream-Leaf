@@ -2,10 +2,7 @@ package com.DreamCoder.DreamLeaf.controller;
 
 import com.DreamCoder.DreamLeaf.Util.AuthUtil;
 import com.DreamCoder.DreamLeaf.dto.*;
-import com.DreamCoder.DreamLeaf.req.AccountCreateReq;
-import com.DreamCoder.DreamLeaf.req.AccountDelReq;
-import com.DreamCoder.DreamLeaf.req.AccountSetReq;
-import com.DreamCoder.DreamLeaf.req.AccountUpReq;
+import com.DreamCoder.DreamLeaf.req.*;
 import com.DreamCoder.DreamLeaf.service.AccountService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -50,20 +48,25 @@ public class AccountController {
         String firebaseToken = accountUpReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
         AccountUpDto accountUpDto = new AccountUpDto(accountUpReq.getAccountId(), accountUpReq.getRestaurant(), accountUpReq.getPrice(), accountUpReq.getDate(), accountUpReq.getBody(), id);
-        AccountDto result = accountService.update(accountUpDto);
+        String result = accountService.update(accountUpDto);
         return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/account/list")
-    public ResponseEntity getAccountList(){
-        return null;
+    public ResponseEntity getAccountList(@RequestBody AccountListReq accountListReq) throws FirebaseAuthException{
+        String firebaseToken = accountListReq.getFirebaseToken();
+        int id = authUtil.findUserId(firebaseToken);
+        AccountListDto accountListDto = new AccountListDto(id,accountListReq.getYearMonth());
+        List<AccountListResultDto> results = accountService.readAccount(accountListDto);
+        return ResponseEntity.ok().body(results);
     }
 
     @PostMapping("/account")
-    public ResponseEntity getSimpleAccount(@RequestBody Map<String,String> req) throws FirebaseAuthException{
-        String firebaseToken = req.get("firebaseToken");
+    public ResponseEntity getSimpleAccount(@RequestBody AccountInqReq accountInqReq) throws FirebaseAuthException{
+        String firebaseToken = accountInqReq.getFirebaseToken();
         int id = authUtil.findUserId(firebaseToken);
-        SimpleAccountDto simpleAccountDto = accountService.simpleInquire(id);
+        AccountInqDto accountInqDto = new AccountInqDto(id,accountInqReq.getYearMonth());
+        SimpleAccountDto simpleAccountDto = accountService.simpleInquire(accountInqDto);
         return ResponseEntity.ok().body(simpleAccountDto);
     }
 

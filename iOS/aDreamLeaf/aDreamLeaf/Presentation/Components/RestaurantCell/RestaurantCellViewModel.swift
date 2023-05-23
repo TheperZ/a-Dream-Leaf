@@ -14,10 +14,14 @@ struct RestaurantCellViewModel {
     let name: String
     let rating: Double
     let distance: Double
+    let good: Bool
+    let card: Bool
     
-    init(name: String, rating: Double, distance: Double) {
+    init(name: String, rating: Double, distance: Double, good: Bool, card: Bool) {
         self.name = name
         self.rating = rating
         self.distance = distance
+        self.good = good
+        self.card = card
     }
 }

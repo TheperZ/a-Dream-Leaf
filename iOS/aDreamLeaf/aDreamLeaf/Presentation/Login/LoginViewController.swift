@@ -67,6 +67,13 @@ class LoginViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        pwdFindButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(PwdResetViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
         loginButton.rx.tap
             .bind(to: viewModel.loginBtnTap)
             .disposed(by: disposeBag)
@@ -85,8 +92,10 @@ class LoginViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 if $0.success {
+                    self.loadingView.stopAnimating()
                     self.dismiss(animated: true)
                 } else {
+                    self.loadingView.stopAnimating()
                     let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default)
                     alert.addAction(confirm)

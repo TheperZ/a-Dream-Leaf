@@ -11,4 +11,18 @@ import RxRelay
 
 struct AccountSettingViewModel {
     private let disposeBag = DisposeBag()
+    
+    let amount = PublishSubject<Int>()
+    
+    let saveBtnTap = PublishRelay<Void>()
+    
+    let budgetSettingResult = PublishSubject<RequestResult>()
+    
+    init(_ repo: AccountRepository = AccountRepository()) {
+        saveBtnTap
+            .withLatestFrom(amount)
+            .flatMap(repo.setBudget)
+            .bind(to: budgetSettingResult)
+            .disposed(by: disposeBag)
+    }
 }
