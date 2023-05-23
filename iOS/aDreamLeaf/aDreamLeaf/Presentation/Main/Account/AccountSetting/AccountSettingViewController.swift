@@ -36,14 +36,22 @@ class AccountSettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         bind()
         attribute()
         layout()
     }
     
     private func bind() {
+        budgetButton.rx.tap
+            .bind(to: viewModel.saveBtnTap)
+            .disposed(by: disposeBag)
         
+        budgetTextField.rx.text
+            .orEmpty
+            .map { Int($0) ?? -1 }
+            .bind(to: viewModel.amount)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -94,6 +102,7 @@ class AccountSettingViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
+        
         [
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.widthAnchor.constraint(equalToConstant: 320),
@@ -133,6 +142,7 @@ class AccountSettingViewController: UIViewController {
             alarmSwitch.widthAnchor.constraint(equalToConstant: 40),
             alarmSwitch.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: -10),
             alarmSwitch.centerYAnchor.constraint(equalTo: alarmLabel.centerYAnchor),
+            
         ].forEach { $0.isActive = true }
     }
 }

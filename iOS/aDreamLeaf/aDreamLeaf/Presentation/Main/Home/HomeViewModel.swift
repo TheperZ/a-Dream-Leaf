@@ -11,5 +11,5 @@ import RxRelay
 
 struct HomeViewModel {
     let disposeBag = DisposeBag()
-    let nearRests = Observable<[(name:String, rating:Double, distance: Double)]>.just([("브런치타임", 4.0, 130), ("조연탄", 4.3, 300), ("도라무통 즉석떡볶이", 4.1, 200)])
+    let nearRests = Observable<[(name:String, rating:Double, distance: Double, good: Bool, card: Bool)]>.just([("브런치타임", 4.0, 130, true, true), ("조연탄", 4.3, 300, true, false), ("도라무통 즉석떡볶이", 4.1, 200, false, true)])
 }

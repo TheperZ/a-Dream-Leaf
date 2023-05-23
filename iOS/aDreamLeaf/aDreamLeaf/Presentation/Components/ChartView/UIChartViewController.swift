@@ -11,11 +11,17 @@ import RxSwift
 
 class UIChartViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    
+    private let viewModel = UIChartViewModel()
+    
+    private var blurEffect: UIBlurEffect!
+    private var cover: UIVisualEffectView!
+    private let coverMessageTextView = UITextView()
+    
     let accountSummaryContainer = UIView()
     private let accountTitleLabel = UILabel()
     
     private let pieChart = PieChartView()
-    private let dataValues = [50000, 12000]
     
     private let usedAmountColorView = UIView()
     private let usedAmountLabel = UILabel()
@@ -28,11 +34,61 @@ class UIChartViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         
+        coverSetting()
         chartLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        bind()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.fetchDataRequest.onNext(Void())
+    }
+    
+    private func bind() {
+        UserManager.getInstance()
+            .subscribe(onNext: { user in
+                if user == nil {
+                    self.cover.isHidden = false
+                } else {
+                    self.cover.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.dataValues
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: $0))
+                self.usedAmountLabel.text = "사용액: \(NumberUtil.commaString($0[0])!)원"
+                self.balanceLabel.text = "잔액: \(NumberUtil.commaString($0[1])!)원"
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func coverSetting() {
+        blurEffect = UIBlurEffect(style: .regular)
+        cover = UIVisualEffectView(effect: blurEffect)
+        cover.layer.cornerRadius = 10
+        cover.clipsToBounds = true
+        
+        coverMessageTextView.isScrollEnabled = false
+        coverMessageTextView.isSelectable = false
+        coverMessageTextView.isEditable = false
+        coverMessageTextView.backgroundColor = .clear
+        coverMessageTextView.text = "로그인이 필요한 기능입니다!\n로그인을 해주세요!"
+        coverMessageTextView.font = .systemFont(ofSize: 15, weight: .semibold)
+        coverMessageTextView.textColor = .darkGray
+        coverMessageTextView.textAlignment = .center
     }
     
     func chartSetting() {
@@ -54,15 +110,13 @@ class UIChartViewController: UIViewController {
         
         pieChart.drawEntryLabelsEnabled = false
         pieChart.legend.enabled = false
-        self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: dataValues))
+        
         
         usedAmountColorView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        usedAmountLabel.text = "사용액: \(NumberUtil.commaString(dataValues[0])!)원"
         usedAmountLabel.textColor = .black
         usedAmountLabel.font = .systemFont(ofSize: 15, weight: .regular)
         
         balanceColorView.backgroundColor = UIColor(named: "subColor")!
-        balanceLabel.text = "잔액: \(NumberUtil.commaString(dataValues[1])!)원"
         balanceLabel.textColor = .black
         balanceLabel.font = .systemFont(ofSize: 15, weight: .regular)
     }
@@ -84,7 +138,7 @@ class UIChartViewController: UIViewController {
         var dataEntries = [PieChartDataEntry]()
         
         for i in 0..<values.count {
-            let dataEntry = PieChartDataEntry(value: Double(dataValues[i]))
+            let dataEntry = PieChartDataEntry(value: Double(values[i]))
             dataEntries.append(dataEntry)
         }
         
@@ -97,10 +151,13 @@ class UIChartViewController: UIViewController {
     
     private func chartLayout() {
         
-        [accountTitleLabel, accountMoreButton, pieChart, usedAmountColorView, usedAmountLabel, balanceColorView, balanceLabel].forEach {
+        [accountTitleLabel, accountMoreButton, pieChart, usedAmountColorView, usedAmountLabel, balanceColorView, balanceLabel, cover].forEach {
             accountSummaryContainer.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        cover.contentView.addSubview(coverMessageTextView)
+        coverMessageTextView.translatesAutoresizingMaskIntoConstraints = false
         
         [
             accountSummaryContainer.heightAnchor.constraint(equalToConstant: 200),
@@ -132,6 +189,16 @@ class UIChartViewController: UIViewController {
             
             balanceLabel.leadingAnchor.constraint(equalTo: balanceColorView.trailingAnchor, constant: 10),
             balanceLabel.centerYAnchor.constraint(equalTo: balanceColorView.centerYAnchor),
+            
+            cover.topAnchor.constraint(equalTo: accountSummaryContainer.topAnchor),
+            cover.leadingAnchor.constraint(equalTo: accountSummaryContainer.leadingAnchor),
+            cover.trailingAnchor.constraint(equalTo: accountSummaryContainer.trailingAnchor),
+            cover.bottomAnchor.constraint(equalTo: accountSummaryContainer.bottomAnchor),
+            
+            coverMessageTextView.heightAnchor.constraint(equalToConstant: 50),
+            coverMessageTextView.widthAnchor.constraint(equalToConstant: 200),
+            coverMessageTextView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
+            coverMessageTextView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
         ].forEach { $0.isActive = true }
     }
     

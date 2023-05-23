@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import AVFoundation
 
 class ReviewViewController: UIViewController {
     private let disposeBag = DisposeBag()
@@ -25,6 +26,11 @@ class ReviewViewController: UIViewController {
     private let textView = UITextView()
     private let photoButton = UIButton()
     private let saveButton = UIButton()
+    
+    private let textViewWarningLabel = UILabel()
+    
+    private let imagePicker = UIImagePickerController()
+    private let imageView = UIImageView()
     
     init() {
         viewModel = ReviewViewModel()
@@ -44,11 +50,66 @@ class ReviewViewController: UIViewController {
     }
     
     private func bind() {
+        let starButtonList = [starButton1, starButton2, starButton3, starButton4, starButton5]
         
+        starButtonList.enumerated().forEach { idx, btn in
+            btn.rx.tap
+                .asDriver()
+                .drive(onNext: {
+                    var p = false
+                    for b in starButtonList {
+                        if p == false {
+                            b.tintColor = UIColor(red: 1, green: 0.8, blue: 0.1, alpha: 1)
+                            if b == btn {
+                                p = true
+                            }
+                        } else {
+                            b.tintColor = .gray
+                        }
+                        
+                    }
+                })
+                .disposed(by: disposeBag)
+            
+            btn.rx.tap
+                .map { return idx+1 }
+                .bind(to: viewModel.rating)
+                .disposed(by: disposeBag)
+        }
+        
+        photoButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+                    print("사용불가 + 사용자에게 토스트/얼럿")
+                    return
+                }
+                self.imagePicker.sourceType = .photoLibrary
+                self.imagePicker.allowsEditing = true // 사진 편집 유무
+                self.present(self.imagePicker, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        textView.rx.text
+            .orEmpty
+            .map { $0.count != 0 ? true : false}
+            .bind(to: textViewWarningLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        textView.rx.text
+            .orEmpty
+            .bind(to: viewModel.body)
+            .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .bind(to: viewModel.saveBtnTap)
+            .disposed(by: disposeBag)
+
     }
     
     private func attribute() {
         view.backgroundColor = .white
+        view.addTapGesture()
         
         titleLabel.text = "리뷰 작성"
         titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
@@ -65,13 +126,17 @@ class ReviewViewController: UIViewController {
         [starButton1, starButton2, starButton3, starButton4, starButton5].forEach {
             $0.setImage(UIImage(systemName: "star.fill"), for: .normal)
             $0.tintColor = UIColor(red: 1, green: 0.8, blue: 0.1, alpha: 1)
+            $0.adjustsImageWhenHighlighted = false
         }
-        starButton5.tintColor = .gray
+        
+        textViewWarningLabel.text = "최소 10글자 이상 입력해주세요."
+        textViewWarningLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        textViewWarningLabel.textColor = .gray
+        textViewWarningLabel.textAlignment = .left
         
         textView.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        textView.text = "최소 10자 이상 입력해주세요."
         textView.textColor = .black
-        textView.layer.cornerRadius = 10
+        textView.layer.cornerRadius = 10    
         textView.contentInset = .init(top: 15, left: 15, bottom: 15, right: 15)
         
         photoButton.setImage(UIImage(systemName: "camera"), for: .normal)
@@ -86,10 +151,21 @@ class ReviewViewController: UIViewController {
         saveButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         saveButton.setTitleColor(.black, for: .normal)
         saveButton.layer.cornerRadius = 10
+        
+        imagePicker.delegate = self
+        
+        let photoImgConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .light, scale: .default)
+        let photoImg = UIImage(systemName: "photo", withConfiguration: photoImgConfig)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = photoImg
+        imageView.contentMode = .center
+        imageView.tintColor = .black
+        imageView.layer.cornerRadius = 5
+        imageView.layer.borderColor = UIColor.gray.cgColor
+        imageView.layer.borderWidth = 0.5
     }
     
     private func layout() {
-        [titleLabel, subtitleLabel, starStackView, textView, photoButton, saveButton].forEach {
+        [titleLabel, subtitleLabel, starStackView, textView, textViewWarningLabel, photoButton, saveButton, imageView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -115,10 +191,18 @@ class ReviewViewController: UIViewController {
             textView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             textView.heightAnchor.constraint(equalToConstant: 200),
             
+            textViewWarningLabel.topAnchor.constraint(equalTo: textView.topAnchor, constant: 23),
+            textViewWarningLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 20),
+            
             photoButton.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 10),
             photoButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             photoButton.heightAnchor.constraint(equalToConstant: 50),
             photoButton.widthAnchor.constraint(equalToConstant: 100),
+            
+            imageView.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 10),
+            imageView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 50),
+            imageView.widthAnchor.constraint(equalToConstant: 50),
             
             saveButton.topAnchor.constraint(equalTo: photoButton.bottomAnchor, constant: 10),
             saveButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
@@ -126,5 +210,29 @@ class ReviewViewController: UIViewController {
             saveButton.heightAnchor.constraint(equalToConstant: 40),
             
         ].forEach { $0.isActive = true}
+    }
+}
+
+
+extension ReviewViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    // UIImagePickerController4. - 사진을 선택하거나, 카메라 촬영하고 나면 호출되는 메소드
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        print(#function, "🦋 사진선택하거나, 카메라 촬영 직후")
+        
+        /* 원본, 편집, 메타 데이터 등 - infoKey,
+         그리고 타입은 Any로 명확하게 지정되지 않았다.
+         왜냐하면 메타 데이터는 명확하기 않기 때문에 그래서 타입캐스팅이 필요한 부분이다. */
+        
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.imageView.contentMode = .scaleAspectFit
+            self.imageView.image = image
+            dismiss(animated: true)
+        }
+    }
+    
+    // UIImagePickerController5. - 취소 버튼을 누르면 호출되는 메소드
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        print(#function, "🦋 취소버튼 클릭 시")
     }
 }

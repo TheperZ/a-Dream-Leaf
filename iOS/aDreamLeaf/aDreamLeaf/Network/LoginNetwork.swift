@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import FirebaseAuth
+import Alamofire
 
 struct LoginNetwork {
     func loginRequestFB(email: String, pwd: String) -> Observable<LoginResult> {
@@ -28,9 +29,7 @@ struct LoginNetwork {
                 
                 if let authResult = authResult {
                     if authResult.user.isEmailVerified {
-                        let userData = User(email: email, password: pwd, uid: authResult.user.uid, nickname: "밝은 햇살") // 닉네임 값 이후 수정
-                        UserManager.login(userData: userData)
-                        observer.onNext(LoginResult(success: true, msg: nil, userData: userData))
+                        observer.onNext(LoginResult(success: true, msg: nil, userData: nil))
                     } else {
                         observer.onNext(LoginResult(success: false, msg: "이메일 인증 후 로그인 해주세요"))
                     }
@@ -38,6 +37,92 @@ struct LoginNetwork {
                 }
                 
             }
+            return Disposables.create()
+        }
+    }
+    
+    func loginRequestServer(email: String, pwd: String) -> Observable<LoginResult> {
+        return Observable.create { observer in
+
+            Auth.auth().signIn(withEmail: email, password: pwd) { authData, error in
+                
+                if error != nil {
+                    observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                }
+                
+                guard let authData = authData else {
+                    observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                    return
+                }
+                
+                authData.user.getIDToken() { token, error2 in
+                    if error != nil {
+                        observer.onNext(LoginResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                    } else {
+                        let url = K.serverURL + "/login"
+                         var request = URLRequest(url: URL(string: url)!)
+                         request.httpMethod = "POST"
+                         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                         request.timeoutInterval = 10
+                         // POST 로 보낼 정보
+                         let params = ["firebaseToken": token!] as Dictionary
+                         
+                         // httpBody 에 parameters 추가
+                         do {
+                             try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
+                         } catch {
+                             print("http Body Error")
+                             observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                         }
+                        
+                        AF.request(request).responseJSON{ (response) in
+                             switch response.result {
+                                 case .success:
+                                     do {
+                                         guard let result = response.data else {return}
+                                         
+                                         let decoder = JSONDecoder()
+                                         let data = try decoder.decode(LoginResponse.self, from: result)
+                                         
+                                         UserManager.login(userData: User(email: data.email, password: pwd, nickname: data.userName))
+                                         observer.onNext(LoginResult(success: true, msg: nil))
+                                     } catch {
+                                         observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                         
+                                 case .failure(let error):
+                                         print("error : \(error.errorDescription!)")
+                                         observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                             }
+                         }
+                
+                    }
+                }
+                
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
+    func sendPwdResetMailFB(_ email: String) -> Observable<RequestResult> {
+        return Observable.create { observer in
+            
+            Auth.auth().sendPasswordReset(withEmail: email) { error in
+                if let error = error {
+                   if error.localizedDescription == "The email address is badly formatted." {
+                        observer.onNext(RequestResult(success: false, msg: "이메일 형식이 잘못되었습니다."))
+                    } else if error.localizedDescription == "There is no user record corresponding to this identifier. The user may have been deleted." {
+                        observer.onNext(RequestResult(success: false, msg: "등록되지 않은 사용자입니다."))
+                    } else {
+                        observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                    }
+                    
+                }
+                
+                observer.onNext(RequestResult(success: true, msg: nil))
+            }
+            
             return Disposables.create()
         }
     }

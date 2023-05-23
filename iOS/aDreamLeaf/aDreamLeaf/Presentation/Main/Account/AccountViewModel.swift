@@ -12,5 +12,19 @@ import RxRelay
 struct AccountViewModel {
     let disposeBag = DisposeBag()
     
-    let list = Observable.just([(Date(timeIntervalSinceNow: -250000), "백채 김치찌개", 12000), (Date(timeIntervalSinceNow: -220000), "할머니 순대국", 6000), (Date(timeIntervalSinceNow: -150000), "신전 떡볶이", 10000), (Date(timeIntervalSinceNow: -100000), "피자스쿨 목2동점", 8000)])
+    let refreshRequest = PublishSubject<Void>()
+    
+    let yearMonth = BehaviorSubject<Date>(value: Date.now)
+    
+    let list = PublishSubject<[Expenditure]>()
+    
+    init(_ repo: AccountRepository = AccountRepository()) {
+        Observable.combineLatest(refreshRequest, yearMonth)
+            .withLatestFrom(yearMonth)
+            .map { Date.dateToString(with: $0, format: "yyyy-MM")}
+            .flatMap(repo.getExpenditureList)
+            .map { $0.list ?? [] }
+            .bind(to: list)
+            .disposed(by: disposeBag)
+    }
 }

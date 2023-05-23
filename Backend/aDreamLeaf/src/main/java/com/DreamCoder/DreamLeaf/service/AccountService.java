@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -23,15 +25,19 @@ public class AccountService {
         return AccountRepositoryImpl.delete(accountDelDto);
     }
 
-    public AccountDto update(AccountUpDto accountUpDto){
+    public String update(AccountUpDto accountUpDto){
         return AccountRepositoryImpl.update(accountUpDto);
     }
 
-    public SimpleAccountDto simpleInquire(int id){
-        return AccountRepositoryImpl.inquire(id);
+    public SimpleAccountDto simpleInquire(AccountInqDto accountInqDto){
+        return AccountRepositoryImpl.inquire(accountInqDto);
     }
 
     public String setAccount(AccountSetDto accountSetDto){
         return AccountRepositoryImpl.set(accountSetDto);
+    }
+
+    public List<AccountListResultDto> readAccount(AccountListDto accountListDto){
+        return AccountRepositoryImpl.search(accountListDto);
     }
 }

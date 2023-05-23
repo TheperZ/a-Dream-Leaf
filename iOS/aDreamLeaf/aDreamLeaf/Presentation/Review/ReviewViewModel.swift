@@ -10,5 +10,19 @@ import RxSwift
 import RxRelay
 
 struct ReviewViewModel {
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    
+    let rating = BehaviorSubject<Int>(value: 5)
+    let body = BehaviorSubject<String>(value: "")
+    
+    let saveBtnTap = PublishSubject<Void>()
+    
+    init() {
+        saveBtnTap
+            .withLatestFrom(Observable.combineLatest(rating, body))
+            .subscribe(onNext: {
+                print($0)
+            })
+            .disposed(by: disposeBag)
+    }
 }

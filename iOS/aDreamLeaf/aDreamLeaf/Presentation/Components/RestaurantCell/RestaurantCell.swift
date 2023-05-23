@@ -10,15 +10,19 @@ import RxSwift
 import RxCocoa
 
 class RestaurantCell: UICollectionViewCell {
-    let disposeBag = DisposeBag()
-    var viewModel: RestaurantCellViewModel!
+    private let disposeBag = DisposeBag()
+    private var viewModel: RestaurantCellViewModel!
     
-    let nameLabel = UILabel()
-    let ratingLabel = UILabel()
-    let distanceLabel = UILabel()
+    private let nameLabel = UILabel()
+    private let ratingLabel = UILabel()
+    private let distanceLabel = UILabel()
     
-    func setUp(with: (name: String, rating: Double, distance: Double)) {
-        viewModel = RestaurantCellViewModel(name: with.name, rating: with.rating, distance: with.distance)
+    private let stackView = UIStackView()
+    private let goodImageView = UIImageView()
+    private let cardImageView = UIImageView()
+    
+    func setUp(with: (name: String, rating: Double, distance: Double, good: Bool, card: Bool)) {
+        viewModel = RestaurantCellViewModel(name: with.name, rating: with.rating, distance: with.distance, good: with.good, card: with.card)
         
         attribute()
         layout()
@@ -26,40 +30,69 @@ class RestaurantCell: UICollectionViewCell {
     
     func attribute() {
         
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = UIColor(white: 0.98, alpha: 1)
         contentView.layer.cornerRadius = 10
         
         nameLabel.text = viewModel.name
-        nameLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        nameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         nameLabel.textColor = .black
         
-        ratingLabel.text = "★ \(viewModel.rating)"
-        ratingLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        ratingLabel.text = "⭐️ \(viewModel.rating)"
+        ratingLabel.font = .systemFont(ofSize: 11, weight: .semibold)
         ratingLabel.textColor = .black
         
         distanceLabel.text = "\(Int(viewModel.distance))m"
-        distanceLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        distanceLabel.font = .systemFont(ofSize: 11, weight: .semibold)
         distanceLabel.textColor = .gray
+        
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        
+        let goodConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .regular, scale: .default)
+        let goodImg = UIImage(systemName: "leaf", withConfiguration: goodConfig)?.withRenderingMode(.alwaysTemplate)
+        goodImageView.image = goodImg
+        goodImageView.tintColor = UIColor(named: "subColor")
+        goodImageView.contentMode = .scaleAspectFit
+        goodImageView.isHidden = viewModel.good ? false : true
+        
+        let cardConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .regular, scale: .default)
+        let cardImg = UIImage(systemName: "creditcard", withConfiguration: cardConfig)?.withRenderingMode(.alwaysTemplate)
+        cardImageView.image = cardImg
+        cardImageView.tintColor = UIColor(named: "subColor")
+        cardImageView.contentMode = .scaleAspectFit
+        cardImageView.isHidden = viewModel.card ? false : true
     }
     
     func layout() {
-        [nameLabel, ratingLabel, distanceLabel].forEach {
+        [nameLabel, ratingLabel, distanceLabel, stackView].forEach {
             self.contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
+        [goodImageView, cardImageView].forEach {
+            stackView.addArrangedSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
         [
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
-            ratingLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
+            ratingLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             ratingLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             ratingLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             
-            distanceLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 5),
+            distanceLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 4),
             distanceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             distanceLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
+            
+            stackView.topAnchor.constraint(equalTo: distanceLabel.bottomAnchor, constant: 4),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            stackView.heightAnchor.constraint(equalToConstant: 25),
+            
+            goodImageView.widthAnchor.constraint(equalToConstant: 25),
+            cardImageView.widthAnchor.constraint(equalToConstant: 25),
         
         ].forEach { $0.isActive = true }
     }

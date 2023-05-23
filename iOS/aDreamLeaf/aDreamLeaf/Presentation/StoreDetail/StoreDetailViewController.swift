@@ -77,6 +77,35 @@ class StoreDetailViewController: UIViewController {
                 self.navigationController?.pushViewController(ReviewViewController(), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        UserManager.getInstance()
+            .observe(on: MainScheduler.instance)
+            .map { userData in
+                if userData != nil {
+                    self.reviewButton.alpha = 1
+                    return true
+                } else {
+                    self.reviewButton.alpha = 0.3
+                    return false
+                }
+            }
+            .bind(to: reviewButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { $0?.storeName ?? ""}
+            .bind(to: nameLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { $0?.roadAddr ?? ""}
+            .bind(to: addressLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { _ in "[ 내 위치로 부터 0.3km ] - 수정!!!!" }
+            .bind(to: distanceLabel.rx.text)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -84,17 +113,14 @@ class StoreDetailViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        nameLabel.text = "피자스쿨 목2동점"
         nameLabel.font = .systemFont(ofSize: 30, weight: .heavy)
         nameLabel.textColor = .black
         nameLabel.textAlignment = .center
         
-        addressLabel.text = "서울 양천구 등촌로 172 등촌빌딩"
         addressLabel.font = .systemFont(ofSize: 15, weight: .light)
         addressLabel.textColor = .black
         addressLabel.textAlignment = .center
         
-        distanceLabel.text = "[ 내 위치로 부터 0.3km ]"
         distanceLabel.font = .systemFont(ofSize: 12, weight: .medium)
         distanceLabel.textColor = .gray
         distanceLabel.textAlignment = .center
@@ -149,7 +175,6 @@ class StoreDetailViewController: UIViewController {
         reviewTableView.isScrollEnabled = false
         reviewTableView.backgroundColor = .white
         
-        reviewButton.backgroundColor = .white
         reviewButton.setTitle("리뷰 작성", for: .normal)
         reviewButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
         reviewButton.setTitleColor(.black, for: .normal)

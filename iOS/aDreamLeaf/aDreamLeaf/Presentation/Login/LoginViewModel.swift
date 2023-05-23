@@ -25,10 +25,6 @@ struct LoginViewModel {
             .bind(to: loginResult)
             .disposed(by: disposeBag)
         
-        /* 서버로부터 닉네임 가져오기 및 저장
-        
-         */
-        
         //MARK: - Loading
         
         loginBtnTap
