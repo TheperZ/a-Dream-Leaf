@@ -104,6 +104,26 @@ class ReviewViewController: UIViewController {
         saveButton.rx.tap
             .bind(to: viewModel.saveBtnTap)
             .disposed(by: disposeBag)
+        
+        viewModel.createRequestResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                if result.success {
+                    let alert = UIAlertController(title: "성공", message: "리뷰가 정상적으로 작성 되었습니다!", preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    alert.addAction(cancel)
+                    self.present(alert, animated: true)
+                } else {
+                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(cancel)
+                    self.present(alert, animated: true)
+                }
+                
+            })
+            .disposed(by: disposeBag)
 
     }
     
@@ -146,10 +166,10 @@ class ReviewViewController: UIViewController {
         photoButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         photoButton.titleEdgeInsets = .init(top: 0, left: 10, bottom: 0, right: 0)
         
-        saveButton.backgroundColor = UIColor(named: "mainColor")
+        saveButton.backgroundColor = UIColor(named: "subColor")
         saveButton.setTitle("리뷰 작성 완료", for: .normal)
-        saveButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        saveButton.setTitleColor(.black, for: .normal)
+        saveButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
+        saveButton.setTitleColor(.white, for: .normal)
         saveButton.layer.cornerRadius = 10
         
         imagePicker.delegate = self

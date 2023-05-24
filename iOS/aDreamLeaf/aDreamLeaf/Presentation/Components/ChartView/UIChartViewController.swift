@@ -12,7 +12,7 @@ import RxSwift
 class UIChartViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
-    private let viewModel = UIChartViewModel()
+    let chartViewModel = UIChartViewModel()
     
     private var blurEffect: UIBlurEffect!
     private var cover: UIVisualEffectView!
@@ -48,12 +48,6 @@ class UIChartViewController: UIViewController {
         bind()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        viewModel.fetchDataRequest.onNext(Void())
-    }
-    
     private func bind() {
         UserManager.getInstance()
             .subscribe(onNext: { user in
@@ -65,7 +59,7 @@ class UIChartViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        viewModel.dataValues
+        chartViewModel.dataValues
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: $0))

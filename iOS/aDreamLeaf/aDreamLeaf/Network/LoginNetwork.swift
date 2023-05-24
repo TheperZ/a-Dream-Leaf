@@ -11,27 +11,27 @@ import FirebaseAuth
 import Alamofire
 
 struct LoginNetwork {
-    func loginRequestFB(email: String, pwd: String) -> Observable<LoginResult> {
+    func loginRequestFB(email: String, pwd: String) -> Observable<RequestResult<User>> {
         return Observable.create { observer in
             Auth.auth().signIn(withEmail: email, password: pwd) { authResult, error in
                 if let error = error {
                     if error.localizedDescription == "The password is invalid or the user does not have a password." {
-                        observer.onNext(LoginResult(success: false, msg: "비밀번호를 잘못 입력했습니다."))
+                        observer.onNext(RequestResult<User>(success: false, msg: "비밀번호를 잘못 입력했습니다."))
                     } else if error.localizedDescription == "The email address is badly formatted." {
-                        observer.onNext(LoginResult(success: false, msg: "이메일 형식이 잘못되었습니다."))
+                        observer.onNext(RequestResult<User>(success: false, msg: "이메일 형식이 잘못되었습니다."))
                     } else if error.localizedDescription == "There is no user record corresponding to this identifier. The user may have been deleted." {
-                        observer.onNext(LoginResult(success: false, msg: "등록되지 않은 사용자입니다."))
+                        observer.onNext(RequestResult<User>(success: false, msg: "등록되지 않은 사용자입니다."))
                     } else {
-                        observer.onNext(LoginResult(success: false, msg: error.localizedDescription))
+                        observer.onNext(RequestResult<User>(success: false, msg: error.localizedDescription))
                     }
                     
                 }
                 
                 if let authResult = authResult {
                     if authResult.user.isEmailVerified {
-                        observer.onNext(LoginResult(success: true, msg: nil, userData: nil))
+                        observer.onNext(RequestResult<User>(success: true, msg: nil, data: nil))
                     } else {
-                        observer.onNext(LoginResult(success: false, msg: "이메일 인증 후 로그인 해주세요"))
+                        observer.onNext(RequestResult<User>(success: false, msg: "이메일 인증 후 로그인 해주세요"))
                     }
                     
                 }
@@ -41,23 +41,23 @@ struct LoginNetwork {
         }
     }
     
-    func loginRequestServer(email: String, pwd: String) -> Observable<LoginResult> {
+    func loginRequestServer(email: String, pwd: String) -> Observable<RequestResult<User>> {
         return Observable.create { observer in
 
             Auth.auth().signIn(withEmail: email, password: pwd) { authData, error in
                 
                 if error != nil {
-                    observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                    observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
                 }
                 
                 guard let authData = authData else {
-                    observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                    observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
                     return
                 }
                 
                 authData.user.getIDToken() { token, error2 in
                     if error != nil {
-                        observer.onNext(LoginResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                        observer.onNext(RequestResult<User>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
                     } else {
                         let url = K.serverURL + "/login"
                          var request = URLRequest(url: URL(string: url)!)
@@ -72,7 +72,7 @@ struct LoginNetwork {
                              try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
                          } catch {
                              print("http Body Error")
-                             observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                             observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                          }
                         
                         AF.request(request).responseJSON{ (response) in
@@ -85,14 +85,14 @@ struct LoginNetwork {
                                          let data = try decoder.decode(LoginResponse.self, from: result)
                                          
                                          UserManager.login(userData: User(email: data.email, password: pwd, nickname: data.userName))
-                                         observer.onNext(LoginResult(success: true, msg: nil))
+                                         observer.onNext(RequestResult<User>(success: true, msg: nil))
                                      } catch {
-                                         observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                         observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                                      }
                                          
                                  case .failure(let error):
                                          print("error : \(error.errorDescription!)")
-                                         observer.onNext(LoginResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                         observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                              }
                          }
                 
@@ -105,7 +105,7 @@ struct LoginNetwork {
         }
     }
     
-    func sendPwdResetMailFB(_ email: String) -> Observable<RequestResult> {
+    func sendPwdResetMailFB(_ email: String) -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             
             Auth.auth().sendPasswordReset(withEmail: email) { error in

@@ -14,8 +14,8 @@ struct SimpleReviewCellViewModel {
     let nickname: String
     let content: String
     
-    init(nickname: String, content: String) {
-        self.nickname = nickname
-        self.content = content
+    init(_ with: Review) {
+        self.nickname = with.userName
+        self.content = with.body
     }
 }

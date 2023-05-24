@@ -17,7 +17,7 @@ struct MyPageViewModel {
     let email = UserManager.getInstance().map{ $0?.email ?? "" }
     let nickname = UserManager.getInstance().map{ $0?.nickname ?? "" }
     let deleteAccountBtnTap = PublishSubject<Void>()
-    let deleteResult = PublishSubject<RequestResult>()
+    let deleteResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: ProfileRepository = ProfileRepository()) {
         deleteAccountBtnTap

@@ -10,7 +10,7 @@ import FirebaseAuth
 import RxSwift
 
 struct ProfileNetwork {
-    func deleteAccountFB() -> Observable<RequestResult> {
+    func deleteAccountFB() -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.delete { error in
