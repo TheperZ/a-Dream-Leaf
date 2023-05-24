@@ -12,11 +12,15 @@ public interface ReviewRepository {
 
     public String delete(ReviewDelDto reviewDelDto);
 
-    public Integer CountReview(int storeId);
+    public int countReview(int storeId);
 
-    public String findUserName(int userId);
+    public void validateUserId(int userId);
 
-    public String findStoreName(int storeId);
+    public String getUserName(int userId);
+
+    public String getStoreName(int storeId);
 
     public String update(ReviewUpDto reviewUpDto);
+
+    public int getWriterId(int reviewId);
 }
