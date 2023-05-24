@@ -20,7 +20,7 @@ struct SignUpViewModel {
     
     let signUpBtnTap = PublishRelay<Void>()
     
-    let signUpResult = PublishSubject<RequestResult>()
+    let signUpResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: SignUpRepository = SignUpRepository()) {
         

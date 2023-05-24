@@ -13,7 +13,7 @@ import Alamofire
 struct SignUpNetwork {
     let disposeBag = DisposeBag()
     
-    func signUpRequestFB(email: String, pwd: String) -> Observable<RequestResult> {
+    func signUpRequestFB(email: String, pwd: String) -> Observable<RequestResult<Void>> {
         
         return Observable.create { observer in
             
@@ -41,7 +41,7 @@ struct SignUpNetwork {
         
     }
     
-    func signUpRequestServer(email: String, pwd: String) -> Observable<RequestResult> {
+    func signUpRequestServer(email: String, pwd: String) -> Observable<RequestResult<Void>> {
 
         return Observable.create { observer in
 

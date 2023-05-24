@@ -17,12 +17,13 @@ struct ReviewViewModel {
     
     let saveBtnTap = PublishSubject<Void>()
     
-    init() {
+    let createRequestResult = PublishSubject<RequestResult<Void>>()
+    
+    init(_ repo: ReviewRepository = ReviewRepository()) {
         saveBtnTap
             .withLatestFrom(Observable.combineLatest(rating, body))
-            .subscribe(onNext: {
-                print($0)
-            })
+            .flatMap{rating, body in repo.create(storeId: 1, body: body, rating: rating)}
+            .bind(to: createRequestResult)
             .disposed(by: disposeBag)
     }
 }

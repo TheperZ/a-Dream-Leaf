@@ -79,6 +79,7 @@ class AccountViewController: UIChartViewController {
                 if user == nil {
                     self.cover.isHidden = false
                     self.navigationItem.rightBarButtonItem = nil
+                    self.emptyWarningLabel.isHidden = true
                 } else {
                     self.cover.isHidden = true
                     self.navigationItem.rightBarButtonItem = self.settingButton
@@ -115,6 +116,17 @@ class AccountViewController: UIChartViewController {
             .map { $0.count == 0 ? false : true}
             .bind(to: emptyWarningLabel.rx.isHidden)
             .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.list) { return ($0, $1)}
+            .subscribe(onNext: { indexPath, list in
+                self.tableView.cellForRow(at: indexPath)?.isSelected = false
+                self.navigationController?.pushViewController(ExpenditureDetailViewController(data: list[indexPath.row]), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        
             
     }
     
@@ -215,5 +227,6 @@ class AccountViewController: UIChartViewController {
 extension AccountViewController {
     @objc func dateChanged(_ picker: MonthYearPickerView) {
         viewModel.yearMonth.onNext(picker.date)
+        chartViewModel.date.onNext(Date.dateToString(with: picker.date, format: "yyyy-MM"))
      }
 }

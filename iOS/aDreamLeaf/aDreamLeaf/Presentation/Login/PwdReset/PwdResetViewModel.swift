@@ -16,7 +16,7 @@ struct PwdResetViewModel {
     
     let email = PublishRelay<String>()
     let resetBtnTap = PublishRelay<Void>()
-    let resetResult = PublishSubject<RequestResult>()
+    let resetResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
         

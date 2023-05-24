@@ -11,7 +11,7 @@ import RxSwift
 struct ProfileRepository {
     private let network = ProfileNetwork()
     
-    func deleteAccount() -> Observable<RequestResult> {
+    func deleteAccount() -> Observable<RequestResult<Void>> {
         return network.deleteAccountFB()
             .map { result in
                 if result.success {
