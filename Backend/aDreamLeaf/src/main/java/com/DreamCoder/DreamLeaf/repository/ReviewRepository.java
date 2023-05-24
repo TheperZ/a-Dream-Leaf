@@ -1,8 +1,7 @@
 package com.DreamCoder.DreamLeaf.repository;
 
-import com.DreamCoder.DreamLeaf.dto.ReviewCreateDto;
-import com.DreamCoder.DreamLeaf.dto.ReviewDto;
-import com.DreamCoder.DreamLeaf.dto.ReviewSearchDto;
+import com.DreamCoder.DreamLeaf.dto.*;
+import com.DreamCoder.DreamLeaf.req.ReviewDelReq;
 
 import java.util.List;
 
@@ -11,9 +10,17 @@ public interface ReviewRepository {
 
     public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto);
 
-    public Integer CountReview(int storeId);
+    public String delete(ReviewDelDto reviewDelDto);
 
-    public String findUserName(int userId);
+    public int countReview(int storeId);
 
-    public String findStoreName(int storeId);
+    public void validateUserId(int userId);
+
+    public String getUserName(int userId);
+
+    public String getStoreName(int storeId);
+
+    public String update(ReviewUpDto reviewUpDto);
+
+    public int getWriterId(int reviewId);
 }
