@@ -21,14 +21,8 @@ public class ReviewService {
     }
 
     public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto){
-        Integer count = reviewRepositoryImpl.CountReview(reviewSearchDto.getStoreId());
 
-        if(count != null){
-            reviewSearchDto.setReviewPagination(new ReviewPagination(count, reviewSearchDto));
-        }
-
-        List<ReviewDto> reviewDtoList = reviewRepositoryImpl.findReviewPage(reviewSearchDto);
-        return reviewDtoList;
+        return reviewRepositoryImpl.findReviewPage(reviewSearchDto);
     }
 
     public String update(ReviewUpDto reviewUpDto) { return reviewRepositoryImpl.update(reviewUpDto);}
