@@ -193,11 +193,11 @@ public class ApiManager {
                     else{
                         lotno=(String)temp.get("REFINE_LOTNO_ADDR");
                     }
-                    if((String)temp.get("REFINE_ZIP_CD")==null){
+                    if((String)temp.get("REFINE_ZIPNO")==null){
                         zipcd=0;
                     }
                     else{
-                        zipcd=Integer.parseInt((String)temp.get("REFINE_ZIP_CD"));
+                        zipcd=Integer.parseInt((String)temp.get("REFINE_ZIPNO"));
                     }
 
                     //위치 정보가 없는 가게는 추가하지 않음
