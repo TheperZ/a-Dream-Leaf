@@ -70,6 +70,14 @@ class AccountSettingViewController: UIViewController {
                 }
                 
             })
+            .disposed(by: disposeBag)
+        
+        alarmSwitch.rx
+            .controlEvent(.valueChanged)
+            .subscribe(onNext:{
+                print(self.alarmSwitch.isOn)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
@@ -86,6 +94,8 @@ class AccountSettingViewController: UIViewController {
         budgetLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         budgetLabel.textColor = .black
         
+        budgetTextField.delegate = self
+        budgetTextField.keyboardType = .decimalPad
         budgetTextField.font = .systemFont(ofSize: 16, weight: .semibold)
         budgetTextField.textColor = .black
         budgetTextField.textAlignment = .right
@@ -164,3 +174,12 @@ class AccountSettingViewController: UIViewController {
         ].forEach { $0.isActive = true }
     }
 }
+
+extension AccountSettingViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
+    }
+}
+d
