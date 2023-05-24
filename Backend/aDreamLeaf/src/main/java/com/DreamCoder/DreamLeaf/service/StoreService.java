@@ -19,10 +19,10 @@ public class StoreService {
 
     @Autowired
     private final StoreRepository storeRepository;
+    private final ApiManager apiManager;
 
 
-
-    public StoreDto save(StoreReq storeReq){
+    public Optional<StoreDto> save(StoreReq storeReq){
         return storeRepository.save(storeReq);
     }
 
@@ -36,6 +36,11 @@ public class StoreService {
 
     public List<StoreDto> findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산
         return storeRepository.findByCur(userCurReq);
+    }
+
+    public void saveApi(){
+        apiManager.saveGoodStoreApi();
+        apiManager.saveGDreamCardApi();
     }
 
 
