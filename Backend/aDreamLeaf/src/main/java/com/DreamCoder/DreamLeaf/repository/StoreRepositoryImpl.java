@@ -1,5 +1,7 @@
 package com.DreamCoder.DreamLeaf.repository;
 
+import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
+import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
@@ -92,11 +94,11 @@ public class StoreRepositoryImpl implements StoreRepository{
     }
 
     @Override
-    public Optional<StoreDto> findById(int storeId) {
+    public Optional<DetailStoreDto> findById(int storeId) {
         String sql="select * from store where storeId=?";
         try{
-            StoreDto storeDto = template.queryForObject(sql, storeDtoRowMapper, storeId);
-            return Optional.of(storeDto);
+            DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper, storeId);
+            return Optional.of(result);
         }catch(EmptyResultDataAccessException e){
             return Optional.empty();
         }
@@ -104,20 +106,20 @@ public class StoreRepositoryImpl implements StoreRepository{
     }
 
     @Override
-    public List<StoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
+    public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
                 "AS distance from store where storeName like ? order by distance";
         log.info("lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
-        return template.query(sql, storeDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
+        return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
     }
 
     @Override
-    public List<StoreDto> findByCur(UserCurReq userCurReq) {
+    public List<SimpleStoreDto> findByCur(UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
                 "AS distance from store having distance<2 order by distance";
-        return template.query(sql, storeDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
+        return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
     }
 
 
@@ -126,17 +128,43 @@ public class StoreRepositoryImpl implements StoreRepository{
             StoreDto.builder()
                     .storeId(rs.getInt("storeId"))
                     .storeName(rs.getString("storeName"))
-                    //.hygieneGrade("매우우수(임시)")
+                    .hygieneGrade("매우우수(임시)")
                     .zipCode(rs.getInt("zipCode"))
                     .roadAddr(rs.getString("roadAddr"))
                     .lotAddr(rs.getString("lotAddr"))
                     .wgs84Lat(rs.getDouble("wgs84Lat"))
                     .wgs84Logt(rs.getDouble("wgs84Logt"))
-                    //.curDist(0.0)
-                    .payment(rs.getInt("payment"))
+//                    .curDist(0.0)
+                    .payment(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
-                    //.totalRating(5.0)
+//                    .totalRating(5.0)
+                    .build();
+
+    private RowMapper<SimpleStoreDto> simpleStoreDtoRowMapper=(rs, rowNum)->
+            SimpleStoreDto.builder()
+                    .storeId(rs.getInt("storeId"))
+                    .storeName(rs.getString("storeName"))
+                    .storeType(rs.getInt("payment"))
+                    .curDist(0.0)                   //만들기
+                    .totalRating(5.0)               //만들기
+                    .build();
+
+    private RowMapper<DetailStoreDto> detailStoreDtoRowMapper=(rs, rowNum)->
+            DetailStoreDto.builder()
+                    .storeId(rs.getInt("storeId"))
+                    .storeName(rs.getString("storeName"))
+                    .hygieneGrade("매우우수(임시)")
+                    .refinezipCd(rs.getInt("zipCode"))
+                    .refineRoadnmAddr(rs.getString("roadAddr"))
+                    .refineLotnoAddr(rs.getString("lotAddr"))
+                    .refineWGS84Lat(rs.getDouble("wgs84Lat"))
+                    .refineWGS84Logt(rs.getDouble("wgs84Logt"))
+                    .curDist(0.0)
+                    .storeType(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
+                    .prodName(rs.getString("prodName"))
+                    .prodTarget(rs.getString("prodTarget"))
+                    .totalRating(5.0)
                     .build();
 
 

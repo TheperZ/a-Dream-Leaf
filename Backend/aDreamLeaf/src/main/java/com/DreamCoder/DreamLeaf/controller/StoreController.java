@@ -1,6 +1,8 @@
 package com.DreamCoder.DreamLeaf.controller;
 
 
+import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
+import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import com.DreamCoder.DreamLeaf.service.StoreService;
@@ -39,17 +41,17 @@ public class StoreController {
     }
 
     @GetMapping("/{storeId}")
-    public Optional<StoreDto> showStoreDetail(@PathVariable int storeId){
+    public Optional<DetailStoreDto> showStoreDetail(@PathVariable int storeId){
         return storeService.findById(storeId);
     }
 
     @PostMapping("/findByKeyword")
-    public List<StoreDto> findByKeyword(@RequestParam String keyword, @RequestBody UserCurReq userCurReq){       //거리 순으로 정렬
+    public List<SimpleStoreDto> findByKeyword(@RequestParam String keyword, @RequestBody UserCurReq userCurReq){       //거리 순으로 정렬
         return storeService.findByKeyword(keyword, userCurReq);
     }
 
     @PostMapping("/findByCur")
-    public List<StoreDto> findByCur(@RequestBody UserCurReq userCurReq){
+    public List<SimpleStoreDto> findByCur(@RequestBody UserCurReq userCurReq){
         return storeService.findByCur(userCurReq);
     }
 
