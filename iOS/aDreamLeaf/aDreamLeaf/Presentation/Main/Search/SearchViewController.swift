@@ -109,6 +109,13 @@ class SearchViewController: UIViewController {
             .bind(to: viewModel.searchButtonTap)
             .disposed(by: disposeBag)
         
+        viewModel.allList
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                self.allButton.sendActions(for: .touchUpInside)
+            })
+            .disposed(by: disposeBag)
+        
     }    
     
     private func attribute() {

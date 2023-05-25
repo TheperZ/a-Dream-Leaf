@@ -21,8 +21,8 @@ class SearchCell: UITableViewCell {
     let goodness = UILabel()
     
     
-    func setUp(with: (name: String, distance: Double, rating: Double, card:Bool, good:Bool)) {
-        viewModel = SearchCellViewModel(name: with.name, distance: with.distance, rating: with.rating, card: with.card, good: with.good)
+    func setUp(with: SimpleStore) {
+        viewModel = SearchCellViewModel(name: with.storeName, distance: with.curDist, rating: with.totalRating, type: with.storeType)
         
         attribute()
         layout()
