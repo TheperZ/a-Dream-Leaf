@@ -16,7 +16,9 @@ class UIChartViewController: UIViewController {
     
     private var blurEffect: UIBlurEffect!
     private var cover: UIVisualEffectView!
+    private let coverStackView = UIStackView()
     private let coverMessageTextView = UITextView()
+    private let gotoLoginButton = UIButton()
     
     let accountSummaryContainer = UIView()
     private let accountTitleLabel = UILabel()
@@ -73,6 +75,16 @@ class UIChartViewController: UIViewController {
                 self.balanceLabel.text = "잔액: \(NumberUtil.commaString($0[1])!)원"
             })
             .disposed(by: disposeBag)
+        
+        gotoLoginButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                let vc = UINavigationController(rootViewController: LoginViewController())
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func coverSetting() {
@@ -80,6 +92,8 @@ class UIChartViewController: UIViewController {
         cover = UIVisualEffectView(effect: blurEffect)
         cover.layer.cornerRadius = 10
         cover.clipsToBounds = true
+        
+        coverStackView.axis = .vertical
         
         coverMessageTextView.isScrollEnabled = false
         coverMessageTextView.isSelectable = false
@@ -89,6 +103,12 @@ class UIChartViewController: UIViewController {
         coverMessageTextView.font = .systemFont(ofSize: 15, weight: .semibold)
         coverMessageTextView.textColor = .darkGray
         coverMessageTextView.textAlignment = .center
+        
+        gotoLoginButton.backgroundColor = UIColor(named: "subColor2")
+        gotoLoginButton.setTitle("로그인하러 가기", for: .normal)
+        gotoLoginButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
+        gotoLoginButton.setTitleColor(.white, for: .normal)
+        gotoLoginButton.layer.cornerRadius = 10
     }
     
     func chartSetting() {
@@ -106,7 +126,7 @@ class UIChartViewController: UIViewController {
         
         accountMoreButton.setTitle("더보기", for: .normal)
         accountMoreButton.setTitleColor(.gray, for: .normal)
-        accountMoreButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        accountMoreButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .regular)
         
         pieChart.drawEntryLabelsEnabled = false
         pieChart.legend.enabled = false
@@ -156,8 +176,13 @@ class UIChartViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        cover.contentView.addSubview(coverMessageTextView)
-        coverMessageTextView.translatesAutoresizingMaskIntoConstraints = false
+        cover.contentView.addSubview(coverStackView)
+        coverStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        [coverMessageTextView, gotoLoginButton].forEach {
+            coverStackView.addArrangedSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         [
             accountSummaryContainer.heightAnchor.constraint(equalToConstant: 200),
@@ -195,10 +220,14 @@ class UIChartViewController: UIViewController {
             cover.trailingAnchor.constraint(equalTo: accountSummaryContainer.trailingAnchor),
             cover.bottomAnchor.constraint(equalTo: accountSummaryContainer.bottomAnchor),
             
+            coverStackView.widthAnchor.constraint(equalToConstant: 200),
+            coverStackView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
+            coverStackView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
+            
             coverMessageTextView.heightAnchor.constraint(equalToConstant: 50),
-            coverMessageTextView.widthAnchor.constraint(equalToConstant: 200),
-            coverMessageTextView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
-            coverMessageTextView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
+
+            gotoLoginButton.heightAnchor.constraint(equalToConstant: 30),
+            gotoLoginButton.widthAnchor.constraint(equalToConstant: 150),
         ].forEach { $0.isActive = true }
     }
     
