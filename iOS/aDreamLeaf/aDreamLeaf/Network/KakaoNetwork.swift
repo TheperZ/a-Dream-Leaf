@@ -20,7 +20,8 @@ struct KakaoNetwork {
                do {
                    let decodedData = try JSONDecoder().decode(KakaoAddressResponse.self, from: data)
                    return decodedData.documents
-               } catch {
+               } catch(let error) {
+                   print(error)
                    return nil
                }
            }

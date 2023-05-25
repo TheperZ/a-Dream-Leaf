@@ -11,12 +11,14 @@ import RxRelay
 
 struct LocalRestaurantViewModel {
     private let disposeBag = DisposeBag()
+    private let tempLat = 37.66346998
+    private let tempLong = 126.7641867
     
     let loading = BehaviorSubject<Bool>(value: true)
     
     let address = BehaviorRelay<String>(value: "")
     
-    let allList = Observable.just([SimpleStore]())
+    let allList = BehaviorSubject<[SimpleStore]>(value: [])
     
     let tableItem = BehaviorSubject(value: [SimpleStore]())
     
@@ -24,25 +26,32 @@ struct LocalRestaurantViewModel {
     let cardButtonTap = PublishRelay<Void>()
     let goodButtonTap = PublishRelay<Void>()
     
-    init(_ repo: KakaoRepositroy = KakaoRepositroy()) {
+    init(_ kakaoRepo: KakaoRepositroy = KakaoRepositroy(), _ storeRepo: StoreRepository = StoreRepository()) {
         
         address.distinctUntilChanged()
             .map { _ in return false }
             .bind(to: loading)
             .disposed(by: disposeBag)
         
-        if LocationManager.permitionCheck() {
-            Observable.just((LocationManager.getLatitude(), LocationManager.getLongitude()))
-                .filter{ (lat: Double?, lon: Double?) in
-                    return lat != nil && lon != nil
-                }
-                .map { ($0.0!, $0.1!) }
-                .flatMap(repo.getAddressKakao)
-                .bind(to: address)
-                .disposed(by: disposeBag)
-        } else {
-            address.accept("GPS 권한을 설정해주세요!")
-        }
+//        if LocationManager.permitionCheck() {
+//            Observable.just((LocationManager.getLatitude(), LocationManager.getLongitude()))
+//                .filter{ (lat: Double?, lon: Double?) in
+//                    return lat != nil && lon != nil
+//                }
+//                .map { ($0.0!, $0.1!) }
+//                .flatMap(repo.getAddressKakao)
+//                .bind(to: address)
+//                .disposed(by: disposeBag)
+//        } else {
+//            address.accept("GPS 권한을 설정해주세요!")
+//        }
+        
+        
+        Observable.just((LocationManager.getLatitude() ?? tempLat, LocationManager.getLongitude() ?? tempLong))
+            .map { ($0.0, $0.1) }
+            .flatMap(kakaoRepo.getAddressKakao)
+            .bind(to: address)
+            .disposed(by: disposeBag)
         
         allButtonTap
             .withLatestFrom(allList)
@@ -61,6 +70,14 @@ struct LocalRestaurantViewModel {
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
-            
+        allList
+            .bind(to: tableItem)
+            .disposed(by: disposeBag)
+        
+        storeRepo.searchNearStore(lat: tempLat, long: tempLong)
+            .map { $0.data ?? [] }
+            .bind(to: allList)
+            .disposed(by: disposeBag)
+        
     }
 }

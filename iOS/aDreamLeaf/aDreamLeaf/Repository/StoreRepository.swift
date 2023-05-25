@@ -18,4 +18,8 @@ struct StoreRepository {
     func fetchDetail(storeId: Int) -> Observable<RequestResult<Store>> {
         return network.fetchStoreDetail(storeId: storeId)
     }
+    
+    func searchNearStore(lat: Double, long: Double) -> Observable<RequestResult<[SimpleStore]>> {
+        return network.searchWithLocation(lat: lat, long: long)
+    }
 }
