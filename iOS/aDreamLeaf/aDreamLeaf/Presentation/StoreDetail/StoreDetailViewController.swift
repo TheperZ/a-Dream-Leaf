@@ -31,9 +31,10 @@ class StoreDetailViewController: UIViewController {
     private let reviewTitle = UIButton()
     private let reviewTableView = UITableView()
     private let reviewButton = UIButton()
+    private let reviewWarningLabel = UILabel()
     
-    init() {
-        viewModel = StoreDetailViewModel()
+    init(storeId: Int) {
+        viewModel = StoreDetailViewModel(storeId: storeId)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -81,7 +82,7 @@ class StoreDetailViewController: UIViewController {
         reviewButton.rx.tap
             .asDriver()
             .drive(onNext: {
-                self.navigationController?.pushViewController(ReviewViewController(), animated: true)
+                self.navigationController?.pushViewController(ReviewViewController(storeId: self.viewModel.storeId), animated: true)
             })
             .disposed(by: disposeBag)
         
@@ -100,19 +101,65 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { $0?.storeName ?? ""}
+            .map { $0.storeName}
             .bind(to: nameLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { $0?.refineRoadnmAddr ?? ""}
+            .map { $0.refineRoadnmAddr}
             .bind(to: addressLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { _ in "[ 내 위치로 부터 0.3km ] - 수정!!!!" }
+            .map { "[ 내 위치로 부터 \($0.curDist)km ]" }
             .bind(to: distanceLabel.rx.text)
             .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { "식약청 위생등급 : \($0.hygieneGrade)" }
+            .observe(on: MainScheduler.instance)
+            .bind(to: hygieneGradeLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { "⭐️ \($0.totalRating)" }
+            .observe(on: MainScheduler.instance)
+            .bind(to: ratingLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                switch($0.storeType) {
+                    case 1:
+                        self.cardAvail.font = .systemFont(ofSize: 16, weight: .semibold)
+                        self.cardAvail.textColor = .lightGray
+                        self.cardAvail.layer.borderColor = UIColor.gray.cgColor
+                        self.cardAvail.layer.borderWidth = 1
+                        self.cardAvail.layer.cornerRadius = 10
+                        self.cardAvail.textAlignment = .center
+                        
+                    case 2:
+                        self.goodness.font = .systemFont(ofSize: 16, weight: .semibold)
+                        self.goodness.textColor = .lightGray
+                        self.goodness.layer.borderColor = UIColor.gray.cgColor
+                        self.goodness.layer.borderWidth = 1
+                        self.goodness.layer.cornerRadius = 10
+                        self.goodness.textAlignment = .center
+                        
+                    default:
+                        return
+                        
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.reviews
+            .map { $0.count == 0 ? false: true}
+            .bind(to: reviewWarningLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        
     }
     
     private func attribute() {
@@ -145,8 +192,8 @@ class StoreDetailViewController: UIViewController {
         
         goodness.text = "선한 영향력 가게"
         goodness.font = .systemFont(ofSize: 16, weight: .semibold)
-        goodness.textColor = .lightGray
-        goodness.layer.borderColor = UIColor.gray.cgColor
+        goodness.textColor = UIColor(named: "subColor2")
+        goodness.layer.borderColor = UIColor(named: "subColor2")?.cgColor
         goodness.layer.borderWidth = 1
         goodness.layer.cornerRadius = 10
         goodness.textAlignment = .center
@@ -154,15 +201,13 @@ class StoreDetailViewController: UIViewController {
         bottomStackView.spacing = 10
         bottomStackView.distribution = .fillEqually
         
-        hygieneGradeLabel.text = "식약청 위생등급 : 1등급"
-        hygieneGradeLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        hygieneGradeLabel.font = .systemFont(ofSize: 10, weight: .semibold)
         hygieneGradeLabel.textColor = .black
         hygieneGradeLabel.layer.borderColor = UIColor.black.cgColor
         hygieneGradeLabel.layer.borderWidth = 1
         hygieneGradeLabel.layer.cornerRadius = 10
         hygieneGradeLabel.textAlignment = .center
         
-        ratingLabel.text = "⭐️ 4.5"
         ratingLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         ratingLabel.textColor = .black
         ratingLabel.layer.borderColor = UIColor.black.cgColor
@@ -188,6 +233,13 @@ class StoreDetailViewController: UIViewController {
         reviewButton.layer.cornerRadius = 10
         reviewButton.layer.borderColor = UIColor.black.cgColor
         reviewButton.layer.borderWidth = 0.5
+        
+        reviewWarningLabel.font = .systemFont(ofSize: 14, weight: .bold)
+        reviewWarningLabel.text = "작성된 리뷰가 없습니다"
+        reviewWarningLabel.textColor = .gray
+        reviewWarningLabel.textAlignment = .center
+        reviewWarningLabel.backgroundColor = UIColor(white: 0.97, alpha: 1)
+        
     }
     
     private func layout() {
@@ -197,7 +249,7 @@ class StoreDetailViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [nameLabel, addressLabel, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView, reviewButton].forEach {
+        [nameLabel, addressLabel, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -261,7 +313,11 @@ class StoreDetailViewController: UIViewController {
             reviewTableView.trailingAnchor.constraint(equalTo: divider.trailingAnchor),
             reviewTableView.heightAnchor.constraint(equalToConstant: 150),
             
-            
+            reviewWarningLabel.topAnchor.constraint(equalTo: reviewTableView.topAnchor),
+            reviewWarningLabel.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
+            reviewWarningLabel.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),
+            reviewWarningLabel.bottomAnchor.constraint(equalTo: reviewTableView.bottomAnchor),
+        
             reviewButton.topAnchor.constraint(equalTo: reviewTableView.bottomAnchor, constant: 10),
             reviewButton.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
             reviewButton.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),

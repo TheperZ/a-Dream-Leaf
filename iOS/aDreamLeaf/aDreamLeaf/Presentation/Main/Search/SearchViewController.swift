@@ -57,16 +57,11 @@ class SearchViewController: UIViewController {
             .disposed(by: disposeBag)
         
         tableView.rx.itemSelected
-            .asDriver()
-            .drive(onNext: {
-                self.tableView.cellForRow(at: $0)?.isSelected = false
-            })
-            .disposed(by: disposeBag)
-        
-        tableView.rx.itemSelected
-            .asDriver()
-            .drive(onNext: { _ in
-                self.navigationController?.pushViewController(StoreDetailViewController(), animated: true)
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.tableItem) { return ($0, $1)}
+            .subscribe(onNext: { indexPath, list in
+                self.tableView.cellForRow(at: indexPath)?.isSelected = false
+                self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
             })
             .disposed(by: disposeBag)
         
