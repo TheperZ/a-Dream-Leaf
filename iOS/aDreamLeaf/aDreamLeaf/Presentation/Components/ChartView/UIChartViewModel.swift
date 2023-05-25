@@ -16,10 +16,12 @@ struct UIChartViewModel {
     
     let date = BehaviorSubject(value: Date.dateToString(with: Date.now, format:"yyyy-MM"))
     
+    let refresh = BehaviorSubject<Void>(value: Void())
+    
     init(_ repo: AccountRepository = AccountRepository()) {
         
-        date
-            .flatMap(repo.getAccountSummary)
+        Observable.combineLatest(date, refresh)
+            .flatMap{repo.getAccountSummary(yearMonth: $0.0)}
             .map { $0.data != nil ? [$0.data!.charge, $0.data!.balance] : [0,0]}
             .bind(to: dataValues)
             .disposed(by: disposeBag)

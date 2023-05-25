@@ -48,6 +48,12 @@ class UIChartViewController: UIViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool){
+        super.viewWillAppear(animated)
+        
+        chartViewModel.refresh.onNext(Void())
+    }
+    
     private func bind() {
         UserManager.getInstance()
             .subscribe(onNext: { user in
