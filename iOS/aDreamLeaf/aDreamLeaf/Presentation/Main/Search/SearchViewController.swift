@@ -61,6 +61,7 @@ class SearchViewController: UIViewController {
             .withLatestFrom(viewModel.tableItem) { return ($0, $1)}
             .subscribe(onNext: { indexPath, list in
                 self.tableView.cellForRow(at: indexPath)?.isSelected = false
+                print((list[indexPath.row]).storeId)
                 self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
             })
             .disposed(by: disposeBag)

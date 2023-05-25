@@ -15,8 +15,8 @@ class Store: Decodable {
     let refineLotnoAddr: String
     let refineWGS84Lat: Double
     let refineWGS84Logt: Double
-    let prodName: String
-    let prodTarget: String
+    let prodName: String?
+    let prodTarget: String?
     let storeType: Int
     let curDist: Double
     let totalRating: Double

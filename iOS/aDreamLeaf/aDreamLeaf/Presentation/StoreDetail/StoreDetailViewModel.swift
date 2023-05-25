@@ -23,7 +23,7 @@ struct StoreDetailViewModel {
         self.storeId = storeId
         
         storeRepo.fetchDetail(storeId: storeId)
-            .filter { $0 != nil }
+            .filter { $0.data != nil }
             .map { $0.data! }
             .bind(to: detail)
             .disposed(by: disposeBag)
