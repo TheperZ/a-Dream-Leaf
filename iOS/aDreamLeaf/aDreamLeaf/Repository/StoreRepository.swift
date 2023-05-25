@@ -11,7 +11,7 @@ import RxSwift
 struct StoreRepository {
     private let network = StoreNetwork()
     
-    func searchStores(with keyword: String) -> Observable<RequestResult<[Store]>> {
+    func searchStores(with keyword: String) -> Observable<RequestResult<[SimpleStore]>> {
         return network.searchStore(with: keyword)
     }
     

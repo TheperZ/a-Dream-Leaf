@@ -105,7 +105,7 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { $0?.roadAddr ?? ""}
+            .map { $0?.refineRoadnmAddr ?? ""}
             .bind(to: addressLabel.rx.text)
             .disposed(by: disposeBag)
         
