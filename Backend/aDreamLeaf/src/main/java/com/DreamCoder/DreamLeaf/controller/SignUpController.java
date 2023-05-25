@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseToken;
 
 import java.util.Map;
 import java.util.Random;
+import java.util.HashSet;
 
 @RestController
 @Slf4j
@@ -32,21 +33,38 @@ public class SignUpController {
     private final SignUpService signUpService;
     private final AuthUtil authUtil;
 
+    private HashSet<String> usedUserNames = new HashSet<>();
 
     @PostMapping("/login/signUp")      // 회원가입
     public ResponseEntity createSignUp(@RequestBody SignUpCreateReq signUpCreateReq) throws FirebaseAuthException {
         String firebaseToken = signUpCreateReq.getFirebaseToken();
         FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(firebaseToken);
         String uid = decodedToken.getUid();
-        String[] a = {"good", "brilliant", "great", "excellent", "happy"}; // 닉네임 임의 부여 조합 예시
-        String[] b = {"dog", "cat", "dolphin", "racoon", "horse"};
-        Random random = new Random();
-        String userName = a[random.nextInt(a.length)] + " " + b[random.nextInt(b.length)];
+
+        String userName = generateUniqueUserName();
+        while (usedUserNames.contains(userName)) {
+            userName = generateUniqueUserName();
+        }
+
         SignUpCreateDto signUpCreateDto = new SignUpCreateDto(userName, signUpCreateReq.getEmail(), uid);
-        /*SignUpDto signUpDto = signUpService.create(signUpCreateDto);
-        return ResponseEntity.status(201).body(signUpDto);*/
         String result = signUpService.create(signUpCreateDto);
+
+        usedUserNames.add(userName);
+
         return ResponseEntity.ok().body(result);
+    }
+
+    private String generateUniqueUserName() {
+        String[] a = {"행복한", "뛰어난", "엄청난", "헤엄치는", "날아다니는", "귀여운", "미소짓는", "탐스러운", "말랑말랑한", "개구진",
+                "강력한", "우아한", "떠오르는", "활발한", "씩씩한", "튼튼한", "시원한", "빛나는", "상쾌한", "기다란",
+                "말끔한", "너그러운", "네모난", "동그란", "부드러운", "쏜살같은", "점잖은", "즐거운", "지혜로운", "희망찬"};
+        String[] b = {"강아지", "고양이", "돌고래", "너구리", "조랑말", "치타", "미어캣", "물고기", "사자", "호랑이",
+                "물소", "공룡", "물소", "맘모스", "기린", "곰", "거북이", "꽃사슴", "판다", "염소",
+                "개구리", "고릴라", "코뿔소", "고슴도치", "하마", "수달", "해달", "낙타", "양", "코끼리"};
+        Random random = new Random();
+        String user = a[random.nextInt(a.length)] + " " + b[random.nextInt(b.length)];
+
+        return user;
     }
 
     @PostMapping("/login")             // 로그인
