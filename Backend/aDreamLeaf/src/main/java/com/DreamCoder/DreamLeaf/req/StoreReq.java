@@ -16,7 +16,7 @@ public class StoreReq {
     private String lotAddr;         //지번주소
     private double wgs84Lat;        //위도
     private double wgs84Logt;       //경도
-    private boolean payment;        //아동급식카드 지원여부
+    private int payment;        //아동급식카드 지원여부
     private String prodName;        //제공품목
     private String prodTarget;      //제공대상
 }
