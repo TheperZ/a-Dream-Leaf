@@ -24,13 +24,16 @@ struct SearchCellViewModel {
         
         if type == 0 {
             good = true
-            card = true
-        } else if type == 1 {
-            good = true
             card = false
-        } else {
+        } else if type == 1 {
             good = false
             card = true
+        } else if type == 2 {
+            good = true
+            card = true
+        } else {
+            good = false
+            card = false
         }
     }
 }

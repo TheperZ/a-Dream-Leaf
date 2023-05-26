@@ -131,7 +131,7 @@ class StoreDetailViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 switch($0.storeType) {
-                    case 1:
+                    case 0:
                         self.cardAvail.font = .systemFont(ofSize: 16, weight: .semibold)
                         self.cardAvail.textColor = .lightGray
                         self.cardAvail.layer.borderColor = UIColor.gray.cgColor
@@ -139,7 +139,7 @@ class StoreDetailViewController: UIViewController {
                         self.cardAvail.layer.cornerRadius = 10
                         self.cardAvail.textAlignment = .center
                         
-                    case 2:
+                    case 1:
                         self.goodness.font = .systemFont(ofSize: 16, weight: .semibold)
                         self.goodness.textColor = .lightGray
                         self.goodness.layer.borderColor = UIColor.gray.cgColor
