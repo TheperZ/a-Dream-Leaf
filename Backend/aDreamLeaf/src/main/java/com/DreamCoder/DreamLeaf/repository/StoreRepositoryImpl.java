@@ -154,7 +154,7 @@ public class StoreRepositoryImpl implements StoreRepository{
             DetailStoreDto.builder()
                     .storeId(rs.getInt("storeId"))
                     .storeName(rs.getString("storeName"))
-                    .hygieneGrade("매우우수(임시)")
+                    .hygieneGrade("매우우수")
                     .refinezipCd(rs.getInt("zipCode"))
                     .refineRoadnmAddr(rs.getString("roadAddr"))
                     .refineLotnoAddr(rs.getString("lotAddr"))
