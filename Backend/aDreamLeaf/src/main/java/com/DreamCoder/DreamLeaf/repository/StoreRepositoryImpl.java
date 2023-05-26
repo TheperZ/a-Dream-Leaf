@@ -93,11 +93,26 @@ public class StoreRepositoryImpl implements StoreRepository{
 
     }
 
+    //사용자 위치 정보가 없을 때에 대한 처리
     @Override
-    public Optional<DetailStoreDto> findById(int storeId) {
-        String sql="select * from store where storeId=?";
+    public Optional<DetailStoreDto> findById(int storeId){
+        String sql="select *, 0.0 as distance from store where storeId=?";
         try{
             DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper, storeId);
+            return Optional.of(result);
+        }catch(EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+    }
+
+    //사용자 위치 정보가 있을 때에 대한 처리
+    @Override
+    public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq) {
+        String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
+                "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
+                "AS distance from store where storeId=?";
+        try{
+            DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper,userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(), storeId);
             return Optional.of(result);
         }catch(EmptyResultDataAccessException e){
             return Optional.empty();
@@ -105,6 +120,14 @@ public class StoreRepositoryImpl implements StoreRepository{
 
     }
 
+    //사용자 위치 정보가 없을 때에 대한 처리(별점 순 정렬 추가 필요)
+    @Override
+    public List<SimpleStoreDto> findByKeyword(String keyword){
+        String sql="select *, 0.0 AS distance from store where storeName like ? order by distance";
+        return template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
+    }
+
+    //사용자 위치 정보가 있을 때에 대한 처리
     @Override
     public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
@@ -123,22 +146,32 @@ public class StoreRepositoryImpl implements StoreRepository{
     }
 
 
+//    //정말로 필요한 함수일까?
+//    private double calcDistance(double lat1, double logt1, double lat2, double logt2){
+//        double dLat = Math.toRadians(lat2 - lat1);
+//        double dLon = Math.toRadians(logt2 - logt1);
+//
+//        double a = Math.sin(dLat/2)* Math.sin(dLat/2)+ Math.cos(Math.toRadians(lat1))* Math.cos(Math.toRadians(lat2))* Math.sin(dLon/2)* Math.sin(dLon/2);
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+//        double d = 6371 * c * 1000;    // Distance in m
+//        return d;
+//    }
+
+
 
     private RowMapper<StoreDto> storeDtoRowMapper=(rs, rowNum) ->
             StoreDto.builder()
                     .storeId(rs.getInt("storeId"))
                     .storeName(rs.getString("storeName"))
-                    .hygieneGrade("매우우수(임시)")
+                    .hygieneGrade("매우우수")
                     .zipCode(rs.getInt("zipCode"))
                     .roadAddr(rs.getString("roadAddr"))
                     .lotAddr(rs.getString("lotAddr"))
                     .wgs84Lat(rs.getDouble("wgs84Lat"))
                     .wgs84Logt(rs.getDouble("wgs84Logt"))
-//                    .curDist(0.0)
                     .payment(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
-//                    .totalRating(5.0)
                     .build();
 
     private RowMapper<SimpleStoreDto> simpleStoreDtoRowMapper=(rs, rowNum)->
@@ -146,8 +179,8 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .storeId(rs.getInt("storeId"))
                     .storeName(rs.getString("storeName"))
                     .storeType(rs.getInt("payment"))
-                    .curDist(0.0)                   //만들기
-                    .totalRating(5.0)               //만들기
+                    .curDist(rs.getDouble("distance"))      //현재 이 column이 없을 경우 0.0으로 처리
+                    .totalRating(5.0)
                     .build();
 
     private RowMapper<DetailStoreDto> detailStoreDtoRowMapper=(rs, rowNum)->
@@ -160,8 +193,8 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .refineLotnoAddr(rs.getString("lotAddr"))
                     .refineWGS84Lat(rs.getDouble("wgs84Lat"))
                     .refineWGS84Logt(rs.getDouble("wgs84Logt"))
-                    .curDist(0.0)
-                    .storeType(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
+                    .curDist(rs.getDouble("distance"))
+                    .storeType(rs.getInt("payment"))
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
                     .totalRating(5.0)
