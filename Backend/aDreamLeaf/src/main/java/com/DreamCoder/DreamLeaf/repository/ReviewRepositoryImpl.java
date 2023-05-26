@@ -68,12 +68,19 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         if(count != 0){
             reviewSearchDto.setReviewPagination(new ReviewPagination(count, reviewSearchDto));
         }
+        else{
+            throw new ReviewException("해당 가게의 리뷰가 존재하지 않습니다.", 404);
+        }
 
         List<ReviewDto> reviewDtoList = jdbcTemplate.query("SELECT * FROM REVIEW WHERE storeId="+reviewSearchDto.getStoreId()
                         + " ORDER BY created_date DESC LIMIT " + reviewSearchDto.getDisplay()
                         + " OFFSET " + reviewSearchDto.getReviewPagination().getLimitStart()
                 , reviewRowMapper);
 
+        if (reviewDtoList.isEmpty()){
+            throw new ReviewException("해당 가게의 페이지에 리뷰가 존재하지 않습니다.", 404);
+        }
+        
         String storeName = getStoreName(reviewSearchDto.getStoreId());
         for (ReviewDto reviewDto : reviewDtoList){
             reviewDto.setNameData(getUserName(reviewDto.getUserId()), storeName);
