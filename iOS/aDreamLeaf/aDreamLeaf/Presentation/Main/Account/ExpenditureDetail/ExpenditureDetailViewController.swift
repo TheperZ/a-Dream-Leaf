@@ -13,6 +13,8 @@ class ExpenditureDetailViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: ExpenditureDetailViewModel
     
+    private let loadingView = UIActivityIndicatorView(style: .medium)
+    
     private let titleLabel = UILabel()
     
     private let accountIdTitleLabel =  UILabel()
@@ -44,9 +46,17 @@ class ExpenditureDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadingSetting()
+        
         bind()
         attribute()
         layout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
     }
     
     private func bind() {
@@ -74,6 +84,50 @@ class ExpenditureDetailViewController: UIViewController {
         viewModel.data
             .map { String($0.body)}
             .bind(to: bodyLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        deleteButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                let alert = UIAlertController(title: "경고", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
+                let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                    self.viewModel.deleteButtonTap.accept(Void())
+                }
+                let cancel = UIAlertAction(title: "취소", style: .cancel)
+                
+                alert.addAction(confirm)
+                alert.addAction(cancel)
+                
+                self.present(alert, animated: true)
+                
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.deleteResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                if result.success {
+                    let alert = UIAlertController(title: "성공", message: "지출 내역이 삭제되었습니다.", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                } else {
+                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        editButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.data)
+            .subscribe(onNext: { expenditure in
+                self.navigationController?.pushViewController(NewPaymentViewController(data: expenditure), animated: true)
+            })
             .disposed(by: disposeBag)
         
     }
@@ -122,6 +176,7 @@ class ExpenditureDetailViewController: UIViewController {
     
     private func layout() {
         [
+            loadingView,
             titleLabel,
             accountIdTitleLabel,
             priceTitleLabel,
@@ -138,6 +193,12 @@ class ExpenditureDetailViewController: UIViewController {
         }
         
         [
+            
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
             titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
@@ -175,5 +236,25 @@ class ExpenditureDetailViewController: UIViewController {
             editButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
         ].forEach { $0.isActive = true }
+    }
+}
+
+extension ExpenditureDetailViewController {
+    func loadingSetting() {
+        
+        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        
+        viewModel.loading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loading in
+                if loading {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                } else {
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }

@@ -90,6 +90,7 @@
 		BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */; };
 		BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E62A1BA79D001FCB88 /* Review.swift */; };
 		BFF042EB2A1BBCE4001FCB88 /* AccountSummaryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */; };
+		BFF042EE2A2065FB001FCB88 /* ExpenditureRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042ED2A2065FB001FCB88 /* ExpenditureRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -181,6 +182,7 @@
 		BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRepository.swift; sourceTree = "<group>"; };
 		BFF042E62A1BA79D001FCB88 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryRequest.swift; sourceTree = "<group>"; };
+		BFF042ED2A2065FB001FCB88 /* ExpenditureRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -470,6 +472,7 @@
 				BFBD10472A1749FC002EE950 /* BudgetRequest.swift */,
 				BFBD10512A18DB98002EE950 /* ExpenditureListRequest.swift */,
 				BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */,
+				BFF042ED2A2065FB001FCB88 /* ExpenditureRequest.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -789,6 +792,7 @@
 				BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BF219DC92A021044005DBAC6 /* LocalRestaurantViewModel.swift in Sources */,
+				BFF042EE2A2065FB001FCB88 /* ExpenditureRequest.swift in Sources */,
 				BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,
