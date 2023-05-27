@@ -96,7 +96,7 @@ public class StoreRepositoryImpl implements StoreRepository{
     //사용자 위치 정보가 없을 때에 대한 처리
     @Override
     public Optional<DetailStoreDto> findById(int storeId){
-        String sql="select *, 0.0 as distance from store where storeId=?";
+        String sql="select store.*, 0.0 as distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeId=?";
         try{
             DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper, storeId);
             return Optional.of(result);
@@ -110,7 +110,7 @@ public class StoreRepositoryImpl implements StoreRepository{
     public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
-                "AS distance from store where storeId=?";
+                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeId=?";
         try{
             DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper,userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(), storeId);
             return Optional.of(result);
@@ -120,10 +120,10 @@ public class StoreRepositoryImpl implements StoreRepository{
 
     }
 
-    //사용자 위치 정보가 없을 때에 대한 처리(별점 순 정렬 추가 필요)
+    //사용자 위치 정보가 없을 때에 대한 처리
     @Override
     public List<SimpleStoreDto> findByKeyword(String keyword){
-        String sql="select *, 0.0 AS distance from store where storeName like ? order by distance";
+        String sql="select *, 0.0 AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by totalRating desc";
         return template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
     }
 
@@ -132,7 +132,7 @@ public class StoreRepositoryImpl implements StoreRepository{
     public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
-                "AS distance from store where storeName like ? order by distance";
+                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by distance";
         log.info("lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
         return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
     }
@@ -141,21 +141,10 @@ public class StoreRepositoryImpl implements StoreRepository{
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
-                "AS distance from store having distance<2 order by distance";
+                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store having distance<2 order by distance";
         return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
     }
 
-
-//    //정말로 필요한 함수일까?
-//    private double calcDistance(double lat1, double logt1, double lat2, double logt2){
-//        double dLat = Math.toRadians(lat2 - lat1);
-//        double dLon = Math.toRadians(logt2 - logt1);
-//
-//        double a = Math.sin(dLat/2)* Math.sin(dLat/2)+ Math.cos(Math.toRadians(lat1))* Math.cos(Math.toRadians(lat2))* Math.sin(dLon/2)* Math.sin(dLon/2);
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-//        double d = 6371 * c * 1000;    // Distance in m
-//        return d;
-//    }
 
 
 
@@ -180,7 +169,7 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .storeName(rs.getString("storeName"))
                     .storeType(rs.getInt("payment"))
                     .curDist(rs.getDouble("distance"))      //현재 이 column이 없을 경우 0.0으로 처리
-                    .totalRating(5.0)
+                    .totalRating(rs.getDouble("totalRating"))
                     .build();
 
     private RowMapper<DetailStoreDto> detailStoreDtoRowMapper=(rs, rowNum)->
@@ -197,7 +186,7 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .storeType(rs.getInt("payment"))
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
-                    .totalRating(5.0)
+                    .totalRating(rs.getDouble("totalRating"))
                     .build();
 
 
