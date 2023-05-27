@@ -3,6 +3,7 @@ package com.DreamCoder.DreamLeaf.repository;
 import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
+import com.DreamCoder.DreamLeaf.exception.StoreException;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import lombok.extern.slf4j.Slf4j;
@@ -101,7 +102,7 @@ public class StoreRepositoryImpl implements StoreRepository{
             DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper, storeId);
             return Optional.of(result);
         }catch(EmptyResultDataAccessException e){
-            return Optional.empty();
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
         }
     }
 
@@ -115,7 +116,7 @@ public class StoreRepositoryImpl implements StoreRepository{
             DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper,userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(), storeId);
             return Optional.of(result);
         }catch(EmptyResultDataAccessException e){
-            return Optional.empty();
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
         }
 
     }
@@ -134,7 +135,11 @@ public class StoreRepositoryImpl implements StoreRepository{
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
                 "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by distance";
         log.info("lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
-        return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
+        List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
+        if(result.size()==0){
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
+        }
+        return result;
     }
 
     @Override
@@ -142,7 +147,11 @@ public class StoreRepositoryImpl implements StoreRepository{
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
                 "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store having distance<2 order by distance";
-        return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
+        List<SimpleStoreDto> result=template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
+        if(result.size()==0){
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
+        }
+        return result;
     }
 
 
