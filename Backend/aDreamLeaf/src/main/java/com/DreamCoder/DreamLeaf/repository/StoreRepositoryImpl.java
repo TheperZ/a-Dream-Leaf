@@ -125,7 +125,11 @@ public class StoreRepositoryImpl implements StoreRepository{
     @Override
     public List<SimpleStoreDto> findByKeyword(String keyword){
         String sql="select *, 0.0 AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by totalRating desc";
-        return template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
+        List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
+        if(result.size()==0){
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
+        }
+        return result;
     }
 
     //사용자 위치 정보가 있을 때에 대한 처리

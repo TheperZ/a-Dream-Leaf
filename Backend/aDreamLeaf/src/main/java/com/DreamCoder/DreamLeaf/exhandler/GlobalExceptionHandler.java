@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = {StoreException.class})
-    protected ResponseEntity handleStoreException(ReviewException e){
+    protected ResponseEntity handleStoreException(StoreException e){
         Map<String,String> result = new HashMap<>();
         result.put("ErrorMessage",e.getMessage());
         return ResponseEntity.status(e.getCode()).body(result);
