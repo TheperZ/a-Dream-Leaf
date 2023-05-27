@@ -51,7 +51,7 @@ public class SignUpController {
 
         usedUserNames.add(userName);
 
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.status(201).body(result);
     }
 
     private String generateUniqueUserName() {
