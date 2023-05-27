@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import com.DreamCoder.DreamLeaf.exception.SignUpException;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.YearMonth;
-import java.util.List;
 
 @Repository
 public class SignUpRepositoryImpl implements SignUpRepository{
@@ -43,12 +43,19 @@ public class SignUpRepositoryImpl implements SignUpRepository{
         return signUpDto;
     }*/
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String save(SignUpCreateDto signUpCreateDto) {
+        String email = signUpCreateDto.getEmail();
+        if (!isValidEmail(email)) {
+            throw new SignUpException("Bad Request. 입력된 정보가 올바르지 않음", 400);
+        }
         jdbcTemplate.execute("INSERT INTO USER(email,uid,userName) VALUES('"+
                 signUpCreateDto.getEmail()+
                 "','"+signUpCreateDto.getUid()+
                 "','"+signUpCreateDto.getUserName()+"')");
+
         return "Created. 회원가입 완료";
+
     }
 
     @Override
@@ -56,6 +63,12 @@ public class SignUpRepositoryImpl implements SignUpRepository{
         LoginDto loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE userId = "+ id
                 ,loginDtoRowMapper);
         return loginDto;
+    }
+
+    @Override
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*@(?!-)(?:[A-Za-z0-9-]{1,63}\\.)*(?:[A-Za-z]{2,63}|(?:[0-9]{1,3}\\.){3}[0-9]{1,3})(?:\\:\\d{2,5})?$";
+        return email.matches(emailRegex);
     }
 
 }

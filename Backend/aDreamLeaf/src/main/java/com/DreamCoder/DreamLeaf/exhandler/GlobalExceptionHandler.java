@@ -3,6 +3,7 @@ package com.DreamCoder.DreamLeaf.exhandler;
 import com.DreamCoder.DreamLeaf.exception.AccountException;
 import com.DreamCoder.DreamLeaf.exception.AlarmException;
 import com.DreamCoder.DreamLeaf.exception.ReviewException;
+import com.DreamCoder.DreamLeaf.exception.SignUpException;
 import com.google.firebase.auth.AuthErrorCode;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -39,12 +40,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getCode()).body(result);
     }
 
+    @ExceptionHandler(value = {SignUpException.class})
+    protected ResponseEntity handleSignUpException(SignUpException e){
+        Map<String,String> result = new HashMap<>();
+        result.put("ErrorMessage",e.getMessage());
+        return ResponseEntity.status(e.getCode()).body(result);
+    }
+
     @ExceptionHandler(value = {FirebaseAuthException.class})
     protected ResponseEntity handleFirebaseAuthException(FirebaseAuthException e){
         AuthErrorCode authErrorCode = e.getAuthErrorCode();
         Map<String,String> result = new HashMap<>();
-        result.put("message","파이어베이스 인증에 실패하였습니다.");
-        result.put("authErrorCode", authErrorCode.toString());
+        result.put("ErrorMessage", authErrorCode.toString());
         return ResponseEntity.status(500).body(result);
     }
 
@@ -52,8 +59,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity handleFirebaseMessagingException(FirebaseMessagingException e){
         MessagingErrorCode messagingErrorCode = e.getMessagingErrorCode();
         Map<String,String> result = new HashMap<>();
-        result.put("message","파이어베이스 메세지 전송에 실패하였습니다.");
-        result.put("MessagingErrorCode", messagingErrorCode.toString());
+        result.put("ErrorMessage", messagingErrorCode.toString());
         return ResponseEntity.status(500).body(result);
     }
 }
