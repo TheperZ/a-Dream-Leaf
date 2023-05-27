@@ -1,6 +1,7 @@
 package com.DreamCoder.DreamLeaf.service;
 
 import com.DreamCoder.DreamLeaf.dto.AddAlarmDto;
+import com.DreamCoder.DreamLeaf.dto.AlarmExistDto;
 import com.DreamCoder.DreamLeaf.repository.AlarmRepositoryImpl;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,12 @@ public class AlarmService {
         System.out.println(response.getSuccessCount() + " tokens were unsubscribed successfully");
         alarmRepository.delete(id);
         return "알림이 해제 되었습니다.";
+    }
+
+    public AlarmExistDto isExist(int id) {
+        boolean result = alarmRepository.isExist(id);
+        AlarmExistDto alarmExistDto = new AlarmExistDto(result);
+        return alarmExistDto;
     }
 
     @Scheduled(cron = "0 0 20 * * *")
