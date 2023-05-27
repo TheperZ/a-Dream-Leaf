@@ -43,8 +43,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity handleFirebaseAuthException(FirebaseAuthException e){
         AuthErrorCode authErrorCode = e.getAuthErrorCode();
         Map<String,String> result = new HashMap<>();
-        result.put("message","파이어베이스 인증에 실패하였습니다.");
-        result.put("authErrorCode", authErrorCode.toString());
+        result.put("ErrorMessage", authErrorCode.toString());
         return ResponseEntity.status(500).body(result);
     }
 
@@ -52,8 +51,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity handleFirebaseMessagingException(FirebaseMessagingException e){
         MessagingErrorCode messagingErrorCode = e.getMessagingErrorCode();
         Map<String,String> result = new HashMap<>();
-        result.put("message","파이어베이스 메세지 전송에 실패하였습니다.");
-        result.put("MessagingErrorCode", messagingErrorCode.toString());
+        result.put("ErrorMessage", messagingErrorCode.toString());
         return ResponseEntity.status(500).body(result);
     }
 }

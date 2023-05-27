@@ -2,6 +2,7 @@ package com.DreamCoder.DreamLeaf.controller;
 
 import com.DreamCoder.DreamLeaf.Util.AuthUtil;
 import com.DreamCoder.DreamLeaf.dto.AddAlarmDto;
+import com.DreamCoder.DreamLeaf.dto.AlarmExistDto;
 import com.DreamCoder.DreamLeaf.req.AddAlarmReq;
 import com.DreamCoder.DreamLeaf.service.AlarmService;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -41,4 +42,10 @@ public class AlarmController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping("/alarm")
+    public ResponseEntity isSetted(@RequestBody Map<String,String> req) throws FirebaseAuthException{
+        int id = authUtil.findUserId(req.get("firebaseToken"));
+        AlarmExistDto alarmExistDto = alarmService.isExist(id);
+        return ResponseEntity.ok().body(alarmExistDto);
+    }
 }
