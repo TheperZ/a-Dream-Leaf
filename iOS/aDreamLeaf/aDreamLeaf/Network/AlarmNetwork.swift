@@ -86,7 +86,7 @@ struct AlarmNetwork {
                 request.timeoutInterval = 10
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token, "FCMToken": Messaging.messaging().apnsToken!.reduce("", {$0 + String(format: "%02X", $1)})]
-                print(params)
+              
                  // httpBody 에 parameters 추가
                 do {
                     try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
@@ -95,7 +95,7 @@ struct AlarmNetwork {
                     observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!"))
                 }
                 
-                AF.request(request).responseJSON{ (response) in
+                AF.request(request).response{ (response) in
                      switch response.result {
                          case .success:
                              do {
@@ -137,7 +137,6 @@ struct AlarmNetwork {
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token, "FCMToken": Messaging.messaging().apnsToken!.reduce("", {$0 + String(format: "%02X", $1)})]
                  
-                print(params)
                  // httpBody 에 parameters 추가
                 do {
                     try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
@@ -146,7 +145,7 @@ struct AlarmNetwork {
                     observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!"))
                 }
                 
-                AF.request(request).responseJSON{ (response) in
+                AF.request(request).response{ (response) in
                      switch response.result {
                          case .success:
                              do {
