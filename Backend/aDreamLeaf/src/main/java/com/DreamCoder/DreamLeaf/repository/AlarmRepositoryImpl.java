@@ -17,7 +17,7 @@ public class AlarmRepositoryImpl implements AlarmRepository{
 
     @Override
     public void save(AddAlarmDto addAlarmDto) {
-        String sql = "INSERT INTO alarm(fcmToken,userId) VALUES(%s,%s)";
+        String sql = "INSERT INTO alarm(fcmToken,userId) VALUES('"+ addAlarmDto.getFCMToken()+"',"+addAlarmDto.getUserId()+")";
         sql = String.format(sql,addAlarmDto.getFCMToken(),addAlarmDto.getUserId());
         if(isExist(addAlarmDto.getUserId())){
             sql = "UPDATE alarm SET fcmToken = ? WHERE userId = ?";
