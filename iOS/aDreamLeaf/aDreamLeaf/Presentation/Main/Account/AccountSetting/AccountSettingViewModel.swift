@@ -20,11 +20,17 @@ struct AccountSettingViewModel {
     let budgetSettingResult = PublishSubject<RequestResult<Void>>()
     
     
-    init(_ repo: AccountRepository = AccountRepository()) {
+    init(_ accountRepo: AccountRepository = AccountRepository(), _ alarmRepo: AlarmRepository = AlarmRepository()) {
         saveBtnTap
             .withLatestFrom(amount)
-            .flatMap(repo.setBudget)
+            .flatMap(accountRepo.setBudget)
             .bind(to: budgetSettingResult)
+            .disposed(by: disposeBag)
+        
+        alarmRepo.getState()
+            .subscribe(onNext: {
+                print($0)
+            })
             .disposed(by: disposeBag)
     }
 }
