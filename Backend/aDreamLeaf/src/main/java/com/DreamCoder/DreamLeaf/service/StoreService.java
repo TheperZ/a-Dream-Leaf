@@ -28,11 +28,18 @@ public class StoreService {
         return storeRepository.save(storeReq);
     }
 
-    public Optional<DetailStoreDto> findById(int storeId){
-        return storeRepository.findById(storeId);
+    public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq){
+        if(userCurReq==null){
+            return storeRepository.findById(storeId);
+        }
+        return storeRepository.findById(storeId, userCurReq);
     }
 
+    //사용자가 위치 정보 제공에 동의하였을 때외 하지 않았을 때에 대한 처리
     public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq){
+        if(userCurReq==null){
+            return storeRepository.findByKeyword(keyword);
+        }
         return storeRepository.findByKeyword(keyword, userCurReq);
     }
 

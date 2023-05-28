@@ -4,6 +4,7 @@ import com.DreamCoder.DreamLeaf.exception.AccountException;
 import com.DreamCoder.DreamLeaf.exception.AlarmException;
 import com.DreamCoder.DreamLeaf.exception.ReviewException;
 import com.DreamCoder.DreamLeaf.exception.SignUpException;
+import com.DreamCoder.DreamLeaf.exception.StoreException;
 import com.google.firebase.auth.AuthErrorCode;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -35,6 +36,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {ReviewException.class})
     protected ResponseEntity handleReviewException(ReviewException e){
+        Map<String,String> result = new HashMap<>();
+        result.put("ErrorMessage",e.getMessage());
+        return ResponseEntity.status(e.getCode()).body(result);
+    }
+
+    @ExceptionHandler(value = {StoreException.class})
+    protected ResponseEntity handleStoreException(StoreException e){
         Map<String,String> result = new HashMap<>();
         result.put("ErrorMessage",e.getMessage());
         return ResponseEntity.status(e.getCode()).body(result);
