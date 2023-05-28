@@ -92,7 +92,7 @@
 		BFF042EB2A1BBCE4001FCB88 /* AccountSummaryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */; };
 		BFF042EE2A2065FB001FCB88 /* ExpenditureRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042ED2A2065FB001FCB88 /* ExpenditureRequest.swift */; };
 		BFF042F02A2328FB001FCB88 /* AlarmNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042EF2A2328FB001FCB88 /* AlarmNetwork.swift */; };
-		BFF042F22A2329EA001FCB88 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042F12A2329EA001FCB88 /* Alarm.swift */; };
+		BFF042F22A2329EA001FCB88 /* AlarmState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042F12A2329EA001FCB88 /* AlarmState.swift */; };
 		BFF042F42A232A97001FCB88 /* AlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042F32A232A97001FCB88 /* AlarmRepository.swift */; };
 /* End PBXBuildFile section */
 
@@ -187,7 +187,7 @@
 		BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryRequest.swift; sourceTree = "<group>"; };
 		BFF042ED2A2065FB001FCB88 /* ExpenditureRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureRequest.swift; sourceTree = "<group>"; };
 		BFF042EF2A2328FB001FCB88 /* AlarmNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmNetwork.swift; sourceTree = "<group>"; };
-		BFF042F12A2329EA001FCB88 /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
+		BFF042F12A2329EA001FCB88 /* AlarmState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmState.swift; sourceTree = "<group>"; };
 		BFF042F32A232A97001FCB88 /* AlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -591,7 +591,7 @@
 				BFBD10592A1924E4002EE950 /* AccountSummary.swift */,
 				BF09DBB62A1930E40083880F /* Store.swift */,
 				BFF042E62A1BA79D001FCB88 /* Review.swift */,
-				BFF042F12A2329EA001FCB88 /* Alarm.swift */,
+				BFF042F12A2329EA001FCB88 /* AlarmState.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -790,7 +790,7 @@
 				BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
 				BFBD10322A131D5B002EE950 /* PwdResetViewModel.swift in Sources */,
-				BFF042F22A2329EA001FCB88 /* Alarm.swift in Sources */,
+				BFF042F22A2329EA001FCB88 /* AlarmState.swift in Sources */,
 				BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */,
 				BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */,
 				BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */,

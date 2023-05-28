@@ -14,11 +14,14 @@ struct AccountSettingViewModel {
     
     let amount = PublishSubject<Int>()
     
+    let alarmState = PublishSubject<Bool>()
     
     let saveBtnTap = PublishRelay<Void>()
+    let alarmSwitchChanged = PublishSubject<Bool>()
     
     let budgetSettingResult = PublishSubject<RequestResult<Void>>()
-    
+    let alarmStateResult = PublishSubject<RequestResult<AlarmState>>()
+    let alarmRequestResult = PublishSubject<RequestResult<Void>>()
     
     init(_ accountRepo: AccountRepository = AccountRepository(), _ alarmRepo: AlarmRepository = AlarmRepository()) {
         saveBtnTap
@@ -28,9 +31,25 @@ struct AccountSettingViewModel {
             .disposed(by: disposeBag)
         
         alarmRepo.getState()
-            .subscribe(onNext: {
-                print($0)
-            })
+            .bind(to: alarmStateResult)
+            .disposed(by: disposeBag)
+        
+        alarmStateResult
+            .filter { $0.data != nil }
+            .map { $0.data!.exist }
+            .bind(to: alarmState)
+            .disposed(by: disposeBag)
+        
+        alarmSwitchChanged
+            .flatMap { isOn in
+                print(isOn)
+                if isOn {
+                    return alarmRepo.register()
+                } else {
+                    return alarmRepo.deregister()
+                }
+            }
+            .bind(to: alarmRequestResult)
             .disposed(by: disposeBag)
     }
 }

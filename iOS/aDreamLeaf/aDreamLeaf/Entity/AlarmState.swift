@@ -7,6 +7,6 @@
 
 import Foundation
 
-class Alarm: Decodable {
-    let isExist: Bool
+class AlarmState: Decodable {
+    let exist: Bool
 }
