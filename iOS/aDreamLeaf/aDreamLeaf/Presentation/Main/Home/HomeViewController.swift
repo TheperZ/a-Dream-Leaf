@@ -65,7 +65,7 @@ class HomeViewController: UIChartViewController {
     }
     
     private func bind() {
-        viewModel.nearRests
+        viewModel.nearStores
             .bind(to: nearRestCollectionView.rx.items) { collectionView, row, element in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CollectionViewCellID.RestaurantCell, for: indexPath) as! RestaurantCell

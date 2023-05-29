@@ -57,16 +57,12 @@ class SearchViewController: UIViewController {
             .disposed(by: disposeBag)
         
         tableView.rx.itemSelected
-            .asDriver()
-            .drive(onNext: {
-                self.tableView.cellForRow(at: $0)?.isSelected = false
-            })
-            .disposed(by: disposeBag)
-        
-        tableView.rx.itemSelected
-            .asDriver()
-            .drive(onNext: { _ in
-                self.navigationController?.pushViewController(StoreDetailViewController(), animated: true)
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.tableItem) { return ($0, $1)}
+            .subscribe(onNext: { indexPath, list in
+                self.tableView.cellForRow(at: indexPath)?.isSelected = false
+                print((list[indexPath.row]).storeId)
+                self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
             })
             .disposed(by: disposeBag)
         
@@ -107,6 +103,13 @@ class SearchViewController: UIViewController {
         
         searchButton.rx.tap
             .bind(to: viewModel.searchButtonTap)
+            .disposed(by: disposeBag)
+        
+        viewModel.allList
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                self.allButton.sendActions(for: .touchUpInside)
+            })
             .disposed(by: disposeBag)
         
     }    

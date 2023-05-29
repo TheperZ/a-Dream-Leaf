@@ -15,4 +15,15 @@ extension Date {
         let dateString = dateFormatter.string(from: date)
         return dateString
     }
+    
+    static func stringToDate(str: String) -> Date? { //"yyyy-MM-dd HH:mm:ss"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        if let date = dateFormatter.date(from: str) {
+            return date
+        } else {
+            return nil
+        }
+    }
 }

@@ -22,7 +22,16 @@ struct AccountRepository {
             return inputValidationResult
         }
         
-        return network.createAccountServer(date: date, storeName: storeName, body: body, price: price)
+        return network.createExpenditure(date: date, storeName: storeName, body: body, price: price)
+    }
+    
+    func updateRequest(accountId: Int, date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult<Void>> {
+        
+        if let inputValidationResult = inputValidation(date: date, storeName: storeName, body: body, price: price) {
+            return inputValidationResult
+        }
+        
+        return network.updateExpenditure(accountId: accountId,date: date, storeName: storeName, body: body, price: price)
     }
     
     func getExpenditureList(when: String) -> Observable<RequestResult<[Expenditure]>> {
@@ -31,6 +40,10 @@ struct AccountRepository {
     
     func getAccountSummary(yearMonth: String) -> Observable<RequestResult<AccountSummary>> {
         return network.getAccountSummary(yearMonth: yearMonth)
+    }
+    
+    func deleteExpenditure(accountId: Int) -> Observable<RequestResult<Void>> {
+        return network.deleteExpenditure(accountId: accountId)
     }
     
     private func inputValidation(date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult<Void>>? {

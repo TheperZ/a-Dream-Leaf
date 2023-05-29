@@ -72,11 +72,14 @@ class AccountSettingViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        viewModel.alarmState
+            .bind(to: alarmSwitch.rx.isOn)
+            .disposed(by: disposeBag)
+        
         alarmSwitch.rx
             .controlEvent(.valueChanged)
-            .subscribe(onNext:{
-                print(self.alarmSwitch.isOn)
-            })
+            .map { self.alarmSwitch.isOn }
+            .bind(to: viewModel.alarmSwitchChanged)
             .disposed(by: disposeBag)
     }
     
@@ -115,7 +118,6 @@ class AccountSettingViewController: UIViewController {
         alarmLabel.text = "지출 내역 추가 알림 받기"
         alarmLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         alarmLabel.textColor = .black
-        
         
     }
     
@@ -182,4 +184,4 @@ extension AccountSettingViewController: UITextFieldDelegate {
         return allowedCharacters.isSuperset(of: characterSet)
     }
 }
-d
+

@@ -17,7 +17,9 @@ class AccountViewController: UIChartViewController {
     
     private var blurEffect: UIBlurEffect!
     private var cover: UIVisualEffectView!
+    private let coverStackView = UIStackView()
     private let coverMessageTextView = UITextView()
+    private let gotoLoginButton = UIButton()
     
     private let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: nil, action: nil)
     
@@ -62,6 +64,9 @@ class AccountViewController: UIChartViewController {
         blurEffect = UIBlurEffect(style: .regular)
         cover = UIVisualEffectView(effect: blurEffect)
         
+        coverStackView.axis = .vertical
+        coverStackView.spacing = 10
+        
         coverMessageTextView.isScrollEnabled = false
         coverMessageTextView.isSelectable = false
         coverMessageTextView.isEditable = false
@@ -70,6 +75,12 @@ class AccountViewController: UIChartViewController {
         coverMessageTextView.font = .systemFont(ofSize: 15, weight: .semibold)
         coverMessageTextView.textColor = .darkGray
         coverMessageTextView.textAlignment = .center
+        
+        gotoLoginButton.backgroundColor = UIColor(named: "subColor2")
+        gotoLoginButton.setTitle("로그인하러 가기", for: .normal)
+        gotoLoginButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
+        gotoLoginButton.setTitleColor(.white, for: .normal)
+        gotoLoginButton.layer.cornerRadius = 10
     }
     
     private func bind() {
@@ -126,7 +137,15 @@ class AccountViewController: UIChartViewController {
             })
             .disposed(by: disposeBag)
         
-        
+        gotoLoginButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                let vc = UINavigationController(rootViewController: LoginViewController())
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
             
     }
     
@@ -174,8 +193,13 @@ class AccountViewController: UIChartViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        cover.contentView.addSubview(coverMessageTextView)
-        coverMessageTextView.translatesAutoresizingMaskIntoConstraints = false
+        cover.contentView.addSubview(coverStackView)
+        coverStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        [coverMessageTextView, gotoLoginButton].forEach {
+            coverStackView.addArrangedSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         [
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -211,10 +235,14 @@ class AccountViewController: UIChartViewController {
             cover.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             cover.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
+            coverStackView.widthAnchor.constraint(equalToConstant: 200),
+            coverStackView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
+            coverStackView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
+            
             coverMessageTextView.heightAnchor.constraint(equalToConstant: 50),
-            coverMessageTextView.widthAnchor.constraint(equalToConstant: 200),
-            coverMessageTextView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
-            coverMessageTextView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
+
+            gotoLoginButton.heightAnchor.constraint(equalToConstant: 30),
+            gotoLoginButton.widthAnchor.constraint(equalToConstant: 150),
             
             emptyWarningLabel.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 80),
             emptyWarningLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
