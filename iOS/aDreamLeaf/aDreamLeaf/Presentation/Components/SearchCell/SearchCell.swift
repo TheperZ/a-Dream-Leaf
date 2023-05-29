@@ -36,7 +36,7 @@ class SearchCell: UITableViewCell {
         nameLabel.textColor = .black
         nameLabel.textAlignment = .left
         
-        distanceLabel.text = " \(viewModel.distance)km "
+        distanceLabel.text = " \(String(format: "%.1f", viewModel.distance))km "
         distanceLabel.font = .systemFont(ofSize: 13, weight: .medium)
         distanceLabel.textColor = .gray
         distanceLabel.textAlignment = .left

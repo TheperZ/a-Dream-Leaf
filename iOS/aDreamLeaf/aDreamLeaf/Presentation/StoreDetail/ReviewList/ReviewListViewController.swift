@@ -84,11 +84,7 @@ class ReviewListViewController : UIViewController {
         tableView.backgroundColor = .white
         tableView.isScrollEnabled = false
         
-        leftButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        leftButton.tintColor = .black
-        
-        rightButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        rightButton.tintColor = .black
+
     }
     
     private func layout() {
@@ -98,7 +94,7 @@ class ReviewListViewController : UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [titleLabel, subtitleLabel, tableView, leftButton, rightButton].forEach {
+        [titleLabel, subtitleLabel, tableView].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -126,18 +122,10 @@ class ReviewListViewController : UIViewController {
             tableView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 15),
             tableView.leadingAnchor.constraint(equalTo: subtitleLabel.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: subtitleLabel.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             tableView.heightAnchor.constraint(equalToConstant: 780),
             
-            leftButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10),
-            leftButton.widthAnchor.constraint(equalToConstant: 30),
-            leftButton.heightAnchor.constraint(equalToConstant: 30),
-            leftButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -30),
             
-            rightButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10),
-            rightButton.widthAnchor.constraint(equalToConstant: 30),
-            rightButton.heightAnchor.constraint(equalToConstant: 30),
-            rightButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 30),
-            rightButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
         ].forEach { $0.isActive = true }
         
         
