@@ -19,8 +19,8 @@ class ReviewCell: UITableViewCell {
     private let ratingLabel = UILabel()
     private let reviewImageView = UIImageView()
     
-    func setUp(with: (nickname: String, content: String, rating: Double, image: UIImage?)) {
-        viewModel = ReviewCellVIewModel(nickname: with.nickname, content: with.content, rating: with.rating, image: with.image)
+    func setUp(with reviewData: Review) {
+        viewModel = ReviewCellVIewModel(reviewData)
         
         bind()
         attribute()

@@ -22,8 +22,8 @@ class ReviewListViewController : UIViewController {
     private let leftButton = UIButton()
     private let rightButton = UIButton()
     
-    init() {
-        viewModel = ReviewListViewModel()
+    init(storeData: Store) {
+        viewModel = ReviewListViewModel(storeData: storeData)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,17 +61,22 @@ class ReviewListViewController : UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        viewModel.reviews
+            .map { "리뷰 (\($0.count))" }
+            .bind(to: subtitleLabel.rx.text)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
         view.backgroundColor = .white
         
-        titleLabel.text = "피자스쿨 목2동점"
+        titleLabel.text = viewModel.storeData.storeName
         titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
         titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         
-        subtitleLabel.text = "리뷰 (5)"
+        subtitleLabel.text = "리뷰"
         subtitleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         subtitleLabel.textColor = .black
         subtitleLabel.textAlignment = .center

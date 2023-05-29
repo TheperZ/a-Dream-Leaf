@@ -73,9 +73,10 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         reviewTitle.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.navigationController?.pushViewController(ReviewListViewController(), animated: true)
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.detail)
+            .subscribe(onNext: { storeData in
+                self.navigationController?.pushViewController(ReviewListViewController(storeData: storeData), animated: true)
             })
             .disposed(by: disposeBag)
         

@@ -24,6 +24,10 @@ struct ReviewRepository {
         return network.fetchRecentRequest(storeId: storeId)
     }
     
+    func fetchReviews(storeId: Int) -> Observable<RequestResult<[Review]>> {
+        return network.fetchReviews(storeId: storeId)
+    }
+    
     private func createInputValidate(body: String) -> RequestResult<Void>? {
         if body.count < 10 {
             return RequestResult(success: false, msg: "최소 10글자 이상 입력해주세요.")
