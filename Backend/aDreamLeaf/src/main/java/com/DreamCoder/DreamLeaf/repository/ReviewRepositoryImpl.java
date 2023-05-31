@@ -77,7 +77,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     @Override
     public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto) {
         int count = countReview(reviewSearchDto.getStoreId());
-        if(count != 0){
+        if(count <= 0 && reviewSearchDto.getDisplay() <= 0){
             reviewSearchDto.setReviewPagination(new ReviewPagination(count, reviewSearchDto));
         }
         else{
