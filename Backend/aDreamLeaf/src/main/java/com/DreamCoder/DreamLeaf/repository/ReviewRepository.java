@@ -10,6 +10,8 @@ public interface ReviewRepository {
 
     public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto);
 
+    List<ReviewDto> findAllReview(int storeId);
+
     public String delete(ReviewDelDto reviewDelDto);
 
     public int countReview(int storeId);
