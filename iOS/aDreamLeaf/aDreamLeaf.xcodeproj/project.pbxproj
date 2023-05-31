@@ -33,6 +33,8 @@
 		BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B629DD33C600A47207 /* UIChartViewController.swift */; };
 		BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */; };
 		BF6761BC29DD3F5600A47207 /* ExpenditureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6761BB29DD3F5600A47207 /* ExpenditureCell.swift */; };
+		BF6CF62F2A27770C009E9E70 /* StoreMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6CF62E2A27770C009E9E70 /* StoreMapViewModel.swift */; };
+		BF6CF6312A277719009E9E70 /* StoreMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6CF6302A277719009E9E70 /* StoreMapViewController.swift */; };
 		BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */; };
 		BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */; };
 		BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */; };
@@ -125,6 +127,8 @@
 		BF6761B629DD33C600A47207 /* UIChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIChartViewController.swift; sourceTree = "<group>"; };
 		BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureCellViewModel.swift; sourceTree = "<group>"; };
 		BF6761BB29DD3F5600A47207 /* ExpenditureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureCell.swift; sourceTree = "<group>"; };
+		BF6CF62E2A27770C009E9E70 /* StoreMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreMapViewModel.swift; sourceTree = "<group>"; };
+		BF6CF6302A277719009E9E70 /* StoreMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreMapViewController.swift; sourceTree = "<group>"; };
 		BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewModel.swift; sourceTree = "<group>"; };
 		BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewController.swift; sourceTree = "<group>"; };
 		BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCell.swift; sourceTree = "<group>"; };
@@ -303,9 +307,19 @@
 			path = ExpenditureCell;
 			sourceTree = "<group>";
 		};
+		BF6CF62D2A2776F0009E9E70 /* StoreMap */ = {
+			isa = PBXGroup;
+			children = (
+				BF6CF62E2A27770C009E9E70 /* StoreMapViewModel.swift */,
+				BF6CF6302A277719009E9E70 /* StoreMapViewController.swift */,
+			);
+			path = StoreMap;
+			sourceTree = "<group>";
+		};
 		BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */ = {
 			isa = PBXGroup;
 			children = (
+				BF6CF62D2A2776F0009E9E70 /* StoreMap */,
 				BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */,
 				BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */,
 				BF15AB2429D92F2500014E05 /* ReviewList */,
@@ -770,9 +784,11 @@
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
 				BFBD105A2A1924E4002EE950 /* AccountSummary.swift in Sources */,
 				BF6439E329F40CFD008DB52A /* StartViewModel.swift in Sources */,
+				BF6CF6312A277719009E9E70 /* StoreMapViewController.swift in Sources */,
 				BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */,
+				BF6CF62F2A27770C009E9E70 /* StoreMapViewModel.swift in Sources */,
 				BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */,
 				BFBD10432A16530B002EE950 /* AccountRequest.swift in Sources */,
 				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,

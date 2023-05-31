@@ -17,7 +17,9 @@ class StoreDetailViewController: UIViewController {
     private let contentView = UIView()
     
     private let nameLabel = UILabel()
+    private let addressStackView = UIStackView()
     private let addressLabel = UILabel()
+    private let mapButton = UIButton()
     private let distanceLabel = UILabel()
     private let topStackView = UIStackView()
     private let cardAvail = UILabel()
@@ -86,6 +88,18 @@ class StoreDetailViewController: UIViewController {
                 self.navigationController?.pushViewController(ReviewViewController(storeId: self.viewModel.storeId), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        mapButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.detail)
+            .subscribe(onNext: {
+                let pvc = StoreMapViewController(data: $0)
+                pvc.modalPresentationStyle = .overCurrentContext
+                pvc.modalTransitionStyle = .coverVertical
+                self.present(pvc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
         
         UserManager.getInstance()
             .observe(on: MainScheduler.instance)
@@ -172,9 +186,17 @@ class StoreDetailViewController: UIViewController {
         nameLabel.textColor = .black
         nameLabel.textAlignment = .center
         
+        addressStackView.spacing = 10
+        
         addressLabel.font = .systemFont(ofSize: 15, weight: .light)
         addressLabel.textColor = .black
         addressLabel.textAlignment = .center
+        
+        mapButton.setTitle("지도 보기", for: .normal)
+        mapButton.titleLabel?.font = .systemFont(ofSize: 10, weight: .medium)
+        mapButton.setTitleColor(.black, for: .normal)
+        mapButton.layer.cornerRadius = 5
+        mapButton.layer.backgroundColor = UIColor(white: 0.90, alpha: 1).cgColor
         
         distanceLabel.font = .systemFont(ofSize: 12, weight: .medium)
         distanceLabel.textColor = .gray
@@ -250,8 +272,13 @@ class StoreDetailViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [nameLabel, addressLabel, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel].forEach {
+        [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel].forEach {
             view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [addressLabel, mapButton].forEach {
+            addressStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -281,10 +308,12 @@ class StoreDetailViewController: UIViewController {
             nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
             
-            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 20),
-            addressLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            addressStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 20),
+            addressStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            distanceLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 20),
+            mapButton.widthAnchor.constraint(equalToConstant: 50),
+            
+            distanceLabel.topAnchor.constraint(equalTo: addressStackView.bottomAnchor, constant: 20),
             distanceLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             topStackView.topAnchor.constraint(equalTo: distanceLabel.bottomAnchor,constant: 20),
