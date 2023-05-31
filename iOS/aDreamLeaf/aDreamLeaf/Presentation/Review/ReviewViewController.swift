@@ -32,8 +32,8 @@ class ReviewViewController: UIViewController {
     private let imagePicker = UIImagePickerController()
     private let imageView = UIImageView()
     
-    init() {
-        viewModel = ReviewViewModel()
+    init(storeId: Int) {
+        viewModel = ReviewViewModel(storeId: storeId)
         super.init(nibName: nil, bundle: nil)
     }
     

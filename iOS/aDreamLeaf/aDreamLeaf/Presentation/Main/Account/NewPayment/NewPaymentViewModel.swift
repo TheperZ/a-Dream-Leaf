@@ -14,6 +14,8 @@ struct NewPaymentViewModel {
     
     let loading = BehaviorSubject<Bool>(value: false)
     
+    let editData: Expenditure?
+    
     let date = BehaviorSubject<String>(value: Date.dateToString(with: Date.now))
     let storeName = BehaviorSubject<String>(value: "")
     let body = BehaviorSubject<String>(value: "")
@@ -21,25 +23,51 @@ struct NewPaymentViewModel {
     
     let saveBtnTap = PublishRelay<Void>()
     
-    let createResult = PublishSubject<RequestResult<Void>>()
+    let saveResult = PublishSubject<RequestResult<Void>>()
     
-    init(_ repo: AccountRepository = AccountRepository()) {
+    init(_ repo: AccountRepository = AccountRepository(), data: Expenditure? = nil) {
         
-        saveBtnTap
-            .withLatestFrom(Observable.combineLatest(date, storeName, body, price))
-            .flatMap(repo.createRequest)
-            .bind(to: createResult)
-            .disposed(by: disposeBag)
+        // New
+        editData = data
         
+        if data == nil {
+            saveBtnTap
+                .withLatestFrom(Observable.combineLatest(date, storeName, body, price))
+                .flatMap(repo.createRequest)
+                .bind(to: saveResult)
+                .disposed(by: disposeBag)
+            
+            saveBtnTap
+                .map { true }
+                .bind(to: loading)
+                .disposed(by: disposeBag)
+            
+            saveResult
+                .map { _ in false }
+                .bind(to: loading)
+                .disposed(by: disposeBag)
+        }
         
-        saveBtnTap
-            .map { true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        // Update
         
-        createResult
-            .map { _ in false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        if let data = data {
+            saveBtnTap
+                .withLatestFrom(Observable.combineLatest(date, storeName, body, price))
+                .flatMap{ date, storeName, body, price in
+                    return repo.updateRequest(accountId: data.accountId, date: date, storeName: storeName, body: body, price: price)
+                }
+                .bind(to: saveResult)
+                .disposed(by: disposeBag)
+            
+            saveBtnTap
+                .map { true }
+                .bind(to: loading)
+                .disposed(by: disposeBag)
+
+            saveResult
+                .map { _ in false }
+                .bind(to: loading)
+                .disposed(by: disposeBag)
+        }
     }
 }

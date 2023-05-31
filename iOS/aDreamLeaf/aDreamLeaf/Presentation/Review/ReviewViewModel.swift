@@ -11,7 +11,7 @@ import RxRelay
 
 struct ReviewViewModel {
     private let disposeBag = DisposeBag()
-    
+    private let storeId: Int
     let rating = BehaviorSubject<Int>(value: 5)
     let body = BehaviorSubject<String>(value: "")
     
@@ -19,10 +19,11 @@ struct ReviewViewModel {
     
     let createRequestResult = PublishSubject<RequestResult<Void>>()
     
-    init(_ repo: ReviewRepository = ReviewRepository()) {
+    init(storeId: Int, _ repo: ReviewRepository = ReviewRepository()) {
+        self.storeId = storeId
         saveBtnTap
             .withLatestFrom(Observable.combineLatest(rating, body))
-            .flatMap{rating, body in repo.create(storeId: 1, body: body, rating: rating)}
+            .flatMap{rating, body in repo.create(storeId: storeId, body: body, rating: rating)}
             .bind(to: createRequestResult)
             .disposed(by: disposeBag)
     }

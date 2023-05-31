@@ -39,8 +39,8 @@ class NewPaymentViewController: UIViewController {
     
     private let saveButton = UIBarButtonItem(title: "저장", style: .done, target: nil, action: nil)
     
-    init() {
-        self.viewModel = NewPaymentViewModel()
+    init(data: Expenditure? = nil) {
+        self.viewModel = NewPaymentViewModel(data: data)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -85,13 +85,13 @@ class NewPaymentViewController: UIViewController {
             .bind(to: viewModel.saveBtnTap)
             .disposed(by: disposeBag)
         
-        viewModel.createResult
+        viewModel.saveResult
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 if result.success {
-                    let alert = UIAlertController(title: "성공", message: "지출 내역이 추가되었습니다", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "성공", message: result.msg , preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.navigationController?.popViewController(animated: true)
+                        self.navigationController?.popToRootViewController(animated: true)
                     }
                     alert.addAction(confirm)
                     self.present(alert, animated: true)
@@ -104,6 +104,10 @@ class NewPaymentViewController: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
+        if viewModel.editData != nil {
+            editSetting(data: viewModel.editData!)
+        }
     }
     
     private func attribute() {
@@ -261,5 +265,18 @@ extension NewPaymentViewController {
                 }
             })
             .disposed(by: disposeBag)
+    }
+    
+    func editSetting(data: Expenditure) {
+        
+        viewModel.date.onNext(data.date)
+        viewModel.storeName.onNext(data.restaurant)
+        viewModel.body.onNext(data.body)
+        viewModel.price.onNext(data.price)
+        
+        datePicker.date = Date.stringToDate(str: viewModel.editData!.date)!
+        storeNameTextField.text = viewModel.editData!.restaurant
+        contentTextField.text = viewModel.editData!.body
+        costTextField.text = "\(viewModel.editData!.price)"
     }
 }

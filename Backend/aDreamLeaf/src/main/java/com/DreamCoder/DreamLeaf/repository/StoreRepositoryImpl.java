@@ -3,6 +3,7 @@ package com.DreamCoder.DreamLeaf.repository;
 import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
+import com.DreamCoder.DreamLeaf.exception.StoreException;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import lombok.extern.slf4j.Slf4j;
@@ -93,34 +94,70 @@ public class StoreRepositoryImpl implements StoreRepository{
 
     }
 
+    //사용자 위치 정보가 없을 때에 대한 처리
     @Override
-    public Optional<DetailStoreDto> findById(int storeId) {
-        String sql="select * from store where storeId=?";
+    public Optional<DetailStoreDto> findById(int storeId){
+        String sql="select store.*, 0.0 as distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeId=?";
         try{
             DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper, storeId);
             return Optional.of(result);
         }catch(EmptyResultDataAccessException e){
-            return Optional.empty();
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
+        }
+    }
+
+    //사용자 위치 정보가 있을 때에 대한 처리
+    @Override
+    public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq) {
+        String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
+                "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
+                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeId=?";
+        try{
+            DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper,userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(), storeId);
+            return Optional.of(result);
+        }catch(EmptyResultDataAccessException e){
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
         }
 
     }
 
+    //사용자 위치 정보가 없을 때에 대한 처리
+    @Override
+    public List<SimpleStoreDto> findByKeyword(String keyword){
+        String sql="select *, 0.0 AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by totalRating desc";
+        List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
+        if(result.size()==0){
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
+        }
+        return result;
+    }
+
+    //사용자 위치 정보가 있을 때에 대한 처리
     @Override
     public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
-                "AS distance from store where storeName like ? order by distance";
+                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by distance";
         log.info("lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
-        return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
+        List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
+        if(result.size()==0){
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
+        }
+        return result;
     }
 
     @Override
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
-                "AS distance from store having distance<2 order by distance";
-        return template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
+                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store having distance<2 order by distance";
+        List<SimpleStoreDto> result=template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
+        if(result.size()==0){
+            throw new StoreException("가게를 찾을 수 없습니다.", 404);
+        }
+        return result;
     }
+
 
 
 
@@ -128,17 +165,15 @@ public class StoreRepositoryImpl implements StoreRepository{
             StoreDto.builder()
                     .storeId(rs.getInt("storeId"))
                     .storeName(rs.getString("storeName"))
-                    .hygieneGrade("매우우수(임시)")
+                    .hygieneGrade("매우우수")
                     .zipCode(rs.getInt("zipCode"))
                     .roadAddr(rs.getString("roadAddr"))
                     .lotAddr(rs.getString("lotAddr"))
                     .wgs84Lat(rs.getDouble("wgs84Lat"))
                     .wgs84Logt(rs.getDouble("wgs84Logt"))
-//                    .curDist(0.0)
                     .payment(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
-//                    .totalRating(5.0)
                     .build();
 
     private RowMapper<SimpleStoreDto> simpleStoreDtoRowMapper=(rs, rowNum)->
@@ -146,25 +181,25 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .storeId(rs.getInt("storeId"))
                     .storeName(rs.getString("storeName"))
                     .storeType(rs.getInt("payment"))
-                    .curDist(0.0)                   //만들기
-                    .totalRating(5.0)               //만들기
+                    .curDist(rs.getDouble("distance"))      //현재 이 column이 없을 경우 0.0으로 처리
+                    .totalRating(rs.getDouble("totalRating"))
                     .build();
 
     private RowMapper<DetailStoreDto> detailStoreDtoRowMapper=(rs, rowNum)->
             DetailStoreDto.builder()
                     .storeId(rs.getInt("storeId"))
                     .storeName(rs.getString("storeName"))
-                    .hygieneGrade("매우우수(임시)")
+                    .hygieneGrade("매우우수")
                     .refinezipCd(rs.getInt("zipCode"))
                     .refineRoadnmAddr(rs.getString("roadAddr"))
                     .refineLotnoAddr(rs.getString("lotAddr"))
                     .refineWGS84Lat(rs.getDouble("wgs84Lat"))
                     .refineWGS84Logt(rs.getDouble("wgs84Logt"))
-                    .curDist(0.0)
-                    .storeType(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
+                    .curDist(rs.getDouble("distance"))
+                    .storeType(rs.getInt("payment"))
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
-                    .totalRating(5.0)
+                    .totalRating(rs.getDouble("totalRating"))
                     .build();
 
 

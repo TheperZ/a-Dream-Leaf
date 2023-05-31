@@ -9,4 +9,6 @@ public interface SignUpRepository {
     public String save(SignUpCreateDto signUpCreateDto);
 
     public LoginDto inquire(int id);
+
+    public boolean isValidEmail(String email);
 }

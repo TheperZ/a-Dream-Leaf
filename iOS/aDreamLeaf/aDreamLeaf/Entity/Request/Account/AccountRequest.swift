@@ -26,4 +26,5 @@ class AccountRequest: Codable {
     func toDict() -> [String: Any] {
         return ["firebaseToken": self.firebaseToken, "restaurant" : self.restaurant, "price" : price, "date": date, "body": body]
     }
+    
 }

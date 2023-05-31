@@ -21,8 +21,8 @@ class RestaurantCell: UICollectionViewCell {
     private let goodImageView = UIImageView()
     private let cardImageView = UIImageView()
     
-    func setUp(with: (name: String, rating: Double, distance: Double, good: Bool, card: Bool)) {
-        viewModel = RestaurantCellViewModel(name: with.name, rating: with.rating, distance: with.distance, good: with.good, card: with.card)
+    func setUp(with: SimpleStore) {
+        viewModel = RestaurantCellViewModel(name: with.storeName, rating: with.totalRating, distance: with.curDist, type: with.storeType)
         
         attribute()
         layout()
@@ -53,14 +53,14 @@ class RestaurantCell: UICollectionViewCell {
         goodImageView.image = goodImg
         goodImageView.tintColor = UIColor(named: "subColor")
         goodImageView.contentMode = .scaleAspectFit
-        goodImageView.isHidden = viewModel.good ? false : true
+        goodImageView.isHidden = viewModel.type == 0 || viewModel.type == 2 ? false : true
         
         let cardConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .regular, scale: .default)
         let cardImg = UIImage(systemName: "creditcard", withConfiguration: cardConfig)?.withRenderingMode(.alwaysTemplate)
         cardImageView.image = cardImg
         cardImageView.tintColor = UIColor(named: "subColor")
         cardImageView.contentMode = .scaleAspectFit
-        cardImageView.isHidden = viewModel.card ? false : true
+        cardImageView.isHidden = viewModel.type == 1 || viewModel.type == 2 ? false : true
     }
     
     func layout() {

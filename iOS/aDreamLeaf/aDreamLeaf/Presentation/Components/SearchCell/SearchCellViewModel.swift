@@ -17,11 +17,23 @@ struct SearchCellViewModel {
     let card: Bool
     let good: Bool
     
-    init(name: String, distance: Double, rating: Double, card: Bool, good: Bool) {
+    init(name: String, distance: Double, rating: Double, type: Int) {
         self.name = name
         self.distance = distance
         self.rating = rating
-        self.card = card
-        self.good = good
+        
+        if type == 0 {
+            good = true
+            card = false
+        } else if type == 1 {
+            good = false
+            card = true
+        } else if type == 2 {
+            good = true
+            card = true
+        } else {
+            good = false
+            card = false
+        }
     }
 }

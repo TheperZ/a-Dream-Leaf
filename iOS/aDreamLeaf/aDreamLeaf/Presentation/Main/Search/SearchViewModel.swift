@@ -15,9 +15,9 @@ struct SearchViewModel {
     let keyword = BehaviorRelay(value: "")
     let searchButtonTap = BehaviorRelay(value: Void())
     
-    let allList = Observable.just([("피자스쿨 목2동점", 0.4, 4.5, true, true), ("다원레스토랑", 1.2, 4.9, true, false), ("할범탕수육 본점", 0.4, 4.2, false, true)])
+    let allList = BehaviorSubject<[SimpleStore]>(value: [])
     
-    let tableItem = BehaviorSubject<[(String, Double, Double, Bool, Bool)]>(value: [("피자스쿨 목2동점", 0.4, 4.5, true, true), ("다원레스토랑", 1.2, 4.9, true, false), ("할범탕수육 본점", 0.4, 4.2, false, true)])
+    let tableItem = BehaviorSubject<[SimpleStore]>(value: [])
     
     let allButtonTap = PublishRelay<Void>()
     let cardButtonTap = PublishRelay<Void>()
@@ -31,22 +31,26 @@ struct SearchViewModel {
         
         cardButtonTap
             .withLatestFrom(allList)
-            .map { $0.filter { $0.3 }}
+            .map { $0.filter { $0.storeType == 0 || $0.storeType == 2 }}
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
         goodButtonTap
             .withLatestFrom(allList)
-            .map { $0.filter { $0.4 }}
+            .map { $0.filter { $0.storeType == 0 || $0.storeType == 1 }}
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
         searchButtonTap.withLatestFrom(keyword)
             .flatMap(repo.searchStores)
-            .subscribe(onNext: {
-                print($0)
-            })
+            .map { $0.data ?? [] }
+            .bind(to: allList)
             .disposed(by: disposeBag)
+        
+        allList
+            .bind(to: tableItem)
+            .disposed(by: disposeBag)
+        
          
          
     }

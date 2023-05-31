@@ -26,11 +26,6 @@ public class StoreController {
     private final StoreService storeService;
 
 
-//    @PostMapping("/save")    //for test
-//    public ResponseEntity save(@RequestBody StoreReq storeReq){
-//        return ResponseEntity.status(HttpStatus.CREATED).body(storeService.create(storeReq));
-//    }
-
     @PostMapping("/api")
     public ResponseEntity saveApi(){
 
@@ -41,12 +36,12 @@ public class StoreController {
     }
 
     @GetMapping("/{storeId}")
-    public Optional<DetailStoreDto> showStoreDetail(@PathVariable int storeId){
-        return storeService.findById(storeId);
+    public Optional<DetailStoreDto> showStoreDetail(@PathVariable int storeId, @RequestBody(required = false) UserCurReq userCurReq){
+        return storeService.findById(storeId, userCurReq);
     }
 
     @PostMapping("/findByKeyword")
-    public List<SimpleStoreDto> findByKeyword(@RequestParam String keyword, @RequestBody UserCurReq userCurReq){       //거리 순으로 정렬
+    public List<SimpleStoreDto> findByKeyword(@RequestParam String keyword, @RequestBody(required = false) UserCurReq userCurReq){       //위치 정보가 있을 경우 거리 순으로 정렬, 없을 경우 별점 순으로 정렬
         return storeService.findByKeyword(keyword, userCurReq);
     }
 
