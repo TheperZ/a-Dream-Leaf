@@ -282,7 +282,7 @@ class StoreDetailViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [cardAvail, goodness].forEach {
+        [goodness, cardAvail].forEach {
             topStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
