@@ -25,9 +25,11 @@ public class ReviewService {
 
     public ReviewDto create(ReviewCreateDto reviewCreateDto) { return reviewRepositoryImpl.save(reviewCreateDto); }
 
-    public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto) { return reviewRepositoryImpl.findReviewPage(reviewSearchDto);}
-
     public String update(ReviewUpDto reviewUpDto) {return reviewRepositoryImpl.update(reviewUpDto);}
+
+    public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto){ return reviewRepositoryImpl.findReviewPage(reviewSearchDto);}
+
+    public List<ReviewDto> findAllReview(int storeId){ return reviewRepositoryImpl.findAllReview(storeId); }
 
     public String delete(ReviewDelDto reviewDelDto) {
         return reviewRepositoryImpl.delete(reviewDelDto);

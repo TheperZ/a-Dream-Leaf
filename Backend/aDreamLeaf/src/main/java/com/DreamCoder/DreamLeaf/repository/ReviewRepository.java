@@ -10,6 +10,7 @@ import java.util.List;
 public interface ReviewRepository {
     public ReviewDto save(ReviewCreateDto reviewCreateDto);
     public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto);
+    List<ReviewDto> findAllReview(int storeId);
     public String delete(ReviewDelDto reviewDelDto);
     public String update(ReviewUpDto reviewUpDto);
     public ReviewImageDto getReviewImage(int reviewId);

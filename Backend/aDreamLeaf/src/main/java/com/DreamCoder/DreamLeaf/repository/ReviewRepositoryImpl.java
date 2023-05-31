@@ -77,7 +77,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     @Override
     public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto) {
         int count = countReview(reviewSearchDto.getStoreId());
-        if(count != 0 && reviewSearchDto.getDisplay() != 0){
+        if(count != 0 && reviewSearchDto.getDisplay() > 0){
             reviewSearchDto.setReviewPagination(new ReviewPagination(count, reviewSearchDto));
         }
         else{
@@ -94,6 +94,21 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         }
         
         String storeName = getStoreName(reviewSearchDto.getStoreId());
+        for (ReviewDto reviewDto : reviewDtoList){
+            reviewDto.setNameData(getUserName(reviewDto.getUserId()), storeName);
+        }
+        return reviewDtoList;
+    }
+
+    @Override
+    public List<ReviewDto> findAllReview(int storeId) {
+        int count = countReview(storeId);
+        if(count == 0){
+            throw new ReviewException("해당 가게의 리뷰가 존재하지 않습니다.", 404);
+        }
+        List<ReviewDto> reviewDtoList = jdbcTemplate.query("SELECT * FROM REVIEW WHERE storeId="+storeId+" ORDER BY created_date DESC"
+                , reviewRowMapper);
+        String storeName = getStoreName(storeId);
         for (ReviewDto reviewDto : reviewDtoList){
             reviewDto.setNameData(getUserName(reviewDto.getUserId()), storeName);
         }

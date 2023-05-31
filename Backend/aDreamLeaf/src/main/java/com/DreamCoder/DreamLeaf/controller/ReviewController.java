@@ -121,12 +121,17 @@ public class ReviewController {
 
     @GetMapping(path = "/review/{storeId}")
     public ResponseEntity getReviewList(@PathVariable(name = "storeId") int storeId, @Param(value = "reviewSearchReq") ReviewSearchReq reviewSearchReq){
-        ReviewSearchDto reviewSearchDto = new ReviewSearchDto(storeId, reviewSearchReq.getPage(), reviewSearchReq.getDisplay());
+        List<ReviewDto> reviewDtoList;
+        if (reviewSearchReq.getPage() == 0 && reviewSearchReq.getDisplay() == 0){
+            reviewDtoList = reviewService.findAllReview(storeId);
+        }
+        else{
+            ReviewSearchDto reviewSearchDto = new ReviewSearchDto(storeId, reviewSearchReq.getPage(), reviewSearchReq.getDisplay());
+            reviewDtoList = reviewService.findReviewPage(reviewSearchDto);
+        }
 
-        List<ReviewDto> reviewDtoList = reviewService.findReviewPage(reviewSearchDto);
         return ResponseEntity.ok().body(reviewDtoList);
     }
-
     @PostMapping("/review/update")
     public ResponseEntity updateReview(@RequestParam("reviewPost") String reviewPost, @RequestPart("reviewImage") MultipartFile reviewImage) throws FirebaseAuthException{
         ObjectMapper objectMapper = new ObjectMapper();
