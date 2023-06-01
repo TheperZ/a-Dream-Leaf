@@ -60,12 +60,16 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                 "'," + reviewCreateDto.getRating()+
                 "," + reviewCreateDto.getUserId()+
                 ")");
-
-        ReviewDto reviewDto = jdbcTemplate.queryForObject("SELECT * FROM REVIEW WHERE body = '"+reviewCreateDto.getBody()+
-                "' AND created_date = '"+reviewCreateDto.getDate()+
-                "' AND storeId = "+reviewCreateDto.getStoreId()+
-                " AND userId = "+reviewCreateDto.getUserId(), reviewRowMapper);
-
+        ReviewDto reviewDto;
+        try {
+            reviewDto = jdbcTemplate.queryForObject("SELECT * FROM REVIEW WHERE body = '" + reviewCreateDto.getBody() +
+                    "' AND created_date = '" + reviewCreateDto.getDate() +
+                    "' AND storeId = " + reviewCreateDto.getStoreId() +
+                    " AND userId = " + reviewCreateDto.getUserId(), reviewRowMapper);
+        }
+        catch (Exception e){
+            throw new ReviewException("유효하지 않은 리뷰입니다.", 400);
+        }
         reviewDto.setNameData(userName, storeName);
 
         if (reviewCreateDto.getReviewImage() != null && !reviewCreateDto.getReviewImage().isEmpty()) {
