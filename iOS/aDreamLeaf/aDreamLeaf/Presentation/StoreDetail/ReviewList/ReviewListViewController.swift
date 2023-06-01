@@ -66,6 +66,7 @@ class ReviewListViewController : UIViewController {
             .map { "리뷰 (\($0.count))" }
             .bind(to: subtitleLabel.rx.text)
             .disposed(by: disposeBag)
+        
     }
     
     private func attribute() {
@@ -82,8 +83,6 @@ class ReviewListViewController : UIViewController {
         subtitleLabel.textAlignment = .center
         
         tableView.backgroundColor = .white
-        tableView.isScrollEnabled = false
-        
 
     }
     
@@ -108,7 +107,7 @@ class ReviewListViewController : UIViewController {
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo:scrollView.widthAnchor),
             
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
@@ -120,14 +119,12 @@ class ReviewListViewController : UIViewController {
             subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
             tableView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 15),
-            tableView.leadingAnchor.constraint(equalTo: subtitleLabel.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: subtitleLabel.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            tableView.heightAnchor.constraint(equalToConstant: 780),
-            
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            tableView.heightAnchor.constraint(equalToConstant: 500),
             
         ].forEach { $0.isActive = true }
         
-        
     }
+    
 }
