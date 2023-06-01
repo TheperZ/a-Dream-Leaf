@@ -116,9 +116,20 @@ struct StoreNetwork {
             let url = K.serverURL + "/restaurant/\(storeId)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
             var request = URLRequest(url: URL(string: url)!)
             
-            request.httpMethod = "GET"
+            request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.timeoutInterval = 10
+                
+            // POST 로 보낼 정보
+            let params = ["curLat": LocationManager.getTempLat(), "curLogt": LocationManager.getTempLogt()]
+             
+             // httpBody 에 parameters 추가
+            do {
+                try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
+            } catch {
+                print("http Body Error")
+                observer.onNext(RequestResult<Store>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+            }
             
             AF.request(request).responseJSON{ (response) in
                  switch response.result {

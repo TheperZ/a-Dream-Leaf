@@ -41,7 +41,7 @@ class RestaurantCell: UICollectionViewCell {
         ratingLabel.font = .systemFont(ofSize: 11, weight: .semibold)
         ratingLabel.textColor = .black
         
-        distanceLabel.text = "\(Int(viewModel.distance))m"
+        distanceLabel.text = "\(String(format: "%.2f", viewModel.distance))m"
         distanceLabel.font = .systemFont(ofSize: 11, weight: .semibold)
         distanceLabel.textColor = .gray
         

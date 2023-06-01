@@ -126,7 +126,7 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { "[ 내 위치로 부터 \($0.curDist)km ]" }
+            .map { "[ 내 위치로 부터 \(String(format:"%.1f", $0.curDist))km ]" }
             .bind(to: distanceLabel.rx.text)
             .disposed(by: disposeBag)
         
