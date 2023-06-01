@@ -35,7 +35,7 @@ public class StoreController {
 
     }
 
-    @GetMapping("/{storeId}")
+    @PostMapping("/{storeId}")
     public Optional<DetailStoreDto> showStoreDetail(@PathVariable int storeId, @RequestBody(required = false) UserCurReq userCurReq){
         return storeService.findById(storeId, userCurReq);
     }
