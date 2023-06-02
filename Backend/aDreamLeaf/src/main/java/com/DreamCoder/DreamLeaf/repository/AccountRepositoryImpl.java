@@ -61,7 +61,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         String currentDate = accountCreateDto.getDate();
         currentDate = currentDate.substring(0,currentDate.length()-3);
         String startDate = currentDate+"-01";
-        String endDate = currentDate+"-31";
+        String endDate = setEndDate(currentDate);
         String updateSql = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
         int remain = getRemain(accountCreateDto.getUserId(),startDate,endDate);
         if(remain>= accountCreateDto.getPrice()){
@@ -92,7 +92,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         price = getPrice(accountDelDto.getAccountId());
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
-        endDate = currentDate+"-31";
+        endDate = setEndDate(currentDate);
         remain = getRemain(accountDelDto.getUserId(),startDate,endDate);
         remain += price;
         jdbcTemplate.update(updateLogSql,remain,accountDelDto.getUserId(),startDate,endDate);
@@ -113,7 +113,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         String currentDate = getCreatedDate(accountUpDto.getAccountId());
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
-        endDate = currentDate+"-31";
+        endDate = setEndDate(currentDate);
         int price = getPrice(accountUpDto.getAccountId());
         int remain = getRemain(accountUpDto.getUserId(),startDate,endDate);
         remain += price;
@@ -121,7 +121,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         currentDate = accountUpDto.getDate();
         currentDate = currentDate.substring(0,currentDate.length()-3);
         startDate = currentDate+"-01";
-        endDate = currentDate+"-31";
+        endDate = setEndDate(currentDate);
         remain = getRemain(accountUpDto.getUserId(),startDate,endDate);
         if(remain >= accountUpDto.getPrice()){
             jdbcTemplate.update(sql6,remain- accountUpDto.getPrice(),accountUpDto.getUserId(),startDate,endDate);
@@ -137,7 +137,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         List<AccountListResultDto> results = new ArrayList<>();
         String Date = accountListDto.getYearMonth();
         String startDate = Date+"-01";
-        String endDate = Date+"-31";
+        String endDate = setEndDate(Date);
         String sql = "SELECT * FROM account WHERE userId = ? and created_date LIKE ?  ORDER BY created_date DESC";
         int remain = getRemain(accountListDto.getId(),startDate,endDate);
         results = jdbcTemplate.query(sql,accountResultRowMapper,accountListDto.getId(),Date+"%");
@@ -153,7 +153,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         String sql = "SELECT amount, remain FROM ACCOUNTLOG WHERE userId = ? and createdDate >= ? AND createdDate <= ?";
         String currentDate = accountInqDto.getYearMonth();
         String startDate = currentDate+"-01";
-        String endDate = currentDate+"-31";
+        String endDate = setEndDate(currentDate);
         SimpleAccountDto simpleAccountDto;
         try{
             simpleAccountDto =  jdbcTemplate.queryForObject(sql,simpleAccountDtoRowMapper,accountInqDto.getId(),startDate,endDate);
@@ -172,7 +172,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         YearMonth now = YearMonth.now();
         String current = now.toString();
         String startDate = current + "-01";
-        String endDate = current + "-31";
+        String endDate = setEndDate(current);
         try{
             id = jdbcTemplate.queryForObject(sql,Integer.class,accountSetDto.getUserId());
         } catch(EmptyResultDataAccessException e){
@@ -257,4 +257,18 @@ public class AccountRepositoryImpl implements AccountRepository{
         }
         return id;
     }
+
+    public String setEndDate(String date){
+        String month = date.substring(5);
+        if(month.equals("02")){
+            return date+"-28";
+        }
+        else if(month.equals("01")||month.equals("03")||month.equals("05")||month.equals("07")||month.equals("08")||month.equals("10")||month.equals("12")){
+            return date+"-31";
+        }
+        else{
+            return date+"-30";
+        }
+    }
+
 }
