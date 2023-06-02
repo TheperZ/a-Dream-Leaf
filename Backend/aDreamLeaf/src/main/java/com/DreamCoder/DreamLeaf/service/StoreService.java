@@ -50,6 +50,7 @@ public class StoreService {
     public void saveApi(){
         apiManager.saveGoodStoreApi();
         apiManager.saveGDreamCardApi();
+        apiManager.saveHygieneApi();
     }
 
 
