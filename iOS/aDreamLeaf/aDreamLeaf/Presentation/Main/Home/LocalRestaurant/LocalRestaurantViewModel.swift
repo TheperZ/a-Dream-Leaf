@@ -11,8 +11,6 @@ import RxRelay
 
 struct LocalRestaurantViewModel {
     private let disposeBag = DisposeBag()
-    private let tempLat = 37.66346998
-    private let tempLong = 126.7641867
     
     let loading = BehaviorSubject<Bool>(value: true)
     
@@ -47,7 +45,7 @@ struct LocalRestaurantViewModel {
 //        }
         
         
-        Observable.just((LocationManager.getLatitude() ?? tempLat, LocationManager.getLongitude() ?? tempLong))
+        Observable.just((LocationManager.getTempLat(), LocationManager.getTempLogt()))
             .map { ($0.0, $0.1) }
             .flatMap(kakaoRepo.getAddressKakao)
             .bind(to: address)
@@ -74,7 +72,7 @@ struct LocalRestaurantViewModel {
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
-        storeRepo.searchNearStore(lat: tempLat, long: tempLong)
+        storeRepo.searchNearStore(lat: LocationManager.getTempLat(), long: LocationManager.getTempLogt())
             .map { $0.data ?? [] }
             .bind(to: allList)
             .disposed(by: disposeBag)

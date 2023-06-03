@@ -11,7 +11,7 @@ import CoreLocation
 struct LocationManager {
     private static let locationManager = CLLocationManager()
     static func getTempLat() -> Double {
-        return 37.66346998
+        return 37.66
     }
     static func getTempLogt() -> Double {
         return 126.7641867
