@@ -4,6 +4,7 @@ import com.DreamCoder.DreamLeaf.dto.SignUpCreateDto;
 import com.DreamCoder.DreamLeaf.dto.SignUpDto;
 import com.DreamCoder.DreamLeaf.dto.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -59,9 +60,15 @@ public class SignUpRepositoryImpl implements SignUpRepository{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public LoginDto inquire(int id) {
-        LoginDto loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE userId = "+ id
-                ,loginDtoRowMapper);
+        LoginDto loginDto;
+        try{
+            loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE userId = "+id,loginDtoRowMapper);
+        } catch(EmptyResultDataAccessException ex){
+            throw new SignUpException("Not found. 유저 정보를 찾을 수 없음",404);
+        }
+
         return loginDto;
     }
 
