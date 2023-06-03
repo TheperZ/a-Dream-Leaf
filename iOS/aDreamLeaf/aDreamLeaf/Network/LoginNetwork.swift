@@ -79,13 +79,27 @@ struct LoginNetwork {
                              switch response.result {
                                  case .success:
                                      do {
-                                         guard let result = response.data else {return}
+                                         if let statusCode = response.response?.statusCode {
+                                             guard let result = response.data else { return }
+                                             let decoder = JSONDecoder()
+                                             switch statusCode {
+                                                 case 200: // 정상적으로 로그인 된 경우
+                                                     let data = try decoder.decode(Login.self, from: result)
+                                                     
+                                                     UserManager.login(userData: User(email: data.email, password: pwd, nickname: data.userName))
+                                                     observer.onNext(RequestResult<User>(success: true, msg: nil))
+                                                     
+                                                 default: // 어떠한 오류로 로그인에 실패한 경우
+                                                     let data = try decoder.decode(ErrorResponse.self, from: result)
+                                                     
+                                                     print("Login Error: ", data.ErrorMessage) // 로그인 에러 원인 출력
+                                                     observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                             }
+                                             
+                                         } else {
+                                             
+                                         }
                                          
-                                         let decoder = JSONDecoder()
-                                         let data = try decoder.decode(Login.self, from: result)
-                                         
-                                         UserManager.login(userData: User(email: data.email, password: pwd, nickname: data.userName))
-                                         observer.onNext(RequestResult<User>(success: true, msg: nil))
                                      } catch {
                                          observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                                      }
