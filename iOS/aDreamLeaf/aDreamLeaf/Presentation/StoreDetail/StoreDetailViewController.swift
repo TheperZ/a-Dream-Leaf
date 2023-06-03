@@ -28,6 +28,9 @@ class StoreDetailViewController: UIViewController {
     private let hygieneGradeLabel = UILabel()
     private let ratingLabel = UILabel()
     
+    private let serviceLabel = UILabel()
+    private let serviceConditionLabel = UILabel()
+    
     private let divider = UIView()
     
     private let reviewTitle = UIButton()
@@ -140,6 +143,30 @@ class StoreDetailViewController: UIViewController {
             .map { "⭐️ \(String(format: "%.1f", $0.totalRating))" }
             .observe(on: MainScheduler.instance)
             .bind(to: ratingLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { $0.prodName }
+            .subscribe(onNext: { service in
+                if service == nil {
+                    self.serviceLabel.isHidden = true
+                } else {
+                    self.serviceLabel.text = "🌱 제공 혜택 : \(service!)"
+                    self.serviceLabel.isHidden = false
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { $0.prodTarget }
+            .subscribe(onNext: { condition in
+                if condition == nil {
+                    self.serviceConditionLabel.isHidden = true
+                } else {
+                    self.serviceConditionLabel.text = "✅ 제공 조건 : \(condition!)"
+                    self.serviceConditionLabel.isHidden = false
+                }
+            })
             .disposed(by: disposeBag)
         
         viewModel.detail
@@ -263,6 +290,13 @@ class StoreDetailViewController: UIViewController {
         reviewWarningLabel.textAlignment = .center
         reviewWarningLabel.backgroundColor = UIColor(white: 0.97, alpha: 1)
         
+        serviceLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        serviceLabel.textColor = .black
+        
+        serviceConditionLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        serviceConditionLabel.textColor = .black
+        
+        
     }
     
     private func layout() {
@@ -272,7 +306,7 @@ class StoreDetailViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel].forEach {
+        [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, serviceLabel, serviceConditionLabel, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel, ].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -330,9 +364,17 @@ class StoreDetailViewController: UIViewController {
             hygieneGradeLabel.heightAnchor.constraint(equalToConstant: 40),
             ratingLabel.heightAnchor.constraint(equalToConstant: 40),
             
-            divider.topAnchor.constraint(equalTo: bottomStackView.bottomAnchor, constant: 30),
-            divider.leadingAnchor.constraint(equalTo: bottomStackView.leadingAnchor),
-            divider.trailingAnchor.constraint(equalTo: bottomStackView.trailingAnchor),
+            serviceLabel.topAnchor.constraint(equalTo: bottomStackView.bottomAnchor,constant: 20),
+            serviceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            serviceLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
+            
+            serviceConditionLabel.topAnchor.constraint(equalTo: serviceLabel.bottomAnchor,constant: 5),
+            serviceConditionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            serviceConditionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
+            
+            divider.topAnchor.constraint(equalTo: serviceConditionLabel.bottomAnchor, constant: 30),
+            divider.leadingAnchor.constraint(equalTo: serviceConditionLabel.leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: serviceConditionLabel.trailingAnchor),
             divider.heightAnchor.constraint(equalToConstant: 0.2),
             
             reviewTitle.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 30),
