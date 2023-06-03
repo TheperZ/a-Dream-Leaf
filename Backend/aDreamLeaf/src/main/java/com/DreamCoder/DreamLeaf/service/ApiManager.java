@@ -1,7 +1,10 @@
 package com.DreamCoder.DreamLeaf.service;
 
 
+
+import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
+import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,7 @@ public class ApiManager {
 
     @Autowired
     private final StoreRepository storeRepository;
+    private final StoreHygradeRepository storeHygradeRepository;
 
     private String makeUrl(String storeType, String key, String dataType, int pIndex, int pSize){
         StringBuffer sb=new StringBuffer();
@@ -261,5 +265,95 @@ public class ApiManager {
         }
 
     }
+
+    public void saveHygieneApi(){
+        String result="";
+        int pIndex=1;
+        Long totalCnt;
+        try{
+            do{
+                URL url=new URL(makeUrl("RestrtSanittnGradStus", "1cbb5970a6a3461b8e4282e78a548c30","json", pIndex, 1000));
+                BufferedReader bf;
+                bf=new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+                result=bf.readLine();
+
+
+                JSONParser jsonParser=new JSONParser();
+                JSONObject jsonObject=(JSONObject) jsonParser.parse(result);
+                JSONArray goodStore=(JSONArray) jsonObject.get("RestrtSanittnGradStus");      //전체 json get(size=2(head, row))
+
+                //casting head
+                JSONObject head=(JSONObject)goodStore.get(0);
+                JSONArray head2=(JSONArray)head.get("head");
+                log.info("head={}", head2);
+                totalCnt=(Long)((JSONObject)head2.get(0)).get("list_total_count");
+                log.info("cnt={}", totalCnt);
+                JSONObject apiResult=(JSONObject)((JSONObject)head2.get(1)).get("RESULT");
+                String resultCode=(String)apiResult.get("CODE");
+                log.info("resCode={}", resultCode);
+
+                //casting body(row)
+                JSONObject row=(JSONObject)goodStore.get(1);
+                JSONArray infoArr=(JSONArray)row.get("row");
+
+
+
+                for(int i=0;i<infoArr.size();i++){
+                    JSONObject temp=(JSONObject)infoArr.get(i);
+
+                    //check location if null
+                    double lat, logt;
+                    String roadno,lotno;
+
+
+                    //정보가 없는 가게에 대한 String 처리
+                    if((String)temp.get("REFINE_ROADNM_ADDR")==null){
+                        roadno="";
+                    }
+                    else{
+                        roadno=(String)temp.get("REFINE_ROADNM_ADDR");
+                    }
+                    if((String)temp.get("REFINE_LOTNO_ADDR")==null){
+                        lotno="";
+                    }
+                    else{
+                        lotno=(String)temp.get("REFINE_LOTNO_ADDR");
+                    }
+
+
+                    //위치 정보가 없는 가게는 추가하지 않음
+                    if((String)temp.get("REFINE_WGS84_LAT")==null){
+                        continue;
+                    }
+                    else{
+                        lat=Double.parseDouble((String)temp.get("REFINE_WGS84_LAT"));
+                    }
+                    if((String)temp.get("REFINE_WGS84_LOGT")==null){
+                        continue;
+                    }
+                    else{
+                        logt=Double.parseDouble((String)temp.get("REFINE_WGS84_LOGT"));
+                    }
+
+                    StoreHygradeReq infoObj=new StoreHygradeReq((String)temp.get("ENTRPS_NM"),
+                            (String)temp.get("APPONT_GRAD"),
+                            roadno,
+                            lotno,
+                            lat, logt);
+                    storeHygradeRepository.save(infoObj);
+
+                }
+                pIndex++;
+            }while(pIndex<=(totalCnt/1000)+1);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
+
 
 }
