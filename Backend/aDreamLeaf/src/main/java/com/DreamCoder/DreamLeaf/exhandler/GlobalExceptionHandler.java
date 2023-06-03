@@ -4,6 +4,7 @@ import com.DreamCoder.DreamLeaf.exception.AccountException;
 import com.DreamCoder.DreamLeaf.exception.AlarmException;
 import com.DreamCoder.DreamLeaf.exception.ReviewException;
 import com.DreamCoder.DreamLeaf.exception.SignUpException;
+import com.DreamCoder.DreamLeaf.exception.MyPageException;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
 import com.google.firebase.auth.AuthErrorCode;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -50,6 +51,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {SignUpException.class})
     protected ResponseEntity handleSignUpException(SignUpException e){
+        Map<String,String> result = new HashMap<>();
+        result.put("ErrorMessage",e.getMessage());
+        return ResponseEntity.status(e.getCode()).body(result);
+    }
+
+    @ExceptionHandler(value = {MyPageException.class})
+    protected ResponseEntity handleMyPageException(MyPageException e){
         Map<String,String> result = new HashMap<>();
         result.put("ErrorMessage",e.getMessage());
         return ResponseEntity.status(e.getCode()).body(result);
