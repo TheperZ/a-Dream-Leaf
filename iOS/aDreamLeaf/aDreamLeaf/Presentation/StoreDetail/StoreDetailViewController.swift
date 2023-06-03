@@ -137,7 +137,7 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { "⭐️ \($0.totalRating)" }
+            .map { "⭐️ \(String(format: "%.1f", $0.totalRating))" }
             .observe(on: MainScheduler.instance)
             .bind(to: ratingLabel.rx.text)
             .disposed(by: disposeBag)

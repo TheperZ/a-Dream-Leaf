@@ -41,7 +41,7 @@ class SearchCell: UITableViewCell {
         distanceLabel.textColor = .gray
         distanceLabel.textAlignment = .left
         
-        ratingLabel.text = "⭐️ \(viewModel.rating)"
+        ratingLabel.text = "⭐️ \(String(format: "%.1f", viewModel.rating))"
         ratingLabel.font = .systemFont(ofSize: 13, weight: .medium)
         ratingLabel.textColor = .black
         ratingLabel.textAlignment = .left
