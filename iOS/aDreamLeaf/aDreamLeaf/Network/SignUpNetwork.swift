@@ -75,12 +75,13 @@ struct SignUpNetwork {
                             print("SignUp Error : http Body Error")
                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                         }
-                        AF.request(request).responseJSON { (response) in
+                        AF.request(request).response { (response) in
+                            print(response.result)
                              switch response.result {
+                                     
                                  case .success:
                                          do {
                                              if let status = response.response?.statusCode {
-                                                 
                                                  guard let result = response.data else {return}
                                                  
                                                  let decoder = JSONDecoder()
