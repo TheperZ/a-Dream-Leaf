@@ -14,19 +14,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
 public class ReviewRepositoryImpl implements ReviewRepository{
-
     private final JdbcTemplate jdbcTemplate;
-    
     private final RowMapper<ReviewDto> reviewRowMapper = new RowMapper<ReviewDto>() {
         @Override
         public ReviewDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -71,9 +67,8 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("유효하지 않은 리뷰입니다.", 400);
         }
         reviewDto.setNameData(userName, storeName);
-
-        if (reviewCreateDto.getReviewImage() != null && !reviewCreateDto.getReviewImage().isEmpty()) {
-            saveReviewImage(reviewDto.getDate(), reviewDto.getStoreId(), reviewDto.getReviewId(), reviewCreateDto.getReviewImage());
+        if (reviewCreateDto.getReviewImage().isPresent() && !reviewCreateDto.getReviewImage().get().isEmpty()) {
+            saveReviewImage(reviewDto.getDate(), reviewDto.getStoreId(), reviewDto.getReviewId(), reviewCreateDto.getReviewImage().get());
         }
         return reviewDto;
     }
@@ -92,11 +87,9 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                         + " ORDER BY created_date DESC LIMIT " + reviewSearchDto.getDisplay()
                         + " OFFSET " + reviewSearchDto.getReviewPagination().getLimitStart()
                 , reviewRowMapper);
-
         if (reviewDtoList.isEmpty()){
             throw new ReviewException("해당 가게의 페이지에 리뷰가 존재하지 않습니다.", 404);
         }
-        
         String storeName = getStoreName(reviewSearchDto.getStoreId());
         for (ReviewDto reviewDto : reviewDtoList){
             reviewDto.setNameData(getUserName(reviewDto.getUserId()), storeName);
@@ -122,12 +115,10 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String update(ReviewUpDto reviewUpDto) {
-
         int writerId = getWriterId(reviewUpDto.getReviewId());
         if (writerId != reviewUpDto.getUserId()){
             throw new ReviewException("수정 권한이 없습니다.", 403);
         }
-
         if (reviewUpDto.getRating() > 5 || reviewUpDto.getRating() < 1 || reviewUpDto.getBody().length() < 10){
             throw new ReviewException("잘못된 리뷰 형식입니다.", 400);
         }
@@ -137,16 +128,15 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                 "', rating="+reviewUpDto.getRating()+
                 " WHERE reviewId="+reviewUpDto.getReviewId()
                 );
-
-        if (reviewUpDto.getReviewImage() == null || reviewUpDto.getReviewImage().isEmpty()) {
+        if (reviewUpDto.getReviewImage().isEmpty() || reviewUpDto.getReviewImage().get().isEmpty()) {
             delReviewImage(reviewUpDto.getReviewId());
         }
         else{
             if (countReviewImage(reviewUpDto.getReviewId()) == 0){
-                saveReviewImage(reviewUpDto.getDate(), getStoreId(reviewUpDto.getReviewId()), reviewUpDto.getReviewId(), reviewUpDto.getReviewImage());
+                saveReviewImage(reviewUpDto.getDate(), getStoreId(reviewUpDto.getReviewId()), reviewUpDto.getReviewId(), reviewUpDto.getReviewImage().get());
             }
             else{
-                updateReviewImage(reviewUpDto.getDate(), getStoreId(reviewUpDto.getReviewId()), reviewUpDto.getReviewId(), reviewUpDto.getReviewImage());
+                updateReviewImage(reviewUpDto.getDate(), getStoreId(reviewUpDto.getReviewId()), reviewUpDto.getReviewId(), reviewUpDto.getReviewImage().get());
             }
         }
         return "수정이 완료 되었습니다.";
@@ -204,8 +194,12 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     @Override
     public void saveReviewImage(String date, int storeId, int reviewId, MultipartFile reviewImage) {
         int idx = reviewImage.getOriginalFilename().lastIndexOf(".");
-        String ext = reviewImage.getOriginalFilename().substring(idx);
-
+        String ext;
+        if (idx != -1)
+            ext = reviewImage.getOriginalFilename().substring(idx);
+        else{
+            ext = "";
+        }
         String rootPath;
         try{
             rootPath = (Paths.get("").toRealPath() + "\\src\\main\\resources").replace('\\', '/');
@@ -253,8 +247,12 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         }
 
         int idx = reviewImage.getOriginalFilename().lastIndexOf(".");
-        String ext = reviewImage.getOriginalFilename().substring(idx);
-
+        String ext;
+        if (idx != -1)
+            ext = reviewImage.getOriginalFilename().substring(idx);
+        else{
+            ext = "";
+        }
         String imageTitle = date.substring(0, 10) + "-" + storeId + "-" + reviewId + ext;
         String imageUrl = validateImageUrl(rootPath, date) + "/" + imageTitle;
         String updateSql = "UPDATE reviewimage SET imageUrl = ?, imageTitle = ? WHERE reviewId = ?";
@@ -306,7 +304,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             userName = jdbcTemplate.queryForObject("SELECT userName FROM USER WHERE userId="+userId, String.class);
         }
         catch (Exception ex){
-            throw new ReviewException("조회하려는 리뷰가 존재하지 않습니다", 404);
+            throw new ReviewException("리뷰 작성 권한이 없습니다.", 403);
         }
         return userName;
     }
@@ -319,7 +317,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             storeName = jdbcTemplate.queryForObject(sql, String.class, storeId);
         }
         catch (Exception ex){
-            throw new ReviewException("조회하려는 리뷰가 존재하지 않습니다.", 404);
+            throw new ReviewException("리뷰에 해당하는 가게가 존재하지 않습니다.", 404);
         }
         return storeName;
     }
@@ -372,7 +370,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             storeId = jdbcTemplate.queryForObject(sql, Integer.class, reviewId);
         }
         catch (EmptyResultDataAccessException ex){
-            throw new ReviewException("조회하려는 리뷰가 존재하지 않습니다.", 404);
+            throw new ReviewException("리뷰를 작성한 가게가 존재하지 않습니다.", 404);
         }
         return storeId;
     }
