@@ -1,12 +1,10 @@
 package com.DreamCoder.DreamLeaf.req;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@ToString
 public class ReviewCreateReq {
     private String firebaseToken;
     private int storeId;
