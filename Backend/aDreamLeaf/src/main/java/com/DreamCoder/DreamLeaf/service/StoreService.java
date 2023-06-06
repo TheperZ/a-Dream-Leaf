@@ -44,7 +44,7 @@ public class StoreService {
         if(userCurReq==null){
             return storeRepository.findByKeyword(keyword);
         }
-        else if(userCurReq.getCurLat()==0 || userCurReq.getCurLogt()==0){
+        else if(userCurReq.getCurLat()==0 || userCurReq.getCurLogt()==0){       //400에러 처리: 위경도가 넘어오지 않을 경우 0으로 처리되는 것 방지
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
         return storeRepository.findByKeyword(keyword, userCurReq);
