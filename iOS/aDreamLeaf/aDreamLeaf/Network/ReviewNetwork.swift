@@ -122,7 +122,7 @@ struct ReviewNetwork {
                 
                 guard let token = token else { return }
                 
-                let url = K.serverURL + "/review/\(storeId)?page=1&display=3".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                let url = K.serverURL + "/review/\(storeId)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
                 var request = URLRequest(url: URL(string: url)!)
                 
                 request.httpMethod = "GET"
