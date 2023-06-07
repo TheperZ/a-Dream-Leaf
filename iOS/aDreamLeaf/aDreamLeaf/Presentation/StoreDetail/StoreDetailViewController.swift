@@ -66,7 +66,6 @@ class StoreDetailViewController: UIViewController {
     
     private func bind() {
         viewModel.reviews
-            .take(2)
             .bind(to: reviewTableView.rx.items) { tv, row, review in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = self.reviewTableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SimpleReviewCell, for: indexPath) as! SimpleReviewCell
