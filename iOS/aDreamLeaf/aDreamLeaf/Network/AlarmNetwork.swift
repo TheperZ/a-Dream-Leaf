@@ -85,7 +85,7 @@ struct AlarmNetwork {
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.timeoutInterval = 10
                 // POST 로 보낼 정보
-                let params = ["firebaseToken": token, "FCMToken": Messaging.messaging().apnsToken!.reduce("", {$0 + String(format: "%02X", $1)})]
+                let params = ["firebaseToken": token, "FCMToken": UserManager.FCMToken ?? "" ]
               
                  // httpBody 에 parameters 추가
                 do {
@@ -135,7 +135,9 @@ struct AlarmNetwork {
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.timeoutInterval = 10
                 // POST 로 보낼 정보
-                let params = ["firebaseToken": token, "FCMToken": Messaging.messaging().apnsToken!.reduce("", {$0 + String(format: "%02X", $1)})]
+                let params = ["firebaseToken": token, "FCMToken": UserManager.FCMToken ?? "" ]
+                
+                print(UserManager.FCMToken ?? "")
                  
                  // httpBody 에 parameters 추가
                 do {
