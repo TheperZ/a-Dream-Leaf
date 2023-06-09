@@ -44,12 +44,26 @@ struct AlarmNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 guard let result = response.data else { return }
-                                 
-                                 let decoder = JSONDecoder()
-                                 let data = try decoder.decode(AlarmState.self, from: result)
+                                 if let statusCode = response.response?.statusCode {
+                                     switch statusCode {
+                                         case 200..<300:
+                                             guard let result = response.data else { return }
+                                             
+                                             let decoder = JSONDecoder()
+                                             let data = try decoder.decode(AlarmState.self, from: result)
 
-                                 observer.onNext(RequestResult(success: true, msg: nil, data: data))
+                                             observer.onNext(RequestResult(success: true, msg: nil, data: data))
+                                         case 404, 500:
+                                             guard let result = response.data else { return }
+                                             let decoder = JSONDecoder()
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
+                                         default:
+                                             print("Account Error - Unknown status code: \(statusCode)")
+                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                 }
+                                 
                              } catch(let err) {
                                  print(err)
                                  observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
@@ -99,7 +113,21 @@ struct AlarmNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 observer.onNext(RequestResult(success: true, msg: nil))
+                                 if let statusCode = response.response?.statusCode {
+                                     switch statusCode {
+                                         case 200..<300:
+                                             observer.onNext(RequestResult(success: true, msg: nil))
+                                         case 404, 500:
+                                             guard let result = response.data else { return }
+                                             let decoder = JSONDecoder()
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
+                                         default:
+                                             print("Account Error - Unknown status code: \(statusCode)")
+                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                 }
+                                 
                              } catch(let err) {
                                  print(err)
                                  observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
@@ -151,7 +179,20 @@ struct AlarmNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                observer.onNext(RequestResult(success: true, msg: nil))
+                                 if let statusCode = response.response?.statusCode {
+                                     switch statusCode {
+                                         case 200..<300:
+                                             observer.onNext(RequestResult(success: true, msg: nil))
+                                         case 404, 500:
+                                             guard let result = response.data else { return }
+                                             let decoder = JSONDecoder()
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
+                                         default:
+                                             print("Account Error - Unknown status code: \(statusCode)")
+                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                 }
                              } catch(let err) {
                                  print(err)
                                  observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
