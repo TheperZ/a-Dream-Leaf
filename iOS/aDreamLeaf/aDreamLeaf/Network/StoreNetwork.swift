@@ -35,14 +35,25 @@ struct StoreNetwork {
                  switch response.result {
                      case .success:
                          do {
-                             guard let result = response.data else {return}
-                             
-                             let decoder = JSONDecoder()
-                             let data = try decoder.decode([SimpleStore].self, from: result)
-                             
-                             print(data)
-                             
-                             observer.onNext(RequestResult<[SimpleStore]>(success: true, msg: nil, data: data))
+                             if let statusCode = response.response?.statusCode {
+                                 switch statusCode {
+                                     case 200..<300:
+                                         guard let result = response.data else {return}
+                                         
+                                         let decoder = JSONDecoder()
+                                         let data = try decoder.decode([SimpleStore].self, from: result)
+                                         
+                                         observer.onNext(RequestResult<[SimpleStore]>(success: true, msg: nil, data: data))
+                                     case 404, 400:
+                                         guard let result = response.data else { return }
+                                         let decoder = JSONDecoder()
+                                         let data = try decoder.decode(ErrorResponse.self, from: result)
+                                         observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
+                                     default:
+                                         print("Account Error - Unknown status code: \(statusCode)")
+                                         observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                 }
+                             }
                          } catch(let error) {
                              print(error)
                              observer.onNext(RequestResult<[SimpleStore]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
@@ -85,14 +96,25 @@ struct StoreNetwork {
                  switch response.result {
                      case .success:
                          do {
-                             guard let result = response.data else {return}
-                             
-                             let decoder = JSONDecoder()
-                             let data = try decoder.decode([SimpleStore].self, from: result)
-                             
-                             print(data)
-                             
-                             observer.onNext(RequestResult<[SimpleStore]>(success: true, msg: nil, data: data))
+                             if let statusCode = response.response?.statusCode {
+                                 switch statusCode {
+                                     case 200..<300:
+                                         guard let result = response.data else {return}
+                                         
+                                         let decoder = JSONDecoder()
+                                         let data = try decoder.decode([SimpleStore].self, from: result)
+                                         
+                                         observer.onNext(RequestResult<[SimpleStore]>(success: true, msg: nil, data: data))
+                                     case 404, 400:
+                                         guard let result = response.data else { return }
+                                         let decoder = JSONDecoder()
+                                         let data = try decoder.decode(ErrorResponse.self, from: result)
+                                         observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
+                                     default:
+                                         print("Account Error - Unknown status code: \(statusCode)")
+                                         observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                 }
+                             }
                          } catch(let error) {
                              print(error)
                              observer.onNext(RequestResult<[SimpleStore]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
@@ -135,14 +157,26 @@ struct StoreNetwork {
                  switch response.result {
                      case .success:
                          do {
-                             guard let result = response.data else {return}
+                             if let statusCode = response.response?.statusCode {
+                                 switch statusCode {
+                                     case 200..<300:
+                                         guard let result = response.data else {return}
+                                         
+                                         let decoder = JSONDecoder()
+                                         let data = try decoder.decode(Store.self, from: result)
+
+                                         observer.onNext(RequestResult<Store>(success: true, msg: nil, data: data))
+                                     case 404, 400:
+                                         guard let result = response.data else { return }
+                                         let decoder = JSONDecoder()
+                                         let data = try decoder.decode(ErrorResponse.self, from: result)
+                                         observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
+                                     default:
+                                         print("Account Error - Unknown status code: \(statusCode)")
+                                         observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                 }
+                             }
                              
-                             let decoder = JSONDecoder()
-                             let data = try decoder.decode(Store.self, from: result)
-                             
-                             print(data)
-                             
-                             observer.onNext(RequestResult<Store>(success: true, msg: nil, data: data))
                          } catch {
                              observer.onNext(RequestResult<Store>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
                          }
