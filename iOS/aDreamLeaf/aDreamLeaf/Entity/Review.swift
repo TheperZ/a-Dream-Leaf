@@ -9,13 +9,14 @@ import Foundation
 
 class Review: Decodable {
     
-   let userId: Int
-   let userName: String
-   let reviewId: Int
-   let storeId: Int
-   let storeName: String
-   let date: String
-   let body: String
-   let rating: Int
+    let userId: Int
+    let userName: String
+    let reviewId: Int
+    let storeId: Int
+    let storeName: String
+    let date: String
+    let body: String
+    let rating: Int
+    let imageUrl: String?
      
 }

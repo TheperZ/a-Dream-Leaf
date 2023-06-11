@@ -36,12 +36,12 @@ class SearchCell: UITableViewCell {
         nameLabel.textColor = .black
         nameLabel.textAlignment = .left
         
-        distanceLabel.text = " \(viewModel.distance)km "
+        distanceLabel.text = " \(String(format: "%.1f", viewModel.distance))km "
         distanceLabel.font = .systemFont(ofSize: 13, weight: .medium)
         distanceLabel.textColor = .gray
         distanceLabel.textAlignment = .left
         
-        ratingLabel.text = "⭐️ \(viewModel.rating)"
+        ratingLabel.text = "⭐️ \(String(format: "%.1f", viewModel.rating))"
         ratingLabel.font = .systemFont(ofSize: 13, weight: .medium)
         ratingLabel.textColor = .black
         ratingLabel.textAlignment = .left

@@ -14,6 +14,7 @@ struct UserManager {
     
     private static let user = BehaviorSubject<User?>(value: nil)
     private static var isLogin = false
+    static var FCMToken: String? = nil
     
     private init() {}
     

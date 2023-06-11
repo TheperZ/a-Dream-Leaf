@@ -17,7 +17,9 @@ class StoreDetailViewController: UIViewController {
     private let contentView = UIView()
     
     private let nameLabel = UILabel()
+    private let addressStackView = UIStackView()
     private let addressLabel = UILabel()
+    private let mapButton = UIButton()
     private let distanceLabel = UILabel()
     private let topStackView = UIStackView()
     private let cardAvail = UILabel()
@@ -25,6 +27,9 @@ class StoreDetailViewController: UIViewController {
     private let bottomStackView = UIStackView()
     private let hygieneGradeLabel = UILabel()
     private let ratingLabel = UILabel()
+    
+    private let serviceLabel = UILabel()
+    private let serviceConditionLabel = UILabel()
     
     private let divider = UIView()
     
@@ -61,7 +66,6 @@ class StoreDetailViewController: UIViewController {
     
     private func bind() {
         viewModel.reviews
-            .take(2)
             .bind(to: reviewTableView.rx.items) { tv, row, review in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = self.reviewTableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SimpleReviewCell, for: indexPath) as! SimpleReviewCell
@@ -73,9 +77,10 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         reviewTitle.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.navigationController?.pushViewController(ReviewListViewController(), animated: true)
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.detail)
+            .subscribe(onNext: { storeData in
+                self.navigationController?.pushViewController(ReviewListViewController(storeData: storeData), animated: true)
             })
             .disposed(by: disposeBag)
         
@@ -85,6 +90,18 @@ class StoreDetailViewController: UIViewController {
                 self.navigationController?.pushViewController(ReviewViewController(storeId: self.viewModel.storeId), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        mapButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.detail)
+            .subscribe(onNext: {
+                let pvc = StoreMapViewController(data: $0)
+                pvc.modalPresentationStyle = .overCurrentContext
+                pvc.modalTransitionStyle = .coverVertical
+                self.present(pvc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
         
         UserManager.getInstance()
             .observe(on: MainScheduler.instance)
@@ -111,7 +128,7 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { "[ 내 위치로 부터 \($0.curDist)km ]" }
+            .map { "[ 내 위치로 부터 \(String(format:"%.1f", $0.curDist))km ]" }
             .bind(to: distanceLabel.rx.text)
             .disposed(by: disposeBag)
         
@@ -122,9 +139,33 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { "⭐️ \($0.totalRating)" }
+            .map { "⭐️ \(String(format: "%.1f", $0.totalRating))" }
             .observe(on: MainScheduler.instance)
             .bind(to: ratingLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { $0.prodName }
+            .subscribe(onNext: { service in
+                if service == nil {
+                    self.serviceLabel.isHidden = true
+                } else {
+                    self.serviceLabel.text = "🌱 제공 혜택 : \(service!)"
+                    self.serviceLabel.isHidden = false
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.detail
+            .map { $0.prodTarget }
+            .subscribe(onNext: { condition in
+                if condition == nil {
+                    self.serviceConditionLabel.isHidden = true
+                } else {
+                    self.serviceConditionLabel.text = "✅ 제공 조건 : \(condition!)"
+                    self.serviceConditionLabel.isHidden = false
+                }
+            })
             .disposed(by: disposeBag)
         
         viewModel.detail
@@ -171,9 +212,17 @@ class StoreDetailViewController: UIViewController {
         nameLabel.textColor = .black
         nameLabel.textAlignment = .center
         
+        addressStackView.spacing = 10
+        
         addressLabel.font = .systemFont(ofSize: 15, weight: .light)
         addressLabel.textColor = .black
         addressLabel.textAlignment = .center
+        
+        mapButton.setTitle("지도 보기", for: .normal)
+        mapButton.titleLabel?.font = .systemFont(ofSize: 10, weight: .medium)
+        mapButton.setTitleColor(.black, for: .normal)
+        mapButton.layer.cornerRadius = 5
+        mapButton.layer.backgroundColor = UIColor(white: 0.90, alpha: 1).cgColor
         
         distanceLabel.font = .systemFont(ofSize: 12, weight: .medium)
         distanceLabel.textColor = .gray
@@ -240,6 +289,13 @@ class StoreDetailViewController: UIViewController {
         reviewWarningLabel.textAlignment = .center
         reviewWarningLabel.backgroundColor = UIColor(white: 0.97, alpha: 1)
         
+        serviceLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        serviceLabel.textColor = .black
+        
+        serviceConditionLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        serviceConditionLabel.textColor = .black
+        
+        
     }
     
     private func layout() {
@@ -249,12 +305,17 @@ class StoreDetailViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [nameLabel, addressLabel, distanceLabel, topStackView, bottomStackView, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel].forEach {
+        [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, serviceLabel, serviceConditionLabel, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel, ].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [cardAvail, goodness].forEach {
+        [addressLabel, mapButton].forEach {
+            addressStackView.addArrangedSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [goodness, cardAvail].forEach {
             topStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -280,10 +341,12 @@ class StoreDetailViewController: UIViewController {
             nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
             
-            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 20),
-            addressLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            addressStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 20),
+            addressStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            distanceLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 20),
+            mapButton.widthAnchor.constraint(equalToConstant: 50),
+            
+            distanceLabel.topAnchor.constraint(equalTo: addressStackView.bottomAnchor, constant: 20),
             distanceLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             topStackView.topAnchor.constraint(equalTo: distanceLabel.bottomAnchor,constant: 20),
@@ -300,9 +363,17 @@ class StoreDetailViewController: UIViewController {
             hygieneGradeLabel.heightAnchor.constraint(equalToConstant: 40),
             ratingLabel.heightAnchor.constraint(equalToConstant: 40),
             
-            divider.topAnchor.constraint(equalTo: bottomStackView.bottomAnchor, constant: 30),
-            divider.leadingAnchor.constraint(equalTo: bottomStackView.leadingAnchor),
-            divider.trailingAnchor.constraint(equalTo: bottomStackView.trailingAnchor),
+            serviceLabel.topAnchor.constraint(equalTo: bottomStackView.bottomAnchor,constant: 20),
+            serviceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            serviceLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
+            
+            serviceConditionLabel.topAnchor.constraint(equalTo: serviceLabel.bottomAnchor,constant: 5),
+            serviceConditionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            serviceConditionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
+            
+            divider.topAnchor.constraint(equalTo: serviceConditionLabel.bottomAnchor, constant: 30),
+            divider.leadingAnchor.constraint(equalTo: serviceConditionLabel.leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: serviceConditionLabel.trailingAnchor),
             divider.heightAnchor.constraint(equalToConstant: 0.2),
             
             reviewTitle.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 30),

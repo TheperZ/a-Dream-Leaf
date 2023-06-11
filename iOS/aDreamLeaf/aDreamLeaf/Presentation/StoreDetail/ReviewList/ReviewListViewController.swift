@@ -22,8 +22,8 @@ class ReviewListViewController : UIViewController {
     private let leftButton = UIButton()
     private let rightButton = UIButton()
     
-    init() {
-        viewModel = ReviewListViewModel()
+    init(storeData: Store) {
+        viewModel = ReviewListViewModel(storeData: storeData)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,29 +61,29 @@ class ReviewListViewController : UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        viewModel.reviews
+            .map { "리뷰 (\($0.count))" }
+            .bind(to: subtitleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
     }
     
     private func attribute() {
         view.backgroundColor = .white
         
-        titleLabel.text = "피자스쿨 목2동점"
+        titleLabel.text = viewModel.storeData.storeName
         titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
         titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         
-        subtitleLabel.text = "리뷰 (5)"
+        subtitleLabel.text = "리뷰"
         subtitleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         subtitleLabel.textColor = .black
         subtitleLabel.textAlignment = .center
         
         tableView.backgroundColor = .white
-        tableView.isScrollEnabled = false
-        
-        leftButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        leftButton.tintColor = .black
-        
-        rightButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        rightButton.tintColor = .black
+
     }
     
     private func layout() {
@@ -93,7 +93,7 @@ class ReviewListViewController : UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [titleLabel, subtitleLabel, tableView, leftButton, rightButton].forEach {
+        [titleLabel, subtitleLabel, tableView].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -107,7 +107,7 @@ class ReviewListViewController : UIViewController {
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo:scrollView.widthAnchor),
             
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
@@ -119,22 +119,12 @@ class ReviewListViewController : UIViewController {
             subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
             tableView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 15),
-            tableView.leadingAnchor.constraint(equalTo: subtitleLabel.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: subtitleLabel.trailingAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: 780),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            tableView.heightAnchor.constraint(equalToConstant: 500),
             
-            leftButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10),
-            leftButton.widthAnchor.constraint(equalToConstant: 30),
-            leftButton.heightAnchor.constraint(equalToConstant: 30),
-            leftButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -30),
-            
-            rightButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10),
-            rightButton.widthAnchor.constraint(equalToConstant: 30),
-            rightButton.heightAnchor.constraint(equalToConstant: 30),
-            rightButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 30),
-            rightButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
         ].forEach { $0.isActive = true }
         
-        
     }
+    
 }

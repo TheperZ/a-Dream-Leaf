@@ -19,8 +19,8 @@ class ReviewCell: UITableViewCell {
     private let ratingLabel = UILabel()
     private let reviewImageView = UIImageView()
     
-    func setUp(with: (nickname: String, content: String, rating: Double, image: UIImage?)) {
-        viewModel = ReviewCellVIewModel(nickname: with.nickname, content: with.content, rating: with.rating, image: with.image)
+    func setUp(with reviewData: Review) {
+        viewModel = ReviewCellVIewModel(reviewData)
         
         bind()
         attribute()
@@ -35,20 +35,20 @@ class ReviewCell: UITableViewCell {
         contentView.backgroundColor = .white
         
         nicknameLabel.text = viewModel.nickname
-        nicknameLabel.font = .systemFont(ofSize: 16, weight: .light)
+        nicknameLabel.font = .systemFont(ofSize: 12, weight: .regular)
         nicknameLabel.textColor = .black
         nicknameLabel.textAlignment = .left
         
         contentTextView.backgroundColor = .white
         contentTextView.text = viewModel.content
-        contentTextView.font = .systemFont(ofSize: 15, weight: .light)
+        contentTextView.font = .systemFont(ofSize: 11, weight: .regular)
         contentTextView.textColor = .gray
         contentTextView.textAlignment = .left
         contentTextView.isEditable = false
         contentTextView.isScrollEnabled = false
         
         ratingLabel.text = "⭐️ \(viewModel.rating)"
-        ratingLabel.font = .systemFont(ofSize: 14, weight: .light)
+        ratingLabel.font = .systemFont(ofSize: 11, weight: .light)
         ratingLabel.textColor = .black
         ratingLabel.textAlignment = .left
         
@@ -78,16 +78,16 @@ class ReviewCell: UITableViewCell {
             
             nicknameLabel.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 20),
             nicknameLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 10),
-            nicknameLabel.widthAnchor.constraint(equalToConstant: 80),
+            nicknameLabel.widthAnchor.constraint(equalToConstant: 100),
             
             ratingLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 10),
             ratingLabel.leadingAnchor.constraint(equalTo: nicknameLabel.leadingAnchor, constant: 5),
             ratingLabel.trailingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor),
             
-            contentTextView.topAnchor.constraint(equalTo: nicknameLabel.topAnchor, constant: -5),
+            contentTextView.topAnchor.constraint(equalTo: nicknameLabel.topAnchor, constant: -7),
             contentTextView.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor),
             contentTextView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
-            contentTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
+            contentTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30),
             
             reviewImageView.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 10),
             reviewImageView.leadingAnchor.constraint(equalTo: contentTextView.leadingAnchor),
