@@ -11,12 +11,16 @@ import RxRelay
 
 struct ReviewCellVIewModel {
     let disposeBag = DisposeBag()
+    let storeId: Int
+    let reviewerId: Int
     let nickname: String
     let content: String
     let rating: Int
     let image: UIImage?
     
     init(_ reviewData: Review) {
+        self.storeId = reviewData.storeId
+        self.reviewerId = reviewData.userId
         self.nickname = reviewData.userName
         self.content = reviewData.body
         self.rating = reviewData.rating

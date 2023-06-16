@@ -607,6 +607,7 @@ PODS:
     - Charts/Core (= 4.1.0)
   - Charts/Core (4.1.0):
     - SwiftAlgorithms (~> 1.0)
+  - DropDown (2.3.13)
   - Firebase/CoreOnly (10.7.0):
     - FirebaseCore (= 10.7.0)
   - Firebase/Messaging (10.7.0):
@@ -755,6 +756,7 @@ PODS:
 
 DEPENDENCIES:
   - Charts
+  - DropDown
   - Firebase/Messaging
   - FirebaseAuth
   - FirebaseFirestore
@@ -770,6 +772,7 @@ SPEC REPOS:
     - Alamofire
     - BoringSSL-GRPC
     - Charts
+    - DropDown
     - Firebase
     - FirebaseAuth
     - FirebaseCore
@@ -800,6 +803,7 @@ SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   Charts: 354f86803d11d9c35de280587fef50d1af063978
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
   FirebaseAuth: dd64c01631df724b09f33e584625775c52f7d71f
   FirebaseCore: e317665b9d744727a97e623edbbed009320afdd7
@@ -825,6 +829,6 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 
-PODFILE CHECKSUM: 4944d55a85e7c3befdac4ab1bfc6ceea92957cb7
+PODFILE CHECKSUM: c5273adf2e5d0dc90194be173229bdcf9408749a
 
 COCOAPODS: 1.11.3

@@ -319,10 +319,10 @@
 		BF6E4BCA29D7DB1F00D67F22 /* StoreDetail */ = {
 			isa = PBXGroup;
 			children = (
+				BF15AB2429D92F2500014E05 /* ReviewList */,
 				BF6CF62D2A2776F0009E9E70 /* StoreMap */,
 				BF6E4BCB29D7DB2E00D67F22 /* StoreDetailViewModel.swift */,
 				BF6E4BCD29D7DB6800D67F22 /* StoreDetailViewController.swift */,
-				BF15AB2429D92F2500014E05 /* ReviewList */,
 			);
 			path = StoreDetail;
 			sourceTree = "<group>";
