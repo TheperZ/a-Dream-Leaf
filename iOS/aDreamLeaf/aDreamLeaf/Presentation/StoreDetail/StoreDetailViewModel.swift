@@ -22,17 +22,20 @@ struct StoreDetailViewModel {
     init(storeId: Int, _ storeRepo: StoreRepository = StoreRepository(), _ reviewRepo: ReviewRepository = ReviewRepository()) {
         self.storeId = storeId
         
+        //가게 정보
         storeRepo.fetchDetail(storeId: storeId)
             .filter { $0.data != nil }
             .map { $0.data! }
             .bind(to: detail)
             .disposed(by: disposeBag)
         
+        //최근 리뷰 목록 업데이트 요청 시 불러오기
         fetchReviewRequest
             .flatMap{ reviewRepo.fetchRecent(storeId: storeId) }
             .bind(to: fetchReviewResult)
             .disposed(by: disposeBag)
         
+        //최근 리뷰 목록 가져오기 결과에서 리뷰 목록 저장
         fetchReviewResult
             .filter { $0.success }
             .map { $0.data! }

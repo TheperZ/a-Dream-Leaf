@@ -13,7 +13,7 @@ import DropDown
 class ReviewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
     private var viewModel: ReviewCellVIewModel!
-    private var parent: UIViewController!
+    private var parent: ReviewListViewController!
     
     private let mainView = UIView()
     private let nicknameLabel = UILabel()
@@ -24,7 +24,7 @@ class ReviewCell: UITableViewCell {
     private let menuButton = UIButton()
     private let menu = DropDown()
     
-    func setUp(_ parent: UIViewController, with reviewData: Review) {
+    func setUp(_ parent: ReviewListViewController, with reviewData: Review) {
         self.parent = parent
         viewModel = ReviewCellVIewModel(reviewData)
         
@@ -51,7 +51,17 @@ class ReviewCell: UITableViewCell {
                 case 0:
                     parent.navigationController?.pushViewController(ReviewViewController(storeId: viewModel.storeId), animated: true)
                 case 1:
-                    print("Delete")
+                    let alert = UIAlertController(title: "확인", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                        // parent ViewController인 ReviewListViewController의 ViewModel에 리뷰 삭제 요청
+                        self.parent.viewModel.reviewDeleteRequest.onNext(self.viewModel.reviewId)
+                    }
+                    let cancel = UIAlertAction(title: "취소", style: .cancel)
+                
+                    alert.addAction(confirm)
+                    alert.addAction(cancel)
+                    
+                    self.parent.present(alert, animated: true)
                 default:
                     break
             }

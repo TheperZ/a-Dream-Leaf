@@ -28,6 +28,10 @@ struct ReviewRepository {
         return network.fetchReviews(storeId: storeId)
     }
     
+    func deleteReview(reviewId: Int) -> Observable<RequestResult<Void>> {
+        return network.deleteReview(reviewId: reviewId)
+    }
+    
     private func createInputValidate(body: String) -> RequestResult<Void>? {
         if body.count < 10 {
             return RequestResult(success: false, msg: "최소 10글자 이상 입력해주세요.")
@@ -35,4 +39,5 @@ struct ReviewRepository {
         
         return nil
     }
+    
 }
