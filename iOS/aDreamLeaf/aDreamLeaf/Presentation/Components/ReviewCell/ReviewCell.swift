@@ -49,7 +49,7 @@ class ReviewCell: UITableViewCell {
         menu.selectionAction = { [unowned self] (index: Int, item: String) in
             switch index {
                 case 0:
-                    parent.navigationController?.pushViewController(ReviewViewController(storeId: viewModel.storeId), animated: true)
+                    parent.navigationController?.pushViewController(ReviewViewController(storeId: viewModel.storeId, editData: viewModel.reviewData), animated: true)
                 case 1:
                     let alert = UIAlertController(title: "확인", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
