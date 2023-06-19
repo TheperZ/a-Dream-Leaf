@@ -222,4 +222,57 @@ struct ReviewNetwork {
             return Disposables.create()
         }
     }
+    
+    func updateRequest(reviewId: Int, body: String, rating: Int) -> Observable<RequestResult<Void>> {
+        return Observable.create { observer in
+            
+            Auth.auth().currentUser?.getIDToken() { token, error in
+                
+                if error != nil {
+                    print(error)
+                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                }
+                
+                guard let token = token else { return }
+                
+                let url = K.serverURL + "/review/update"
+                var request = URLRequest(url: URL(string: url)!)
+                request.httpMethod = "POST"
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.timeoutInterval = 10
+                // POST 로 보낼 정보
+                
+                let reviewPost = ["firebaseToken": token, "reviewId": reviewId, "date": Date.dateToString(with: Date.now), "body": body, "rating": rating]
+                
+                let params = ["reviewPost":reviewPost]
+                 
+                 // httpBody 에 parameters 추가
+                do {
+                    try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
+                } catch {
+                    print("http Body Error")
+                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!"))
+                }
+                
+                AF.request(request).responseJSON{ (response) in
+                     switch response.result {
+                         case .success:
+                             do {
+                                 observer.onNext(RequestResult(success: true, msg: nil))
+                             } catch(let err) {
+                                 print(err)
+                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                             }
+                                 
+                         case .failure(let error):
+                                 print("error : \(error.errorDescription!)")
+                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                     }
+                 }
+                
+            }
+            
+            return Disposables.create()
+        }
+    }
 }

@@ -20,6 +20,15 @@ struct ReviewRepository {
         return network.createRequest(storeId: storeId, body: body, rating: rating)
     }
     
+    func update(reviewId: Int, body: String, rating: Int) -> Observable<RequestResult<Void>> {
+        
+        if let validationResult = createInputValidate(body: body), validationResult != nil {
+            return Observable.just(validationResult)
+        }
+        
+        return network.updateRequest(reviewId: reviewId, body: body, rating: rating)
+    }
+    
     func fetchRecent(storeId: Int) -> Observable<RequestResult<[Review]>> {
         return network.fetchRecentRequest(storeId: storeId)
     }

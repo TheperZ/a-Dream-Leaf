@@ -25,10 +25,26 @@ struct ReviewViewModel {
         self.storeId = storeId
         self.editData = editData
         
+        // 신규 리뷰 작성
         saveBtnTap
+            .filter { editData == nil }
             .withLatestFrom(Observable.combineLatest(rating, body))
             .flatMap{rating, body in repo.create(storeId: storeId, body: body, rating: rating)}
             .bind(to: createRequestResult)
             .disposed(by: disposeBag)
+        
+        // 기존 리뷰 수정
+        saveBtnTap
+            .filter { editData == nil }
+            .withLatestFrom(Observable.combineLatest(rating, body))
+            .flatMap{rating, body in repo.update(reviewId: editData!.reviewId, body: body, rating: rating)}
+            .bind(to: createRequestResult)
+            .disposed(by: disposeBag)
+        
+        // 리뷰 수정모드 시 초기값 설정
+        if editData != nil  {
+            rating.onNext(editData!.rating)
+            body.onNext(editData!.body)
+        }
     }
 }
