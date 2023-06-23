@@ -86,7 +86,7 @@ struct LoginNetwork {
                                                  case 200: // 정상적으로 로그인 된 경우
                                                      let data = try decoder.decode(Login.self, from: result)
                                                      
-                                                     UserManager.login(userData: User(email: data.email, password: pwd, nickname: data.userName))
+                                                     UserManager.login(userData: User(userId: data.userId, email: data.email, nickname: data.userName, password: pwd))
                                                      observer.onNext(RequestResult<User>(success: true, msg: nil))
                                                      
                                                  default: // 어떠한 오류로 로그인에 실패한 경우

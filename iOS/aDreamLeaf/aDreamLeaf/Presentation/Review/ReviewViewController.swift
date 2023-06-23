@@ -22,7 +22,7 @@ class ReviewViewController: UIViewController {
     private let starButton3 = UIButton()
     private let starButton4 = UIButton()
     private let starButton5 = UIButton()
-    
+    private let starButtonList: [UIButton]
     private let textView = UITextView()
     private let photoButton = UIButton()
     private let saveButton = UIButton()
@@ -32,8 +32,9 @@ class ReviewViewController: UIViewController {
     private let imagePicker = UIImagePickerController()
     private let imageView = UIImageView()
     
-    init(storeId: Int) {
-        viewModel = ReviewViewModel(storeId: storeId)
+    init(storeId: Int, editData: Review? = nil) {
+        viewModel = ReviewViewModel(storeId: storeId, editData: editData)
+        starButtonList = [starButton1, starButton2, starButton3, starButton4, starButton5]
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,14 +51,14 @@ class ReviewViewController: UIViewController {
     }
     
     private func bind() {
-        let starButtonList = [starButton1, starButton2, starButton3, starButton4, starButton5]
+        
         
         starButtonList.enumerated().forEach { idx, btn in
             btn.rx.tap
                 .asDriver()
                 .drive(onNext: {
                     var p = false
-                    for b in starButtonList {
+                    for b in self.starButtonList {
                         if p == false {
                             b.tintColor = UIColor(red: 1, green: 0.8, blue: 0.1, alpha: 1)
                             if b == btn {
@@ -124,7 +125,6 @@ class ReviewViewController: UIViewController {
                 
             })
             .disposed(by: disposeBag)
-
     }
     
     private func attribute() {
@@ -147,6 +147,12 @@ class ReviewViewController: UIViewController {
             $0.setImage(UIImage(systemName: "star.fill"), for: .normal)
             $0.tintColor = UIColor(red: 1, green: 0.8, blue: 0.1, alpha: 1)
             $0.adjustsImageWhenHighlighted = false
+        }
+        
+        // 수정인 경우 초기값 설정
+        if viewModel.editData != nil {
+            textView.text = viewModel.editData!.body
+            starButtonList[viewModel.editData!.rating-1].sendActions(for: .touchUpInside)
         }
         
         textViewWarningLabel.text = "최소 10글자 이상 입력해주세요."

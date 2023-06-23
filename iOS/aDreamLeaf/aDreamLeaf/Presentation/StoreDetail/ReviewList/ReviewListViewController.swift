@@ -11,7 +11,7 @@ import RxCocoa
 
 class ReviewListViewController : UIViewController {
     private let disposeBag = DisposeBag()
-    private let viewModel: ReviewListViewModel
+    let viewModel: ReviewListViewModel
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -56,7 +56,7 @@ class ReviewListViewController : UIViewController {
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = tv.dequeueReusableCell(withIdentifier: K.TableViewCellID.ReviewCell, for: indexPath) as! ReviewCell
                 
-                cell.setUp(with: review)
+                cell.setUp(self, with: review)
                 
                 return cell
             }
@@ -65,6 +65,16 @@ class ReviewListViewController : UIViewController {
         viewModel.reviews
             .map { "리뷰 (\($0.count))" }
             .bind(to: subtitleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.reviewDeleteResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                let alert = UIAlertController(title: result.success ? "성공" : "실패", message: result.msg, preferredStyle: .alert)
+                let cancel = UIAlertAction(title: "확인", style: .default)
+                alert.addAction(cancel)
+                self.present(alert, animated: true)
+            })
             .disposed(by: disposeBag)
         
     }

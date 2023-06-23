@@ -8,10 +8,12 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import DropDown
 
 class ReviewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
     private var viewModel: ReviewCellVIewModel!
+    private var parent: ReviewListViewController!
     
     private let mainView = UIView()
     private let nicknameLabel = UILabel()
@@ -19,7 +21,11 @@ class ReviewCell: UITableViewCell {
     private let ratingLabel = UILabel()
     private let reviewImageView = UIImageView()
     
-    func setUp(with reviewData: Review) {
+    private let menuButton = UIButton()
+    private let menu = DropDown()
+    
+    func setUp(_ parent: ReviewListViewController, with reviewData: Review) {
+        self.parent = parent
         viewModel = ReviewCellVIewModel(reviewData)
         
         bind()
@@ -28,7 +34,38 @@ class ReviewCell: UITableViewCell {
     }
     
     private func bind() {
+        UserManager.getInstance()
+            .map { $0 == nil ? true : $0!.userId != self.viewModel.reviewerId }
+            .bind(to: menuButton.rx.isHidden)
+            .disposed(by: disposeBag)
         
+        menuButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                self.menu.show()
+            })
+            .disposed(by: disposeBag)
+        
+        menu.selectionAction = { [unowned self] (index: Int, item: String) in
+            switch index {
+                case 0:
+                    parent.navigationController?.pushViewController(ReviewViewController(storeId: viewModel.storeId, editData: viewModel.reviewData), animated: true)
+                case 1:
+                    let alert = UIAlertController(title: "확인", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                        // parent ViewController인 ReviewListViewController의 ViewModel에 리뷰 삭제 요청
+                        self.parent.viewModel.reviewDeleteRequest.onNext(self.viewModel.reviewId)
+                    }
+                    let cancel = UIAlertAction(title: "취소", style: .cancel)
+                
+                    alert.addAction(confirm)
+                    alert.addAction(cancel)
+                    
+                    self.parent.present(alert, animated: true)
+                default:
+                    break
+            }
+        }
     }
     
     private func attribute() {
@@ -56,6 +93,13 @@ class ReviewCell: UITableViewCell {
         reviewImageView.image = viewModel.image
         reviewImageView.contentMode = .scaleAspectFit
         
+        menuButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        menuButton.tintColor = .black
+        
+        menu.dataSource = ["리뷰 수정", "리뷰 삭제"]
+        menu.anchorView = menuButton
+        menu.bottomOffset = CGPoint(x: -20, y:(menu.anchorView?.plainView.bounds.height)!)
+        
     }
     
     private func layout() {
@@ -63,7 +107,7 @@ class ReviewCell: UITableViewCell {
         contentView.addSubview(mainView)
         mainView.translatesAutoresizingMaskIntoConstraints = false
         
-        [nicknameLabel, contentTextView, ratingLabel, reviewImageView].forEach {
+        [nicknameLabel, contentTextView, ratingLabel, reviewImageView, menuButton].forEach {
             mainView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -86,8 +130,13 @@ class ReviewCell: UITableViewCell {
             
             contentTextView.topAnchor.constraint(equalTo: nicknameLabel.topAnchor, constant: -7),
             contentTextView.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor),
-            contentTextView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
+            contentTextView.trailingAnchor.constraint(equalTo: menuButton.leadingAnchor),
             contentTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30),
+            
+            menuButton.topAnchor.constraint(equalTo: nicknameLabel.topAnchor, constant: -7),
+            menuButton.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
+            menuButton.heightAnchor.constraint(equalToConstant: 30),
+            menuButton.widthAnchor.constraint(equalToConstant: 30),
             
             reviewImageView.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 10),
             reviewImageView.leadingAnchor.constraint(equalTo: contentTextView.leadingAnchor),
