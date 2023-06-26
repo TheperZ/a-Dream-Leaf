@@ -35,7 +35,7 @@ struct ReviewViewModel {
         
         // 기존 리뷰 수정
         saveBtnTap
-            .filter { editData == nil }
+            .filter { editData != nil }
             .withLatestFrom(Observable.combineLatest(rating, body))
             .flatMap{rating, body in repo.update(reviewId: editData!.reviewId, body: body, rating: rating)}
             .bind(to: createRequestResult)
