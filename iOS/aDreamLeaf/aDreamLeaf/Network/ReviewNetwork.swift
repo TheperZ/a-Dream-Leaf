@@ -11,7 +11,7 @@ import Alamofire
 import FirebaseAuth
 
 struct ReviewNetwork {
-    func createRequest(storeId: Int, body: String, rating: Int) -> Observable<RequestResult<Void>> {
+    func createRequest(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
@@ -29,7 +29,7 @@ struct ReviewNetwork {
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.timeoutInterval = 10
                 // POST 로 보낼 정보
-                let params = CreateReviewRequest(firebaseToken: token, storeId: storeId, date: Date.now, body: body, rating: rating).toDict()
+                let params = CreateReviewRequest(firebaseToken: token, storeId: storeId, date: Date.now, body: body, rating: rating, image: image).toDict()
                  
                  // httpBody 에 parameters 추가
                 do {

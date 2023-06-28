@@ -16,7 +16,7 @@ struct ReviewViewModel {
     let editData : Review? // 리뷰 수정 시 리뷰 데이터, 신규 작성시 nil
     let rating = BehaviorSubject<Int>(value: 5)
     let body = BehaviorSubject<String>(value: "")
-    
+    let image = BehaviorSubject<UIImage?>(value: nil)
     let saveBtnTap = PublishSubject<Void>()
     
     let createRequestResult = PublishSubject<RequestResult<Void>>()
@@ -28,16 +28,16 @@ struct ReviewViewModel {
         // 신규 리뷰 작성
         saveBtnTap
             .filter { editData == nil }
-            .withLatestFrom(Observable.combineLatest(rating, body))
-            .flatMap{rating, body in repo.create(storeId: storeId, body: body, rating: rating)}
+            .withLatestFrom(Observable.combineLatest(rating, body, image))
+            .flatMap{rating, body, img in repo.create(storeId: storeId, body: body, rating: rating, image: img)}
             .bind(to: createRequestResult)
             .disposed(by: disposeBag)
         
         // 기존 리뷰 수정
         saveBtnTap
             .filter { editData != nil }
-            .withLatestFrom(Observable.combineLatest(rating, body))
-            .flatMap{rating, body in repo.update(reviewId: editData!.reviewId, body: body, rating: rating)}
+            .withLatestFrom(Observable.combineLatest(rating, body, image))
+            .flatMap{rating, body, image in repo.update(reviewId: editData!.reviewId, body: body, rating: rating)}
             .bind(to: createRequestResult)
             .disposed(by: disposeBag)
         

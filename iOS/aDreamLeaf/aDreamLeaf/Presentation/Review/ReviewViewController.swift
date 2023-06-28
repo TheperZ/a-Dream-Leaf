@@ -244,15 +244,11 @@ extension ReviewViewController: UIImagePickerControllerDelegate, UINavigationCon
     
     // UIImagePickerController4. - 사진을 선택하거나, 카메라 촬영하고 나면 호출되는 메소드
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        print(#function, "🦋 사진선택하거나, 카메라 촬영 직후")
-        
-        /* 원본, 편집, 메타 데이터 등 - infoKey,
-         그리고 타입은 Any로 명확하게 지정되지 않았다.
-         왜냐하면 메타 데이터는 명확하기 않기 때문에 그래서 타입캐스팅이 필요한 부분이다. */
         
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             self.imageView.contentMode = .scaleAspectFit
             self.imageView.image = image
+            viewModel.image.onNext(image)
             dismiss(animated: true)
         }
     }
