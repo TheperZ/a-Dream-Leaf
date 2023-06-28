@@ -14,5 +14,5 @@ public class ReviewUpDto {
     private String date;
     private String body;
     private int rating;
-    private Optional<MultipartFile> reviewImage;
+    private Optional<String> reviewImage;
 }
