@@ -14,8 +14,8 @@ public interface ReviewRepository {
     public String delete(ReviewDelDto reviewDelDto);
     public String update(ReviewUpDto reviewUpDto);
     public ReviewImageDto getReviewImage(int reviewId);
-    public void saveReviewImage(String date, int storeId, int reviewId, MultipartFile reviewImage);
-    public void updateReviewImage(String date, int storeId, int reviewId, MultipartFile reviewImage);
+    public void saveReviewImage(String date, int storeId, int reviewId, String reviewImage);
+    public void updateReviewImage(String date, int storeId, int reviewId, String reviewImage);
     public void delReviewImage(int reviewId);
     public int countReview(int storeId);
     public void validateUserId(int userId);

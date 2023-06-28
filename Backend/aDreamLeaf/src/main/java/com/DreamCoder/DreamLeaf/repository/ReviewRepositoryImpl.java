@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -67,7 +68,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("유효하지 않은 리뷰입니다.", 400);
         }
         reviewDto.setNameData(userName, storeName);
-        if (reviewCreateDto.getReviewImage().isPresent() && !reviewCreateDto.getReviewImage().get().isEmpty()) {
+        if (reviewCreateDto.getReviewImage() != null && !reviewCreateDto.getReviewImage().get().isEmpty()) {
             saveReviewImage(reviewDto.getDate(), reviewDto.getStoreId(), reviewDto.getReviewId(), reviewCreateDto.getReviewImage().get());
         }
         return reviewDto;
@@ -128,7 +129,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                 "', rating="+reviewUpDto.getRating()+
                 " WHERE reviewId="+reviewUpDto.getReviewId()
                 );
-        if (reviewUpDto.getReviewImage().isEmpty() || reviewUpDto.getReviewImage().get().isEmpty()) {
+        if (reviewUpDto.getReviewImage() == null || reviewUpDto.getReviewImage().get().isEmpty()) {
             delReviewImage(reviewUpDto.getReviewId());
         }
         else{
@@ -192,14 +193,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     }
 
     @Override
-    public void saveReviewImage(String date, int storeId, int reviewId, MultipartFile reviewImage) {
-        int idx = reviewImage.getOriginalFilename().lastIndexOf(".");
-        String ext;
-        if (idx != -1)
-            ext = reviewImage.getOriginalFilename().substring(idx);
-        else{
-            ext = "";
-        }
+    public void saveReviewImage(String date, int storeId, int reviewId, String reviewImage) {
         String rootPath;
         try{
             rootPath = (Paths.get("").toRealPath() + "\\src\\main\\resources").replace('\\', '/');
@@ -208,11 +202,15 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("이미지를 저장할 경로를 찾을 수 없습니다.", 404);
         }
 
-        String imageTitle = date.substring(0, 10) + "-" + storeId + "-" + reviewId + ext;
+        String imageTitle = date.substring(0, 10) + "-" + storeId + "-" + reviewId;
         String imageUrl = validateImageUrl(rootPath, date) + "/" + imageTitle;
 
         try {
-            reviewImage.transferTo(Paths.get(rootPath + imageUrl));
+            System.out.println(rootPath + imageUrl);
+            File imageFile = new File(rootPath + imageUrl);
+            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+            fileOutputStream.write(reviewImage.getBytes());
+            fileOutputStream.close();
         }
         catch (Exception e){
             throw new ReviewException("이미지 파일을 찾을 수 없습니다.", 404);
@@ -225,7 +223,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     }
 
     @Override
-    public void updateReviewImage(String date, int storeId, int reviewId, MultipartFile reviewImage) {
+    public void updateReviewImage(String date, int storeId, int reviewId, String reviewImage) {
         String rootPath;
         try{
             rootPath = (Paths.get("").toRealPath() + "\\src\\main\\resources").replace('\\', '/');
@@ -246,19 +244,15 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("삭제할 이미지를 찾을 수 없습니다.", 404);
         }
 
-        int idx = reviewImage.getOriginalFilename().lastIndexOf(".");
-        String ext;
-        if (idx != -1)
-            ext = reviewImage.getOriginalFilename().substring(idx);
-        else{
-            ext = "";
-        }
-        String imageTitle = date.substring(0, 10) + "-" + storeId + "-" + reviewId + ext;
+        String imageTitle = date.substring(0, 10) + "-" + storeId + "-" + reviewId;
         String imageUrl = validateImageUrl(rootPath, date) + "/" + imageTitle;
         String updateSql = "UPDATE reviewimage SET imageUrl = ?, imageTitle = ? WHERE reviewId = ?";
 
         try {
-            reviewImage.transferTo(Paths.get(rootPath + imageUrl));
+            File imageFile = new File(rootPath + imageUrl);
+            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+            fileOutputStream.write(reviewImage.getBytes());
+            fileOutputStream.close();
             jdbcTemplate.update(updateSql, imageUrl, imageTitle, reviewId);
         }
         catch (Exception e){

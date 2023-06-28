@@ -14,5 +14,5 @@ public class ReviewCreateDto {
     private String body;
     private int rating;
     private int userId;
-    private Optional<MultipartFile> reviewImage;
+    private Optional<String> reviewImage;
 }
