@@ -31,8 +31,8 @@ public class ReviewController {
     @PostMapping(path = "/review/create")
     public ResponseEntity createReview(@RequestBody ReviewCreateReq reviewCreateReq) throws FirebaseAuthException{
         String firebaseToken = reviewCreateReq.getFirebaseToken();
-//        int id = authUtil.findUserId(firebaseToken);
-        int id = 1;
+        int id = authUtil.findUserId(firebaseToken);
+
         ReviewCreateDto reviewCreateDto = new ReviewCreateDto(reviewCreateReq.getStoreId(), reviewCreateReq.getDate(), reviewCreateReq.getBody(), reviewCreateReq.getRating(), id, reviewCreateReq.getReviewImage());
         ReviewDto reviewDto = reviewService.create(reviewCreateDto);
         return ResponseEntity.status(201).body(reviewDto);
@@ -54,8 +54,8 @@ public class ReviewController {
     @PostMapping(path = "/review/update")
     public ResponseEntity updateReview(@RequestBody ReviewUpReq reviewUpReq) throws FirebaseAuthException{
         String firebaseToken = reviewUpReq.getFirebaseToken();
-//        int id = authUtil.findUserId(firebaseToken);
-        int id = 1;
+        int id = authUtil.findUserId(firebaseToken);
+
         ReviewUpDto reviewUpDto = new ReviewUpDto(id, reviewUpReq.getReviewId(), reviewUpReq.getDate(), reviewUpReq.getBody(), reviewUpReq.getRating(), reviewUpReq.getReviewImage());
         String result = reviewService.update(reviewUpDto);
         return ResponseEntity.ok().body(result);
@@ -64,8 +64,8 @@ public class ReviewController {
     @PostMapping("/review/delete")
     public ResponseEntity deleteReview(@RequestBody ReviewDelReq reviewDelReq) throws FirebaseAuthException{
         String firebaseToken = reviewDelReq.getFirebaseToken();
-//        int id = authUtil.findUserId(firebaseToken);
-        int id = 1;
+        int id = authUtil.findUserId(firebaseToken);
+
         ReviewDelDto reviewDelDto = new ReviewDelDto(id, reviewDelReq.getReviewId());
         String result = reviewService.delete(reviewDelDto);
         return ResponseEntity.ok().body(result);
