@@ -341,6 +341,8 @@ public class ApiManager {
                             roadno,
                             lotno,
                             lat, logt);
+
+                    //storeRepository.updateGrade(infoObj);
                     storeHygradeRepository.save(infoObj);
 
                 }
@@ -351,6 +353,7 @@ public class ApiManager {
         }
 
     }
+
 
 
 

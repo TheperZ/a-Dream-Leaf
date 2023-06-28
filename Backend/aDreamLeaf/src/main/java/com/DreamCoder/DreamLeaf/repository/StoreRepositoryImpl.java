@@ -4,6 +4,7 @@ import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
+import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import lombok.extern.slf4j.Slf4j;
@@ -158,6 +159,15 @@ public class StoreRepositoryImpl implements StoreRepository{
         return result;
     }
 
+/*    public void updateGrade(StoreHygradeReq storeHygradeReq){
+        String sql="update store set grade=? where storeName=? and wgs84Lat=? and wgs84Logt=?";
+        template.update(sql, storeHygradeReq.getGrade(),
+                storeHygradeReq.getStoreName(),
+                storeHygradeReq.getWgs84Lat(),
+                storeHygradeReq.getWgs84Logt());
+
+    }*/
+
 
 
 
@@ -171,7 +181,7 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .lotAddr(rs.getString("lotAddr"))
                     .wgs84Lat(rs.getDouble("wgs84Lat"))
                     .wgs84Logt(rs.getDouble("wgs84Logt"))
-                    .payment(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
+                    .payment(rs.getInt("payment"))          //->storeType(rs.getInt("payment"))
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
                     .build();
