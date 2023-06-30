@@ -70,6 +70,10 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         reviewDto.setNameData(userName, storeName);
         if (reviewCreateDto.getReviewImage().isPresent()) {
             saveReviewImage(reviewDto.getDate(), reviewDto.getStoreId(), reviewDto.getReviewId(), reviewCreateDto.getReviewImage().get());
+            reviewDto.setReviewImage(reviewCreateDto.getReviewImage().get());
+        }
+        else{
+            reviewDto.setReviewImage(null);
         }
         return reviewDto;
     }
@@ -94,6 +98,12 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         String storeName = getStoreName(reviewSearchDto.getStoreId());
         for (ReviewDto reviewDto : reviewDtoList){
             reviewDto.setNameData(getUserName(reviewDto.getUserId()), storeName);
+            if (countReviewImage(reviewDto.getReviewId()) == 0){
+                reviewDto.setReviewImage(null);
+            }
+            else{
+                reviewDto.setReviewImage(getReviewImage(reviewDto.getReviewId()).getUrlResource());
+            }
         }
         return reviewDtoList;
     }
@@ -109,9 +119,16 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         String storeName = getStoreName(storeId);
         for (ReviewDto reviewDto : reviewDtoList){
             reviewDto.setNameData(getUserName(reviewDto.getUserId()), storeName);
+            if (countReviewImage(reviewDto.getReviewId()) == 0){
+                reviewDto.setReviewImage(null);
+            }
+            else{
+                reviewDto.setReviewImage(getReviewImage(reviewDto.getReviewId()).getUrlResource());
+            }
         }
         return reviewDtoList;
     }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -168,7 +185,8 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     public ReviewImageDto getReviewImage(int reviewId) {
         String imageUrl;
         String imageTitle;
-        UrlResource urlResource;
+        String urlResource;
+
         String sql = "SELECT imageUrl FROM reviewimage WHERE reviewId = ?";
         String sql2 = "SELECT imageTitle FROM reviewimage WHERE reviewId = ?";
 
@@ -183,7 +201,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         try{
             imageUrl = jdbcTemplate.queryForObject(sql, String.class, reviewId);
             imageTitle = jdbcTemplate.queryForObject(sql2, String.class, reviewId);
-            urlResource = new UrlResource("file:" + Paths.get(rootPath + imageUrl));
+            urlResource = Files.readString(Paths.get(rootPath + imageUrl));
         }
         catch (Exception ex){
             throw new ReviewException("리뷰 이미지를 찾을 수 없습니다.", 404);
