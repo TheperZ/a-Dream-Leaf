@@ -28,7 +28,11 @@ struct ReviewCellVIewModel {
         self.nickname = reviewData.userName
         self.content = reviewData.body
         self.rating = reviewData.rating
-//        self.image = reviewData.imageUrl
-        self.image = nil
+        if let reviewImage = reviewData.reviewImage { // 리뷰에 사진이 포함된 경우
+            self.image = Image.base64ToImg(with: reviewImage)
+        } else {
+            self.image = nil
+        }
+        
     }
 }

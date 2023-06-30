@@ -37,14 +37,17 @@ struct ReviewViewModel {
         saveBtnTap
             .filter { editData != nil }
             .withLatestFrom(Observable.combineLatest(rating, body, image))
-            .flatMap{rating, body, image in repo.update(reviewId: editData!.reviewId, body: body, rating: rating)}
+            .flatMap{rating, body, img in repo.update(reviewId: editData!.reviewId, body: body, rating: rating, image: img)}
             .bind(to: createRequestResult)
             .disposed(by: disposeBag)
         
         // 리뷰 수정모드 시 초기값 설정
-        if editData != nil  {
-            rating.onNext(editData!.rating)
-            body.onNext(editData!.body)
+        if let data = editData {
+            rating.onNext(data.rating)
+            body.onNext(data.body)
+            if let reviewImage = data.reviewImage { // 리뷰에 이미지가 포함 된 경우
+                image.onNext(Image.base64ToImg(with: reviewImage))
+            }
         }
     }
 }

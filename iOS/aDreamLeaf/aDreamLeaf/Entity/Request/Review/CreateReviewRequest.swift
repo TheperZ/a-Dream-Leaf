@@ -25,9 +25,7 @@ class CreateReviewRequest {
         self.rating = rating
         
         if let image = image { // 이미지가 포함되어있는 경우
-            let imageData:NSData = image.pngData()! as NSData
-            let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-            self.reviewImage = strBase64
+            self.reviewImage = Image.imgToBase64(with: image)
         } else { // 이미지가 포함되지 않은 경우
             self.reviewImage = nil
         }

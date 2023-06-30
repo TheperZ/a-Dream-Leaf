@@ -134,8 +134,6 @@ struct ReviewNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 print(response.response?.statusCode)
-                                 
                                  guard let result = response.data else {return}
                                  
                                  let decoder = JSONDecoder()
@@ -223,7 +221,7 @@ struct ReviewNetwork {
         }
     }
     
-    func updateRequest(reviewId: Int, body: String, rating: Int) -> Observable<RequestResult<Void>> {
+    func updateRequest(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
@@ -242,9 +240,7 @@ struct ReviewNetwork {
                 request.timeoutInterval = 10
                 // POST 로 보낼 정보
                 
-                let reviewPost = ["firebaseToken": token, "reviewId": reviewId, "date": Date.dateToString(with: Date.now), "body": body, "rating": rating]
-                
-                let params = ["reviewPost":reviewPost]
+                let params = ["firebaseToken": token, "reviewId": reviewId, "date": Date.dateToString(with: Date.now), "body": body, "rating": rating, "reviewImage": Image.imgToBase64(with: image)]
                  
                  // httpBody 에 parameters 추가
                 do {
@@ -254,7 +250,7 @@ struct ReviewNetwork {
                     observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!"))
                 }
                 
-                AF.request(request).responseJSON{ (response) in
+                AF.request(request).response{ (response) in
                      switch response.result {
                          case .success:
                              do {

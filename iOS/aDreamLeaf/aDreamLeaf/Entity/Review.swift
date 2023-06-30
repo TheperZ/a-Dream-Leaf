@@ -17,6 +17,6 @@ class Review: Decodable {
     let date: String
     let body: String
     let rating: Int
-    let imageUrl: String?
+    let reviewImage: String?
      
 }

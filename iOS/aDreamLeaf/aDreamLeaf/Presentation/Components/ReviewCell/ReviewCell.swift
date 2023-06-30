@@ -98,7 +98,7 @@ class ReviewCell: UITableViewCell {
         
         menu.dataSource = ["리뷰 수정", "리뷰 삭제"]
         menu.anchorView = menuButton
-        menu.bottomOffset = CGPoint(x: -20, y:(menu.anchorView?.plainView.bounds.height)!)
+        menu.bottomOffset = CGPoint(x: -60, y:(menu.anchorView?.plainView.bounds.height)!)
         
     }
     
