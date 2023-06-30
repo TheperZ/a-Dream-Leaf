@@ -3,6 +3,8 @@ package com.DreamCoder.DreamLeaf.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Optional;
+
 @Getter
 @AllArgsConstructor
 public class ReviewDto {
@@ -14,6 +16,7 @@ public class ReviewDto {
     private String date;
     private String body;
     private int rating;
+    private String reviewImage;
 
     public ReviewDto(int userId, int reviewId, int storeId, String date, String body, int rating) {
         this.userId = userId;
@@ -27,5 +30,9 @@ public class ReviewDto {
     public void setNameData(String userName, String storeName){
         this.userName = userName;
         this.storeName = storeName;
+    }
+
+    public void setReviewImage(String reviewImage){
+        this.reviewImage = reviewImage;
     }
 }
