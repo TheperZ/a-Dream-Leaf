@@ -9,5 +9,5 @@ import org.springframework.core.io.UrlResource;
 public class ReviewImageDto {
     private String imageTitle;
     private String imageUrl;
-    UrlResource urlResource;
+    String urlResource;
 }
