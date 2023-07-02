@@ -12,19 +12,42 @@ import RxRelay
 struct ReviewViewModel {
     private let disposeBag = DisposeBag()
     private let storeId: Int
+    
+    let editData : Review? // 리뷰 수정 시 리뷰 데이터, 신규 작성시 nil
     let rating = BehaviorSubject<Int>(value: 5)
     let body = BehaviorSubject<String>(value: "")
-    
+    let image = BehaviorSubject<UIImage?>(value: nil)
     let saveBtnTap = PublishSubject<Void>()
     
     let createRequestResult = PublishSubject<RequestResult<Void>>()
     
-    init(storeId: Int, _ repo: ReviewRepository = ReviewRepository()) {
+    init(storeId: Int, editData: Review?, _ repo: ReviewRepository = ReviewRepository()) {
         self.storeId = storeId
+        self.editData = editData
+        
+        // 신규 리뷰 작성
         saveBtnTap
-            .withLatestFrom(Observable.combineLatest(rating, body))
-            .flatMap{rating, body in repo.create(storeId: storeId, body: body, rating: rating)}
+            .filter { editData == nil }
+            .withLatestFrom(Observable.combineLatest(rating, body, image))
+            .flatMap{rating, body, img in repo.create(storeId: storeId, body: body, rating: rating, image: img)}
             .bind(to: createRequestResult)
             .disposed(by: disposeBag)
+        
+        // 기존 리뷰 수정
+        saveBtnTap
+            .filter { editData != nil }
+            .withLatestFrom(Observable.combineLatest(rating, body, image))
+            .flatMap{rating, body, img in repo.update(reviewId: editData!.reviewId, body: body, rating: rating, image: img)}
+            .bind(to: createRequestResult)
+            .disposed(by: disposeBag)
+        
+        // 리뷰 수정모드 시 초기값 설정
+        if let data = editData {
+            rating.onNext(data.rating)
+            body.onNext(data.body)
+            if let reviewImage = data.reviewImage { // 리뷰에 이미지가 포함 된 경우
+                image.onNext(Image.base64ToImg(with: reviewImage))
+            }
+        }
     }
 }

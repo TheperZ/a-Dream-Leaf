@@ -11,15 +11,28 @@ import RxRelay
 
 struct ReviewCellVIewModel {
     let disposeBag = DisposeBag()
+    let reviewData: Review
+    let reviewId: Int
+    let storeId: Int
+    let reviewerId: Int
     let nickname: String
     let content: String
-    let rating: Double
+    let rating: Int
     let image: UIImage?
     
-    init(nickname: String, content: String, rating: Double, image: UIImage?) {
-        self.nickname = nickname
-        self.content = content
-        self.rating = rating
-        self.image = image
+    init(_ reviewData: Review) {
+        self.reviewData = reviewData
+        self.reviewId = reviewData.reviewId
+        self.storeId = reviewData.storeId
+        self.reviewerId = reviewData.userId
+        self.nickname = reviewData.userName
+        self.content = reviewData.body
+        self.rating = reviewData.rating
+        if let reviewImage = reviewData.reviewImage { // 리뷰에 사진이 포함된 경우
+            self.image = Image.base64ToImg(with: reviewImage)
+        } else {
+            self.image = nil
+        }
+        
     }
 }

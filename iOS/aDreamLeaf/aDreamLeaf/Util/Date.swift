@@ -26,4 +26,41 @@ extension Date {
             return nil
         }
     }
+    
+    static func getNowKorDateString() -> String {
+        
+        /*
+        // -----------------------------------------
+        [getNowKorDate24 메소드 설명]
+        // -----------------------------------------
+        1. 한국 시간 대로 24 시간 설정을 맞춰서 날짜 및 시간 데이터 반환
+        // -----------------------------------------
+        2. 호출 방법 : C_Util().getNowKorDate24()
+        // -----------------------------------------
+        3. 리턴 반환 : 20220413155123
+        // -----------------------------------------
+        */
+        
+        // [초기 리턴 데이터 변수 선언 실시]
+        var returnData = ""
+        
+        
+        // [한국 날짜 및 시간 데이터 반환 실시]
+        let date = Date.now
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd" // 24 시간 대 설정
+        formatter.locale = Locale(identifier: "ko_kr") // 한국 시간 지정
+        formatter.timeZone = TimeZone(abbreviation: "KST") // 한국 시간대 지정
+        
+        // [리턴 변수에 삽입 실시]
+        returnData = formatter.string(from: date) // string 형태
+        
+        // [리턴 데이터 반환 실시]
+        return returnData
+    }
+    
+    static func getNowKorDate() -> Date? {
+        return stringToDate(str: getNowKorDateString())
+    }
+
 }

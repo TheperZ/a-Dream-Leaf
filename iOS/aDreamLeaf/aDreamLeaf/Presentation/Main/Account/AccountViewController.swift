@@ -165,10 +165,11 @@ class AccountViewController: UIChartViewController {
         
         chartSetting()
         hideMoreButton()
-        datePicker.locale = Locale(identifier: "ko-KR")
-        datePicker.maximumDate = Date()
         
-        divider.backgroundColor = .gray
+        datePicker.locale = Locale(identifier: "ko-KR")
+        datePicker.date = Date.getNowKorDate() ?? Date.now
+        datePicker.maximumDate = Date.getNowKorDate()
+        print("date", Date.getNowKorDateString())
         
         addButton.backgroundColor = UIColor(named: "subColor2")
         addButton.setTitle("지출내역 추가", for: .normal)

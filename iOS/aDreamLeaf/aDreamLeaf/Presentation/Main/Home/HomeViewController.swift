@@ -105,6 +105,15 @@ class HomeViewController: UIChartViewController {
                 self.navigationController?.pushViewController(LocalRestaurantViewController(), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        nearRestCollectionView.rx.itemSelected
+            .observe(on: MainScheduler.instance)
+            .withLatestFrom(viewModel.nearStores) { return ($0, $1)}
+            .subscribe(onNext: { indexPath, list in
+                self.nearRestCollectionView.cellForItem(at: indexPath)?.isSelected = false
+                self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {

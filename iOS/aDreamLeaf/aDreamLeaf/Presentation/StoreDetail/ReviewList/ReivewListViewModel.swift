@@ -11,5 +11,45 @@ import RxRelay
 
 struct ReviewListViewModel {
     let disposeBag = DisposeBag()
-    let reviews = Observable.just([("닉네임1", "맛있게 잘 먹었습니다!", 4.5, nil),("닉네임2", "양념이 조금 짜지만 먹을만 했어요", 3.3, UIImage(named: "pizza")), ("닉네임3", "존맛이에요! 번창하세요~", 5.0, nil), ("김상명", "항상 친절하게 맞아주십니다.\n다음에도 꼭 갈게요.\n여러분도 꼭 가보세요!", 5.0, UIImage(named: "pizza2")), ("닉네임5", "제 입맛에는 너무 느끼했어요.. 아쉽네요 🥲", 2.5, nil)])
+    let storeData : Store
+    
+    let reviews = PublishSubject<[Review]>()
+    
+    //ReviewCell로 부터 온 리뷰 삭제 처리 Observe - 리뷰 ID를 전달받음
+    let reviewDeleteRequest = PublishSubject<Int>()
+    //리뷰 삭제 결과
+    let reviewDeleteResult = PublishSubject<RequestResult<Void>>()
+    
+    //리뷰 수정/삭제시 리스트 업데이트를 위한 Subject
+    let reviewListUpdateRequest = PublishSubject<Void>()
+    
+    init(storeData: Store, _ repo: ReviewRepository = ReviewRepository()) {
+        self.storeData = storeData
+        
+        //초기 리뷰 목록 가져오기
+        repo.fetchReviews(storeId: storeData.storeId)
+            .map { $0.data != nil ? $0.data! : []}
+            .bind(to: reviews)
+            .disposed(by: disposeBag)
+        
+        //리뷰 목록 업데이트시 목록 가져오기
+        reviewListUpdateRequest
+            .flatMap { repo.fetchReviews(storeId: storeData.storeId)}
+            .map { $0.data != nil ? $0.data! : []} // 에러 발생시 리뷰 빈 목록 
+            .bind(to: reviews)
+            .disposed(by: disposeBag)
+        
+        //리뷰 삭제 요청 처리
+        reviewDeleteRequest
+            .flatMap(repo.deleteReview)
+            .bind(to: reviewDeleteResult)
+            .disposed(by: disposeBag)
+        
+        //리뷰 삭제 성공 시 리뷰 목록 업데이트
+        reviewDeleteResult
+            .filter { $0.success == true }
+            .map { _ in Void() }
+            .bind(to: reviewListUpdateRequest)
+            .disposed(by: disposeBag)
+    }
 }
