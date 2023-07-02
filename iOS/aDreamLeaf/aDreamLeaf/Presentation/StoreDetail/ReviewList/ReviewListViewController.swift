@@ -41,6 +41,11 @@ class ReviewListViewController : UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.reviewListUpdateRequest.onNext(Void())
+    }
     private func bind() {
         
         tableView.rx.itemSelected

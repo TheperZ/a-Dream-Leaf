@@ -45,13 +45,12 @@ class ReviewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bind()
         attribute()
+        bind()
         layout()
     }
     
     private func bind() {
-        
         
         starButtonList.enumerated().forEach { idx, btn in
             btn.rx.tap
@@ -125,6 +124,22 @@ class ReviewViewController: UIViewController {
                 
             })
             .disposed(by: disposeBag)
+        
+        viewModel.image
+            .map { img in
+                if img == nil { // 리뷰에 포함된 이미지가 없을 때 기본 이미지 ( 사진 모양 ) 표시
+                    let photoImgConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .light, scale: .default)
+                    let photoImg = UIImage(systemName: "photo", withConfiguration: photoImgConfig)?.withRenderingMode(.alwaysTemplate)
+                    self.imageView.contentMode = .center
+                    return photoImg!
+                } else {
+                    self.imageView.contentMode = .scaleAspectFit
+                    return img!
+                }
+            }
+            .bind(to: imageView.rx.image)
+            .disposed(by: disposeBag)
+    
     }
     
     private func attribute() {
@@ -153,6 +168,9 @@ class ReviewViewController: UIViewController {
         if viewModel.editData != nil {
             textView.text = viewModel.editData!.body
             starButtonList[viewModel.editData!.rating-1].sendActions(for: .touchUpInside)
+            if let reviewImage = viewModel.editData!.reviewImage { // 리뷰에 사진이 포함된 경우
+                imageView.image = Image.base64ToImg(with: reviewImage)
+            }
         }
         
         textViewWarningLabel.text = "최소 10글자 이상 입력해주세요."
@@ -180,10 +198,7 @@ class ReviewViewController: UIViewController {
         
         imagePicker.delegate = self
         
-        let photoImgConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .light, scale: .default)
-        let photoImg = UIImage(systemName: "photo", withConfiguration: photoImgConfig)?.withRenderingMode(.alwaysTemplate)
-        imageView.image = photoImg
-        imageView.contentMode = .center
+        imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .black
         imageView.layer.cornerRadius = 5
         imageView.layer.borderColor = UIColor.gray.cgColor
@@ -244,15 +259,10 @@ extension ReviewViewController: UIImagePickerControllerDelegate, UINavigationCon
     
     // UIImagePickerController4. - 사진을 선택하거나, 카메라 촬영하고 나면 호출되는 메소드
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        print(#function, "🦋 사진선택하거나, 카메라 촬영 직후")
-        
-        /* 원본, 편집, 메타 데이터 등 - infoKey,
-         그리고 타입은 Any로 명확하게 지정되지 않았다.
-         왜냐하면 메타 데이터는 명확하기 않기 때문에 그래서 타입캐스팅이 필요한 부분이다. */
         
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            self.imageView.contentMode = .scaleAspectFit
             self.imageView.image = image
+            viewModel.image.onNext(image)
             dismiss(animated: true)
         }
     }
