@@ -31,7 +31,7 @@ public class StoreRepositoryImpl implements StoreRepository{
     @Transactional(rollbackFor = Exception.class)
     public Optional<StoreDto> save(StoreReq storeReq) {
 
-        //음식점명, 위경도가 동일한 데이터가 있는지 확인
+        //음식점명, 위경도가 동일한 데이터가 있는지 확인(이 경우 임시로 같은 가게인 경우로 간주)
         String checkSql="select * from store where storeName=? and wgs84Lat=? and wgs84Logt=?";
         List<StoreDto> checkForDuplicate=template.query(checkSql, storeDtoRowMapper,
                 storeReq.getStoreName(),
@@ -127,9 +127,6 @@ public class StoreRepositoryImpl implements StoreRepository{
     public List<SimpleStoreDto> findByKeyword(String keyword){
         String sql="select *, 0.0 AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by totalRating desc";
         List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
-        if(result.size()==0){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
         return result;
     }
 
@@ -141,9 +138,6 @@ public class StoreRepositoryImpl implements StoreRepository{
                 "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by distance";
         log.info("lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
         List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
-        if(result.size()==0){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
         return result;
     }
 
@@ -153,14 +147,12 @@ public class StoreRepositoryImpl implements StoreRepository{
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
                 "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store having distance<2 order by distance";
         List<SimpleStoreDto> result=template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
-        if(result.size()==0){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
         return result;
     }
 
+
 /*    public void updateGrade(StoreHygradeReq storeHygradeReq){
-        String sql="update store set grade=? where storeName=? and wgs84Lat=? and wgs84Logt=?";
+        String sql="update store set grade=? where storeName=? and wgs84Lat=? and wgs84Logt=?"; //이 자리에 같은 가맹점을 식별하는 코드 작성
         template.update(sql, storeHygradeReq.getGrade(),
                 storeHygradeReq.getStoreName(),
                 storeHygradeReq.getWgs84Lat(),
