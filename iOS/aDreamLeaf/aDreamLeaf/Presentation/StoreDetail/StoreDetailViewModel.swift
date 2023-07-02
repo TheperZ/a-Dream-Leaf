@@ -15,6 +15,7 @@ struct StoreDetailViewModel {
     let storeId: Int
     
     let detail = PublishSubject<Store>()
+    let fetchDetailResult = PublishSubject<RequestResult<Store>>()
     
     let fetchReviewRequest = BehaviorSubject(value: Void())
     let fetchReviewResult = PublishSubject<RequestResult<[Review]>>()
@@ -24,7 +25,11 @@ struct StoreDetailViewModel {
         
         //가게 정보
         storeRepo.fetchDetail(storeId: storeId)
-            .filter { $0.data != nil }
+            .bind(to: fetchDetailResult)
+            .disposed(by: disposeBag)
+        
+        fetchDetailResult
+            .filter { $0.success }
             .map { $0.data! }
             .bind(to: detail)
             .disposed(by: disposeBag)
