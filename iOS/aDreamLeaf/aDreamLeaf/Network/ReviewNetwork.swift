@@ -29,7 +29,7 @@ struct ReviewNetwork {
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.timeoutInterval = 10
                 // POST 로 보낼 정보
-                let params = CreateReviewRequest(firebaseToken: token, storeId: 6152316, date: Date.now, body: body, rating: rating, image: image).toDict()
+                let params = CreateReviewRequest(firebaseToken: token, storeId: storeId, date: Date.now, body: body, rating: rating, image: image).toDict()
                  
                  // httpBody 에 parameters 추가
                 do {
