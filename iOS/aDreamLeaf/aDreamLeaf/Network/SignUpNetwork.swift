@@ -92,11 +92,11 @@ struct SignUpNetwork {
                                                      case 400 : // Bad Request. 입력된 정보가 올바르지 않음
                                                          let data = try decoder.decode(ErrorResponse.self, from: result)
                                                          print("SignUp Error : \(data.ErrorMessage)")
-                                                         observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                                         observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
                                                      case 503 : // Service Unavailable.
                                                          let data = try decoder.decode(ErrorResponse.self, from: result)
                                                          print("SignUp Error : Server Error - \(data.ErrorMessage)")
-                                                         observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                                         observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
                                                      default: // 500 - ServerError ...
                                                          print("SignUp Error - error with response status : \(status)")
                                                          observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
