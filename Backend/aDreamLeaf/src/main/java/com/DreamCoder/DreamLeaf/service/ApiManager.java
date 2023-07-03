@@ -342,7 +342,6 @@ public class ApiManager {
                             lotno,
                             lat, logt);
 
-                    //storeRepository.updateGrade(infoObj);
                     storeHygradeRepository.save(infoObj);
 
                 }

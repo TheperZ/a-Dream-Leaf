@@ -151,17 +151,6 @@ public class StoreRepositoryImpl implements StoreRepository{
     }
 
 
-/*    public void updateGrade(StoreHygradeReq storeHygradeReq){
-        String sql="update store set grade=? where storeName=? and wgs84Lat=? and wgs84Logt=?"; //이 자리에 같은 가맹점을 식별하는 코드 작성
-        template.update(sql, storeHygradeReq.getGrade(),
-                storeHygradeReq.getStoreName(),
-                storeHygradeReq.getWgs84Lat(),
-                storeHygradeReq.getWgs84Logt());
-
-    }*/
-
-
-
 
     private RowMapper<StoreDto> storeDtoRowMapper=(rs, rowNum) ->
             StoreDto.builder()
