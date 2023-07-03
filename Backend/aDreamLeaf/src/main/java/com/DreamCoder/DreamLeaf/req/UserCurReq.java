@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserCurReq {
-    private double curLat;
-    private double curLogt;
+    private Double curLat;
+    private Double curLogt;
 }
