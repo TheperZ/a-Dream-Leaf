@@ -93,10 +93,8 @@ struct LoginNetwork {
                                                      let data = try decoder.decode(ErrorResponse.self, from: result)
                                                      
                                                      print("Login Error: ", data.ErrorMessage) // 로그인 에러 원인 출력
-                                                     observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                                     observer.onNext(RequestResult<User>(success: false, msg: "\(data.ErrorMessage)"))
                                              }
-                                             
-                                         } else {
                                              
                                          }
                                          

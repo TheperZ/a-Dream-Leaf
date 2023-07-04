@@ -43,10 +43,30 @@ struct ReviewNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 observer.onNext(RequestResult(success: true, msg: nil))
-                             } catch(let err) {
-                                 print(err)
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                 if let status = response.response?.statusCode {
+                                     guard let result = response.data else {return}
+                                     
+                                     let decoder = JSONDecoder()
+                                     
+                                     switch(status){
+                                         case 201: // 리뷰 작성 성공
+                                             observer.onNext(RequestResult(success: true, msg: nil))
+                                         case 403 : // 작성 권한 없음
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             print("Review Create Error : 403 - \(data.ErrorMessage)")
+                                             observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
+                                         case 404 : // 가게 찾을 수 없음
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             print("Review Create Error : 404 - \(data.ErrorMessage)")
+                                             observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
+                                         default: // 500 - Firebase 토큰 오류 등 ...
+                                             print("Review Create Error - error with response status : \(status)")
+                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                 }
+                             } catch(let error) {
+                                print("Review Create Error - Decoding Error : ", error)
+                                observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                              }
                                  
                          case .failure(let error):
@@ -85,17 +105,31 @@ struct ReviewNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 print(response.response?.statusCode)
-                                 
-                                 guard let result = response.data else {return}
-                                 
-                                 let decoder = JSONDecoder()
-                                 let data = try decoder.decode([Review].self, from: result)
-                                 
-                                 observer.onNext(RequestResult<[Review]>(success: true, msg: nil, data: data))
-                             } catch(let err) {
-                                 print(err)
-                                 observer.onNext(RequestResult<[Review]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                                 if let status = response.response?.statusCode {
+                                     guard let result = response.data else {return}
+                                     
+                                     let decoder = JSONDecoder()
+                                     
+                                     switch(status){
+                                         case 200: // 리뷰 조회 성공
+                                            guard let result = response.data else {return}
+                                                                              
+                                            let decoder = JSONDecoder()
+                                            let data = try decoder.decode([Review].self, from: result)
+                                              
+                                            observer.onNext(RequestResult<[Review]>(success: true, msg: nil, data: data))
+                                         case 404 : // 가게의 리뷰를 찾을 수 없음
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             print("Fetch Recent Review Error : 404 - \(data.ErrorMessage)")
+                                             observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
+                                         default: // 500 - Firebase 토큰 오류 등 ...
+                                             print("Fetch Recent Review Error - error with response status : \(status)")
+                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                 }
+                             } catch(let error) {
+                                print("Fetch Recent Review Error - Decoding Error : ", error)
+                                observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                              }
                                  
                          case .failure(let error):
@@ -134,15 +168,31 @@ struct ReviewNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 guard let result = response.data else {return}
-                                 
-                                 let decoder = JSONDecoder()
-                                 let data = try decoder.decode([Review].self, from: result)
-                                 
-                                 observer.onNext(RequestResult<[Review]>(success: true, msg: nil, data: data))
-                             } catch(let err) {
-                                 print(err)
-                                 observer.onNext(RequestResult<[Review]>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!", data: nil))
+                                 if let status = response.response?.statusCode {
+                                     guard let result = response.data else {return}
+                                     
+                                     let decoder = JSONDecoder()
+                                     
+                                     switch(status){
+                                         case 200: // 리뷰 조회 성공
+                                             guard let result = response.data else {return}
+                                                                               
+                                             let decoder = JSONDecoder()
+                                             let data = try decoder.decode([Review].self, from: result)
+                                               
+                                             observer.onNext(RequestResult<[Review]>(success: true, msg: nil, data: data))
+                                         case 404 : // 가게의 리뷰를 찾을 수 없음
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             print("Fetch Total Review Error : 404 - \(data.ErrorMessage)")
+                                             observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
+                                         default: // 500 - Firebase 토큰 오류 등 ...
+                                             print("Fetch Total Review Error - error with response status : \(status)")
+                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                 }
+                             } catch(let error) {
+                                print("Fetch Total Review Error - Decoding Error : ", error)
+                                observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                              }
                                  
                          case .failure(let error):
@@ -254,10 +304,30 @@ struct ReviewNetwork {
                      switch response.result {
                          case .success:
                              do {
-                                 observer.onNext(RequestResult(success: true, msg: nil))
-                             } catch(let err) {
-                                 print(err)
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                 if let status = response.response?.statusCode {
+                                     guard let result = response.data else {return}
+                                     
+                                     let decoder = JSONDecoder()
+                                     
+                                     switch(status){
+                                         case 200: // 리뷰 수정 성공
+                                             observer.onNext(RequestResult(success: true, msg: nil))
+                                         case 403 : // 작성 권한 없음 - 타인의 리뷰 수정
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             print("Review Update Error : 403 - \(data.ErrorMessage)")
+                                             observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
+                                         case 404 : // 가게 찾을 수 없음
+                                             let data = try decoder.decode(ErrorResponse.self, from: result)
+                                             print("Review Update Error : 404 - \(data.ErrorMessage)")
+                                             observer.onNext(RequestResult(success: false, msg: "\(data.ErrorMessage)"))
+                                         default: // 500 - Firebase 토큰 오류 등 ...
+                                             print("Review Update Error - error with response status : \(status)")
+                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
+                                     }
+                                 }
+                             } catch(let error) {
+                                print("Review Update Error - Decoding Error : ", error)
+                                observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                              }
                                  
                          case .failure(let error):

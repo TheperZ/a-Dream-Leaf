@@ -65,6 +65,21 @@ class StoreDetailViewController: UIViewController {
     
     
     private func bind() {
+        
+        viewModel.fetchDetailResult
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {
+                if $0.success == false {
+                    let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+        
         viewModel.reviews
             .bind(to: reviewTableView.rx.items) { tv, row, review in
                 let indexPath = IndexPath(row: row, section: 0)

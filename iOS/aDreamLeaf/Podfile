@@ -14,7 +14,7 @@ target 'aDreamLeaf' do
     pod 'FirebaseAuth'
     pod 'FirebaseFirestore'
     pod 'Firebase/Messaging'
-    pod 'RxAlamofire'
+    pod 'Alamofire'
     pod 'NMapsMap'
     pod 'DropDown'
     

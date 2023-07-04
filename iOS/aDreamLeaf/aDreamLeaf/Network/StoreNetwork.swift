@@ -21,7 +21,7 @@ struct StoreNetwork {
             request.timeoutInterval = 10
                 
             // POST 로 보낼 정보
-            let params = LocationManager.permitionCheck() ? ["curLat": LocationManager.getLatitude() ?? LocationManager.getTempLat(), "curLogt": LocationManager.getLongitude() ?? LocationManager.getTempLogt()] : [:]
+            let params =  LocationManager.permitionCheck() ? ["curLat": LocationManager.getLatitude() ?? LocationManager.getTempLat(), "curLogt": LocationManager.getLongitude() ?? LocationManager.getTempLogt()] : [:]
              
              // httpBody 에 parameters 추가
             do {
@@ -48,9 +48,10 @@ struct StoreNetwork {
                                          guard let result = response.data else { return }
                                          let decoder = JSONDecoder()
                                          let data = try decoder.decode(ErrorResponse.self, from: result)
+                                         print("Search Store Error - ",data.ErrorMessage)
                                          observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
                                      default:
-                                         print("Account Error - Unknown status code: \(statusCode)")
+                                         print("Search Stroe Error - Unknown status code: \(statusCode)")
                                          observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                                  }
                              }
@@ -109,9 +110,10 @@ struct StoreNetwork {
                                          guard let result = response.data else { return }
                                          let decoder = JSONDecoder()
                                          let data = try decoder.decode(ErrorResponse.self, from: result)
+                                         print("Search Store with Location Error - ",data.ErrorMessage)
                                          observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
                                      default:
-                                         print("Account Error - Unknown status code: \(statusCode)")
+                                         print("Search Store with Location Error - Unknown status code: \(statusCode)")
                                          observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                                  }
                              }
@@ -172,7 +174,7 @@ struct StoreNetwork {
                                          let data = try decoder.decode(ErrorResponse.self, from: result)
                                          observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
                                      default:
-                                         print("Account Error - Unknown status code: \(statusCode)")
+                                         print("Store Detail Error - Unknown status code: \(statusCode)")
                                          observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
                                  }
                              }

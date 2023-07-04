@@ -13,6 +13,7 @@
 		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
 		BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB82A1931BC0083880F /* StoreRepository.swift */; };
 		BF0FCEAA2A4EDDFD0052B49C /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0FCEA92A4EDDFD0052B49C /* Image.swift */; };
+		BF0FCEBE2A5450CC0052B49C /* KakaoAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0FCEBD2A5450CC0052B49C /* KakaoAddress.swift */; };
 		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
 		BF15AB2829D92F6600014E05 /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */; };
 		BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */; };
@@ -108,6 +109,7 @@
 		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		BF09DBB82A1931BC0083880F /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
 		BF0FCEA92A4EDDFD0052B49C /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		BF0FCEBD2A5450CC0052B49C /* KakaoAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoAddress.swift; sourceTree = "<group>"; };
 		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
 		BF15AB2729D92F6600014E05 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		BF15AB2C29D93CEE00014E05 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
@@ -601,6 +603,7 @@
 				BF09DBB62A1930E40083880F /* Store.swift */,
 				BFF042E62A1BA79D001FCB88 /* Review.swift */,
 				BFF042F12A2329EA001FCB88 /* AlarmState.swift */,
+				BF0FCEBD2A5450CC0052B49C /* KakaoAddress.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -757,6 +760,7 @@
 				BFB0A90829D2C66D003D3E6E /* UIView.swift in Sources */,
 				BFB0A8FE29D28906003D3E6E /* RestaurantCellViewModel.swift in Sources */,
 				BFBD10482A1749FC002EE950 /* BudgetRequest.swift in Sources */,
+				BF0FCEBE2A5450CC0052B49C /* KakaoAddress.swift in Sources */,
 				BFCC911129DE9D6A00A37470 /* Number.swift in Sources */,
 				BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */,
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
