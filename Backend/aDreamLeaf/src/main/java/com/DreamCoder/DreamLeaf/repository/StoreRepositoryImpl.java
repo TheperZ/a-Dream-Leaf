@@ -4,6 +4,7 @@ import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
+import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class StoreRepositoryImpl implements StoreRepository{
     @Transactional(rollbackFor = Exception.class)
     public Optional<StoreDto> save(StoreReq storeReq) {
 
-        //음식점명, 위경도가 동일한 데이터가 있는지 확인
+        //음식점명, 위경도가 동일한 데이터가 있는지 확인(이 경우 임시로 같은 가게인 경우로 간주)
         String checkSql="select * from store where storeName=? and wgs84Lat=? and wgs84Logt=?";
         List<StoreDto> checkForDuplicate=template.query(checkSql, storeDtoRowMapper,
                 storeReq.getStoreName(),
@@ -126,9 +127,6 @@ public class StoreRepositoryImpl implements StoreRepository{
     public List<SimpleStoreDto> findByKeyword(String keyword){
         String sql="select *, 0.0 AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by totalRating desc";
         List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
-        if(result.size()==0){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
         return result;
     }
 
@@ -140,9 +138,6 @@ public class StoreRepositoryImpl implements StoreRepository{
                 "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by distance";
         log.info("lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
         List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
-        if(result.size()==0){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
         return result;
     }
 
@@ -152,12 +147,8 @@ public class StoreRepositoryImpl implements StoreRepository{
                 "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
                 "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store having distance<2 order by distance";
         List<SimpleStoreDto> result=template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat());
-        if(result.size()==0){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
         return result;
     }
-
 
 
 
@@ -171,7 +162,7 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .lotAddr(rs.getString("lotAddr"))
                     .wgs84Lat(rs.getDouble("wgs84Lat"))
                     .wgs84Logt(rs.getDouble("wgs84Logt"))
-                    .payment(rs.getInt("payment"))          //->storeType(rs.getInt("payment")
+                    .payment(rs.getInt("payment"))          //->storeType(rs.getInt("payment"))
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
                     .build();
