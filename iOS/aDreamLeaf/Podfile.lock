@@ -741,11 +741,6 @@ PODS:
   - NMapsMap (3.16.2):
     - NMapsGeometry
   - PromisesObjC (2.2.0)
-  - RxAlamofire (6.1.1):
-    - RxAlamofire/Core (= 6.1.1)
-  - RxAlamofire/Core (6.1.1):
-    - Alamofire (~> 5.4)
-    - RxSwift (~> 6.0)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -755,6 +750,7 @@ PODS:
   - SwiftAlgorithms (1.0.0)
 
 DEPENDENCIES:
+  - Alamofire
   - Charts
   - DropDown
   - Firebase/Messaging
@@ -762,7 +758,6 @@ DEPENDENCIES:
   - FirebaseFirestore
   - MonthYearPicker (~> 4.0.2)
   - NMapsMap
-  - RxAlamofire
   - RxCocoa (= 6.5.0)
   - RxSwift (= 6.5.0)
 
@@ -792,7 +787,6 @@ SPEC REPOS:
     - NMapsGeometry
     - NMapsMap
     - PromisesObjC
-    - RxAlamofire
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -823,12 +817,11 @@ SPEC CHECKSUMS:
   NMapsGeometry: 53c573ead66466681cf123f99f698dc8071a4b83
   NMapsMap: aaa64717249b06ae82c3a3addb3a01f0e33100ab
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 
-PODFILE CHECKSUM: c5273adf2e5d0dc90194be173229bdcf9408749a
+PODFILE CHECKSUM: 6d4d1d979beaf9d619496228e5d6f8771035ce8c
 
 COCOAPODS: 1.11.3
