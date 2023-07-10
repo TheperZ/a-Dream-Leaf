@@ -48,7 +48,7 @@ public class SignUpRepositoryImpl implements SignUpRepository{
     public String save(SignUpCreateDto signUpCreateDto) {
         String email = signUpCreateDto.getEmail();
         if (!isValidEmail(email)) {
-            throw new SignUpException("Bad Request. 입력된 정보가 올바르지 않음", 400);
+            throw new SignUpException("입력된 정보가 올바르지 않습니다.", 400);
         }
         jdbcTemplate.execute("INSERT INTO USER(email,uid,userName) VALUES('"+
                 signUpCreateDto.getEmail()+
@@ -66,7 +66,7 @@ public class SignUpRepositoryImpl implements SignUpRepository{
         try{
             loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE userId = "+id,loginDtoRowMapper);
         } catch(EmptyResultDataAccessException ex){
-            throw new SignUpException("Not found. 유저 정보를 찾을 수 없음",404);
+            throw new SignUpException("유저 정보를 찾을 수 없습니다.",404);
         }
 
         return loginDto;

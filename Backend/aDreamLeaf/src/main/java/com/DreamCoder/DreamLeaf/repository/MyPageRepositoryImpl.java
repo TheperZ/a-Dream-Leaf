@@ -36,7 +36,7 @@ public class MyPageRepositoryImpl implements MyPageRepository{
         MyPageDelDto2 myPageDelDto2 = jdbcTemplate.queryForObject("SELECT userId FROM USER WHERE userId = "+ myPageDelDto.getUserId(),myPageDelDto2RowMapper);
 
         if (writerId != myPageDelDto2.getUserId()){
-            throw new MyPageException("Forbidden. 삭제 권한 없음", 403);
+            throw new MyPageException("삭제 권한이 없습니다.", 403);
         }
 
         try{
@@ -44,7 +44,7 @@ public class MyPageRepositoryImpl implements MyPageRepository{
             jdbcTemplate.update(sql);
         }
         catch(Exception e){
-            throw new MyPageException("Not Found. 사용자 정보를 찾을 수 없음", 404);
+            throw new MyPageException("사용자 정보를 찾을 수 없습니다.", 404);
         }
 
         return "No Content. 사용자 계정 삭제 완료";
@@ -60,12 +60,12 @@ public class MyPageRepositoryImpl implements MyPageRepository{
                     ,myPageDtoRowMapper);
         }
         catch(EmptyResultDataAccessException ex){
-            throw new MyPageException("Not found. 사용자 정보를 찾을 수 없음", 404);
+            throw new MyPageException("사용자 정보를 찾을 수 없습니다.", 404);
         }
 
         int writerId = myPageDto.getUserId();
         if (writerId != id){
-            throw new MyPageException("Forbidden. 조회 권한 없음", 403);
+            throw new MyPageException("조회 권한이 없습니다.", 403);
         }
 
         return myPageDto;
