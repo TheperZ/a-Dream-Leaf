@@ -63,7 +63,7 @@ public class AlarmService {
         return alarmExistDto;
     }
 
-    @Scheduled(cron = "0 45 00 * * *")
+    @Scheduled(cron = "0 00 20 * * *")
     public void sending() throws FirebaseMessagingException {
         String topic = "account";
         Message message = Message.builder().setNotification(
