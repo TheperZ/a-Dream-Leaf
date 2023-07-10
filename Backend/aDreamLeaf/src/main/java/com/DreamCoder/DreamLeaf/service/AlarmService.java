@@ -69,7 +69,7 @@ public class AlarmService {
         Message message = Message.builder().setNotification(
                         Notification.builder()
                                 .setTitle("오늘의 가계부! 작성하셨나요?")
-                                .setBody("하루가 마무리 되어가고 있습니다! 좋은 하루 되셨나요? 오늘의 가계부를 작성해주세요!")
+                                .setBody("오늘 하루 잘 보내셨나요?\n오늘의 가계부를 작성해 주세요!")
                                 .build())
                 .setTopic(topic)
                 .build();
