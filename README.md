@@ -63,7 +63,7 @@
 ### BackEnd
 [![AshRainK](https://avatars.githubusercontent.com/u/90693056?v=3&s=100)](https://github.com/SunEom)  | <a href="https://github.com/K-Y-Hoo"><img src="https://avatars.githubusercontent.com/u/127609484?v=4" height="100" width="100" ></a> | <a href="https://github.com/TheperZ"><img src="https://avatars.githubusercontent.com/u/94631956?v=3&s=100" height="100" width="100" ></a>  | <a href="https://github.com/changzin"><img src="https://avatars.githubusercontent.com/u/114674059?v=4" height="100" width="100" ></a> |
 |---|---|---|---|
-|[AshRainK](https://github.com/AshRainK) | [김윤후](https://github.com/K-Y-Hoo) | [TheperZ](https://github.com/TheperZ) | [changzin](https://github.com/changzin) |
+|[AshRainK](https://github.com/AshRainK) | [K-Y-Hoo](https://github.com/K-Y-Hoo) | [TheperZ](https://github.com/TheperZ) | [changzin](https://github.com/changzin) |
 
 
 
