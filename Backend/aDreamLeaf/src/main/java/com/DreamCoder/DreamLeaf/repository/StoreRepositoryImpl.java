@@ -4,10 +4,12 @@ import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
-import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
+import lombok.Builder;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -150,7 +153,76 @@ public class StoreRepositoryImpl implements StoreRepository{
         return result;
     }
 
+    //여기부터는 api 병합 관련 로직
+    @Override
+    public void checkAndMerge(){
+        String sql="select a.storeName as aStore, b.storeName as bStore, a.wgs84Lat, a.wgs84Logt " +
+                "from (select * from store where payment=0)a, (select * from store where payment=1)b " +
+                "where a.wgs84Lat=b.wgs84Lat and a.wgs84Logt=b.wgs84Logt";
+        List<CheckSameStore> result=template.query(sql, checkSameStoreRowMapper);
+        for(CheckSameStore s:result){
+            if(isSameStore(s)){
+                log.info("mergeInfo: aStore={}, bStore={}", s.getAStore(), s.getBStore());
+                mergeStore(s);
+            }
+        }
+    }
 
+    public double findSimilarity(String x, String y) {
+
+        double maxLength = Double.max(x.length(), y.length());
+        LevenshteinDistance ld=new LevenshteinDistance();
+        if (maxLength > 0) {
+            // 필요한 경우 선택적으로 대소문자를 무시합니다.
+            return (maxLength - ld.apply(x, y)) / maxLength;
+        }
+        return 1.0;
+    }
+
+
+    public boolean isSameStore(CheckSameStore s){
+
+        Map<String, String> degenerateCase=Map.ofEntries(
+                Map.entry("꼬꼬불장작 동탄나루점", "참나무로구운누룽통닭꼬꼬불장작동탄나루점"),
+                Map.entry("현일병의피자&치킨군단", "현일병의 피자군단"),
+                Map.entry("벨라로사", "벨라로사/주식회사 우리요리"),
+                Map.entry("아고라 샐러드", "아고라 샐러드(Agora salad)"),
+                Map.entry("네네치킨앤봉구스밥버거", "네네치킨앤봉구스밥버거신천점(네네치킨&봉구스밥버거"),
+                Map.entry("휴반어스", "휴반"),
+                Map.entry("생고기제작소 양주옥정점", "생고기제작소"),
+                Map.entry("햇살머믄꼬마김밥 향남점", "햇살머믄꼬마김밥"),
+                Map.entry("돌체도노", "돌체도노(Dolce dono)")
+        );
+
+
+        if(findSimilarity(s.getAStore(), s.getBStore())>=0.7){
+            return true;
+        }
+        else if(degenerateCase.get(s.getAStore())!=null && degenerateCase.get(s.getAStore()).equals(s.getBStore())){
+            return true;
+        }
+        return false;
+    }
+
+    private void mergeStore(CheckSameStore s){
+        String usql="update store set payment=2 where storeName=? and wgs84Lat=? and wgs84Logt=?";
+        template.update(usql, s.getAStore(), s.getWgs84Lat(), s.getWgs84Logt());
+        String dsql="delete from store where storeName=? and wgs84Lat=? and wgs84Logt=?";
+        template.update(dsql, s.getBStore(), s.getWgs84Lat(), s.getWgs84Logt());
+    }
+
+    @Builder
+    @Data
+    public static class CheckSameStore{
+        private String aStore;
+        private String bStore;
+        private double wgs84Lat;
+        private double wgs84Logt;
+    }
+
+
+
+    //여기부터는 rowmapper
 
     private RowMapper<StoreDto> storeDtoRowMapper=(rs, rowNum) ->
             StoreDto.builder()
@@ -191,6 +263,13 @@ public class StoreRepositoryImpl implements StoreRepository{
                     .prodName(rs.getString("prodName"))
                     .prodTarget(rs.getString("prodTarget"))
                     .totalRating(rs.getDouble("totalRating"))
+                    .build();
+    private RowMapper<CheckSameStore> checkSameStoreRowMapper=(rs, rowNum)->
+            CheckSameStore.builder()
+                    .aStore(rs.getString("aStore"))
+                    .bStore(rs.getString("bStore"))
+                    .wgs84Lat(rs.getDouble("wgs84Lat"))
+                    .wgs84Logt(rs.getDouble("wgs84Logt"))
                     .build();
 
 
