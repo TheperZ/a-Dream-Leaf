@@ -213,7 +213,7 @@ public class StoreRepositoryImpl implements StoreRepository{
 
     @Builder
     @Data
-    public static class CheckSameStore{
+    static class CheckSameStore{
         private String aStore;
         private String bStore;
         private double wgs84Lat;
