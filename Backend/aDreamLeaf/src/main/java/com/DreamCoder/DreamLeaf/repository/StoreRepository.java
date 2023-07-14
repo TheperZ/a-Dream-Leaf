@@ -20,4 +20,6 @@ public interface StoreRepository {
     Boolean hasAnotherType(StoreReq forCheck);
 
     public void updatePaymentTo2(StoreReq storeReq);
+
+    public void checkAndMerge();
 }
