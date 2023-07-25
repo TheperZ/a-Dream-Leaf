@@ -10,8 +10,8 @@ class KakaoAddressResponse: Decodable {
 }
 
 class KakaoAddress: Decodable {
-    let road_address: KakaoAddressData
-    let address: KakaoAddressData
+    let road_address: KakaoAddressData?
+    let address: KakaoAddressData?
 }
 
 class KakaoAddressData: Decodable {
