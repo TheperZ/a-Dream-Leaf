@@ -151,7 +151,7 @@ class LocalRestaurantViewController : UIViewController {
         checkBoxView.addSubview(buttonStackView)
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        [allButton, cardButton, goodButton].forEach {
+        [allButton, goodButton, cardButton].forEach {
             buttonStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }

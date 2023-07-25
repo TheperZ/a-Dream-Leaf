@@ -16,7 +16,7 @@ struct HomeViewModel {
     
     init(_ storeRepo: StoreRepository = StoreRepository()) {
         storeRepo
-            .searchNearStore(lat: LocationManager.getTempLat(), long: LocationManager.getTempLogt())
+            .searchNearStore(lat: LocationManager.getLatitude() ?? 0.0, long: LocationManager.getLongitude() ?? 0.0)
             .map { $0.data ?? []}
             .map { $0.count > 2 ? Array($0[...2]) : $0 }
             .bind(to: nearStores)

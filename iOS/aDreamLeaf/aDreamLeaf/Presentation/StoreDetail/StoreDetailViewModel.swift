@@ -47,6 +47,13 @@ struct StoreDetailViewModel {
             .bind(to: reviews)
             .disposed(by: disposeBag)
         
+        
+        
+        detail.subscribe(onNext: {
+            print($0.storeType)
+        })
+        .disposed(by: disposeBag)
+        
     
     }
 }

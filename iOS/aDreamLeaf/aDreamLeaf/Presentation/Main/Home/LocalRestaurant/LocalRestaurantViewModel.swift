@@ -45,7 +45,7 @@ struct LocalRestaurantViewModel {
 //        }
         
         
-        Observable.just((LocationManager.getTempLat(), LocationManager.getTempLogt()))
+        Observable.just((LocationManager.getLatitude() ?? 0.0 , LocationManager.getLongitude() ?? 0.0))
             .map { ($0.0, $0.1) }
             .flatMap(kakaoRepo.getAddressKakao)
             .bind(to: address)
@@ -58,13 +58,13 @@ struct LocalRestaurantViewModel {
         
         cardButtonTap
             .withLatestFrom(allList)
-            .map { $0.filter { $0.storeType == 0 || $0.storeType == 2 }}
+            .map { $0.filter { $0.storeType == 0 || $0.storeType == 1 }}
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
         goodButtonTap
             .withLatestFrom(allList)
-            .map { $0.filter { $0.storeType == 0 || $0.storeType == 1 }}
+            .map { $0.filter { $0.storeType == 0 || $0.storeType == 2 }}
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
@@ -72,7 +72,7 @@ struct LocalRestaurantViewModel {
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
-        storeRepo.searchNearStore(lat: LocationManager.getTempLat(), long: LocationManager.getTempLogt())
+        storeRepo.searchNearStore(lat: LocationManager.getLatitude() ?? 0.0, long: LocationManager.getLongitude() ?? 0.0 )
             .map { $0.data ?? [] }
             .bind(to: allList)
             .disposed(by: disposeBag)

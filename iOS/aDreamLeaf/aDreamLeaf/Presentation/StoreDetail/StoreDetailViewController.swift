@@ -160,28 +160,19 @@ class StoreDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { $0.prodName }
-            .subscribe(onNext: { service in
-                if service == nil {
+            .subscribe(onNext: { detailData in
+                if detailData.storeType == 1 {
                     self.serviceLabel.isHidden = true
-                } else {
-                    self.serviceLabel.text = "🌱 제공 혜택 : \(service!)"
-                    self.serviceLabel.isHidden = false
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel.detail
-            .map { $0.prodTarget }
-            .subscribe(onNext: { condition in
-                if condition == nil {
                     self.serviceConditionLabel.isHidden = true
                 } else {
-                    self.serviceConditionLabel.text = "✅ 제공 조건 : \(condition!)"
+                    self.serviceLabel.text = "🌱 제공 혜택 : \(detailData.prodName ?? "-")"
+                    self.serviceLabel.isHidden = false
+                    self.serviceConditionLabel.text = "✅ 제공 조건 : \(detailData.prodTarget ?? "-")"
                     self.serviceConditionLabel.isHidden = false
                 }
             })
             .disposed(by: disposeBag)
+        
         
         viewModel.detail
             .observe(on: MainScheduler.instance)
