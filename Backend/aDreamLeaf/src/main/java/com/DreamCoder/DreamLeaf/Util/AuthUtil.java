@@ -19,7 +19,7 @@ public class AuthUtil {
         String uid = decodedToken.getUid();
         int id = -1;
         try{
-            id = jdbcTemplate.queryForObject("SELECT userId FROM USER WHERE uid = '"+uid+"'",Integer.class);
+            id = jdbcTemplate.queryForObject("SELECT userId FROM user WHERE uid = '"+uid+"'",Integer.class);
         } catch(EmptyResultDataAccessException error){
             id = -1;
         }

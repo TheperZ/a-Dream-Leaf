@@ -8,6 +8,7 @@ import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @Slf4j
 @Repository
+@RequiredArgsConstructor
 public class StoreRepositoryImpl implements StoreRepository{
 
     @Autowired
@@ -213,7 +215,7 @@ public class StoreRepositoryImpl implements StoreRepository{
     }
 
     public String checkHygrade(String storeName, double wgs84Lat, double wgs84Logt){
-        String checkSql="select a.storeName, a.grade, a.wgs84Lat, a.wgs84Logt from storeHygrade as a where wgs84Lat=? and wgs84Logt=?";
+        String checkSql="select a.storeName, a.grade, a.wgs84Lat, a.wgs84Logt from storehygrade as a where wgs84Lat=? and wgs84Logt=?";
         List<CheckSameStoreHygrade> res=template.query(checkSql, checkSameStoreHygradeRowMapper, wgs84Lat, wgs84Logt);
         Map<String, String> degenerateCase2=Map.ofEntries(
                 Map.entry("스트릿츄러스 롯데몰수원점","스트릿츄러스수원롯데몰"),

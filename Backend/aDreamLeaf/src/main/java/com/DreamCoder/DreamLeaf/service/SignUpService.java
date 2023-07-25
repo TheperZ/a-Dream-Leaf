@@ -6,6 +6,7 @@ import com.DreamCoder.DreamLeaf.dto.LoginDto;
 import com.DreamCoder.DreamLeaf.repository.SignUpRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SignUpService {
 
+    @Autowired
     private final SignUpRepository SignUpRepositoryImpl;
 
     /*public SignUpDto create(SignUpCreateDto signUpCreateDto){

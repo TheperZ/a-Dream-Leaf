@@ -4,6 +4,7 @@ import com.DreamCoder.DreamLeaf.dto.MyPageDelDto2;
 import com.DreamCoder.DreamLeaf.dto.MyPageDto;
 import com.DreamCoder.DreamLeaf.dto.MyPageDelDto;
 import com.DreamCoder.DreamLeaf.exception.MyPageException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@RequiredArgsConstructor
 public class MyPageRepositoryImpl implements MyPageRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -33,14 +35,14 @@ public class MyPageRepositoryImpl implements MyPageRepository{
 
         int writerId = myPageDelDto.getUserId();
 
-        MyPageDelDto2 myPageDelDto2 = jdbcTemplate.queryForObject("SELECT userId FROM USER WHERE userId = "+ myPageDelDto.getUserId(),myPageDelDto2RowMapper);
+        MyPageDelDto2 myPageDelDto2 = jdbcTemplate.queryForObject("SELECT userId FROM user WHERE userId = "+ myPageDelDto.getUserId(),myPageDelDto2RowMapper);
 
         if (writerId != myPageDelDto2.getUserId()){
             throw new MyPageException("삭제 권한이 없습니다.", 403);
         }
 
         try{
-            String sql = "DELETE FROM USER WHERE userId = " + myPageDelDto.getUserId();
+            String sql = "DELETE FROM user WHERE userId = " + myPageDelDto.getUserId();
             jdbcTemplate.update(sql);
         }
         catch(Exception e){
@@ -56,7 +58,7 @@ public class MyPageRepositoryImpl implements MyPageRepository{
         MyPageDto myPageDto;
 
         try{
-            myPageDto = jdbcTemplate.queryForObject("SELECT userId, userName, email FROM USER WHERE userId = "+ id
+            myPageDto = jdbcTemplate.queryForObject("SELECT userId, userName, email FROM user WHERE userId = "+ id
                     ,myPageDtoRowMapper);
         }
         catch(EmptyResultDataAccessException ex){
