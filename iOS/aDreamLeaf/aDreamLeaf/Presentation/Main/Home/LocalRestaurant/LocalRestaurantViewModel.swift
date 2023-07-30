@@ -58,13 +58,13 @@ struct LocalRestaurantViewModel {
         
         cardButtonTap
             .withLatestFrom(allList)
-            .map { $0.filter { $0.storeType == 0 || $0.storeType == 1 }}
+            .map { $0.filter { $0.storeType == 2 || $0.storeType == 1 }}
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
         goodButtonTap
             .withLatestFrom(allList)
-            .map { $0.filter { $0.storeType == 0 || $0.storeType == 2 }}
+            .map { $0.filter { $0.storeType == 2 || $0.storeType == 0 }}
             .bind(to: tableItem)
             .disposed(by: disposeBag)
         
