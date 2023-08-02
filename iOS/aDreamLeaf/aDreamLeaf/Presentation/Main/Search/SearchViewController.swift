@@ -22,6 +22,7 @@ class SearchViewController: UIViewController {
     private let cardButton = UIButton()
     private let goodButton = UIButton()
     private let tableView = UITableView()
+    private let searchListEmptyWarnLabel = UILabel()
     
     init() {
         viewModel = SearchViewModel()
@@ -112,6 +113,12 @@ class SearchViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        viewModel.tableItem
+            .map { $0.count != 0 }
+            .observe(on: MainScheduler.instance)
+            .bind(to: searchListEmptyWarnLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
     }    
     
     private func attribute() {
@@ -136,7 +143,6 @@ class SearchViewController: UIViewController {
         
         buttonStackView.spacing = 15
         
-        
         allButton.setTitle("전체", for: .normal)
         allButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
         allButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
@@ -157,10 +163,15 @@ class SearchViewController: UIViewController {
         goodButton.setTitleColor(.black, for: .normal)
         goodButton.tintColor = .black
         goodButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
+        
+        searchListEmptyWarnLabel.text = "검색된 음식점이 없습니다 🥲"
+        searchListEmptyWarnLabel.textColor = .black
+        searchListEmptyWarnLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        searchListEmptyWarnLabel.textAlignment = .center
     }
     
     private func layout() {
-        [searchTextField, searchButton, underLine, tableView, checkBoxView].forEach {
+        [searchTextField, searchButton, underLine, tableView, checkBoxView, searchListEmptyWarnLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -181,6 +192,7 @@ class SearchViewController: UIViewController {
             searchButton.topAnchor.constraint(equalTo: searchTextField.topAnchor),
             searchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             searchButton.widthAnchor.constraint(equalToConstant: 40),
+            searchButton.heightAnchor.constraint(equalToConstant: 25),
             
             underLine.topAnchor.constraint(equalTo: searchButton.bottomAnchor, constant: 15),
             underLine.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -198,7 +210,12 @@ class SearchViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: checkBoxView.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            searchListEmptyWarnLabel.topAnchor.constraint(equalTo: tableView.topAnchor),
+            searchListEmptyWarnLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            searchListEmptyWarnLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            searchListEmptyWarnLabel.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
             
         ].forEach { $0.isActive = true }
     }
