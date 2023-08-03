@@ -47,8 +47,7 @@ class StartViewController: UIViewController {
     private func bind() {
         viewModel.isLogInChecked
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                print($0)
+            .subscribe(onNext: { _ in
                 let vc = MainViewController()
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen

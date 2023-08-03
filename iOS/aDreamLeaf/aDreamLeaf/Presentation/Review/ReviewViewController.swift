@@ -81,7 +81,6 @@ class ReviewViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-                    print("사용불가 + 사용자에게 토스트/얼럿")
                     return
                 }
                 self.imagePicker.sourceType = .photoLibrary

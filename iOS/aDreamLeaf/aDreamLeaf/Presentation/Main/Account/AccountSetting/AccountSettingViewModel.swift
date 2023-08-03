@@ -42,7 +42,6 @@ struct AccountSettingViewModel {
         
         alarmSwitchChanged
             .flatMap { isOn in
-                print(isOn)
                 if isOn {
                     return alarmRepo.register()
                 } else {

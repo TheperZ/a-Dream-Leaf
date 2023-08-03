@@ -62,7 +62,6 @@ class AccountSettingViewController: UIViewController {
                     alert.addAction(cancel)
                     self.present(alert, animated: true)
                 } else {
-                    print(result.msg)
                     let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
                     let cancel = UIAlertAction(title: "확인", style: .default)
                     alert.addAction(cancel)
