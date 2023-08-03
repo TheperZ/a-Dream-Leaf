@@ -10,12 +10,12 @@ import CoreLocation
 
 struct LocationManager {
     private static let locationManager = CLLocationManager()
-    static func getTempLat() -> Double {
-        return 37.66
-    }
-    static func getTempLogt() -> Double {
-        return 126.7641867
-    }
+//    static func getTempLat() -> Double {
+//        return 37.66
+//    }
+//    static func getTempLogt() -> Double {
+//        return 126.7641867
+//    }
     
     static func permitionCheck() -> Bool{
         switch locationManager.authorizationStatus {
