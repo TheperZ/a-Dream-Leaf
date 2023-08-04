@@ -127,7 +127,7 @@ class HomeViewController: UIChartViewController {
         view.backgroundColor = .white
         
         titleLabel.text = "꿈나무 한입"
-        titleLabel.font = .systemFont(ofSize: 30, weight: .bold)
+        titleLabel.font = UIFont(name: "LINESeedSansKR-Bold", size: 28)
         titleLabel.textColor = .black
         
         let profileButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
@@ -141,7 +141,7 @@ class HomeViewController: UIChartViewController {
         nearRestSummaryContainer.layer.cornerRadius = 10
         
         nearRestTitleLabel.text = "주변 음식점"
-        nearRestTitleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        nearRestTitleLabel.font = .systemFont(ofSize: 18, weight: .bold)
         nearRestTitleLabel.textColor = .black
         
         nearRestMoreButon.setTitle("더보기", for: .normal)
@@ -222,7 +222,7 @@ class HomeViewController: UIChartViewController {
             nearRestMoreButon.centerYAnchor.constraint(equalTo: nearRestTitleLabel.centerYAnchor),
             nearRestMoreButon.widthAnchor.constraint(equalToConstant: 60),
             
-            nearRestSubTitleLabel.topAnchor.constraint(equalTo: nearRestTitleLabel.bottomAnchor,constant: 15),
+            nearRestSubTitleLabel.topAnchor.constraint(equalTo: nearRestTitleLabel.bottomAnchor,constant: 10),
             nearRestSubTitleLabel.leadingAnchor.constraint(equalTo: nearRestTitleLabel.leadingAnchor),
             
             nearRestCollectionView.topAnchor.constraint(equalTo: nearRestSubTitleLabel.bottomAnchor, constant: 15),

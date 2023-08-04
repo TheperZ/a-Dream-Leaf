@@ -121,7 +121,7 @@ class UIChartViewController: UIViewController {
         accountSummaryContainer.layer.cornerRadius = 10
         
         accountTitleLabel.text = "가계부 요약"
-        accountTitleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        accountTitleLabel.font = .systemFont(ofSize: 18, weight: .bold)
         accountTitleLabel.textColor = .black
         
         accountMoreButton.setTitle("더보기", for: .normal)

@@ -84,6 +84,9 @@
 		BFCF86B129CD56400075D5E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B029CD56400075D5E6 /* AppDelegate.swift */; };
 		BFCF86B329CD56400075D5E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */; };
 		BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFCF86B929CD56410075D5E6 /* Assets.xcassets */; };
+		BFDF62392A7CC0870050DF48 /* LINESeedKR-Rg.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDF62362A7CC0870050DF48 /* LINESeedKR-Rg.otf */; };
+		BFDF623A2A7CC0870050DF48 /* LINESeedKR-Th.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDF62372A7CC0870050DF48 /* LINESeedKR-Th.otf */; };
+		BFDF623B2A7CC0870050DF48 /* LINESeedKR-Bd.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDF62382A7CC0870050DF48 /* LINESeedKR-Bd.otf */; };
 		BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */; };
 		BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */; };
 		BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D329ECCBA600590CC0 /* RequestResult.swift */; };
@@ -182,6 +185,9 @@
 		BFCF86B229CD56400075D5E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		BFCF86B929CD56410075D5E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFCF86BE29CD56410075D5E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFDF62362A7CC0870050DF48 /* LINESeedKR-Rg.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedKR-Rg.otf"; sourceTree = "<group>"; };
+		BFDF62372A7CC0870050DF48 /* LINESeedKR-Th.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedKR-Th.otf"; sourceTree = "<group>"; };
+		BFDF62382A7CC0870050DF48 /* LINESeedKR-Bd.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedKR-Bd.otf"; sourceTree = "<group>"; };
 		BFEB30CB29EB89D400590CC0 /* aDreamLeaf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = aDreamLeaf.entitlements; sourceTree = "<group>"; };
 		BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepository.swift; sourceTree = "<group>"; };
 		BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNetwork.swift; sourceTree = "<group>"; };
@@ -542,6 +548,7 @@
 		BFCF86AF29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXGroup;
 			children = (
+				BFDF622F2A7CB3DB0050DF48 /* Font */,
 				BF6439D929EFFE8F008DB52A /* User */,
 				BFEB30D229ECCB9F00590CC0 /* Entity */,
 				BFEB30CF29ECCAF700590CC0 /* Network */,
@@ -558,6 +565,16 @@
 				BFB0A8FF29D28DA7003D3E6E /* Constant.swift */,
 			);
 			path = aDreamLeaf;
+			sourceTree = "<group>";
+		};
+		BFDF622F2A7CB3DB0050DF48 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				BFDF62382A7CC0870050DF48 /* LINESeedKR-Bd.otf */,
+				BFDF62362A7CC0870050DF48 /* LINESeedKR-Rg.otf */,
+				BFDF62372A7CC0870050DF48 /* LINESeedKR-Th.otf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 		BFEB30CC29ECCAE200590CC0 /* Repository */ = {
@@ -685,9 +702,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFDF62392A7CC0870050DF48 /* LINESeedKR-Rg.otf in Resources */,
 				BFCF86BA29CD56410075D5E6 /* Assets.xcassets in Resources */,
 				BFB0A8F829D17737003D3E6E /* LaunchScreen.storyboard in Resources */,
+				BFDF623B2A7CC0870050DF48 /* LINESeedKR-Bd.otf in Resources */,
 				BFBD102D2A1218C7002EE950 /* GoogleService-Info.plist in Resources */,
+				BFDF623A2A7CC0870050DF48 /* LINESeedKR-Th.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,6 +981,7 @@
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한입";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
@@ -997,6 +1018,7 @@
 				INFOPLIST_FILE = aDreamLeaf/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "꿈나무 한입";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
