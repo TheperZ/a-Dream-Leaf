@@ -47,8 +47,7 @@ class StartViewController: UIViewController {
     private func bind() {
         viewModel.isLogInChecked
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                print($0)
+            .subscribe(onNext: { _ in
                 let vc = MainViewController()
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
@@ -66,7 +65,7 @@ class StartViewController: UIViewController {
         
         titleLabel.text = "꿈나무 한입"
         titleLabel.textColor = .white
-        titleLabel.font = .systemFont(ofSize: 35, weight: .bold)
+        titleLabel.font = UIFont(name: "LINESeedSansKR-Bold", size: 35)
         titleLabel.textAlignment = .center
     }
     

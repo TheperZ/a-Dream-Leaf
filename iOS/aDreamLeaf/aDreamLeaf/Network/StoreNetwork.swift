@@ -21,7 +21,7 @@ struct StoreNetwork {
             request.timeoutInterval = 10
                 
             // POST 로 보낼 정보
-            let params =  LocationManager.permitionCheck() ? ["curLat": LocationManager.getLatitude() ?? LocationManager.getTempLat(), "curLogt": LocationManager.getLongitude() ?? LocationManager.getTempLogt()] : [:]
+            let params =  LocationManager.permitionCheck() && LocationManager.getLatitude() != nil && LocationManager.getLongitude() != nil ? ["curLat": LocationManager.getLatitude()!, "curLogt": LocationManager.getLongitude()! ] : [:]
              
              // httpBody 에 parameters 추가
             do {
@@ -145,7 +145,7 @@ struct StoreNetwork {
             request.timeoutInterval = 10
                 
             // POST 로 보낼 정보
-            let params = ["curLat": LocationManager.getTempLat(), "curLogt": LocationManager.getTempLogt()]
+            let params =  LocationManager.permitionCheck() && LocationManager.getLatitude() != nil && LocationManager.getLongitude() != nil ? ["curLat": LocationManager.getLatitude()!, "curLogt": LocationManager.getLongitude()! ] : [:]
              
              // httpBody 에 parameters 추가
             do {

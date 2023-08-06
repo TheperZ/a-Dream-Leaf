@@ -40,6 +40,9 @@ class SearchCell: UITableViewCell {
         distanceLabel.font = .systemFont(ofSize: 13, weight: .medium)
         distanceLabel.textColor = .gray
         distanceLabel.textAlignment = .left
+        if LocationManager.permitionCheck() == false { // 위치 정보 비동의시 거리 표기 X
+            distanceLabel.isHidden = true
+        }
         
         ratingLabel.text = "⭐️ \(String(format: "%.1f", viewModel.rating))"
         ratingLabel.font = .systemFont(ofSize: 13, weight: .medium)

@@ -31,19 +31,6 @@ struct LocalRestaurantViewModel {
             .bind(to: loading)
             .disposed(by: disposeBag)
         
-//        if LocationManager.permitionCheck() {
-//            Observable.just((LocationManager.getLatitude(), LocationManager.getLongitude()))
-//                .filter{ (lat: Double?, lon: Double?) in
-//                    return lat != nil && lon != nil
-//                }
-//                .map { ($0.0!, $0.1!) }
-//                .flatMap(repo.getAddressKakao)
-//                .bind(to: address)
-//                .disposed(by: disposeBag)
-//        } else {
-//            address.accept("GPS 권한을 설정해주세요!")
-//        }
-        
         
         Observable.just((LocationManager.getLatitude() ?? 0.0 , LocationManager.getLongitude() ?? 0.0))
             .map { ($0.0, $0.1) }

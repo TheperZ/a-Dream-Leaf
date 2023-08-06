@@ -21,6 +21,7 @@ class HomeViewController: UIChartViewController {
     private let nearRestTitleLabel = UILabel()
     private let nearRestMoreButon = UIButton()
     private let nearRestSubTitleLabel = UILabel()
+    private let nearRestEmptyAlertLabel = UILabel()
     
     private let nearRestCollectionViewLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -114,13 +115,19 @@ class HomeViewController: UIChartViewController {
                 self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        viewModel.nearStores
+            .observe(on: MainScheduler.instance)
+            .map { $0.count != 0 }
+            .bind(to: nearRestEmptyAlertLabel.rx.isHidden)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
         view.backgroundColor = .white
         
         titleLabel.text = "꿈나무 한입"
-        titleLabel.font = .systemFont(ofSize: 30, weight: .bold)
+        titleLabel.font = UIFont(name: "LINESeedSansKR-Bold", size: 28)
         titleLabel.textColor = .black
         
         let profileButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
@@ -134,7 +141,7 @@ class HomeViewController: UIChartViewController {
         nearRestSummaryContainer.layer.cornerRadius = 10
         
         nearRestTitleLabel.text = "주변 음식점"
-        nearRestTitleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        nearRestTitleLabel.font = .systemFont(ofSize: 18, weight: .bold)
         nearRestTitleLabel.textColor = .black
         
         nearRestMoreButon.setTitle("더보기", for: .normal)
@@ -169,6 +176,14 @@ class HomeViewController: UIChartViewController {
         cardInfoTextLabel.text = "꿈나무 카드"
         cardInfoTextLabel.font = .systemFont(ofSize: 12, weight: .regular)
         cardInfoTextLabel.textColor = .gray
+        
+        nearRestEmptyAlertLabel.text = "주변의 음식점을 찾을 수 없습니다 🥲"
+        nearRestEmptyAlertLabel.font = .systemFont(ofSize: 14, weight: .bold)
+        nearRestEmptyAlertLabel.textColor = .gray
+        nearRestEmptyAlertLabel.textAlignment = .center
+        nearRestEmptyAlertLabel.layer.borderColor = UIColor.gray.cgColor
+        nearRestEmptyAlertLabel.layer.borderWidth = 0.5
+        nearRestEmptyAlertLabel.layer.cornerRadius = 10
     }
     
     private func layout() {
@@ -177,7 +192,7 @@ class HomeViewController: UIChartViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
     
-        [nearRestTitleLabel, nearRestMoreButon, nearRestSubTitleLabel, nearRestCollectionView].forEach {
+        [nearRestTitleLabel, nearRestMoreButon, nearRestSubTitleLabel, nearRestCollectionView, nearRestEmptyAlertLabel].forEach {
             nearRestSummaryContainer.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -210,13 +225,18 @@ class HomeViewController: UIChartViewController {
             nearRestMoreButon.centerYAnchor.constraint(equalTo: nearRestTitleLabel.centerYAnchor),
             nearRestMoreButon.widthAnchor.constraint(equalToConstant: 60),
             
-            nearRestSubTitleLabel.topAnchor.constraint(equalTo: nearRestTitleLabel.bottomAnchor,constant: 15),
+            nearRestSubTitleLabel.topAnchor.constraint(equalTo: nearRestTitleLabel.bottomAnchor,constant: 10),
             nearRestSubTitleLabel.leadingAnchor.constraint(equalTo: nearRestTitleLabel.leadingAnchor),
             
             nearRestCollectionView.topAnchor.constraint(equalTo: nearRestSubTitleLabel.bottomAnchor, constant: 15),
             nearRestCollectionView.leadingAnchor.constraint(equalTo: nearRestSummaryContainer.leadingAnchor),
             nearRestCollectionView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor),
             nearRestCollectionView.bottomAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: -10),
+            
+            nearRestEmptyAlertLabel.topAnchor.constraint(equalTo: nearRestCollectionView.topAnchor),
+            nearRestEmptyAlertLabel.bottomAnchor.constraint(equalTo: nearRestCollectionView.bottomAnchor),
+            nearRestEmptyAlertLabel.leadingAnchor.constraint(equalTo: nearRestCollectionView.leadingAnchor, constant: 20),
+            nearRestEmptyAlertLabel.trailingAnchor.constraint(equalTo: nearRestCollectionView.trailingAnchor, constant: -20),
             
             infoStackView.topAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: 5),
             infoStackView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor, constant: -15),

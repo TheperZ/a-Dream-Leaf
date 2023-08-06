@@ -21,6 +21,8 @@ class ReviewListViewController : UIViewController {
     private let tableView = UITableView()
     private let leftButton = UIButton()
     private let rightButton = UIButton()
+    private let reviewListEmptyWarnLabel = UILabel()
+    
     
     init(storeData: Store) {
         viewModel = ReviewListViewModel(storeData: storeData)
@@ -82,6 +84,12 @@ class ReviewListViewController : UIViewController {
             })
             .disposed(by: disposeBag)
         
+        viewModel.reviews
+            .map { $0.count != 0 }
+            .observe(on: MainScheduler.instance)
+            .bind(to: reviewListEmptyWarnLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
     }
     
     private func attribute() {
@@ -98,6 +106,11 @@ class ReviewListViewController : UIViewController {
         subtitleLabel.textAlignment = .center
         
         tableView.backgroundColor = .white
+        
+        reviewListEmptyWarnLabel.text = "작성된 리뷰가 없습니다 🥲"
+        reviewListEmptyWarnLabel.textColor = .black
+        reviewListEmptyWarnLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        reviewListEmptyWarnLabel.textAlignment = .center
 
     }
     
@@ -108,7 +121,7 @@ class ReviewListViewController : UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [titleLabel, subtitleLabel, tableView].forEach {
+        [titleLabel, subtitleLabel, tableView, reviewListEmptyWarnLabel].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -137,6 +150,11 @@ class ReviewListViewController : UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             tableView.heightAnchor.constraint(equalToConstant: 500),
+            
+            reviewListEmptyWarnLabel.topAnchor.constraint(equalTo: tableView.topAnchor),
+            reviewListEmptyWarnLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            reviewListEmptyWarnLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            reviewListEmptyWarnLabel.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
             
         ].forEach { $0.isActive = true }
         

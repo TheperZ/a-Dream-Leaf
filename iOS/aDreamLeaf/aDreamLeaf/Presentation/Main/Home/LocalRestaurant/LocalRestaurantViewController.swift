@@ -26,6 +26,8 @@ class LocalRestaurantViewController : UIViewController {
     
     private let tableView = UITableView()
     
+    private let nearListEmptyWarnLabel = UILabel()
+    
     
     init() {
         viewModel = LocalRestaurantViewModel()
@@ -99,9 +101,14 @@ class LocalRestaurantViewController : UIViewController {
             .withLatestFrom(viewModel.tableItem) { return ($0, $1)}
             .subscribe(onNext: { indexPath, list in
                 self.tableView.cellForRow(at: indexPath)?.isSelected = false
-                print((list[indexPath.row]).storeId)
                 self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
             })
+            .disposed(by: disposeBag)
+        
+        viewModel.tableItem
+            .map { $0.count != 0 }
+            .observe(on: MainScheduler.instance)
+            .bind(to: nearListEmptyWarnLabel.rx.isHidden)
             .disposed(by: disposeBag)
     }
     
@@ -139,11 +146,16 @@ class LocalRestaurantViewController : UIViewController {
         goodButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
         
         tableView.backgroundColor = .white
+        
+        nearListEmptyWarnLabel.text = "검색된 음식점이 없습니다 🥲"
+        nearListEmptyWarnLabel.textColor = .black
+        nearListEmptyWarnLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        nearListEmptyWarnLabel.textAlignment = .center
     }
     
     private func layout() {
         
-        [imageView, addressLabel, tableView, buttonStackView, checkBoxView].forEach {
+        [imageView, addressLabel, tableView, buttonStackView, checkBoxView, nearListEmptyWarnLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -178,6 +190,11 @@ class LocalRestaurantViewController : UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            
+            nearListEmptyWarnLabel.topAnchor.constraint(equalTo: tableView.topAnchor),
+            nearListEmptyWarnLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            nearListEmptyWarnLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            nearListEmptyWarnLabel.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
         ].forEach { $0.isActive = true}
     }
     
