@@ -181,6 +181,9 @@ class HomeViewController: UIChartViewController {
         nearRestEmptyAlertLabel.font = .systemFont(ofSize: 14, weight: .bold)
         nearRestEmptyAlertLabel.textColor = .gray
         nearRestEmptyAlertLabel.textAlignment = .center
+        nearRestEmptyAlertLabel.layer.borderColor = UIColor.gray.cgColor
+        nearRestEmptyAlertLabel.layer.borderWidth = 0.5
+        nearRestEmptyAlertLabel.layer.cornerRadius = 10
     }
     
     private func layout() {
@@ -232,8 +235,8 @@ class HomeViewController: UIChartViewController {
             
             nearRestEmptyAlertLabel.topAnchor.constraint(equalTo: nearRestCollectionView.topAnchor),
             nearRestEmptyAlertLabel.bottomAnchor.constraint(equalTo: nearRestCollectionView.bottomAnchor),
-            nearRestEmptyAlertLabel.leadingAnchor.constraint(equalTo: nearRestCollectionView.leadingAnchor),
-            nearRestEmptyAlertLabel.trailingAnchor.constraint(equalTo: nearRestCollectionView.trailingAnchor),
+            nearRestEmptyAlertLabel.leadingAnchor.constraint(equalTo: nearRestCollectionView.leadingAnchor, constant: 20),
+            nearRestEmptyAlertLabel.trailingAnchor.constraint(equalTo: nearRestCollectionView.trailingAnchor, constant: -20),
             
             infoStackView.topAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: 5),
             infoStackView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor, constant: -15),
