@@ -13,7 +13,7 @@ struct ReviewRepository {
     
     func create(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {
         
-        if let validationResult = createInputValidate(body: body), validationResult != nil {
+        if let validationResult = createInputValidate(body: body) {
             return Observable.just(validationResult)
         }
         
@@ -22,7 +22,7 @@ struct ReviewRepository {
     
     func update(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {
         
-        if let validationResult = createInputValidate(body: body), validationResult != nil {
+        if let validationResult = createInputValidate(body: body) {
             return Observable.just(validationResult)
         }
         

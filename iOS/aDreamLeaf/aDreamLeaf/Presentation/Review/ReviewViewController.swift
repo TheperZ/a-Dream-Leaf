@@ -14,6 +14,8 @@ class ReviewViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: ReviewViewModel
     
+    private let loadingView = UIActivityIndicatorView(style: .medium)
+    
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let starStackView = UIStackView()
@@ -45,6 +47,8 @@ class ReviewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadingSetting()
+        
         attribute()
         bind()
         layout()
@@ -71,7 +75,7 @@ class ReviewViewController: UIViewController {
                 })
                 .disposed(by: disposeBag)
             
-            btn.rx.tap
+            btn.rx.tap // 0번째 버튼 -> 1점
                 .map { return idx+1 }
                 .bind(to: viewModel.rating)
                 .disposed(by: disposeBag)
@@ -104,7 +108,7 @@ class ReviewViewController: UIViewController {
             .bind(to: viewModel.saveBtnTap)
             .disposed(by: disposeBag)
         
-        viewModel.createRequestResult
+        viewModel.reviewRequestResult
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 if result.success {
@@ -205,7 +209,7 @@ class ReviewViewController: UIViewController {
     }
     
     private func layout() {
-        [titleLabel, subtitleLabel, starStackView, textView, textViewWarningLabel, photoButton, saveButton, imageView].forEach {
+        [ titleLabel, subtitleLabel, starStackView, textView, textViewWarningLabel, photoButton, saveButton, imageView, loadingView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -216,6 +220,11 @@ class ReviewViewController: UIViewController {
         }
         
         [
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.widthAnchor.constraint(equalToConstant: 300),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -269,5 +278,25 @@ extension ReviewViewController: UIImagePickerControllerDelegate, UINavigationCon
     // UIImagePickerController5. - 취소 버튼을 누르면 호출되는 메소드
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         print(#function, "🦋 취소버튼 클릭 시")
+    }
+}
+
+extension ReviewViewController {
+    func loadingSetting() {
+        
+        loadingView.backgroundColor = UIColor(white: 0.95, alpha: 0.3)
+        
+        viewModel.loading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loading in
+                if loading {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                } else {
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
