@@ -9,15 +9,16 @@ import Foundation
 import RxSwift
 import RxRelay
 
-struct LoginViewModel {
+class LoginViewModel: LoadingViewModel {
     let disposeBag = DisposeBag()
-    let loading = BehaviorSubject<Bool>(value: false)
+    
     let email = PublishRelay<String>()
     let pwd = PublishRelay<String>()
     let loginBtnTap = PublishRelay<Void>()
     let loginResult = PublishSubject<RequestResult<User>>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
+        super.init()
         
         loginBtnTap
             .withLatestFrom(Observable.combineLatest(email, pwd))
