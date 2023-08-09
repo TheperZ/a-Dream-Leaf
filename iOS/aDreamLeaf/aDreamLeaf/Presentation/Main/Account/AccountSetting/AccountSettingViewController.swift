@@ -9,7 +9,11 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class AccountSettingViewController: LoadingViewController {
+class AccountSettingViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    
+    var loadingView: UIActivityIndicatorView
+    
     private let viewModel: AccountSettingViewModel
     
     private let titleLabel = UILabel()
@@ -26,7 +30,10 @@ class AccountSettingViewController: LoadingViewController {
     
     init() {
         viewModel = AccountSettingViewModel()
-        super.init(viewModel: viewModel)
+        loadingView = UIActivityIndicatorView(style: .medium)
+        super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {

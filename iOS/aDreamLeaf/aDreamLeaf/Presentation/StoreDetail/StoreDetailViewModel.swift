@@ -10,6 +10,8 @@ import RxSwift
 import RxRelay
 
 class StoreDetailViewModel: LoadingViewModel {
+    var loading: PublishSubject<Bool>
+    
     let disposeBag = DisposeBag()
     let reviews = BehaviorSubject<[Review]>(value: [])
     let storeId: Int
@@ -23,7 +25,7 @@ class StoreDetailViewModel: LoadingViewModel {
     init(storeId: Int, _ storeRepo: StoreRepository = StoreRepository(), _ reviewRepo: ReviewRepository = ReviewRepository()) {
         self.storeId = storeId
         
-        super.init()
+        loading = PublishSubject<Bool>()
         
         //가게 정보
         storeRepo.fetchDetail(storeId: storeId)

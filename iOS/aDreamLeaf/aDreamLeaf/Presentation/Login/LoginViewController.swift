@@ -9,7 +9,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class LoginViewController: LoadingViewController {
+class LoginViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    
+    var loadingView: UIActivityIndicatorView
+    
     private let viewModel: LoginViewModel
     
     private let backButton = UIBarButtonItem()
@@ -32,7 +36,10 @@ class LoginViewController: LoadingViewController {
     
     init() {
         viewModel = LoginViewModel()
-        super.init(viewModel: viewModel)
+        loadingView = UIActivityIndicatorView(style: .medium)
+        super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel)
     }
     
     required init?(coder: NSCoder) {

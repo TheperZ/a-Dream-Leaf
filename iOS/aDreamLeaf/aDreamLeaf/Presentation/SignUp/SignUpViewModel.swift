@@ -10,6 +10,8 @@ import RxSwift
 import RxRelay
 
 class SignUpViewModel: LoadingViewModel {
+    var loading: PublishSubject<Bool>
+    
     let disposeBag = DisposeBag()
     
     let email = PublishSubject<String>()
@@ -21,7 +23,7 @@ class SignUpViewModel: LoadingViewModel {
     let signUpResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: SignUpRepository = SignUpRepository()) {
-        super.init()
+        loading = PublishSubject<Bool>()
         
         signUpBtnTap
             .withLatestFrom(Observable.combineLatest(email, password, passwordCheck))

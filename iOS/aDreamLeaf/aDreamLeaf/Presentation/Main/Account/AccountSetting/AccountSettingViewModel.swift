@@ -11,6 +11,7 @@ import RxRelay
 
 class AccountSettingViewModel: LoadingViewModel {
     private let disposeBag = DisposeBag()
+    var loading: PublishSubject<Bool>
     
     let amount = PublishSubject<Int>()
     
@@ -24,8 +25,8 @@ class AccountSettingViewModel: LoadingViewModel {
     let alarmRequestResult = PublishSubject<RequestResult<Void>>()
     
     init(_ accountRepo: AccountRepository = AccountRepository(), _ alarmRepo: AlarmRepository = AlarmRepository()) {
-        super.init()
         
+        loading = PublishSubject<Bool>()
         
         // 예산 저장 버튼 클릭 혹은 알림 설정 스위치 변경 시 로딩 시작
         saveBtnTap

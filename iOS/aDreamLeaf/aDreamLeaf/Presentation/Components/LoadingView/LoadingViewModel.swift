@@ -9,6 +9,6 @@ import Foundation
 import RxSwift
 import RxRelay
 
-class LoadingViewModel {
-    let loading = PublishSubject<Bool>()
+protocol LoadingViewModel {
+    var loading: PublishSubject<Bool> { get set }
 }

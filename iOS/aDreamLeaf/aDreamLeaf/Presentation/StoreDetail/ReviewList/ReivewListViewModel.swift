@@ -10,6 +10,8 @@ import RxSwift
 import RxRelay
 
 class ReviewListViewModel: LoadingViewModel {
+    var loading: PublishSubject<Bool>
+    
     let disposeBag = DisposeBag()
     let storeData : Store
     
@@ -26,7 +28,7 @@ class ReviewListViewModel: LoadingViewModel {
     init(storeData: Store, _ repo: ReviewRepository = ReviewRepository()) {
         self.storeData = storeData
         
-        super.init()
+        loading = PublishSubject<Bool>()
         
         // 리뷰 목록 업데이트 요청 시 로딩 시작
         reviewListUpdateRequest

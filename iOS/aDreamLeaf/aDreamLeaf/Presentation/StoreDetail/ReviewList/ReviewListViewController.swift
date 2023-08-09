@@ -9,7 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ReviewListViewController : LoadingViewController {
+class ReviewListViewController : UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    var loadingView: UIActivityIndicatorView
     let viewModel: ReviewListViewModel
     
     private let scrollView = UIScrollView()
@@ -25,7 +27,10 @@ class ReviewListViewController : LoadingViewController {
     
     init(storeData: Store) {
         viewModel = ReviewListViewModel(storeData: storeData)
-        super.init(viewModel: viewModel)
+        loadingView = UIActivityIndicatorView(style: .medium)
+        super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {

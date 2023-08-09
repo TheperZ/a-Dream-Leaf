@@ -10,7 +10,11 @@ import RxSwift
 import RxCocoa
 import FirebaseAuth
 
-class SignUpViewController: LoadingViewController {
+class SignUpViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    
+    var loadingView: UIActivityIndicatorView
+    
     private let viewModel: SignUpViewModel
     
     private let keyboard = PublishRelay<Bool>()
@@ -37,7 +41,10 @@ class SignUpViewController: LoadingViewController {
     
     init() {
         viewModel = SignUpViewModel()
-        super.init(viewModel: viewModel)
+        loadingView = UIActivityIndicatorView(style: .medium)
+        super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
