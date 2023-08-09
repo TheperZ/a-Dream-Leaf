@@ -10,11 +10,11 @@ import RxSwift
 import RxCocoa
 import AVFoundation
 
-class ReviewViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: ReviewViewModel
+class ReviewViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    var loadingView = UIActivityIndicatorView(style: .medium)
     
-    private let loadingView = UIActivityIndicatorView(style: .medium)
+    private let viewModel: ReviewViewModel
     
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
@@ -46,9 +46,7 @@ class ReviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadingSetting()
-        
+        configLoadingView(viewModel: viewModel) // 로딩 화면 초기 설정
         attribute()
         bind()
         layout()
@@ -278,25 +276,5 @@ extension ReviewViewController: UIImagePickerControllerDelegate, UINavigationCon
     // UIImagePickerController5. - 취소 버튼을 누르면 호출되는 메소드
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         print(#function, "🦋 취소버튼 클릭 시")
-    }
-}
-
-extension ReviewViewController {
-    func loadingSetting() {
-        
-        loadingView.backgroundColor = UIColor(white: 0.95, alpha: 0.3)
-        
-        viewModel.loading
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { loading in
-                if loading {
-                    self.loadingView.startAnimating()
-                    self.loadingView.isHidden = false
-                } else {
-                    self.loadingView.stopAnimating()
-                    self.loadingView.isHidden = true
-                }
-            })
-            .disposed(by: disposeBag)
     }
 }

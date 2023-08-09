@@ -10,8 +10,8 @@ import RxSwift
 import RxCocoa
 
 class StoreDetailViewController: UIViewController, LoadingViewController {
-    var loadingView: UIActivityIndicatorView
     var disposeBag = DisposeBag()
+    var loadingView = UIActivityIndicatorView(style: .medium)
     var viewModel: StoreDetailViewModel
     
     private let scrollView = UIScrollView()
@@ -41,10 +41,7 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
     
     init(storeId: Int) {
         viewModel = StoreDetailViewModel(storeId: storeId)
-        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
-        
-        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
@@ -55,7 +52,7 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
         super.viewDidLoad()
         
         reviewTableView.register(SimpleReviewCell.self, forCellReuseIdentifier: K.TableViewCellID.SimpleReviewCell)
-        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
         bind()
         attribute()
         layout()

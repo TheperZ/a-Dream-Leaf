@@ -9,12 +9,10 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class PwdResetViewController: UIViewController {
-    private let disposeBag = DisposeBag()
+class PwdResetViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    var loadingView = UIActivityIndicatorView(style: .medium)
     private var viewModel: PwdResetViewModel!
-    
-    private let loadingView = UIActivityIndicatorView(style: .medium)
-    
     private let titleLabel = UILabel()
     private let emailLabel = UILabel()
     private let emailTextField = UITextField()
@@ -24,7 +22,6 @@ class PwdResetViewController: UIViewController {
     
     init() {
         viewModel = PwdResetViewModel()
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,9 +31,7 @@ class PwdResetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadingSetting()
-        
+        configLoadingView(viewModel: viewModel)
         bind()
         attribute()
         layout()
@@ -145,24 +140,4 @@ class PwdResetViewController: UIViewController {
         ].forEach { $0.isActive = true}
     }
     
-}
-
-extension PwdResetViewController {
-    func loadingSetting() {
-        
-        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 0.5)
-        
-        viewModel.loading
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { loading in
-                if loading {
-                    self.loadingView.startAnimating()
-                    self.loadingView.isHidden = false
-                } else {
-                    self.loadingView.stopAnimating()
-                    self.loadingView.isHidden = true
-                }
-            })
-            .disposed(by: disposeBag)
-    }
 }

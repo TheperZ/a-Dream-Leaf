@@ -9,11 +9,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class NewPaymentViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: NewPaymentViewModel
+class NewPaymentViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    var loadingView = UIActivityIndicatorView(style: .medium)
     
-    private let loadingView = UIActivityIndicatorView(style: .medium)
+    private let viewModel: NewPaymentViewModel
     
     private let titleLabel = UILabel()
     
@@ -50,10 +50,7 @@ class NewPaymentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        loadingSetting()
-        
+        configLoadingView(viewModel: viewModel)
         bind()
         attribute()
         layout()

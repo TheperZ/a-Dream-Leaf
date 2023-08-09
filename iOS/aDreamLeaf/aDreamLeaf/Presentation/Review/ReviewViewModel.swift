@@ -9,11 +9,12 @@ import Foundation
 import RxSwift
 import RxRelay
 
-struct ReviewViewModel {
+struct ReviewViewModel: LoadingViewModel {
+    var loading: PublishSubject<Bool>
+    
     private let disposeBag = DisposeBag()
     private let storeId: Int
-    
-    let loading = BehaviorSubject<Bool>(value: false)
+
     let editData : Review? // 리뷰 수정 시 리뷰 데이터, 신규 작성시 nil
     let rating = BehaviorSubject<Int>(value: 5)
     let body = BehaviorSubject<String>(value: "")
@@ -25,6 +26,7 @@ struct ReviewViewModel {
     init(storeId: Int, editData: Review?, _ repo: ReviewRepository = ReviewRepository()) {
         self.storeId = storeId
         self.editData = editData
+        self.loading = PublishSubject<Bool>()
         
         // 신규 리뷰 작성
         saveBtnTap

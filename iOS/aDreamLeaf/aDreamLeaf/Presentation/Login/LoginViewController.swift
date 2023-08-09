@@ -11,8 +11,7 @@ import RxCocoa
 
 class LoginViewController: UIViewController, LoadingViewController {
     var disposeBag = DisposeBag()
-    
-    var loadingView: UIActivityIndicatorView
+    var loadingView = UIActivityIndicatorView(style: .medium)
     
     private let viewModel: LoginViewModel
     
@@ -36,10 +35,7 @@ class LoginViewController: UIViewController, LoadingViewController {
     
     init() {
         viewModel = LoginViewModel()
-        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
-        
-        configLoadingView(viewModel: viewModel)
     }
     
     required init?(coder: NSCoder) {
@@ -48,7 +44,7 @@ class LoginViewController: UIViewController, LoadingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configLoadingView(viewModel: viewModel)
         bind()
         attribute()
         layout()

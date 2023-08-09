@@ -9,11 +9,10 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ExpenditureDetailViewController: UIViewController {
-    private let disposeBag = DisposeBag()
+class ExpenditureDetailViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    var loadingView = UIActivityIndicatorView(style: .medium)
     private let viewModel: ExpenditureDetailViewModel
-    
-    private let loadingView = UIActivityIndicatorView(style: .medium)
     
     private let titleLabel = UILabel()
     
@@ -35,7 +34,6 @@ class ExpenditureDetailViewController: UIViewController {
     
     init(data: Expenditure) {
         viewModel = ExpenditureDetailViewModel(data: data)
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -45,18 +43,10 @@ class ExpenditureDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadingSetting()
-        
+        configLoadingView(viewModel: viewModel) // 리뷰 화면 초기 설정
         bind()
         attribute()
         layout()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
     }
     
     private func bind() {
@@ -236,25 +226,5 @@ class ExpenditureDetailViewController: UIViewController {
             editButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
         ].forEach { $0.isActive = true }
-    }
-}
-
-extension ExpenditureDetailViewController {
-    func loadingSetting() {
-        
-        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        
-        viewModel.loading
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { loading in
-                if loading {
-                    self.loadingView.startAnimating()
-                    self.loadingView.isHidden = false
-                } else {
-                    self.loadingView.stopAnimating()
-                    self.loadingView.isHidden = true
-                }
-            })
-            .disposed(by: disposeBag)
     }
 }

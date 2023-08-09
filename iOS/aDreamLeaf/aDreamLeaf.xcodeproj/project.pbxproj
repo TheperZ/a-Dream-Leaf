@@ -462,7 +462,6 @@
 		BFB0A91C29D6B4F2003D3E6E /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				BF3429CB2A8215A400EF97CA /* LoadingView */,
 				BF6761B529DD33B700A47207 /* ChartView */,
 				BF6761B829DD3ECF00A47207 /* ExpenditureCell */,
 				BF15AB2929D93C0000014E05 /* ReviewCell */,
@@ -562,6 +561,7 @@
 		BFCF86AF29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXGroup;
 			children = (
+				BFEB7CEF2A83664900F86BB1 /* Protocol */,
 				BFDF622F2A7CB3DB0050DF48 /* Font */,
 				BF6439D929EFFE8F008DB52A /* User */,
 				BFEB30D229ECCB9F00590CC0 /* Entity */,
@@ -637,6 +637,14 @@
 				BF0FCEBD2A5450CC0052B49C /* KakaoAddress.swift */,
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		BFEB7CEF2A83664900F86BB1 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				BF3429CB2A8215A400EF97CA /* LoadingView */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 		BFF042DB2A1B943A001FCB88 /* ExpenditureDetail */ = {
