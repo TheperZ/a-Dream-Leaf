@@ -9,7 +9,9 @@ import Foundation
 import RxSwift
 import RxRelay
 
-struct StoreDetailViewModel {
+class StoreDetailViewModel: LoadingViewModel {
+    var loading: PublishSubject<Bool>
+    
     let disposeBag = DisposeBag()
     let reviews = BehaviorSubject<[Review]>(value: [])
     let storeId: Int
@@ -22,6 +24,8 @@ struct StoreDetailViewModel {
     
     init(storeId: Int, _ storeRepo: StoreRepository = StoreRepository(), _ reviewRepo: ReviewRepository = ReviewRepository()) {
         self.storeId = storeId
+        
+        loading = PublishSubject<Bool>()
         
         //가게 정보
         storeRepo.fetchDetail(storeId: storeId)
@@ -47,5 +51,16 @@ struct StoreDetailViewModel {
             .bind(to: reviews)
             .disposed(by: disposeBag)
     
+        //최근 리뷰 목록 요청 시 로딩 시작
+        fetchReviewRequest
+            .map { return true }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
+
+        //최근 리뷰 목록 응답 시 로딩 종료
+        fetchReviewResult
+            .map { _ in return false }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
     }
 }

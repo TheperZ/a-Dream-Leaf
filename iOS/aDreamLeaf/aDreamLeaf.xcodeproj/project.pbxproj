@@ -24,6 +24,7 @@
 		BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */; };
 		BF219DCE2A034FE0005DBAC6 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCD2A034FE0005DBAC6 /* LocationManager.swift */; };
 		BF219DD02A060C70005DBAC6 /* KakaoNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */; };
+		BF3429CF2A82168600EF97CA /* LoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3429CE2A82168600EF97CA /* LoadingViewModel.swift */; };
 		BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D529ED99EE008DB52A /* LoginRepository.swift */; };
 		BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D729ED99FD008DB52A /* LoginNetwork.swift */; };
 		BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DA29EFFE97008DB52A /* UserManager.swift */; };
@@ -90,6 +91,7 @@
 		BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */; };
 		BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */; };
 		BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D329ECCBA600590CC0 /* RequestResult.swift */; };
+		BFEB7CEE2A834E7F00F86BB1 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB7CED2A834E7F00F86BB1 /* LoadingViewController.swift */; };
 		BFF042DD2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */; };
 		BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */; };
 		BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */; };
@@ -123,6 +125,7 @@
 		BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRestaurantViewController.swift; sourceTree = "<group>"; };
 		BF219DCD2A034FE0005DBAC6 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoNetwork.swift; sourceTree = "<group>"; };
+		BF3429CE2A82168600EF97CA /* LoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewModel.swift; sourceTree = "<group>"; };
 		BF6439D529ED99EE008DB52A /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		BF6439D729ED99FD008DB52A /* LoginNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetwork.swift; sourceTree = "<group>"; };
 		BF6439DA29EFFE97008DB52A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
@@ -192,6 +195,7 @@
 		BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepository.swift; sourceTree = "<group>"; };
 		BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNetwork.swift; sourceTree = "<group>"; };
 		BFEB30D329ECCBA600590CC0 /* RequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestResult.swift; sourceTree = "<group>"; };
+		BFEB7CED2A834E7F00F86BB1 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewModel.swift; sourceTree = "<group>"; };
 		BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewController.swift; sourceTree = "<group>"; };
 		BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewNetwork.swift; sourceTree = "<group>"; };
@@ -268,6 +272,15 @@
 				BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */,
 			);
 			path = LocalRestaurant;
+			sourceTree = "<group>";
+		};
+		BF3429CB2A8215A400EF97CA /* LoadingView */ = {
+			isa = PBXGroup;
+			children = (
+				BF3429CE2A82168600EF97CA /* LoadingViewModel.swift */,
+				BFEB7CED2A834E7F00F86BB1 /* LoadingViewController.swift */,
+			);
+			path = LoadingView;
 			sourceTree = "<group>";
 		};
 		BF6439D929EFFE8F008DB52A /* User */ = {
@@ -449,6 +462,7 @@
 		BFB0A91C29D6B4F2003D3E6E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BF3429CB2A8215A400EF97CA /* LoadingView */,
 				BF6761B529DD33B700A47207 /* ChartView */,
 				BF6761B829DD3ECF00A47207 /* ExpenditureCell */,
 				BF15AB2929D93C0000014E05 /* ReviewCell */,
@@ -804,8 +818,10 @@
 				BF6439E329F40CFD008DB52A /* StartViewModel.swift in Sources */,
 				BF6CF6312A277719009E9E70 /* StoreMapViewController.swift in Sources */,
 				BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */,
+				BFEB7CEE2A834E7F00F86BB1 /* LoadingViewController.swift in Sources */,
 				BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */,
 				BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */,
+				BF3429CF2A82168600EF97CA /* LoadingViewModel.swift in Sources */,
 				BF6CF62F2A27770C009E9E70 /* StoreMapViewModel.swift in Sources */,
 				BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */,
 				BFBD10432A16530B002EE950 /* AccountRequest.swift in Sources */,

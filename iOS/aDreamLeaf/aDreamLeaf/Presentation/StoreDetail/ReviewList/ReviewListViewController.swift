@@ -9,8 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ReviewListViewController : UIViewController {
-    private let disposeBag = DisposeBag()
+class ReviewListViewController : UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    var loadingView: UIActivityIndicatorView
     let viewModel: ReviewListViewModel
     
     private let scrollView = UIScrollView()
@@ -26,7 +27,10 @@ class ReviewListViewController : UIViewController {
     
     init(storeData: Store) {
         viewModel = ReviewListViewModel(storeData: storeData)
+        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
@@ -118,6 +122,9 @@ class ReviewListViewController : UIViewController {
         view.addSubview(scrollView)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
+        view.addSubview(loadingView)
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -127,6 +134,11 @@ class ReviewListViewController : UIViewController {
         }
         
         [
+            loadingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),

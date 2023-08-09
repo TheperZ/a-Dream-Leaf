@@ -9,7 +9,9 @@ import Foundation
 import RxSwift
 import RxRelay
 
-struct ReviewListViewModel {
+class ReviewListViewModel: LoadingViewModel {
+    var loading: PublishSubject<Bool>
+    
     let disposeBag = DisposeBag()
     let storeData : Store
     
@@ -26,18 +28,30 @@ struct ReviewListViewModel {
     init(storeData: Store, _ repo: ReviewRepository = ReviewRepository()) {
         self.storeData = storeData
         
-        //초기 리뷰 목록 가져오기
-        repo.fetchReviews(storeId: storeData.storeId)
-            .map { $0.data != nil ? $0.data! : []}
-            .bind(to: reviews)
+        loading = PublishSubject<Bool>()
+        
+        // 리뷰 목록 업데이트 요청 시 로딩 시작
+        reviewListUpdateRequest
+            .map { return true }
+            .bind(to: loading)
             .disposed(by: disposeBag)
         
-        //리뷰 목록 업데이트시 목록 가져오기
+        // 리뷰 목록이 업데이트 되면 로딩 종료
+        reviews
+            .map { _ in return false }
+            .bind(to: loading)
+            .disposed(by: disposeBag)
+        
+        
+        //리뷰 목록 업데이트 요청 시 목록 가져오기
         reviewListUpdateRequest
             .flatMap { repo.fetchReviews(storeId: storeData.storeId)}
             .map { $0.data != nil ? $0.data! : []} // 에러 발생시 리뷰 빈 목록 
             .bind(to: reviews)
             .disposed(by: disposeBag)
+        
+        //초기 리뷰 목록 가져오기
+        reviewListUpdateRequest.onNext(Void())
         
         //리뷰 삭제 요청 처리
         reviewDeleteRequest

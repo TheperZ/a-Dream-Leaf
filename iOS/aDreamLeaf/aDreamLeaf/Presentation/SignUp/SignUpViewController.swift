@@ -10,11 +10,12 @@ import RxSwift
 import RxCocoa
 import FirebaseAuth
 
-class SignUpViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: SignUpViewModel
+class SignUpViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
     
-    private let loadingView = UIActivityIndicatorView(style: .medium)
+    var loadingView: UIActivityIndicatorView
+    
+    private let viewModel: SignUpViewModel
     
     private let keyboard = PublishRelay<Bool>()
     private var keyboardHeight: CGFloat!
@@ -40,7 +41,10 @@ class SignUpViewController: UIViewController {
     
     init() {
         viewModel = SignUpViewModel()
+        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
@@ -51,7 +55,6 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         
         keyboardConfig()
-        loadingSetting()
         bind()
         attribute()
         layout()
@@ -90,6 +93,7 @@ class SignUpViewController: UIViewController {
                 if $0.success {
                     let alert = UIAlertController(title: "성공", message: "이메일 인증 후 로그인 해주세요", preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
                         self.navigationController?.popViewController(animated: true)
                     }
                     alert.addAction(confirm)
@@ -98,7 +102,7 @@ class SignUpViewController: UIViewController {
                     
                     let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.viewModel.loading.onNext(false)
+                        self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
                     }
                     alert.addAction(confirm)
                     self.present(alert, animated: true)
@@ -283,24 +287,4 @@ extension SignUpViewController {
          self.keyboardHeight = keyboardSize.height
          self.keyboard.accept(false)
      }
-}
-
-extension SignUpViewController {
-    func loadingSetting() {
-        
-        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        
-        viewModel.loading
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { loading in
-                if loading {
-                    self.loadingView.startAnimating()
-                    self.loadingView.isHidden = false
-                } else {
-                    self.loadingView.stopAnimating()
-                    self.loadingView.isHidden = true
-                }
-            })
-            .disposed(by: disposeBag)
-    }
 }

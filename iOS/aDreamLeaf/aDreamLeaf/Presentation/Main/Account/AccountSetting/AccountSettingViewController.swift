@@ -9,8 +9,11 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class AccountSettingViewController: UIViewController {
-    private let disposeBag = DisposeBag()
+class AccountSettingViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
+    
+    var loadingView: UIActivityIndicatorView
+    
     private let viewModel: AccountSettingViewModel
     
     private let titleLabel = UILabel()
@@ -27,7 +30,10 @@ class AccountSettingViewController: UIViewController {
     
     init() {
         viewModel = AccountSettingViewModel()
+        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
@@ -85,6 +91,8 @@ class AccountSettingViewController: UIViewController {
     private func attribute() {
         view.backgroundColor = .white
         
+        setActivityIndicatorViewAlpha(to: UIColor(white: 1, alpha: 0.3))
+        
         titleLabel.text = "가계부 설정"
         titleLabel.font = .systemFont(ofSize: 25, weight: .bold)
         titleLabel.textColor = .black
@@ -121,7 +129,7 @@ class AccountSettingViewController: UIViewController {
     }
     
     private func layout() {
-        [titleLabel, contentView, alarmLabel, alarmSwitch].forEach {
+        [titleLabel, contentView, alarmLabel, alarmSwitch, loadingView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -133,6 +141,12 @@ class AccountSettingViewController: UIViewController {
         
         
         [
+            
+            loadingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.widthAnchor.constraint(equalToConstant: 320),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),

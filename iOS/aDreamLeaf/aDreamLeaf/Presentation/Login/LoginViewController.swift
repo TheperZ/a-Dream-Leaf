@@ -9,11 +9,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class LoginViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: LoginViewModel
+class LoginViewController: UIViewController, LoadingViewController {
+    var disposeBag = DisposeBag()
     
-    private let loadingView = UIActivityIndicatorView(style: .medium)
+    var loadingView: UIActivityIndicatorView
+    
+    private let viewModel: LoginViewModel
     
     private let backButton = UIBarButtonItem()
     
@@ -35,7 +36,10 @@ class LoginViewController: UIViewController {
     
     init() {
         viewModel = LoginViewModel()
+        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel)
     }
     
     required init?(coder: NSCoder) {
@@ -44,8 +48,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadingSetting()
         
         bind()
         attribute()
@@ -92,12 +94,13 @@ class LoginViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 if $0.success {
-                    self.loadingView.stopAnimating()
+                    self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
                     self.dismiss(animated: true)
                 } else {
-                    self.loadingView.stopAnimating()
                     let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
+                    }
                     alert.addAction(confirm)
                     self.present(alert, animated: true)
                 }
@@ -234,25 +237,5 @@ class LoginViewController: UIViewController {
             
             
         ].forEach{ $0.isActive = true }
-    }
-}
-
-extension LoginViewController {
-    func loadingSetting() {
-        
-        loadingView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        
-        viewModel.loading
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { loading in
-                if loading {
-                    self.loadingView.startAnimating()
-                    self.loadingView.isHidden = false
-                } else {
-                    self.loadingView.stopAnimating()
-                    self.loadingView.isHidden = true
-                }
-            })
-            .disposed(by: disposeBag)
     }
 }

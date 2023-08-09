@@ -9,9 +9,10 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class StoreDetailViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: StoreDetailViewModel
+class StoreDetailViewController: UIViewController, LoadingViewController {
+    var loadingView: UIActivityIndicatorView
+    var disposeBag = DisposeBag()
+    var viewModel: StoreDetailViewModel
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -40,7 +41,10 @@ class StoreDetailViewController: UIViewController {
     
     init(storeId: Int) {
         viewModel = StoreDetailViewModel(storeId: storeId)
+        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
+        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
@@ -311,7 +315,7 @@ class StoreDetailViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, serviceLabel, serviceConditionLabel, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel, ].forEach {
+        [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, serviceLabel, serviceConditionLabel, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel, loadingView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -399,6 +403,11 @@ class StoreDetailViewController: UIViewController {
             reviewButton.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
             reviewButton.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),
             reviewButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
+            
+            loadingView.topAnchor.constraint(equalTo: reviewTableView.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: reviewTableView.bottomAnchor)
             
         ].forEach { $0.isActive = true }
     }
