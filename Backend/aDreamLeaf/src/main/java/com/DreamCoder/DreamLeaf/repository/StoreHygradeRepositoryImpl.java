@@ -3,6 +3,7 @@ package com.DreamCoder.DreamLeaf.repository;
 
 import com.DreamCoder.DreamLeaf.dto.StoreHygradeDto;
 import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class StoreHygradeRepositoryImpl implements StoreHygradeRepository{
 
     @Autowired

@@ -3,6 +3,7 @@ package com.DreamCoder.DreamLeaf.repository;
 import com.DreamCoder.DreamLeaf.dto.SignUpCreateDto;
 import com.DreamCoder.DreamLeaf.dto.SignUpDto;
 import com.DreamCoder.DreamLeaf.dto.LoginDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Repository
+@RequiredArgsConstructor
 public class SignUpRepositoryImpl implements SignUpRepository{
 
     @Autowired
@@ -50,7 +52,7 @@ public class SignUpRepositoryImpl implements SignUpRepository{
         if (!isValidEmail(email)) {
             throw new SignUpException("입력된 정보가 올바르지 않습니다.", 400);
         }
-        jdbcTemplate.execute("INSERT INTO USER(email,uid,userName) VALUES('"+
+        jdbcTemplate.execute("INSERT INTO user(email,uid,userName) VALUES('"+
                 signUpCreateDto.getEmail()+
                 "','"+signUpCreateDto.getUid()+
                 "','"+signUpCreateDto.getUserName()+"')");
@@ -64,7 +66,7 @@ public class SignUpRepositoryImpl implements SignUpRepository{
     public LoginDto inquire(int id) {
         LoginDto loginDto;
         try{
-            loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM USER WHERE userId = "+id,loginDtoRowMapper);
+            loginDto = jdbcTemplate.queryForObject("SELECT userId, email, userName FROM user WHERE userId = "+id,loginDtoRowMapper);
         } catch(EmptyResultDataAccessException ex){
             throw new SignUpException("유저 정보를 찾을 수 없습니다.",404);
         }

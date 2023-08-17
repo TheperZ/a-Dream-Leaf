@@ -38,3 +38,12 @@ out/
 
 ### ServiceAccountKey ###
 src/main/resources/serviceAccountKey.json
+
+### Properties ###
+src/main/resources/*.properties
+
+### Dockerfile ###
+Dockerfile
+
+### keyFile ###
+*.pem

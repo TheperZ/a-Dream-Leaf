@@ -3,6 +3,8 @@ package com.DreamCoder.DreamLeaf.repository;
 import com.DreamCoder.DreamLeaf.dto.*;
 import com.DreamCoder.DreamLeaf.exception.ReviewException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,7 +25,10 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ReviewRepositoryImpl implements ReviewRepository{
+
+    @Autowired
     private final JdbcTemplate jdbcTemplate;
+
     private final RowMapper<ReviewDto> reviewRowMapper = new RowMapper<ReviewDto>() {
         @Override
         public ReviewDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -36,6 +41,9 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                     rs.getInt("rating"));
         }
     };
+
+    @Value("${images.path}")
+    private String dirPath;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -50,7 +58,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("잘못된 리뷰 형식입니다.", 400);
         }
 
-        jdbcTemplate.execute("INSERT INTO REVIEW(storeId,created_date,body,rating, userId) VALUES(" +
+        jdbcTemplate.execute("INSERT INTO review(storeId,created_date,body,rating, userId) VALUES(" +
                 reviewCreateDto.getStoreId()+
                 ",'" + reviewCreateDto.getDate()+
                 "','" + reviewCreateDto.getBody()+
@@ -59,7 +67,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
                 ")");
         ReviewDto reviewDto;
         try {
-            reviewDto = jdbcTemplate.queryForObject("SELECT * FROM REVIEW WHERE body = '" + reviewCreateDto.getBody() +
+            reviewDto = jdbcTemplate.queryForObject("SELECT * FROM review WHERE body = '" + reviewCreateDto.getBody() +
                     "' AND created_date = '" + reviewCreateDto.getDate() +
                     "' AND storeId = " + reviewCreateDto.getStoreId() +
                     " AND userId = " + reviewCreateDto.getUserId(), reviewRowMapper);
@@ -88,7 +96,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("해당 가게의 리뷰가 존재하지 않습니다.", 404);
         }
 
-        List<ReviewDto> reviewDtoList = jdbcTemplate.query("SELECT * FROM REVIEW WHERE storeId="+reviewSearchDto.getStoreId()
+        List<ReviewDto> reviewDtoList = jdbcTemplate.query("SELECT * FROM review WHERE storeId="+reviewSearchDto.getStoreId()
                         + " ORDER BY created_date DESC LIMIT " + reviewSearchDto.getDisplay()
                         + " OFFSET " + reviewSearchDto.getReviewPagination().getLimitStart()
                 , reviewRowMapper);
@@ -114,7 +122,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         if(count == 0){
             throw new ReviewException("해당 가게의 리뷰가 존재하지 않습니다.", 404);
         }
-        List<ReviewDto> reviewDtoList = jdbcTemplate.query("SELECT * FROM REVIEW WHERE storeId="+storeId+" ORDER BY created_date DESC"
+        List<ReviewDto> reviewDtoList = jdbcTemplate.query("SELECT * FROM review WHERE storeId="+storeId+" ORDER BY created_date DESC"
                 , reviewRowMapper);
         String storeName = getStoreName(storeId);
         for (ReviewDto reviewDto : reviewDtoList){
@@ -141,7 +149,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("잘못된 리뷰 형식입니다.", 400);
         }
 
-        jdbcTemplate.update("UPDATE REVIEW SET created_date='"+reviewUpDto.getDate()+
+        jdbcTemplate.update("UPDATE review SET created_date='"+reviewUpDto.getDate()+
                 "', body='"+reviewUpDto.getBody()+
                 "', rating="+reviewUpDto.getRating()+
                 " WHERE reviewId="+reviewUpDto.getReviewId()
@@ -173,7 +181,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         }
 
         try{
-            jdbcTemplate.update("DELETE FROM REVIEW WHERE reviewId="+reviewDelDto.getReviewId());
+            jdbcTemplate.update("DELETE FROM review WHERE reviewId="+reviewDelDto.getReviewId());
         }
         catch(Exception e){
             throw new ReviewException("삭제할 리뷰를 찾을 수 없습니다.", 404);
@@ -187,14 +195,14 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         String imageTitle;
         String urlResource;
 
-        String sql = "SELECT imageUrl FROM reviewimage WHERE reviewId = ?";
-        String sql2 = "SELECT imageTitle FROM reviewimage WHERE reviewId = ?";
+        String sql = "SELECT imageUrl FROM reviewImage WHERE reviewId = ?";
+        String sql2 = "SELECT imageTitle FROM reviewImage WHERE reviewId = ?";
 
         String rootPath;
         try{
-            rootPath = (Paths.get("").toRealPath() + "\\src\\main\\resources").replace('\\', '/');
+            rootPath = (Paths.get("").toRealPath() + dirPath).replace('\\', '/');
         }
-        catch (IOException e){
+        catch (Exception e){
             throw new ReviewException("이미지를 저장한 경로를 찾을 수 없습니다.", 404);
         }
 
@@ -214,9 +222,9 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     public void saveReviewImage(String date, int storeId, int reviewId, String reviewImage) {
         String rootPath;
         try{
-            rootPath = (Paths.get("").toRealPath() + "\\src\\main\\resources").replace('\\', '/');
+            rootPath = (Paths.get("").toRealPath() + dirPath).replace('\\', '/');
         }
-        catch (IOException e){
+        catch (Exception e){
             throw new ReviewException("이미지를 저장할 경로를 찾을 수 없습니다.", 404);
         }
 
@@ -232,7 +240,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
         catch (Exception e){
             throw new ReviewException("이미지 파일을 찾을 수 없습니다.", 404);
         }
-        jdbcTemplate.execute("INSERT INTO reviewimage(imageTitle, imageUrl, reviewId) VALUES('" +
+        jdbcTemplate.execute("INSERT INTO reviewImage(imageTitle, imageUrl, reviewId) VALUES('" +
                 imageTitle +
                 "','" + imageUrl +
                 "'," + reviewId +
@@ -243,14 +251,14 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     public void updateReviewImage(String date, int storeId, int reviewId, String reviewImage) {
         String rootPath;
         try{
-            rootPath = (Paths.get("").toRealPath() + "\\src\\main\\resources").replace('\\', '/');
+            rootPath = (Paths.get("").toRealPath() + dirPath).replace('\\', '/');
         }
-        catch (IOException e){
+        catch (Exception e){
             throw new ReviewException("이미지를 저장할 경로를 찾을 수 없습니다.", 404);
         }
 
         try{
-            String selectSql = "SELECT imageUrl FROM reviewimage WHERE reviewId = ?";
+            String selectSql = "SELECT imageUrl FROM reviewImage WHERE reviewId = ?";
             String imageUrl = jdbcTemplate.queryForObject(selectSql, String.class, reviewId);
             if (imageUrl == null){
                 throw new ReviewException("이미지를 저장할 경로를 찾을 수 없습니다.", 404);
@@ -263,7 +271,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
 
         String imageTitle = date.substring(0, 10) + "-" + storeId + "-" + reviewId;
         String imageUrl = validateImageUrl(rootPath, date) + "/" + imageTitle;
-        String updateSql = "UPDATE reviewimage SET imageUrl = ?, imageTitle = ? WHERE reviewId = ?";
+        String updateSql = "UPDATE reviewImage SET imageUrl = ?, imageTitle = ? WHERE reviewId = ?";
 
         try {
             File imageFile = new File(rootPath + imageUrl);
@@ -279,11 +287,11 @@ public class ReviewRepositoryImpl implements ReviewRepository{
 
     @Override
     public void delReviewImage(int reviewId) {
-        String selectSql = "SELECT imageUrl FROM reviewimage WHERE reviewId = ?";
-        String deleteSql = "DELETE FROM reviewimage WHERE reviewId = ?";
+        String selectSql = "SELECT imageUrl FROM reviewImage WHERE reviewId = ?";
+        String deleteSql = "DELETE FROM reviewImage WHERE reviewId = ?";
         try{
             String imageUrl = jdbcTemplate.queryForObject(selectSql, String.class, reviewId);
-            String rootPath = (Paths.get("").toRealPath() + "\\src\\main\\resources").replace('\\', '/');
+            String rootPath = (Paths.get("").toRealPath() + dirPath).replace('\\', '/');
             Files.delete(Paths.get(rootPath + imageUrl));
             jdbcTemplate.update(deleteSql, reviewId);
         }
@@ -297,14 +305,14 @@ public class ReviewRepositoryImpl implements ReviewRepository{
 
     @Override
     public int countReview(int storeId) {
-        int count = jdbcTemplate.queryForObject("SELECT count(*) FROM REVIEW WHERE storeId="+storeId, Integer.class);
+        int count = jdbcTemplate.queryForObject("SELECT count(*) FROM review WHERE storeId="+storeId, Integer.class);
         return count;
     }
 
     @Override
     public void validateUserId(int userId) {
         try{
-            jdbcTemplate.queryForObject("SELECT userId FROM USER WHERE userId="+userId, Integer.class);
+            jdbcTemplate.queryForObject("SELECT userId FROM user WHERE userId="+userId, Integer.class);
         }
         catch (EmptyResultDataAccessException ex){
             throw new ReviewException("리뷰 작성 권한이 없습니다.", 403);
@@ -315,7 +323,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
     public String getUserName(int userId) {
         String userName;
         try{
-            userName = jdbcTemplate.queryForObject("SELECT userName FROM USER WHERE userId="+userId, String.class);
+            userName = jdbcTemplate.queryForObject("SELECT userName FROM user WHERE userId="+userId, String.class);
         }
         catch (Exception ex){
             throw new ReviewException("리뷰 작성 권한이 없습니다.", 403);
@@ -372,7 +380,7 @@ public class ReviewRepositoryImpl implements ReviewRepository{
 
     @Override
     public int countReviewImage(int reviewId) {
-        int count = jdbcTemplate.queryForObject("SELECT count(*) FROM reviewimage WHERE reviewId="+reviewId, Integer.class);
+        int count = jdbcTemplate.queryForObject("SELECT count(*) FROM reviewImage WHERE reviewId="+reviewId, Integer.class);
         return count;
     }
 

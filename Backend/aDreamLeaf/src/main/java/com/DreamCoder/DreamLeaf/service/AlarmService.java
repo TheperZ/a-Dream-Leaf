@@ -7,6 +7,7 @@ import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlarmService {
 
+    @Autowired
     private final AlarmRepositoryImpl alarmRepository;
 
     public String add(AddAlarmDto addAlarmDto) throws FirebaseMessagingException {

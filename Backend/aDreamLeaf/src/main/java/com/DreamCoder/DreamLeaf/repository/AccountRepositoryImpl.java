@@ -3,6 +3,7 @@ package com.DreamCoder.DreamLeaf.repository;
 
 import com.DreamCoder.DreamLeaf.dto.*;
 import com.DreamCoder.DreamLeaf.exception.AccountException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class AccountRepositoryImpl implements AccountRepository{
 
     @Autowired
@@ -51,7 +53,7 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AccountDto save(AccountCreateDto accountCreateDto) {
-        String sql = "INSERT INTO ACCOUNT(restaurant,price,created_date,accountBody,userId) VALUES('"+
+        String sql = "INSERT INTO account(restaurant,price,created_date,accountBody,userId) VALUES('"+
                 accountCreateDto.getRestaurant()+
                 "','"+accountCreateDto.getPrice()+
                 "','"+accountCreateDto.getDate()+
@@ -62,7 +64,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         currentDate = currentDate.substring(0,currentDate.length()-3);
         String startDate = currentDate+"-01";
         String endDate = setEndDate(currentDate);
-        String updateSql = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
+        String updateSql = "UPDATE accountlog SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
         int remain = getRemain(accountCreateDto.getUserId(),startDate,endDate);
         if(remain>= accountCreateDto.getPrice()){
             jdbcTemplate.execute(sql);
@@ -86,8 +88,8 @@ public class AccountRepositoryImpl implements AccountRepository{
         String endDate;
         int price;
         int remain;
-        String sql = "DELETE FROM ACCOUNT WHERE accountId = "+accountDelDto.getAccountId();
-        String updateLogSql = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
+        String sql = "DELETE FROM account WHERE accountId = "+accountDelDto.getAccountId();
+        String updateLogSql = "UPDATE accountlog SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
         currentDate = getCreatedDate(accountDelDto.getAccountId());
         price = getPrice(accountDelDto.getAccountId());
         currentDate = currentDate.substring(0,currentDate.length()-3);
@@ -106,8 +108,8 @@ public class AccountRepositoryImpl implements AccountRepository{
         int writerId = getWriteId(accountUpDto.getAccountId());
         if(writerId != accountUpDto.getUserId())
             throw new AccountException("수정 권한이 없습니다.", 403);
-        String sql = "UPDATE ACCOUNT SET restaurant = ?, price = ?, Created_date = ?, accountBody = ? WHERE accountId = ?";
-        String sql6 = "UPDATE ACCOUNTLOG SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
+        String sql = "UPDATE account SET restaurant = ?, price = ?, Created_date = ?, accountBody = ? WHERE accountId = ?";
+        String sql6 = "UPDATE accountlog SET remain = ? WHERE userId = ? AND createdDate BETWEEN ? AND ?";
         String startDate;
         String endDate;
         String currentDate = getCreatedDate(accountUpDto.getAccountId());
@@ -150,7 +152,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     @Override
     public SimpleAccountDto inquire(AccountInqDto accountInqDto) {
-        String sql = "SELECT amount, remain FROM ACCOUNTLOG WHERE userId = ? and createdDate >= ? AND createdDate <= ?";
+        String sql = "SELECT amount, remain FROM accountlog WHERE userId = ? and createdDate >= ? AND createdDate <= ?";
         String currentDate = accountInqDto.getYearMonth();
         String startDate = currentDate+"-01";
         String endDate = setEndDate(currentDate);
