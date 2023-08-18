@@ -17,7 +17,7 @@ struct ReviewRepository {
             return Observable.just(validationResult)
         }
         
-        return network.createRequest(storeId: storeId, body: body, rating: rating, image: image)
+        return network.createReview(storeId: storeId, body: body, rating: rating, image: image)
     }
     
     func update(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {
@@ -30,11 +30,11 @@ struct ReviewRepository {
     }
     
     func fetchRecent(storeId: Int) -> Observable<RequestResult<[Review]>> {
-        return network.fetchRecentRequest(storeId: storeId)
+        return network.fetchRecentReview(storeId: storeId)
     }
     
     func fetchReviews(storeId: Int) -> Observable<RequestResult<[Review]>> {
-        return network.fetchReviews(storeId: storeId)
+        return network.fetchAllReviews(storeId: storeId)
     }
     
     func deleteReview(reviewId: Int) -> Observable<RequestResult<Void>> {

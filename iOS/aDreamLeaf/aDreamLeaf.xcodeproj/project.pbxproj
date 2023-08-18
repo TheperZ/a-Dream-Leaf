@@ -24,6 +24,7 @@
 		BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */; };
 		BF219DCE2A034FE0005DBAC6 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCD2A034FE0005DBAC6 /* LocationManager.swift */; };
 		BF219DD02A060C70005DBAC6 /* KakaoNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */; };
+		BF3395862A8F56FD0053A935 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3395852A8F56FD0053A935 /* Network.swift */; };
 		BF3429CF2A82168600EF97CA /* LoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3429CE2A82168600EF97CA /* LoadingViewModel.swift */; };
 		BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D529ED99EE008DB52A /* LoginRepository.swift */; };
 		BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D729ED99FD008DB52A /* LoginNetwork.swift */; };
@@ -125,6 +126,7 @@
 		BF219DCA2A02108B005DBAC6 /* LocalRestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRestaurantViewController.swift; sourceTree = "<group>"; };
 		BF219DCD2A034FE0005DBAC6 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoNetwork.swift; sourceTree = "<group>"; };
+		BF3395852A8F56FD0053A935 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		BF3429CE2A82168600EF97CA /* LoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewModel.swift; sourceTree = "<group>"; };
 		BF6439D529ED99EE008DB52A /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		BF6439D729ED99FD008DB52A /* LoginNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetwork.swift; sourceTree = "<group>"; };
@@ -614,6 +616,7 @@
 				BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */,
 				BFBD103F2A163FD9002EE950 /* AccountNetwork.swift */,
 				BF219DCF2A060C70005DBAC6 /* KakaoNetwork.swift */,
+				BF3395852A8F56FD0053A935 /* Network.swift */,
 				BF09DBB42A19309E0083880F /* StoreNetwork.swift */,
 				BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */,
 				BFF042EF2A2328FB001FCB88 /* AlarmNetwork.swift */,
@@ -808,6 +811,7 @@
 				BFB0A90D29D5217B003D3E6E /* SignUpViewController.swift in Sources */,
 				BFB0A91429D550ED003D3E6E /* MyPageViewController.swift in Sources */,
 				BFBD10342A131D7C002EE950 /* PwdResetViewController.swift in Sources */,
+				BF3395862A8F56FD0053A935 /* Network.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */,
 				BFBD10402A163FD9002EE950 /* AccountNetwork.swift in Sources */,
