@@ -33,12 +33,18 @@ class Network {
         self.type = type
     }
     
-    func makeRequest(url: String, method: NetworkMethod, params:[String: Any]? = nil) -> URLRequest {
+    func makeRequest(url: String, method: NetworkMethod, params:[String: Any]? = nil, header: [String: String]? = nil) -> URLRequest {
         let url = K.serverURL + url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         var request = URLRequest(url: URL(string: url)!)
         
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if let header = header {
+            header.keys.forEach { key in
+                request.setValue(header[key], forHTTPHeaderField: key)
+            }
+        }
         request.timeoutInterval = 10
          
         // httpBody 에 parameters 추가
