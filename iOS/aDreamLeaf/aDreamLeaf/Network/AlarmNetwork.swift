@@ -27,7 +27,7 @@ class AlarmNetwork: Network {
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token]
                 
-                let request = self.makeRequest(url: K.serverURL + "/alarm", method: .POST, params: params)
+                let request = self.makeRequest(url: "/alarm", method: .POST, params: params)
                 
                 AF.request(request).responseData{ (response) in
                     self.handleResponse(response: response, observer: observer)
@@ -54,7 +54,7 @@ class AlarmNetwork: Network {
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token, "FCMToken": UserManager.FCMToken ?? "" ]
               
-                let request = self.makeRequest(url: K.serverURL + "/alarm/add", method: .POST, params: params)
+                let request = self.makeRequest(url: "/alarm/add", method: .POST, params: params)
                 
                 AF.request(request).responseData{ (response) in
                     self.handleResponse(response: response, observer: observer)
@@ -81,7 +81,7 @@ class AlarmNetwork: Network {
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token, "FCMToken": UserManager.FCMToken ?? "" ]
                 
-                let request = self.makeRequest(url: K.serverURL + "/alarm/delete", method: .POST, params: params)
+                let request = self.makeRequest(url: "/alarm/delete", method: .POST, params: params)
                  
                 AF.request(request).responseData { (response) in
                     self.handleResponse(response: response, observer: observer)

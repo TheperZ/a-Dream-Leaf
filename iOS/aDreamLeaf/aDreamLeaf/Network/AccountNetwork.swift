@@ -27,7 +27,7 @@ class AccountNetwork: Network {
                 // POST 로 보낼 정보
                 let params = ExpenditureRequest(firebaseToken: token, accountId: accountId).toDict()
                  
-                let request = self.makeRequest(url: K.serverURL + "/account/delete", method: .POST, params: params)
+                let request = self.makeRequest(url: "/account/delete", method: .POST, params: params)
                 
                 AF.request(request).responseData { (response) in
                     self.handleResponse(response: response, observer: observer)
@@ -54,7 +54,7 @@ class AccountNetwork: Network {
                 // POST 로 보낼 정보
                 let params = BudgetRequest(token: token, amount: budget).toDict()
                 
-                let request = self.makeRequest(url: K.serverURL + "/account/setting", method: .POST, params: params)
+                let request = self.makeRequest(url: "/account/setting", method: .POST, params: params)
                  
                 AF.request(request).responseData{ (response) in
                     self.handleResponse(response: response, observer: observer)
@@ -81,7 +81,7 @@ class AccountNetwork: Network {
                 // POST 로 보낼 정보
                 let params = AccountRequest(token: token, restaurant: storeName, price: price, date: date, body: body).toDict()
                  
-                let request = self.makeRequest(url: K.serverURL + "/account/create", method: .POST, params: params)
+                let request = self.makeRequest(url: "/account/create", method: .POST, params: params)
                 
                 AF.request(request).responseData { (response) in
                     self.handleResponse(response: response, observer: observer)
@@ -109,7 +109,7 @@ class AccountNetwork: Network {
                 var params =  AccountRequest(token: token, restaurant: storeName, price: price, date: date, body: body).toDict()
                 params["accountId"] = accountId as Any
                 
-                let request = self.makeRequest(url: K.serverURL + "/account/update", method: .POST, params: params)
+                let request = self.makeRequest(url: "/account/update", method: .POST, params: params)
                 
                 AF.request(request).responseData { (response) in
                     self.handleResponse(response: response, observer: observer)
@@ -136,7 +136,7 @@ class AccountNetwork: Network {
                 // POST 로 보낼 정보
                 let params = ExpenditureListRequest(firebaseToken: token, yearMonth: when).toDict()
                 
-                let request = self.makeRequest(url: K.serverURL + "/account/list", method: .POST, params: params)
+                let request = self.makeRequest(url: "/account/list", method: .POST, params: params)
 
                 AF.request(request).responseData{ (response) in
                     self.handleResponse(response: response, observer: observer)
@@ -163,7 +163,7 @@ class AccountNetwork: Network {
                 // POST 로 보낼 정보
                 let params = AccountSummaryRequest(firebaseToken: token, yearMonth: yearMonth).toDict()
                 
-                let request = self.makeRequest(url: K.serverURL + "/account", method: .POST, params: params)
+                let request = self.makeRequest(url: "/account", method: .POST, params: params)
                 
                 AF.request(request).responseData{ (response) in
                     self.handleResponse(response: response, observer: observer)
