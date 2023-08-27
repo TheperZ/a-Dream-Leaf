@@ -9,16 +9,17 @@ import Foundation
 import RxRelay
 import RxSwift
 
-struct PwdResetViewModel {
-    let disposeBag = DisposeBag()
+struct PwdResetViewModel:LoadingViewModel {
+    var loading: PublishSubject<Bool>
     
-    let loading = BehaviorSubject<Bool>(value: false)
+    var disposeBag = DisposeBag()
     
     let email = PublishRelay<String>()
     let resetBtnTap = PublishRelay<Void>()
     let resetResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: LoginRepository = LoginRepository()) {
+        loading = PublishSubject<Bool>()
         
         resetBtnTap
             .withLatestFrom(email)

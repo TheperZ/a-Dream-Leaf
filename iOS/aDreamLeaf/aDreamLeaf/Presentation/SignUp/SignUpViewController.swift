@@ -12,8 +12,7 @@ import FirebaseAuth
 
 class SignUpViewController: UIViewController, LoadingViewController {
     var disposeBag = DisposeBag()
-    
-    var loadingView: UIActivityIndicatorView
+    var loadingView = UIActivityIndicatorView(style: .medium)
     
     private let viewModel: SignUpViewModel
     
@@ -41,10 +40,7 @@ class SignUpViewController: UIViewController, LoadingViewController {
     
     init() {
         viewModel = SignUpViewModel()
-        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
-        
-        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
@@ -53,7 +49,7 @@ class SignUpViewController: UIViewController, LoadingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
         keyboardConfig()
         bind()
         attribute()

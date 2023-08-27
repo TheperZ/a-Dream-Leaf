@@ -9,10 +9,10 @@ import Foundation
 import RxSwift
 import RxRelay
 
-struct MyPageViewModel {
-    private let disposeBag = DisposeBag()
+struct MyPageViewModel: LoadingViewModel {
+    var disposeBag = DisposeBag()
     
-    let loading = BehaviorSubject<Bool>(value: false)
+    var loading = PublishSubject<Bool>()
     
     let email = UserManager.getInstance().map{ $0?.email ?? "" }
     let nickname = UserManager.getInstance().map{ $0?.nickname ?? "" }

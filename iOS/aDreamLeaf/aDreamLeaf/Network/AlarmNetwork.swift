@@ -11,7 +11,7 @@ import FirebaseAuth
 import RxSwift
 import FirebaseMessaging
 
-struct AlarmNetwork {
+class AlarmNetwork: Network {
     func checkState() -> Observable<RequestResult<AlarmState>> {
         return Observable.create { observer in
             
@@ -19,61 +19,19 @@ struct AlarmNetwork {
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                    observer.onNext(RequestResult<AlarmState>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
                 }
                 
                 guard let token = token else { return }
                 
-                let url = K.serverURL + "/alarm"
-                var request = URLRequest(url: URL(string: url)!)
-                request.httpMethod = "POST"
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.timeoutInterval = 10
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token]
-                 
-                 // httpBody 에 parameters 추가
-                do {
-                    try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
-                } catch {
-                    print("http Body Error")
-                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!"))
-                }
                 
-                AF.request(request).responseJSON{ (response) in
-                     switch response.result {
-                         case .success:
-                             do {
-                                 if let statusCode = response.response?.statusCode {
-                                     switch statusCode {
-                                         case 200..<300:
-                                             guard let result = response.data else { return }
-                                             
-                                             let decoder = JSONDecoder()
-                                             let data = try decoder.decode(AlarmState.self, from: result)
-
-                                             observer.onNext(RequestResult(success: true, msg: nil, data: data))
-                                         case 404, 500:
-                                             guard let result = response.data else { return }
-                                             let decoder = JSONDecoder()
-                                             let data = try decoder.decode(ErrorResponse.self, from: result)
-                                             observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
-                                         default:
-                                             print("Account Error - Unknown status code: \(statusCode)")
-                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                                     }
-                                 }
-                                 
-                             } catch(let err) {
-                                 print(err)
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                             }
-                                 
-                         case .failure(let error):
-                                 print("error : \(error.errorDescription!)")
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                     }
-                 }
+                let request = self.makeRequest(url: "/alarm", method: .POST, params: params)
+                
+                AF.request(request).responseData{ (response) in
+                    self.handleResponse(response: response, observer: observer)
+                }
                 
             }
             
@@ -88,56 +46,19 @@ struct AlarmNetwork {
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
                 }
                 
                 guard let token = token else { return }
                 
-                let url = K.serverURL + "/alarm/add"
-                var request = URLRequest(url: URL(string: url)!)
-                request.httpMethod = "POST"
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.timeoutInterval = 10
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token, "FCMToken": UserManager.FCMToken ?? "" ]
               
-                 // httpBody 에 parameters 추가
-                do {
-                    try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
-                } catch {
-                    print("http Body Error")
-                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!"))
-                }
+                let request = self.makeRequest(url: "/alarm/add", method: .POST, params: params)
                 
-                AF.request(request).response{ (response) in
-                     switch response.result {
-                         case .success:
-                             do {
-                                 if let statusCode = response.response?.statusCode {
-                                     switch statusCode {
-                                         case 200..<300:
-                                             observer.onNext(RequestResult(success: true, msg: nil))
-                                         case 404, 500:
-                                             guard let result = response.data else { return }
-                                             let decoder = JSONDecoder()
-                                             let data = try decoder.decode(ErrorResponse.self, from: result)
-                                             observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
-                                         default:
-                                             print("Account Error - Unknown status code: \(statusCode)")
-                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                                     }
-                                 }
-                                 
-                             } catch(let err) {
-                                 print(err)
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                             }
-                                 
-                         case .failure(let error):
-                                 print("error : \(error.errorDescription!)")
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                     }
-                 }
+                AF.request(request).responseData{ (response) in
+                    self.handleResponse(response: response, observer: observer)
+                }
                 
             }
             
@@ -157,52 +78,14 @@ struct AlarmNetwork {
                 
                 guard let token = token else { return }
                 
-                let url = K.serverURL + "/alarm/delete"
-                var request = URLRequest(url: URL(string: url)!)
-                request.httpMethod = "POST"
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.timeoutInterval = 10
                 // POST 로 보낼 정보
                 let params = ["firebaseToken": token, "FCMToken": UserManager.FCMToken ?? "" ]
                 
-                print(UserManager.FCMToken ?? "")
+                let request = self.makeRequest(url: "/alarm/delete", method: .POST, params: params)
                  
-                 // httpBody 에 parameters 추가
-                do {
-                    try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
-                } catch {
-                    print("http Body Error")
-                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n잠시 후에 다시 시도해주세요!"))
+                AF.request(request).responseData { (response) in
+                    self.handleResponse(response: response, observer: observer)
                 }
-                
-                AF.request(request).response{ (response) in
-                     switch response.result {
-                         case .success:
-                             do {
-                                 if let statusCode = response.response?.statusCode {
-                                     switch statusCode {
-                                         case 200..<300:
-                                             observer.onNext(RequestResult(success: true, msg: nil))
-                                         case 404, 500:
-                                             guard let result = response.data else { return }
-                                             let decoder = JSONDecoder()
-                                             let data = try decoder.decode(ErrorResponse.self, from: result)
-                                             observer.onNext(RequestResult(success: false, msg: data.ErrorMessage))
-                                         default:
-                                             print("Account Error - Unknown status code: \(statusCode)")
-                                             observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                                     }
-                                 }
-                             } catch(let err) {
-                                 print(err)
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                             }
-                                 
-                         case .failure(let error):
-                                 print("error : \(error.errorDescription!)")
-                                 observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                     }
-                 }
                 
             }
             

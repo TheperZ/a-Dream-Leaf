@@ -10,7 +10,7 @@ import RxSwift
 import FirebaseAuth
 import Alamofire
 
-struct LoginNetwork {
+class LoginNetwork : Network {
     func loginRequestFB(email: String, pwd: String) -> Observable<RequestResult<User>> {
         return Observable.create { observer in
             Auth.auth().signIn(withEmail: email, password: pwd) { authResult, error in
@@ -59,22 +59,8 @@ struct LoginNetwork {
                     if error != nil {
                         observer.onNext(RequestResult<User>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
                     } else {
-                        let url = K.serverURL + "/login"
-                         var request = URLRequest(url: URL(string: url)!)
-                         request.httpMethod = "POST"
-                         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                         request.timeoutInterval = 10
-                         // POST 로 보낼 정보
-                         let params = ["firebaseToken": token!] as Dictionary
-                         
-                         // httpBody 에 parameters 추가
-                         do {
-                             try request.httpBody = JSONSerialization.data(withJSONObject: params, options: [])
-                         } catch {
-                             print("http Body Error")
-                             observer.onNext(RequestResult<User>(success: false, msg: "오류가 발생했습니다! \n 잠시 후에 다시 시도해주세요!"))
-                         }
-                        
+                        let params = ["firebaseToken": token!] as Dictionary
+                        let request = self.makeRequest(url: "/login", method: .POST, params: params)
                         AF.request(request).response{ (response) in
                              switch response.result {
                                  case .success:
@@ -85,9 +71,9 @@ struct LoginNetwork {
                                              switch statusCode {
                                                  case 200: // 정상적으로 로그인 된 경우
                                                      let data = try decoder.decode(Login.self, from: result)
-                                                     
-                                                     UserManager.login(userData: User(userId: data.userId, email: data.email, nickname: data.userName, password: pwd))
-                                                     observer.onNext(RequestResult<User>(success: true, msg: nil))
+                                                     let userData = User(userId: data.userId, email: data.email, nickname: data.userName, password: pwd)
+                                                     UserManager.login(userData: userData)
+                                                     observer.onNext(RequestResult<User>(success: true, msg: nil, data: userData))
                                                      
                                                  default: // 어떠한 오류로 로그인에 실패한 경우
                                                      let data = try decoder.decode(ErrorResponse.self, from: result)

@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 struct SignUpRepository {
-    let network = SignUpNetwork()
+    let network = SignUpNetwork(type: .SignUp)
     
     func signUp(email: String, pwd: String, pwdCheck: String) -> Observable<RequestResult<Void>> {
         let inputValidationResult = validateInput(email: email, pwd: pwd, pwdCheck: pwdCheck)

@@ -9,11 +9,9 @@ import Foundation
 import RxSwift
 import RxRelay
 
-struct NewPaymentViewModel {
-    let disposeBag = DisposeBag()
-    
-    let loading = BehaviorSubject<Bool>(value: false)
-    
+struct NewPaymentViewModel: LoadingViewModel {
+    var loading: PublishSubject<Bool>
+    var disposeBag = DisposeBag()
     let editData: Expenditure?
     
     let date = BehaviorSubject<String>(value: Date.dateToString(with: Date.now))
@@ -26,6 +24,7 @@ struct NewPaymentViewModel {
     let saveResult = PublishSubject<RequestResult<Void>>()
     
     init(_ repo: AccountRepository = AccountRepository(), data: Expenditure? = nil) {
+        loading = PublishSubject<Bool>()
         
         // New
         editData = data

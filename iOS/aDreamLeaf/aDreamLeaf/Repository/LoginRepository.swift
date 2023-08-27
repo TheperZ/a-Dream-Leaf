@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 struct LoginRepository {
-    private let network = LoginNetwork()
+    private let network = LoginNetwork(type: .Login)
     
     func login(email: String, pwd: String) -> Observable<RequestResult<User>> {
         if let emailValidationResult = validateInput(email: email, pwd: pwd) {
@@ -21,6 +21,12 @@ struct LoginRepository {
         return FBLoginResult.flatMap { result in
             if result.success {
                 return network.loginRequestServer(email: email, pwd: pwd)
+                    .map { result in
+                        if result.success {
+                            UserManager.login(userData: result.data)
+                        }
+                        return result
+                    }
             } else {
                 return FBLoginResult
             }

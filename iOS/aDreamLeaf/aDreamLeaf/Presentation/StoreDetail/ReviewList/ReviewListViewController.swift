@@ -11,7 +11,7 @@ import RxCocoa
 
 class ReviewListViewController : UIViewController, LoadingViewController {
     var disposeBag = DisposeBag()
-    var loadingView: UIActivityIndicatorView
+    var loadingView = UIActivityIndicatorView(style: .medium)
     let viewModel: ReviewListViewModel
     
     private let scrollView = UIScrollView()
@@ -27,10 +27,7 @@ class ReviewListViewController : UIViewController, LoadingViewController {
     
     init(storeData: Store) {
         viewModel = ReviewListViewModel(storeData: storeData)
-        loadingView = UIActivityIndicatorView(style: .medium)
         super.init(nibName: nil, bundle: nil)
-        
-        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
     }
     
     required init?(coder: NSCoder) {
@@ -41,7 +38,7 @@ class ReviewListViewController : UIViewController, LoadingViewController {
         super.viewDidLoad()
         
         tableView.register(ReviewCell.self, forCellReuseIdentifier: K.TableViewCellID.ReviewCell)
-        
+        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
         bind()
         attribute()
         layout()

@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 struct KakaoRepositroy {
-    private let network = KakaoNetwork()
+    private let network = KakaoNetwork(type: .Kakao)
     
     func getAddressKakao(lat: Double, lon: Double) -> Observable<String>{
         return network.getAddress(lat: lat, lon: lon)

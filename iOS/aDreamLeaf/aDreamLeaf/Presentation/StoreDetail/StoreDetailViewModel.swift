@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxRelay
 
-class StoreDetailViewModel: LoadingViewModel {
+struct StoreDetailViewModel: LoadingViewModel {
     var loading: PublishSubject<Bool>
     
     let disposeBag = DisposeBag()

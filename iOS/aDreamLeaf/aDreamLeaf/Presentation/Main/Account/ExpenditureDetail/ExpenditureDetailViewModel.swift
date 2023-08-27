@@ -9,10 +9,10 @@ import Foundation
 import RxSwift
 import RxRelay
 
-struct ExpenditureDetailViewModel {
-    private let disposeBag = DisposeBag()
+struct ExpenditureDetailViewModel: LoadingViewModel {
+    var disposeBag = DisposeBag()
     
-    let loading = BehaviorSubject<Bool>(value: false)
+    var loading: PublishSubject<Bool>
     
     let data: BehaviorSubject<Expenditure>
     private let expenditureId: Int
@@ -23,6 +23,7 @@ struct ExpenditureDetailViewModel {
     init(data : Expenditure, _ repo: AccountRepository = AccountRepository()) {
         self.data = BehaviorSubject(value: data)
         self.expenditureId = data.accountId
+        self.loading = PublishSubject<Bool>()
         
         deleteButtonTap
             .flatMap{ repo.deleteExpenditure(accountId: data.accountId) }
