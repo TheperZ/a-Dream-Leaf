@@ -4,6 +4,7 @@ package com.DreamCoder.DreamLeaf.controller;
 import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
+import com.DreamCoder.DreamLeaf.service.ApiManager;
 import com.DreamCoder.DreamLeaf.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,12 @@ public class StoreController {
         storeService.saveApi();
         return ResponseEntity.status(HttpStatus.CREATED).body("");
 
+    }
+
+    @PostMapping("/api/hygiene")
+    public ResponseEntity saveHygiene(){
+        storeService.saveHyApi();
+        return ResponseEntity.status(201).body("위생정보 저장이 완료 되었습니다.");
     }
 
     @PostMapping("/{storeId}")
