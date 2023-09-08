@@ -67,6 +67,9 @@ public class StoreService {
         apiManager.saveHygieneApi();
     }
 
+    public void saveHyApi(){
+        apiManager.saveHygieneApi();
+    }
 
 
 }
