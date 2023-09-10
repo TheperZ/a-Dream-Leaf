@@ -19,7 +19,6 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
     
     private let nameLabel = UILabel()
     private let addressStackView = UIStackView()
-    private let addressLabel = UILabel()
     private let mapButton = UIButton()
     private let distanceLabel = UILabel()
     private let topStackView = UIStackView()
@@ -139,17 +138,12 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { $0.refineRoadnmAddr}
-            .bind(to: addressLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.detail
-            .map { "[ 내 위치로 부터 \(String(format:"%.1f", $0.curDist))km ]" }
+            .map { "[ 내 위치로 부터 \($0.curDist != 0.0 ? StringUtil.getRefinedDistance(with:$0.curDist) : "-km") ]" }
             .bind(to: distanceLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.detail
-            .map { "식약청 위생등급 : \($0.hygieneGrade)" }
+            .map { "식약청 위생등급 : \($0.hygieneGrade == "" ? "없음" : $0.hygieneGrade)" }
             .observe(on: MainScheduler.instance)
             .bind(to: hygieneGradeLabel.rx.text)
             .disposed(by: disposeBag)
@@ -221,17 +215,13 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
         
         addressStackView.spacing = 10
         
-        addressLabel.font = .systemFont(ofSize: 15, weight: .light)
-        addressLabel.textColor = .black
-        addressLabel.textAlignment = .center
-        
         mapButton.setTitle("지도 보기", for: .normal)
         mapButton.titleLabel?.font = .systemFont(ofSize: 10, weight: .medium)
         mapButton.setTitleColor(.black, for: .normal)
         mapButton.layer.cornerRadius = 5
         mapButton.layer.backgroundColor = UIColor(white: 0.90, alpha: 1).cgColor
         
-        distanceLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        distanceLabel.font = .systemFont(ofSize: 14, weight: .medium)
         distanceLabel.textColor = .gray
         distanceLabel.textAlignment = .center
         
@@ -317,7 +307,7 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [addressLabel, mapButton].forEach {
+        [distanceLabel, mapButton].forEach {
             addressStackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -352,9 +342,6 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
             addressStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             mapButton.widthAnchor.constraint(equalToConstant: 50),
-            
-            distanceLabel.topAnchor.constraint(equalTo: addressStackView.bottomAnchor, constant: 20),
-            distanceLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             topStackView.topAnchor.constraint(equalTo: distanceLabel.bottomAnchor,constant: 20),
             topStackView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),

@@ -24,7 +24,7 @@ struct LocationManager {
         case .restricted, .notDetermined, .denied:
             return false
         default:
-            return true
+            return false
         }
     }
     static func config() {
