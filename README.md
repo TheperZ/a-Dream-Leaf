@@ -30,6 +30,10 @@
 
 ## 기능
 
+
+
+
+
 * 사용자 위치 기반 주변 선한 영향력 가게 및 꿈나무 카드 결제 가맹점 검색 (2023.07.05 기준 경기도 내의 가게만 검색가능)
 
   <img src="https://github.com/SunEom/a-Dream-Leaf/assets/75257785/0959f7f6-5659-4bda-8681-7ff4b1b111f0" width="250" height="500"/>
@@ -37,7 +41,7 @@
 * 선한 영향력 가게 및 꿈나무 카드 결제 가맹점에 대한 상세 정보 및 식약청 위생등급 제공
   - 사용자부터의 거리 및 지도를 이용한 위치 제공
   
-  <img src="https://github.com/SunEom/a-Dream-Leaf/assets/75257785/5a28aad1-3fc2-48bf-b66f-e92e62bad88a" width="250" height="500"/>
+  <img src="https://github.com/SunEom/a-Dream-Leaf/assets/75257785/0ca4656e-1c2f-416d-bc64-f7ff96499fe0" width="250" height="500"/>
 
 * 키워드를 이용한 가게 검색
 
