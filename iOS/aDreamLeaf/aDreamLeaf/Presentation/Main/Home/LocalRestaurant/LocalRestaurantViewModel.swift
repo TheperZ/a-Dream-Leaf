@@ -31,12 +31,11 @@ struct LocalRestaurantViewModel {
             .bind(to: loading)
             .disposed(by: disposeBag)
         
-        
-        Observable.just((LocationManager.getLatitude() ?? 0.0 , LocationManager.getLongitude() ?? 0.0))
-            .map { ($0.0, $0.1) }
-            .flatMap(kakaoRepo.getAddressKakao)
+
+        kakaoRepo.getMyAddress()
             .bind(to: address)
             .disposed(by: disposeBag)
+        
         
         allButtonTap
             .withLatestFrom(allList)

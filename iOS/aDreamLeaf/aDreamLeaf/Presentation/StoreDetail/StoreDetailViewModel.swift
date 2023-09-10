@@ -37,7 +37,7 @@ struct StoreDetailViewModel: LoadingViewModel {
             .map { $0.data! }
             .bind(to: detail)
             .disposed(by: disposeBag)
-        
+
         //최근 리뷰 목록 업데이트 요청 시 불러오기
         fetchReviewRequest
             .flatMap{ reviewRepo.fetchRecent(storeId: storeId) }
