@@ -23,9 +23,6 @@ struct KakaoNetwork {
             request.setValue("KakaoAK \(Bundle.main.object(forInfoDictionaryKey: "KAKAO_API_KEY") as! String)", forHTTPHeaderField: "Authorization")
             request.timeoutInterval = 10
 
-            
-            print(lat, lon)
-            
             AF.request(request).response{ (response) in
                 switch response.result {
                     case .success:

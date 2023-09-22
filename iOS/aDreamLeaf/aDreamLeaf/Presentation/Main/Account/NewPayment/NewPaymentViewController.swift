@@ -86,7 +86,7 @@ class NewPaymentViewController: UIViewController, LoadingViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 if result.success {
-                    let alert = UIAlertController(title: "성공", message: result.msg , preferredStyle: .alert)
+                    let alert = UIAlertController(title: "성공", message: self.viewModel.editData == nil ? "지출 내역을 정상적으로 추가하였습니다." : "지출 내역을 정상적으로 수정하였습니다." , preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default) { _ in
                         self.navigationController?.popToRootViewController(animated: true)
                     }
