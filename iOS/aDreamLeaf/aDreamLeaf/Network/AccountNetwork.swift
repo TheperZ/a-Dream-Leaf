@@ -12,6 +12,10 @@ import Alamofire
 
 class AccountNetwork: Network {
     
+    init() {
+        super.init(type: .Account)
+    }
+    
     func deleteExpenditure(accountId: Int) -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             

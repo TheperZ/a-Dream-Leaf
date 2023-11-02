@@ -11,7 +11,10 @@ import FirebaseAuth
 import Alamofire
 
 class SignUpNetwork: Network {
-    let disposeBag = DisposeBag()
+    
+    init() {
+        super.init(type: .SignUp)
+    }
     
     func signUpRequestFB(email: String, pwd: String) -> Observable<RequestResult<Void>> {
         

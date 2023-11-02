@@ -50,7 +50,7 @@ class SignUpViewController: UIViewController, LoadingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
-        keyboardConfig()
+//        keyboardConfig()
         bind()
         attribute()
         layout()

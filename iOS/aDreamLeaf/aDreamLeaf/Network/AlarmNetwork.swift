@@ -12,6 +12,11 @@ import RxSwift
 import FirebaseMessaging
 
 class AlarmNetwork: Network {
+    
+    init() {
+        super.init(type: .Alarm)
+    }
+    
     func checkState() -> Observable<RequestResult<AlarmState>> {
         return Observable.create { observer in
             

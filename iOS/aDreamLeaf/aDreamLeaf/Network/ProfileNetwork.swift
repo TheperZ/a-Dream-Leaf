@@ -11,6 +11,11 @@ import Alamofire
 import RxSwift
 
 class ProfileNetwork: Network {
+    
+    init() {
+        super.init(type: .Profile)
+    }
+    
     func deleteAccountFB() -> Observable<RequestResult<Void>> {
         return Observable.create { observer in
             

@@ -35,11 +35,13 @@ struct LocationManager {
     }
     
     static func getLatitude() -> Double? {
-        return locationManager.location?.coordinate.latitude
+//        return locationManager.location?.coordinate.latitude
+        return 37.6822
     }
     
     static func getLongitude() -> Double? {
-        return locationManager.location?.coordinate.longitude
+//        return locationManager.location?.coordinate.longitude
+        return 126.7695
     }
   
 }

@@ -99,13 +99,6 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
             })
             .disposed(by: disposeBag)
         
-        reviewButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.navigationController?.pushViewController(ReviewViewController(storeId: self.viewModel.storeId), animated: true)
-            })
-            .disposed(by: disposeBag)
-        
         mapButton.rx.tap
             .observe(on: MainScheduler.instance)
             .withLatestFrom(viewModel.detail)
@@ -130,6 +123,13 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
                 }
             }
             .bind(to: reviewButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        reviewButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(ReviewViewController(storeId: self.viewModel.storeId), animated: true)
+            })
             .disposed(by: disposeBag)
         
         viewModel.detail
