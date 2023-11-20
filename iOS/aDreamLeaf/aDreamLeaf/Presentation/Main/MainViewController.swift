@@ -20,6 +20,6 @@ class MainViewController: UITabBarController {
         super.viewDidLoad()
         self.tabBar.backgroundColor = UIColor(named: "mainColor")
         self.tabBar.tintColor = UIColor(named: "subColor")
-        self.setViewControllers([UINavigationController(rootViewController: HomeViewController()), UINavigationController(rootViewController: SearchViewController()), UINavigationController(rootViewController: AccountViewController())], animated: true)
+        self.setViewControllers([UINavigationController(rootViewController: HomeViewController(viewModel: HomeViewModel())), UINavigationController(rootViewController: SearchViewController()), UINavigationController(rootViewController: AccountViewController())], animated: true)
     }
 }

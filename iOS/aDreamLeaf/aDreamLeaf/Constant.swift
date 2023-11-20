@@ -25,5 +25,5 @@ struct K {
         static let RestaurantCell = "RestaurantCell"
     }
     
-    static let serverURL = "No Server"
+    static let serverURL = "http://localhost:8080"
 }

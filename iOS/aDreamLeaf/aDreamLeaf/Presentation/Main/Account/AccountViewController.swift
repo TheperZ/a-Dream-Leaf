@@ -124,7 +124,8 @@ class AccountViewController: UIChartViewController {
             .disposed(by: disposeBag)
         
         viewModel.list
-            .map { $0.count == 0 ? false : true}
+            .withLatestFrom(UserManager.getInstance()) { ($0, $1) }
+            .map { $0.count == 0 && $1 != nil ? false : true}
             .bind(to: emptyWarningLabel.rx.isHidden)
             .disposed(by: disposeBag)
         

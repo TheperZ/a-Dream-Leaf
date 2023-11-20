@@ -14,14 +14,65 @@ class HomeViewController: UIChartViewController {
     let disposeBag = DisposeBag()
     var viewModel: HomeViewModel!
     
-    let titleLabel = UILabel()
-    let profileButton = UIButton()
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "꿈나무 한입"
+        label.font = UIFont(name: "LINESeedSansKR-Bold", size: 28)
+        label.textColor = .black
+        return label
+    }()
     
-    private let nearRestSummaryContainer = UIView()
-    private let nearRestTitleLabel = UILabel()
-    private let nearRestMoreButon = UIButton()
-    private let nearRestSubTitleLabel = UILabel()
-    private let nearRestEmptyAlertLabel = UILabel()
+    let profileButton: UIButton = {
+        let button = UIButton()
+        let profileButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
+        let profileButtonImg = UIImage(systemName: "person.circle", withConfiguration: profileButtonConfig)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(profileButtonImg, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+    
+    private let nearRestSummaryContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 10
+        return view
+    }()
+    
+    private let nearRestTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "주변 음식점"
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textColor = .black
+        return label
+    }()
+    
+    private let nearRestMoreButon: UIButton = {
+        let button = UIButton()
+        button.setTitle("더보기", for: .normal)
+        button.setTitleColor(.gray, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        return button
+    }()
+    
+    private let nearRestSubTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "우리동네 꿈나무 식당을 소개합니다 :)"
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .black
+        return label
+    }()
+    
+    private let nearRestEmptyAlertLabel: UILabel = {
+        let label = UILabel()
+        label.text = "주변의 음식점을 찾을 수 없습니다 🥲"
+        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.layer.borderColor = UIColor.gray.cgColor
+        label.layer.borderWidth = 0.5
+        label.layer.cornerRadius = 10
+        return label
+    }()
     
     private let nearRestCollectionViewLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -30,27 +81,63 @@ class HomeViewController: UIChartViewController {
         return layout
     }()
     
-    private lazy var nearRestCollectionView = {
+    private lazy var nearRestCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: nearRestCollectionViewLayout)
         collectionView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 15)
         collectionView.register(RestaurantCell.self, forCellWithReuseIdentifier: K.CollectionViewCellID.RestaurantCell)
         collectionView.isScrollEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
         return collectionView
     }()
     
-    private let infoStackView = UIStackView()
-    private let goodInfoImageView = UIImageView()
-    private let goodInfoTextLabel = UILabel()
-    private let cardInfoImageView = UIImageView()
-    private let cardInfoTextLabel = UILabel()
+    private let infoStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 5
+        return stackView
+    }()
     
-    override init() {
-        viewModel = HomeViewModel()
+    private let goodInfoImageView: UIImageView = {
+        let imageView = UIImageView()
+        let goodConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .regular, scale: .default)
+        let goodImg = UIImage(systemName: "leaf", withConfiguration: goodConfig)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = goodImg
+        imageView.tintColor = UIColor(named: "subColor")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let goodInfoTextLabel: UILabel = {
+        let textLabel = UILabel()
+        textLabel.text = "선한 영향력 /"
+        textLabel.font = .systemFont(ofSize: 12, weight: .regular)
+        textLabel.textColor = .gray
+        return textLabel
+    }()
+    
+    private let cardInfoImageView: UIImageView = {
+        let imageView = UIImageView()
+        let cardConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .regular, scale: .default)
+        let cardImg = UIImage(systemName: "creditcard", withConfiguration: cardConfig)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = cardImg
+        imageView.tintColor = UIColor(named: "subColor")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let cardInfoTextLabel: UILabel = {
+        let textLabel = UILabel()
+        textLabel.text = "꿈나무 카드"
+        textLabel.font = .systemFont(ofSize: 12, weight: .regular)
+        textLabel.textColor = .gray
+        return textLabel
+    }()
+    
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
         super.init()
-        tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), tag: 1)
-        tabBarItem.imageInsets = .init(top: 10, left: 0, bottom: -10, right: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -126,64 +213,10 @@ class HomeViewController: UIChartViewController {
     private func attribute() {
         view.backgroundColor = .white
         
-        titleLabel.text = "꿈나무 한입"
-        titleLabel.font = UIFont(name: "LINESeedSansKR-Bold", size: 28)
-        titleLabel.textColor = .black
-        
-        let profileButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
-        let profileButtonImg = UIImage(systemName: "person.circle", withConfiguration: profileButtonConfig)?.withRenderingMode(.alwaysTemplate)
-        profileButton.setImage(profileButtonImg, for: .normal)
-        profileButton.tintColor = .black
+        tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), tag: 1)
+        tabBarItem.imageInsets = .init(top: 10, left: 0, bottom: -10, right: 0)
         
         chartSetting()
-        
-        nearRestSummaryContainer.backgroundColor = .white
-        nearRestSummaryContainer.layer.cornerRadius = 10
-        
-        nearRestTitleLabel.text = "주변 음식점"
-        nearRestTitleLabel.font = .systemFont(ofSize: 18, weight: .bold)
-        nearRestTitleLabel.textColor = .black
-        
-        nearRestMoreButon.setTitle("더보기", for: .normal)
-        nearRestMoreButon.setTitleColor(.gray, for: .normal)
-        nearRestMoreButon.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
-        
-        nearRestSubTitleLabel.text = "우리동네 꿈나무 식당을 소개합니다 :)"
-        nearRestSubTitleLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        nearRestSubTitleLabel.textColor = .black
-        
-        nearRestCollectionView.contentInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
-        
-        infoStackView.axis = .horizontal
-        infoStackView.spacing = 5
-        
-        let goodConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .regular, scale: .default)
-        let goodImg = UIImage(systemName: "leaf", withConfiguration: goodConfig)?.withRenderingMode(.alwaysTemplate)
-        goodInfoImageView.image = goodImg
-        goodInfoImageView.tintColor = UIColor(named: "subColor")
-        goodInfoImageView.contentMode = .scaleAspectFit
-        
-        goodInfoTextLabel.text = "선한 영향력 /"
-        goodInfoTextLabel.font = .systemFont(ofSize: 12, weight: .regular)
-        goodInfoTextLabel.textColor = .gray
-        
-        let cardConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .regular, scale: .default)
-        let cardImg = UIImage(systemName: "creditcard", withConfiguration: cardConfig)?.withRenderingMode(.alwaysTemplate)
-        cardInfoImageView.image = cardImg
-        cardInfoImageView.tintColor = UIColor(named: "subColor")
-        cardInfoImageView.contentMode = .scaleAspectFit
-        
-        cardInfoTextLabel.text = "꿈나무 카드"
-        cardInfoTextLabel.font = .systemFont(ofSize: 12, weight: .regular)
-        cardInfoTextLabel.textColor = .gray
-        
-        nearRestEmptyAlertLabel.text = "주변의 음식점을 찾을 수 없습니다 🥲"
-        nearRestEmptyAlertLabel.font = .systemFont(ofSize: 14, weight: .bold)
-        nearRestEmptyAlertLabel.textColor = .gray
-        nearRestEmptyAlertLabel.textAlignment = .center
-        nearRestEmptyAlertLabel.layer.borderColor = UIColor.gray.cgColor
-        nearRestEmptyAlertLabel.layer.borderWidth = 0.5
-        nearRestEmptyAlertLabel.layer.cornerRadius = 10
     }
     
     private func layout() {

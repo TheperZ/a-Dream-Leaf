@@ -23,10 +23,8 @@ class KakaoNetwork: Network{
             let url = URL(string: encodedString)!
             
             var request = URLRequest(url: url)
-            request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("KakaoAK \(Bundle.main.object(forInfoDictionaryKey: "KAKAO_API_KEY") as! String)", forHTTPHeaderField: "Authorization")
-            request.timeoutInterval = 10
 
             AF.request(request).responseData { response in
                 self.handleResponse<KakaoAddressResponse>(response: response, observer: observer)
