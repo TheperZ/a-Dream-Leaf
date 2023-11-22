@@ -141,7 +141,7 @@ class StoreMapViewController: UIViewController {
     
     private func configMap() {
         if LocationManager.permitionCheck() {
-            myPos.position = NMGLatLng(lat: LocationManager.getLatitude()!, lng: LocationManager.getLongitude()!)
+            myPos.position = NMGLatLng(lat: LocationManager.getLatitude(), lng: LocationManager.getLongitude())
             myPos.mapView = mapView
             myPos.width = 40
             myPos.height = 40

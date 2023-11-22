@@ -28,7 +28,6 @@ class UIChartViewController: UIViewController {
     private let usedAmountColorView = UIView()
     private let usedAmountLabel = UILabel()
     private let accountMoreButton = UIButton()
-    let accountMoreButtonTap = PublishSubject<Void>()
     
     private let balanceColorView = UIView()
     private let balanceLabel = UILabel()
@@ -114,7 +113,10 @@ class UIChartViewController: UIViewController {
     func chartSetting() {
         
         accountMoreButton.rx.tap
-            .bind(to: accountMoreButtonTap)
+            .asDriver()
+            .drive(onNext:{
+                self.tabBarController?.selectedIndex = 2
+            })
             .disposed(by: disposeBag)
         
         accountSummaryContainer.backgroundColor = UIColor(white: 0.95, alpha: 1)

@@ -34,14 +34,14 @@ struct LocationManager {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
-    static func getLatitude() -> Double? {
+    static func getLatitude() -> Double {
 //        return locationManager.location?.coordinate.latitude
-        return 37.6822
+        return 37.66
     }
     
-    static func getLongitude() -> Double? {
+    static func getLongitude() -> Double {
 //        return locationManager.location?.coordinate.longitude
-        return 126.7695
+        return 126.80
     }
   
 }

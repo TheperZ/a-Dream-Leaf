@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import Charts
+import SnapKit
 
 class HomeViewController: UIChartViewController {
     let disposeBag = DisposeBag()
@@ -147,14 +147,22 @@ class HomeViewController: UIChartViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bind()
+        bindViewModel()
         attribute()
         layout()
     }
     
-    private func bind() {
-        viewModel.nearStores
-            .bind(to: nearRestCollectionView.rx.items) { collectionView, row, element in
+    private func bindViewModel() {
+        
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:))).map { _ in () }.asDriver(onErrorJustReturn: ())
+        
+        let input = HomeViewModel.Input(trigger: viewWillAppear,
+                                        selectStore: nearRestCollectionView.rx.itemSelected.asDriver())
+        
+        let output = viewModel.transform(input: input)
+        
+        output.nearStores
+            .drive(nearRestCollectionView.rx.items) { collectionView, row, element in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CollectionViewCellID.RestaurantCell, for: indexPath) as! RestaurantCell
                 cell.setUp(with: element)
@@ -163,10 +171,10 @@ class HomeViewController: UIChartViewController {
             .disposed(by: disposeBag)
         
         profileButton.rx.tap
-            .observe(on: MainScheduler.instance)
-            .withLatestFrom(UserManager.getInstance())
-            .subscribe(onNext: { user in
-                if user != nil {
+            .asDriver()
+            .withLatestFrom(output.login)
+            .drive(onNext: { login in
+                if login {
                     let vc = MyPageViewController()
                     vc.modalTransitionStyle = .crossDissolve
                     vc.modalPresentationStyle = .fullScreen
@@ -180,33 +188,24 @@ class HomeViewController: UIChartViewController {
             })
             .disposed(by: disposeBag)
         
-        accountMoreButtonTap
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext:{
-                self.tabBarController?.selectedIndex = 2
-            })
-            .disposed(by: disposeBag)
+        
         
         nearRestMoreButon.rx.tap
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                self.navigationController?.pushViewController(LocalRestaurantViewController(), animated: true)
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(LocalRestaurantViewController(viewModel: LocalRestaurantViewModel()), animated: true)
             })
             .disposed(by: disposeBag)
         
-        nearRestCollectionView.rx.itemSelected
-            .observe(on: MainScheduler.instance)
-            .withLatestFrom(viewModel.nearStores) { return ($0, $1)}
-            .subscribe(onNext: { indexPath, list in
-                self.nearRestCollectionView.cellForItem(at: indexPath)?.isSelected = false
-                self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
+        output.selectedStore
+            .drive(onNext: { store in
+                self.navigationController?.pushViewController(StoreDetailViewController(storeId: store.storeId), animated: true)
             })
             .disposed(by: disposeBag)
         
-        viewModel.nearStores
-            .observe(on: MainScheduler.instance)
+        output.nearStores
             .map { $0.count != 0 }
-            .bind(to: nearRestEmptyAlertLabel.rx.isHidden)
+            .drive(nearRestEmptyAlertLabel.rx.isHidden)
             .disposed(by: disposeBag)
     }
     
@@ -222,60 +221,71 @@ class HomeViewController: UIChartViewController {
     private func layout() {
         [titleLabel, profileButton, accountSummaryContainer, nearRestSummaryContainer, infoStackView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
     
         [nearRestTitleLabel, nearRestMoreButon, nearRestSubTitleLabel, nearRestCollectionView, nearRestEmptyAlertLabel].forEach {
             nearRestSummaryContainer.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [goodInfoImageView, goodInfoTextLabel, cardInfoImageView, cardInfoTextLabel].forEach {
             infoStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            
-            profileButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            profileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            accountSummaryContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
-            accountSummaryContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            accountSummaryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            nearRestSummaryContainer.topAnchor.constraint(equalTo: accountSummaryContainer.bottomAnchor, constant: 40),
-            nearRestSummaryContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            nearRestSummaryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            nearRestSummaryContainer.heightAnchor.constraint(equalToConstant: 200),
-            
-            nearRestTitleLabel.topAnchor.constraint(equalTo: nearRestSummaryContainer.topAnchor, constant: 20),
-            nearRestTitleLabel.leadingAnchor.constraint(equalTo: nearRestSummaryContainer.leadingAnchor, constant: 30),
-            
-            nearRestMoreButon.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor, constant: -15),
-            nearRestMoreButon.centerYAnchor.constraint(equalTo: nearRestTitleLabel.centerYAnchor),
-            nearRestMoreButon.widthAnchor.constraint(equalToConstant: 60),
-            
-            nearRestSubTitleLabel.topAnchor.constraint(equalTo: nearRestTitleLabel.bottomAnchor,constant: 10),
-            nearRestSubTitleLabel.leadingAnchor.constraint(equalTo: nearRestTitleLabel.leadingAnchor),
-            
-            nearRestCollectionView.topAnchor.constraint(equalTo: nearRestSubTitleLabel.bottomAnchor, constant: 15),
-            nearRestCollectionView.leadingAnchor.constraint(equalTo: nearRestSummaryContainer.leadingAnchor),
-            nearRestCollectionView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor),
-            nearRestCollectionView.bottomAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: -10),
-            
-            nearRestEmptyAlertLabel.topAnchor.constraint(equalTo: nearRestCollectionView.topAnchor),
-            nearRestEmptyAlertLabel.bottomAnchor.constraint(equalTo: nearRestCollectionView.bottomAnchor),
-            nearRestEmptyAlertLabel.leadingAnchor.constraint(equalTo: nearRestCollectionView.leadingAnchor, constant: 20),
-            nearRestEmptyAlertLabel.trailingAnchor.constraint(equalTo: nearRestCollectionView.trailingAnchor, constant: -20),
-            
-            infoStackView.topAnchor.constraint(equalTo: nearRestSummaryContainer.bottomAnchor, constant: 5),
-            infoStackView.trailingAnchor.constraint(equalTo: nearRestSummaryContainer.trailingAnchor, constant: -15),
-            
-            
-        ].forEach { $0.isActive = true}
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.equalTo(view).offset(20)
+        }
+        
+        profileButton.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel)
+            $0.trailing.equalTo(view).offset(-20)
+        }
+        
+        accountSummaryContainer.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(50)
+            $0.leading.equalTo(view).offset(20)
+            $0.trailing.equalTo(view).offset(-20)
+        }
+        
+        nearRestSummaryContainer.snp.makeConstraints {
+            $0.top.equalTo(accountSummaryContainer.snp.bottom).offset(40)
+            $0.leading.trailing.equalTo(view)
+            $0.height.equalTo(200)
+        }
+        
+        nearRestTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(nearRestSummaryContainer).offset(20)
+            $0.leading.equalTo(nearRestSummaryContainer).offset(30)
+        }
+        
+        nearRestMoreButon.snp.makeConstraints {
+            $0.trailing.equalTo(nearRestSummaryContainer).offset(-15)
+            $0.centerY.equalTo(nearRestTitleLabel)
+            $0.width.equalTo(60)
+        }
+        
+        nearRestSubTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(nearRestTitleLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(nearRestTitleLabel)
+        }
+        
+        nearRestCollectionView.snp.makeConstraints {
+            $0.top.equalTo(nearRestSubTitleLabel.snp.bottom).offset(15)
+            $0.leading.trailing.equalTo(nearRestSummaryContainer)
+            $0.bottom.equalTo(nearRestSummaryContainer).offset(-10)
+        }
+        
+        nearRestEmptyAlertLabel.snp.makeConstraints {
+            $0.top.bottom.equalTo(nearRestCollectionView)
+            $0.leading.equalTo(nearRestCollectionView).offset(20)
+            $0.trailing.equalTo(nearRestCollectionView).offset(-20)
+        }
+        
+        infoStackView.snp.makeConstraints {
+            $0.top.equalTo(nearRestSummaryContainer.snp.bottom).offset(5)
+            $0.trailing.equalTo(nearRestSummaryContainer).offset(-15)
+        }
+        
     }
     
 }
