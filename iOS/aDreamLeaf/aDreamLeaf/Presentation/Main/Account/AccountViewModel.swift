@@ -7,24 +7,39 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
 struct AccountViewModel {
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    private let repository: AccountRepository
+    struct Input {
+        let trigger: Driver<Date>
+        let select: Driver<IndexPath>
+    }
     
-    let refreshRequest = PublishSubject<Void>()
-    
-    let yearMonth = BehaviorSubject<Date>(value: Date.now)
-    
-    let list = PublishSubject<[Expenditure]>()
+    struct Output {
+        let login: Driver<Bool>
+        let expenditures: Driver<[Expenditure]>
+        let selectedExpenditure: Driver<Expenditure>
+    }
     
     init(_ repo: AccountRepository = AccountRepository()) {
-        Observable.combineLatest(refreshRequest, yearMonth)
-            .withLatestFrom(yearMonth)
+        self.repository = repo
+    }
+    
+    func tranform(input: Input) -> Output {
+        let login = UserManager.getInstance().map { $0 != nil }.asDriver(onErrorJustReturn: false)
+        
+        let expenditures = input.trigger
             .map { Date.dateToString(with: $0, format: "yyyy-MM")}
-            .flatMap(repo.getExpenditureList)
-            .map { $0.data ?? [] }
-            .bind(to: list)
-            .disposed(by: disposeBag)
+            .flatMapLatest {
+                repository.getExpenditureList(when: $0)
+                    .asDriver(onErrorJustReturn: [])
+            }
+        
+        let selectedExpenditure = input.select
+            .withLatestFrom(expenditures) { indexPath, list in list[indexPath.row] }
+        
+        return Output(login: login, expenditures: expenditures, selectedExpenditure: selectedExpenditure)
     }
 }

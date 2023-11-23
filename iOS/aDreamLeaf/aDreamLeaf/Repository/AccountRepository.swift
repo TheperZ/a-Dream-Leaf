@@ -34,8 +34,9 @@ struct AccountRepository {
         return network.updateExpenditure(accountId: accountId,date: date, storeName: storeName, body: body, price: price)
     }
     
-    func getExpenditureList(when: String) -> Observable<RequestResult<[Expenditure]>> {
+    func getExpenditureList(when: String) -> Observable<[Expenditure]> {
         return network.getExpenditureList(when: when)
+            .map { result in result.data ?? []}
     }
     
     func getAccountSummary(yearMonth: String) -> Observable<RequestResult<AccountSummary>> {

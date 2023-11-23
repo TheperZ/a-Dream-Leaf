@@ -11,8 +11,16 @@ import RxSwift
 struct AlarmRepository {
     private let network = AlarmNetwork()
     
-    func getState() -> Observable<RequestResult<AlarmState>> {
+    func getState() -> Observable<Bool> {
         return network.checkState()
+            .map { result in
+                if result.success {
+                    guard let state = result.data?.exist else { return false }
+                    return state
+                } else {
+                    return false
+                }
+            }
     }
     
     func register() -> Observable<RequestResult<Void>> {

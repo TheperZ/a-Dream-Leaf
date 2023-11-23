@@ -7,76 +7,69 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-struct AccountSettingViewModel: LoadingViewModel {
+struct AccountSettingViewModel {
     private let disposeBag = DisposeBag()
-    var loading: PublishSubject<Bool>
+    private let accountRepo: AccountRepository
+    private let alarmRepo: AlarmRepository
     
-    let amount = PublishSubject<Int>()
+    struct Input {
+        let trigger: Driver<Void>
+        let budget: Driver<Int>
+        let budgetTrigger: Driver<Void>
+        let alarmTrigger: Driver<Void>
+    }
     
-    let alarmState = PublishSubject<Bool>()
-    
-    let saveBtnTap = PublishRelay<Void>()
-    let alarmSwitchChanged = PublishSubject<Bool>()
-    
-    let budgetSettingResult = PublishSubject<RequestResult<Void>>()
-    let alarmStateResult = PublishSubject<RequestResult<AlarmState>>()
-    let alarmRequestResult = PublishSubject<RequestResult<Void>>()
+    struct Output {
+        let loading: Driver<Bool>
+        let alarm: Driver<Bool>
+        let budgetResult: Driver<RequestResult<Void>>
+    }
     
     init(_ accountRepo: AccountRepository = AccountRepository(), _ alarmRepo: AlarmRepository = AlarmRepository()) {
+        self.accountRepo = accountRepo
+        self.alarmRepo = alarmRepo
+    }
+    
+    func transform(input: Input) -> Output {
+        let loading = PublishSubject<Bool>()
         
-        loading = PublishSubject<Bool>()
+        let budgetResult = input.budgetTrigger
+            .withLatestFrom(input.budget)
+            .do(onNext: { _ in loading.onNext(true)})
+            .flatMapLatest {
+                accountRepo.setBudget(to: $0)
+                    .do(onNext: { _ in loading.onNext(false) })
+                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+            }
+    
         
-        // 예산 저장 버튼 클릭 혹은 알림 설정 스위치 변경 시 로딩 시작
-        saveBtnTap
-            .map { _ in return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        let alarmUpdate = PublishSubject<Void>()
+        let alarm = Driver.merge(alarmUpdate.asDriver(onErrorJustReturn: ()), input.trigger)
+            .flatMapLatest {
+                alarmRepo.getState()
+                    .asDriver(onErrorJustReturn: false)
+            }
         
-        alarmSwitchChanged
-            .map { _ in return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        // 예산 저장 결과 혹은 알림 설정 변경 결과 응답 시 로딩 종료
-        budgetSettingResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        alarmRequestResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        // 예산 저장 버튼 클릭 시 서버에 예산 비용 저장 요청
-        saveBtnTap
-            .withLatestFrom(amount)
-            .flatMap(accountRepo.setBudget)
-            .bind(to: budgetSettingResult)
-            .disposed(by: disposeBag)
-        
-        //최초 알림 설정 값 가져오기
-        alarmRepo.getState()
-            .bind(to: alarmStateResult)
-            .disposed(by: disposeBag)
-        
-        alarmSwitchChanged
-            .flatMap { isOn in
-                if isOn {
-                    return alarmRepo.register()
+        input.alarmTrigger
+            .withLatestFrom(alarm)
+            .do(onNext: { _ in loading.onNext(true) })
+            .flatMapLatest { state in
+                if state {
+                    alarmRepo.deregister()
+                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
                 } else {
-                    return alarmRepo.deregister()
+                    alarmRepo.register()
+                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
                 }
             }
-            .bind(to: alarmRequestResult)
+            .map { _ in () }
+            .do(onNext: { _ in loading.onNext(false) })
+            .asObservable()
+            .bind(to: alarmUpdate)
             .disposed(by: disposeBag)
         
-        alarmStateResult
-            .filter { $0.data != nil }
-            .map { $0.data!.exist }
-            .bind(to: alarmState)
-            .disposed(by: disposeBag)
+        return Output(loading: loading.asDriver(onErrorJustReturn: false), alarm: alarm , budgetResult: budgetResult)
     }
 }
