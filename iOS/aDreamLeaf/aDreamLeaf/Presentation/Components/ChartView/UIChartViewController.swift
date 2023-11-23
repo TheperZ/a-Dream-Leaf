@@ -78,7 +78,7 @@ class UIChartViewController: UIViewController {
         gotoLoginButton.rx.tap
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { _ in
-                let vc = UINavigationController(rootViewController: LoginViewController())
+                let vc = UINavigationController(rootViewController: LoginViewController(viewModel: LoginViewModel()))
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)

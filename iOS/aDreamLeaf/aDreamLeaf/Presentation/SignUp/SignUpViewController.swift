@@ -10,36 +10,105 @@ import RxSwift
 import RxCocoa
 import FirebaseAuth
 
-class SignUpViewController: UIViewController, LoadingViewController {
-    var disposeBag = DisposeBag()
-    var loadingView = UIActivityIndicatorView(style: .medium)
-    
+class SignUpViewController: UIViewController {
+    private let disposeBag = DisposeBag()
     private let viewModel: SignUpViewModel
     
-    private let keyboard = PublishRelay<Bool>()
-    private var keyboardHeight: CGFloat!
+    private let loadingView = UIActivityIndicatorView(style: .medium)
     
-    private let titleLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "회원가입"
+        label.font = .systemFont(ofSize: 30, weight: .heavy)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+    
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let emailLabel = UILabel()
-    private let emailTextField = UITextField()
-    private let emailUnderLine = UIView()
+    private let emailLabel: UILabel = {
+        let label = UILabel()
+        label.text = "이메일"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        return label
+    }()
     
-    private let pwdLabel = UILabel()
-    private let pwdTextField = UITextField()
-    private let pwdUnderLine = UIView()
+    private let emailTextField: UITextField = {
+        let textField = UITextField()
+        textField.textColor = .black
+        textField.font = .systemFont(ofSize: 20, weight: .regular)
+        textField.keyboardType = .emailAddress
+        textField.autocapitalizationType = .none
+        textField.textContentType = .oneTimeCode
+        return textField
+    }()
     
-    private let pwdCheckLabel = UILabel()
-    private let pwdCheckTextField = UITextField()
-    private let pwdCheckUnderLine = UIView()
+    private let emailUnderLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
     
-    private let signUpButton = UIButton()
+    private let pwdLabel: UILabel = {
+        let label = UILabel()
+        label.text = "비밀번호"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        return label
+    }()
     
-    init() {
-        viewModel = SignUpViewModel()
+    private let pwdTextField: UITextField = {
+        let textField = UITextField()
+        textField.textColor = .black
+        textField.font = .systemFont(ofSize: 20, weight: .regular)
+        textField.isSecureTextEntry = true
+        return textField
+    }()
+    
+    private let pwdUnderLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    
+    private let pwdCheckLabel: UILabel = {
+        let label = UILabel()
+        label.text = "비밀번호 확인"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        return label
+    }()
+    
+    private let pwdCheckTextField: UITextField = {
+        let textField = UITextField()
+        textField.textColor = .black
+        textField.font = .systemFont(ofSize: 20, weight: .regular)
+        textField.isSecureTextEntry = true
+        return textField
+    }()
+    
+    private let pwdCheckUnderLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    
+    private let signUpButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(named: "mainColor")
+        button.setTitle("회원가입 하기", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
+    init(viewModel: SignUpViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,9 +118,7 @@ class SignUpViewController: UIViewController, LoadingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
-//        keyboardConfig()
-        bind()
+        bindViewModel()
         attribute()
         layout()
         
@@ -62,46 +129,42 @@ class SignUpViewController: UIViewController, LoadingViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    private func bind() {
+    private func bindViewModel() {
         
-        emailTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.email)
+        let input = SignUpViewModel.Input(email: emailTextField.rx.text.orEmpty.asDriver(),
+                                          passsword: pwdTextField.rx.text.orEmpty.asDriver(),
+                                          passwordCheck: pwdCheckTextField.rx.text.orEmpty.asDriver(),
+                                          trigger: signUpButton.rx.tap.asDriver())
+        
+        let output = viewModel.transform(input: input)
+        
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
+                } else {
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
+                }
+            })
             .disposed(by: disposeBag)
         
-        pwdTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.password)
-            .disposed(by: disposeBag)
-        
-        pwdCheckTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.passwordCheck)
-            .disposed(by: disposeBag)
-    
-        signUpButton.rx.tap
-            .bind(to: viewModel.signUpBtnTap)
-            .disposed(by: disposeBag)
-        
-        viewModel.signUpResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                if $0.success {
+        output.result
+            .drive(onNext: {[weak self] result in
+                if result.success {
                     let alert = UIAlertController(title: "성공", message: "이메일 인증 후 로그인 해주세요", preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
-                        self.navigationController?.popViewController(animated: true)
+                        self?.navigationController?.popViewController(animated: true)
                     }
                     alert.addAction(confirm)
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                 } else {
-                    
-                    let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
-                    }
+
+                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
                     alert.addAction(confirm)
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                 }
             })
             .disposed(by: disposeBag)
@@ -112,175 +175,89 @@ class SignUpViewController: UIViewController, LoadingViewController {
         view.backgroundColor = .white
         view.addTapGesture()
         self.navigationController?.navigationBar.tintColor = .black
-        
-        titleLabel.text = "회원가입"
-        titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        
-        emailLabel.text = "이메일"
-        emailLabel.textColor = .black
-        emailLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        
-        emailTextField.textColor = .black
-        emailTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.autocapitalizationType = .none
-        emailTextField.textContentType = .oneTimeCode
-        
-        
-        emailUnderLine.backgroundColor = .lightGray
-        
-        pwdLabel.text = "비밀번호"
-        pwdLabel.textColor = .black
-        pwdLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        
-        pwdTextField.textColor = .black
-        pwdTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        pwdTextField.isSecureTextEntry = true
-        pwdUnderLine.backgroundColor = .lightGray
-        
-        pwdCheckLabel.text = "비밀번호 확인"
-        pwdCheckLabel.textColor = .black
-        pwdCheckLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        
-        pwdCheckTextField.textColor = .black
-        pwdCheckTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        pwdCheckTextField.isSecureTextEntry = true
-        pwdCheckUnderLine.backgroundColor = .lightGray
-        
-        signUpButton.backgroundColor = UIColor(named: "mainColor")
-        signUpButton.setTitle("회원가입 하기", for: .normal)
-        signUpButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        signUpButton.setTitleColor(.black, for: .normal)
-        signUpButton.layer.cornerRadius = 10
     }
     
     private func layout() {
         self.view.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         self.scrollView.addSubview(contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         [loadingView, titleLabel, emailLabel, emailTextField, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
             contentView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 50),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.widthAnchor.constraint(equalToConstant: 300),
-            
-            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            emailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5),
-            emailTextField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailTextField.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            
-            emailUnderLine.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
-            emailUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            emailUnderLine.heightAnchor.constraint(equalToConstant: 1),
-            
-            pwdLabel.topAnchor.constraint(equalTo: emailUnderLine.bottomAnchor, constant: 30),
-            pwdLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            pwdLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            pwdTextField.topAnchor.constraint(equalTo: pwdLabel.bottomAnchor, constant: 5),
-            pwdTextField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            pwdTextField.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            pwdUnderLine.topAnchor.constraint(equalTo: pwdTextField.bottomAnchor),
-            pwdUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            pwdUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            pwdUnderLine.heightAnchor.constraint(equalToConstant: 1),
-            
-            pwdCheckLabel.topAnchor.constraint(equalTo: pwdUnderLine.bottomAnchor, constant: 30),
-            pwdCheckLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            pwdCheckLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            pwdCheckTextField.topAnchor.constraint(equalTo: pwdCheckLabel.bottomAnchor, constant: 5),
-            pwdCheckTextField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            pwdCheckTextField.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            pwdCheckUnderLine.topAnchor.constraint(equalTo: pwdCheckTextField.bottomAnchor),
-            pwdCheckUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            pwdCheckUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            pwdCheckUnderLine.heightAnchor.constraint(equalToConstant: 1),
-            
-            signUpButton.topAnchor.constraint(equalTo: pwdCheckUnderLine.bottomAnchor, constant: 30),
-            signUpButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            signUpButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            signUpButton.heightAnchor.constraint(equalToConstant: 45),
-            signUpButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-            
-        ].forEach { $0.isActive = true}
-    }
-    
-    
-}
-
-//MARK: - Keyboard Config
-extension SignUpViewController {
-    
-    func keyboardConfig() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        keyboard
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                if $0 {
-                    self.view.frame.size.height -= self.keyboardHeight
-                } else {
-                    self.view.frame.size.height += self.keyboardHeight
-                }
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
-    
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            // if keyboard size is not available for some reason, dont do anything
-            return
+        loadingView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-        self.keyboardHeight = keyboardSize.height
-       // move the root view up by the distance of keyboard height
-        self.keyboard.accept(true)
         
-     }
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.width.equalTo(scrollView)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(contentView).offset(50)
+            $0.centerX.equalTo(view)
+            $0.width.equalTo(300)
+        }
+        
+        emailLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        emailTextField.snp.makeConstraints {
+            $0.top.equalTo(emailLabel.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
 
-     @objc func keyboardWillHide(notification: NSNotification) {
-         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-             // if keyboard size is not available for some reason, dont do anything
-             return
-         }
-       // move back the root view origin to zero
-         self.keyboardHeight = keyboardSize.height
-         self.keyboard.accept(false)
-     }
+        emailUnderLine.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(1)
+        }
+        
+        pwdLabel.snp.makeConstraints {
+            $0.top.equalTo(emailUnderLine.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        pwdTextField.snp.makeConstraints {
+            $0.top.equalTo(pwdLabel.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+
+        pwdUnderLine.snp.makeConstraints {
+            $0.top.equalTo(pwdTextField.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(1)
+        }
+        
+        pwdCheckLabel.snp.makeConstraints {
+            $0.top.equalTo(pwdUnderLine.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        pwdCheckTextField.snp.makeConstraints {
+            $0.top.equalTo(pwdCheckLabel.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+
+        pwdCheckUnderLine.snp.makeConstraints {
+            $0.top.equalTo(pwdCheckTextField.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(1)
+        }
+        
+        signUpButton.snp.makeConstraints {
+            $0.top.equalTo(pwdCheckUnderLine.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(45)
+            $0.bottom.equalTo(contentView).offset(-20)
+        }
+    
+    }
+
 }

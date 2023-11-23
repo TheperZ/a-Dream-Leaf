@@ -9,32 +9,111 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class LoginViewController: UIViewController, LoadingViewController {
-    var disposeBag = DisposeBag()
-    var loadingView = UIActivityIndicatorView(style: .medium)
+class LoginViewController: UIViewController {
+    private let disposeBag = DisposeBag()
+    private let loadingView = UIActivityIndicatorView(style: .medium)
     
     private let viewModel: LoginViewModel
     
-    private let backButton = UIBarButtonItem()
+    private let backButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        let backButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
+        let backButtonImg = UIImage(systemName: "chevron.left", withConfiguration: backButtonConfig)?.withRenderingMode(.alwaysTemplate)
+        button.image = backButtonImg
+        button.tintColor = .black
+        return button
+    }()
     
     private let contentView = UIView()
     
-    private let titleLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "꿈나무 한입"
+        label.font = .systemFont(ofSize: 40, weight: .heavy)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
     
-    private let emailLabel = UILabel()
-    private let emailTextField = UITextField()
-    private let emailUnderLine = UIView()
+    private let emailLabel: UILabel = {
+        let label = UILabel()
+        label.text = "이메일"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        return label
+    }()
+    private let emailTextField: UITextField = {
+        let textField = UITextField()
+        textField.textColor = .black
+        textField.font = .systemFont(ofSize: 20, weight: .regular)
+        textField.autocapitalizationType = .none
+        textField.keyboardType = .emailAddress
+        textField.attributedPlaceholder =
+        NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        return textField
+    }()
     
-    private let passwordLabel = UILabel()
-    private let passwordTextField = UITextField()
-    private let passwordUnderLine = UIView()
+    private let emailUnderLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
     
-    private let loginButton = UIButton()
-    private let signInButton = UIButton()
-    private let pwdFindButton = UIButton()
+    private let passwordLabel: UILabel = {
+        let label = UILabel()
+        label.text = "비밀번호"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        return label
+    }()
+    private let passwordTextField: UITextField = {
+        let textField = UITextField()
+        textField.textColor = .black
+        textField.font = .systemFont(ofSize: 20, weight: .regular)
+        textField.isSecureTextEntry = true
+        textField.attributedPlaceholder =
+        NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        return textField
+    }()
     
-    init() {
-        viewModel = LoginViewModel()
+    private let passwordUnderLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    
+    private let loginButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(named: "mainColor")
+        button.setTitle("로그인", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
+    private let signInButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        button.setTitle("회원가입", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
+    private let pwdFindButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        button.setTitle("비밀번호 찾기", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
+        button.setTitleColor(.gray, for: .normal)
+        return button
+    }()
+    
+    
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -44,194 +123,150 @@ class LoginViewController: UIViewController, LoadingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configLoadingView(viewModel: viewModel)
-        bind()
+        
+        bindViewModel()
+        uiEvent()
         attribute()
         layout()
     }
     
-    private func bind() {
-        backButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.dismiss(animated: true)
-            })
-            .disposed(by: disposeBag)
+    private func bindViewModel() {
+        let input = LoginViewModel.Input(trigger: loginButton.rx.tap.asDriver(),
+                                         email: emailTextField.rx.text.orEmpty.asDriver(),
+                                         pwd: passwordTextField.rx.text.orEmpty.asDriver())
         
-        signInButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.navigationController?.pushViewController(SignUpViewController(), animated: true)
-            })
-            .disposed(by: disposeBag)
+        let output = viewModel.transform(input: input)
         
-        pwdFindButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.navigationController?.pushViewController(PwdResetViewController(), animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        loginButton.rx.tap
-            .bind(to: viewModel.loginBtnTap)
-            .disposed(by: disposeBag)
-        
-        emailTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.email)
-            .disposed(by: disposeBag)
-        
-        passwordTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.pwd)
-            .disposed(by: disposeBag)
-        
-        viewModel.loginResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                if $0.success {
-                    self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
-                    self.dismiss(animated: true)
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
                 } else {
-                    let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.viewModel.loading.onNext(false) // 알림 메세지의 확인버튼을 눌렀을 때 추가적으로 이벤트를 발생하지 않으면 로딩 화면이 사라지지 않음..
-                    }
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        output.result
+            .drive(onNext: {[weak self] result in
+                if result.success {
+                    self?.dismiss(animated: true)
+                } else {
+                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
                     alert.addAction(confirm)
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                 }
             })
             .disposed(by: disposeBag)
         
     }
     
+    func uiEvent() {
+        backButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+
+        signInButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(SignUpViewController(viewModel: SignUpViewModel()), animated: true)
+            })
+            .disposed(by: disposeBag)
+
+        pwdFindButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.navigationController?.pushViewController(PwdResetViewController(viewModel: PwdResetViewModel()), animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     private func attribute() {
         view.backgroundColor = .white
         view.addTapGesture()
-        
-        let backButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
-        let backButtonImg = UIImage(systemName: "chevron.left", withConfiguration: backButtonConfig)?.withRenderingMode(.alwaysTemplate)
-        backButton.image = backButtonImg
-        backButton.tintColor = .black
         self.navigationItem.leftBarButtonItem = backButton
-        
-        titleLabel.text = "꿈나무 한입"
-        titleLabel.font = .systemFont(ofSize: 40, weight: .heavy)
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        
-        emailLabel.text = "이메일"
-        emailLabel.textColor = .black
-        emailLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        
-        emailTextField.textColor = .black
-        emailTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        emailTextField.autocapitalizationType = .none
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.attributedPlaceholder =
-        NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
-        emailUnderLine.backgroundColor = .lightGray
-        
-        passwordLabel.text = "비밀번호"
-        passwordLabel.textColor = .black
-        passwordLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-    
-        passwordTextField.textColor = .black
-        passwordTextField.font = .systemFont(ofSize: 20, weight: .regular)
-        passwordTextField.isSecureTextEntry = true
-        passwordTextField.attributedPlaceholder =
-        NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
-        passwordUnderLine.backgroundColor = .lightGray
-        
-        loginButton.backgroundColor = UIColor(named: "mainColor")
-        loginButton.setTitle("로그인", for: .normal)
-        loginButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        loginButton.setTitleColor(.black, for: .normal)
-        loginButton.layer.cornerRadius = 10
-        
-        signInButton.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        signInButton.setTitle("회원가입", for: .normal)
-        signInButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        signInButton.setTitleColor(.black, for: .normal)
-        signInButton.layer.cornerRadius = 10
-        
-        pwdFindButton.backgroundColor = .clear
-        pwdFindButton.setTitle("비밀번호 찾기", for: .normal)
-        pwdFindButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
-        pwdFindButton.setTitleColor(.gray, for: .normal)
-        
     }
     
     private func layout() {
         
         [contentView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         
         [loadingView, titleLabel, emailLabel, emailTextField, emailUnderLine, passwordLabel, passwordTextField, passwordUnderLine, loginButton, signInButton, pwdFindButton].forEach {
             contentView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            contentView.widthAnchor.constraint(equalToConstant: 300),
-            contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            contentView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            contentView.bottomAnchor.constraint(equalTo: pwdFindButton.bottomAnchor, constant: 10),
-            
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
-            emailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            emailLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5),
-            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            emailUnderLine.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
-            emailUnderLine.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            emailUnderLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            emailUnderLine.heightAnchor.constraint(equalToConstant: 1),
-            
-            passwordLabel.topAnchor.constraint(equalTo: emailUnderLine.bottomAnchor, constant: 30),
-            passwordLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            passwordLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 5),
-            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            passwordUnderLine.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor),
-            passwordUnderLine.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            passwordUnderLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            passwordUnderLine.heightAnchor.constraint(equalToConstant: 1),
-            
-            loginButton.topAnchor.constraint(equalTo: passwordUnderLine.bottomAnchor, constant: 40),
-            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            loginButton.heightAnchor.constraint(equalToConstant: 45),
-            
-            signInButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 10),
-            signInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            signInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            signInButton.heightAnchor.constraint(equalToConstant: 45),
-            
-            pwdFindButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 10),
-            pwdFindButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            pwdFindButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            pwdFindButton.heightAnchor.constraint(equalToConstant: 45),
-            
-            
-        ].forEach{ $0.isActive = true }
+        loadingView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.width.equalTo(300)
+            $0.centerX.centerY.equalTo(view)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(contentView)
+        }
+        
+        emailLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(50)
+            $0.leading.trailing.equalTo(contentView)
+        }
+        
+        emailTextField.snp.makeConstraints {
+            $0.top.equalTo(emailLabel.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(contentView)
+        }
+        
+        emailUnderLine.snp.makeConstraints {
+            $0.top.equalTo(emailTextField.snp.bottom)
+            $0.leading.trailing.equalTo(contentView)
+            $0.height.equalTo(1)
+        }
+        
+        passwordLabel.snp.makeConstraints {
+            $0.top.equalTo(emailUnderLine.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(contentView)
+        }
+        
+        passwordTextField.snp.makeConstraints {
+            $0.top.equalTo(passwordLabel.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(contentView)
+        }
+        
+        passwordUnderLine.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField.snp.bottom)
+            $0.leading.trailing.equalTo(contentView)
+            $0.height.equalTo(1)
+        }
+        
+        loginButton.snp.makeConstraints {
+            $0.top.equalTo(passwordUnderLine.snp.bottom).offset(40)
+            $0.leading.trailing.equalTo(contentView)
+            $0.height.equalTo(45)
+        }
+        
+        signInButton.snp.makeConstraints {
+            $0.top.equalTo(loginButton.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(contentView)
+            $0.height.equalTo(45)
+        }
+        
+        pwdFindButton.snp.makeConstraints {
+            $0.top.equalTo(signInButton.snp.bottom).offset(10)
+            $0.bottom.equalTo(contentView)
+            $0.leading.trailing.equalTo(contentView)
+            $0.height.equalTo(45)
+        }
+        
     }
 }
