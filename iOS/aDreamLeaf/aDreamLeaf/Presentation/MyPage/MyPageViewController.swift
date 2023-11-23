@@ -8,25 +8,82 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SnapKit
 
 class MyPageViewController: UIViewController, LoadingViewController {
     var disposeBag = DisposeBag()
     var loadingView = UIActivityIndicatorView(style: .medium)
     private let viewModel: MyPageViewModel
     
-    private let backButton = UIButton()
+    private let backButton: UIButton = {
+        let button = UIButton()
+        let backButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
+        let backButtonImg = UIImage(systemName: "chevron.left", withConfiguration: backButtonConfig)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(backButtonImg, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
     
-    private let titleLabel = UILabel()
-    private let nicknameLabel = UILabel()
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "마이페이지"
+        label.font = .systemFont(ofSize: 30, weight: .heavy)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let nicknameStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private let nicknameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "닉네임"
+        return label
+    }()
+    
     private let nicknameContentLabel = UILabel()
     private let nicknameUnderLine = UIView()
     
-    private let emailLabel = UILabel()
+    private let emailStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private let emailLabel: UILabel = {
+        let label = UILabel()
+        label.text = "이메일"
+        return label
+    }()
+    
     private let emailContentLabel = UILabel()
     private let emailUnderLine = UIView()
     
-    private let logoutButton = UIButton()
-    private let exitButton = UIButton()
+    private let logoutButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(named: "mainColor")
+        button.setTitle("로그아웃", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
+    private let exitButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .lightGray
+        button.setTitle("계정 탈퇴", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
     
     init() {
         viewModel = MyPageViewModel()
@@ -40,35 +97,39 @@ class MyPageViewController: UIViewController, LoadingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bind()
+        bindViewModel()
+        uiEvent()
         attribute()
         layout()
     }
     
-    private func bind() {
-        viewModel.loading
-            .subscribe(onNext: { isLoading in
-                if isLoading {
-                    self.loadingView.startAnimating()
+    private func bindViewModel() {
+        
+        let delete = PublishSubject<Void>()
+        
+        let input = MyPageViewModel.Input(logoutTrigger: logoutButton.rx.tap.asDriver(),
+                                          deleteTrigger: delete.asDriver(onErrorJustReturn: ()))
+        
+        let output = viewModel.tranform(input: input)
+        
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
                 } else {
-                    self.loadingView.stopAnimating()
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
                 }
             })
             .disposed(by: disposeBag)
         
-        backButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.dismiss(animated: true)
-            })
+        output.nickname
+            .drive(nicknameContentLabel.rx.text)
             .disposed(by: disposeBag)
         
-        logoutButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                UserManager.logout()
-                self.dismiss(animated: true)
-            })
+        output.email
+            .drive(emailContentLabel.rx.text)
             .disposed(by: disposeBag)
         
         exitButton.rx.tap
@@ -76,154 +137,136 @@ class MyPageViewController: UIViewController, LoadingViewController {
             .subscribe(onNext: { _ in
                 let alert = UIAlertController(title: "경고", message: "한번 삭제한 계정은 복구할 수 없습니다.\n삭제하시겠습니까?", preferredStyle: .alert)
                 let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
-                    self.viewModel.deleteAccountBtnTap.onNext(Void())
+                    delete.onNext(())
                 }
                 let cancel = UIAlertAction(title: "취소", style: .cancel)
-                
+
                 alert.addAction(confirm)
                 alert.addAction(cancel)
-                
+
                 self.present(alert, animated: true)
-                
+
             })
             .disposed(by: disposeBag)
         
-        viewModel.deleteResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in
+        output.logoutResult
+            .drive(onNext: {[weak self] result in
                 if result.success {
-                    let alert = UIAlertController(title: "성공", message: "그 동안 이용해주셔서 감사합니다.", preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.dismiss(animated: true)
-                    }
-                    
-                    alert.addAction(confirm)
-                    
-                    self.present(alert, animated: true)
+                    self?.dismiss(animated: true)
                 } else {
                     let alert = UIAlertController(title: "실패", message: result.msg , preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default)
-                    
                     alert.addAction(confirm)
-                    
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                 }
             })
             .disposed(by: disposeBag)
         
-        viewModel.email
-            .observe(on: MainScheduler.instance)
-            .bind(to: emailContentLabel.rx.text)
+        output.deleteResult
+            .drive(onNext: { [weak self] result in
+                if result.success {
+                    let alert = UIAlertController(title: "성공", message: "그 동안 이용해주셔서 감사합니다.", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self?.dismiss(animated: true)
+                    }
+                    alert.addAction(confirm)
+                    self?.present(alert, animated: true)
+                } else {
+                    let alert = UIAlertController(title: "실패", message: result.msg , preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(confirm)
+                    self?.present(alert, animated: true)
+                }
+            })
             .disposed(by: disposeBag)
-        
-        viewModel.nickname
-            .observe(on: MainScheduler.instance)
-            .bind(to: nicknameContentLabel.rx.text)
+    }
+    
+    private func uiEvent() {
+        backButton.rx.tap
+            .asDriver()
+            .drive(onNext: {
+                self.dismiss(animated: true)
+            })
             .disposed(by: disposeBag)
     }
     
     private func attribute() {
-        
         view.backgroundColor = .white
-        
-        let backButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
-        let backButtonImg = UIImage(systemName: "chevron.left", withConfiguration: backButtonConfig)?.withRenderingMode(.alwaysTemplate)
-        backButton.setImage(backButtonImg, for: .normal)
-        backButton.tintColor = .black
-        
-        titleLabel.text = "마이페이지"
-        titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
         
         [nicknameLabel, emailLabel].forEach {
             $0.textColor = .black
             $0.font = .systemFont(ofSize: 15, weight: .semibold)
         }
         
-        nicknameLabel.text = "닉네임"
-        emailLabel.text = "이메일"
-        
         [nicknameContentLabel, emailContentLabel].forEach {
             $0.textColor = .gray
             $0.font = .systemFont(ofSize: 17, weight: .semibold)
             $0.textAlignment = .right
-            
         }
         
         [nicknameUnderLine, emailUnderLine].forEach {
             $0.backgroundColor = .lightGray
         }
-        
-        logoutButton.backgroundColor = UIColor(named: "mainColor")
-        logoutButton.setTitle("로그아웃", for: .normal)
-        logoutButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        logoutButton.setTitleColor(.black, for: .normal)
-        logoutButton.layer.cornerRadius = 10
-        
-        exitButton.backgroundColor = .lightGray
-        exitButton.setTitle("계정 탈퇴", for: .normal)
-        exitButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        exitButton.setTitleColor(.white, for: .normal)
-        exitButton.layer.cornerRadius = 10
-        
     }
     
     private func layout() {
-        [loadingView, backButton,titleLabel, nicknameLabel, nicknameContentLabel, nicknameUnderLine, emailLabel, emailContentLabel, emailUnderLine, logoutButton, exitButton].forEach {
+        
+        [nicknameLabel, nicknameContentLabel].forEach { nicknameStackView.addArrangedSubview($0) }
+        [emailLabel, emailContentLabel].forEach { emailStackView.addArrangedSubview($0) }
+        
+        [loadingView, backButton,titleLabel, nicknameStackView, nicknameUnderLine, emailStackView, emailUnderLine, logoutButton, exitButton].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            
-            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            
-            titleLabel.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 40),
-            titleLabel.widthAnchor.constraint(equalToConstant: 300),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            nicknameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
-            nicknameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            nicknameLabel.trailingAnchor.constraint(equalTo: nicknameContentLabel.leadingAnchor),
-            
-            nicknameContentLabel.topAnchor.constraint(equalTo: nicknameLabel.topAnchor),
-            nicknameContentLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            nicknameUnderLine.topAnchor.constraint(equalTo: nicknameContentLabel.bottomAnchor, constant: 15),
-            nicknameUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            nicknameUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            nicknameUnderLine.heightAnchor.constraint(equalToConstant: 0.5),
-            
-            emailLabel.topAnchor.constraint(equalTo: nicknameUnderLine.bottomAnchor, constant: 30),
-            emailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailLabel.trailingAnchor.constraint(equalTo: emailContentLabel.leadingAnchor),
-            
-            emailContentLabel.topAnchor.constraint(equalTo: emailLabel.topAnchor),
-            emailContentLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            emailUnderLine.topAnchor.constraint(equalTo: emailContentLabel.bottomAnchor, constant: 15),
-            emailUnderLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            emailUnderLine.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            emailUnderLine.heightAnchor.constraint(equalToConstant: 0.5),
-            
-            logoutButton.topAnchor.constraint(equalTo: emailUnderLine.bottomAnchor, constant: 40),
-            logoutButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            logoutButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            logoutButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            exitButton.topAnchor.constraint(equalTo: logoutButton.bottomAnchor, constant: 20),
-            exitButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            exitButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            exitButton.heightAnchor.constraint(equalToConstant: 40)
-            
-        ].forEach { $0.isActive = true }
+        loadingView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        backButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.leading.equalTo(view).offset(20)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(backButton.snp.bottom).offset(40)
+            $0.width.equalTo(300)
+            $0.centerX.equalTo(view)
+        }
+        
+        nicknameStackView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(50)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        nicknameUnderLine.snp.makeConstraints {
+            $0.top.equalTo(nicknameContentLabel.snp.bottom).offset(15)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(0.5)
+        }
+        
+        emailStackView.snp.makeConstraints {
+            $0.top.equalTo(nicknameUnderLine.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        emailUnderLine.snp.makeConstraints {
+            $0.top.equalTo(emailContentLabel.snp.bottom).offset(15)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(0.5)
+        }
+        
+        logoutButton.snp.makeConstraints {
+            $0.top.equalTo(emailUnderLine.snp.bottom).offset(40)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(40)
+        }
+        
+        exitButton.snp.makeConstraints {
+            $0.top.equalTo(logoutButton.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(40)
+        }
+
     }
     
 }
