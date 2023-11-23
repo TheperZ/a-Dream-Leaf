@@ -137,7 +137,7 @@ class HomeViewController: UIChartViewController {
     
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
-        super.init()
+        super.init(viewModel: UIChartViewModel())
     }
     
     required init?(coder: NSCoder) {
@@ -215,7 +215,6 @@ class HomeViewController: UIChartViewController {
         tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), tag: 1)
         tabBarItem.imageInsets = .init(top: 10, left: 0, bottom: -10, right: 0)
         
-        chartSetting()
     }
     
     private func layout() {

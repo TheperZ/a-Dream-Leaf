@@ -14,8 +14,6 @@ import SnapKit
 class AccountViewController: UIChartViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: AccountViewModel
-    
-    private let selectedDate = BehaviorSubject(value: Date.now)
 
     private var cover: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .regular)
@@ -104,7 +102,7 @@ class AccountViewController: UIChartViewController {
     
     init(viewModel: AccountViewModel) {
         self.viewModel = viewModel
-        super.init()
+        super.init(viewModel: UIChartViewModel())
         tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "tree"), tag: 1)
     }
     
@@ -206,7 +204,6 @@ class AccountViewController: UIChartViewController {
         navigationItem.rightBarButtonItem = settingButton
         navigationController?.navigationBar.tintColor = .black
         
-        chartSetting()
         hideMoreButton()
     
     }
@@ -277,8 +274,7 @@ class AccountViewController: UIChartViewController {
         }
         
         emptyWarningLabel.snp.makeConstraints {
-            $0.top.equalTo(divider.snp.bottom).offset(80)
-            $0.leading.trailing.bottom.equalTo(tableView)
+            $0.top.leading.trailing.bottom.equalTo(tableView)
         }
     }
 }

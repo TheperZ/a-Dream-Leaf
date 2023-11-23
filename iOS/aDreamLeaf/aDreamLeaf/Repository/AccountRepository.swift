@@ -39,8 +39,16 @@ struct AccountRepository {
             .map { result in result.data ?? []}
     }
     
-    func getAccountSummary(yearMonth: String) -> Observable<RequestResult<AccountSummary>> {
+    func getAccountSummary(yearMonth: String) -> Observable<[Int]> {
         return network.getAccountSummary(yearMonth: yearMonth)
+            .map { result in
+                if result.success {
+                    guard let data = result.data else { return [0,0] }
+                    return [ data.charge, data.balance ]
+                } else {
+                    return [0,0]
+                }
+            }
     }
     
     func deleteExpenditure(accountId: Int) -> Observable<RequestResult<Void>> {

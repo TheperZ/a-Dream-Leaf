@@ -8,35 +8,110 @@
 import UIKit
 import Charts
 import RxSwift
+import RxCocoa
 
 class UIChartViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    private let chartViewModel: UIChartViewModel
+    let selectedDate = BehaviorSubject<Date>(value:Date.now)
     
-    let chartViewModel = UIChartViewModel()
+    private var cover: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .regular)
+        let cover = UIVisualEffectView(effect: blurEffect)
+        cover.clipsToBounds = true
+        return cover
+    }()
     
-    private var blurEffect: UIBlurEffect!
-    private var cover: UIVisualEffectView!
-    private let coverStackView = UIStackView()
-    private let coverMessageTextView = UITextView()
-    private let gotoLoginButton = UIButton()
+    private let coverStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
     
-    let accountSummaryContainer = UIView()
-    private let accountTitleLabel = UILabel()
+    private let coverMessageTextView: UITextView = {
+        let textView = UITextView()
+        textView.isScrollEnabled = false
+        textView.isSelectable = false
+        textView.isEditable = false
+        textView.backgroundColor = .clear
+        textView.text = "로그인이 필요한 기능입니다!\n로그인을 해주세요!"
+        textView.font = .systemFont(ofSize: 15, weight: .semibold)
+        textView.textColor = .darkGray
+        textView.textAlignment = .center
+        return textView
+    }()
     
-    private let pieChart = PieChartView()
+    private let gotoLoginButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(named: "subColor2")
+        button.setTitle("로그인하러 가기", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
     
-    private let usedAmountColorView = UIView()
-    private let usedAmountLabel = UILabel()
-    private let accountMoreButton = UIButton()
+    let accountSummaryContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        view.layer.cornerRadius = 10
+        return view
+    }()
     
-    private let balanceColorView = UIView()
-    private let balanceLabel = UILabel()
+    private let accountTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "가계부 요약"
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textColor = .black
+        return label
+    }()
     
-    init() {
+    
+    private let pieChart: PieChartView = {
+        let pieChart = PieChartView()
+        pieChart.drawEntryLabelsEnabled = false
+        pieChart.legend.enabled = false
+        return pieChart
+    }()
+    
+    private let usedAmountColorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        return view
+    }()
+    
+    private let usedAmountLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 15, weight: .regular)
+        return label
+    }()
+    
+    private let accountMoreButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("더보기", for: .normal)
+        button.setTitleColor(.gray, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 13, weight: .regular)
+        return button
+    }()
+    
+    private let balanceColorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "subColor")!
+        return view
+    }()
+    
+    private let balanceLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 15, weight: .regular)
+        return label
+    }()
+    
+    
+    init(viewModel: UIChartViewModel) {
+        self.chartViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        
-        coverSetting()
-        chartLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -45,72 +120,44 @@ class UIChartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        bind()
+        bindViewModel()
+        chartLayout()
     }
     
-    override func viewWillAppear(_ animated: Bool){
-        super.viewWillAppear(animated)
+    private func bindViewModel() {
         
-        chartViewModel.refresh.onNext(Void())
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:))).map { _ in () }.asDriver(onErrorJustReturn: ())
+        
+        let input = UIChartViewModel.Input(trigger: Driver.merge(viewWillAppear, selectedDate.map { _ in ()}.asDriver(onErrorJustReturn: ()) ),
+                                           date: selectedDate.asDriver(onErrorJustReturn: .now))
+        
+        let output = chartViewModel.transform(input: input)
+        
+        output.login
+            .drive(cover.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        output.data
+            .drive(onNext: {[weak self] data in
+                guard let self = self else { return }
+                self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: data))
+                self.usedAmountLabel.text = "사용액: \(NumberUtil.commaString(data[0])!)원"
+                self.balanceLabel.text = "잔액: \(NumberUtil.commaString(data[1])!)원"
+            })
+            .disposed(by: disposeBag)
+
     }
     
-    private func bind() {
-        UserManager.getInstance()
-            .subscribe(onNext: { user in
-                if user == nil {
-                    self.cover.isHidden = false
-                } else {
-                    self.cover.isHidden = true
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        chartViewModel.dataValues
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                self.setPieChartData(pieChart: self.pieChart, with: self.entryData(values: $0))
-                self.usedAmountLabel.text = "사용액: \(NumberUtil.commaString($0[0])!)원"
-                self.balanceLabel.text = "잔액: \(NumberUtil.commaString($0[1])!)원"
-            })
-            .disposed(by: disposeBag)
-        
+    private func uiEvent() {
         gotoLoginButton.rx.tap
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { _ in
+            .asDriver()
+            .drive(onNext: {[weak self] _ in
                 let vc = UINavigationController(rootViewController: LoginViewController(viewModel: LoginViewModel()))
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
+                self?.present(vc, animated: true)
             })
             .disposed(by: disposeBag)
-    }
-    
-    private func coverSetting() {
-        blurEffect = UIBlurEffect(style: .regular)
-        cover = UIVisualEffectView(effect: blurEffect)
-        cover.layer.cornerRadius = 10
-        cover.clipsToBounds = true
-        
-        coverStackView.axis = .vertical
-        
-        coverMessageTextView.isScrollEnabled = false
-        coverMessageTextView.isSelectable = false
-        coverMessageTextView.isEditable = false
-        coverMessageTextView.backgroundColor = .clear
-        coverMessageTextView.text = "로그인이 필요한 기능입니다!\n로그인을 해주세요!"
-        coverMessageTextView.font = .systemFont(ofSize: 15, weight: .semibold)
-        coverMessageTextView.textColor = .darkGray
-        coverMessageTextView.textAlignment = .center
-        
-        gotoLoginButton.backgroundColor = UIColor(named: "subColor2")
-        gotoLoginButton.setTitle("로그인하러 가기", for: .normal)
-        gotoLoginButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
-        gotoLoginButton.setTitleColor(.white, for: .normal)
-        gotoLoginButton.layer.cornerRadius = 10
-    }
-    
-    func chartSetting() {
         
         accountMoreButton.rx.tap
             .asDriver()
@@ -118,29 +165,6 @@ class UIChartViewController: UIViewController {
                 self.tabBarController?.selectedIndex = 2
             })
             .disposed(by: disposeBag)
-        
-        accountSummaryContainer.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        accountSummaryContainer.layer.cornerRadius = 10
-        
-        accountTitleLabel.text = "가계부 요약"
-        accountTitleLabel.font = .systemFont(ofSize: 18, weight: .bold)
-        accountTitleLabel.textColor = .black
-        
-        accountMoreButton.setTitle("더보기", for: .normal)
-        accountMoreButton.setTitleColor(.gray, for: .normal)
-        accountMoreButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .regular)
-        
-        pieChart.drawEntryLabelsEnabled = false
-        pieChart.legend.enabled = false
-        
-        
-        usedAmountColorView.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        usedAmountLabel.textColor = .black
-        usedAmountLabel.font = .systemFont(ofSize: 15, weight: .regular)
-        
-        balanceColorView.backgroundColor = UIColor(named: "subColor")!
-        balanceLabel.textColor = .black
-        balanceLabel.font = .systemFont(ofSize: 15, weight: .regular)
     }
     
     private func setPieChartData(pieChart: PieChartView, with: [ChartDataEntry]) {
@@ -175,62 +199,74 @@ class UIChartViewController: UIViewController {
         
         [accountTitleLabel, accountMoreButton, pieChart, usedAmountColorView, usedAmountLabel, balanceColorView, balanceLabel, cover].forEach {
             accountSummaryContainer.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         cover.contentView.addSubview(coverStackView)
-        coverStackView.translatesAutoresizingMaskIntoConstraints = false
         
         [coverMessageTextView, gotoLoginButton].forEach {
             coverStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            accountSummaryContainer.heightAnchor.constraint(equalToConstant: 200),
-            
-            accountTitleLabel.topAnchor.constraint(equalTo: accountSummaryContainer.topAnchor, constant: 10),
-            accountTitleLabel.leadingAnchor.constraint(equalTo: accountSummaryContainer.leadingAnchor, constant: 15),
-            
-            accountMoreButton.trailingAnchor.constraint(equalTo: accountSummaryContainer.trailingAnchor, constant: -10),
-            accountMoreButton.centerYAnchor.constraint(equalTo: accountTitleLabel.centerYAnchor),
-            accountMoreButton.widthAnchor.constraint(equalToConstant: 60),
-            
-            pieChart.topAnchor.constraint(equalTo: accountTitleLabel.bottomAnchor, constant: 10),
-            pieChart.leadingAnchor.constraint(equalTo: accountTitleLabel.leadingAnchor),
-            pieChart.trailingAnchor.constraint(equalTo: accountSummaryContainer.centerXAnchor, constant: -10),
-            pieChart.bottomAnchor.constraint(equalTo: accountSummaryContainer.bottomAnchor, constant: -10),
-            
-            usedAmountColorView.heightAnchor.constraint(equalToConstant: 15),
-            usedAmountColorView.widthAnchor.constraint(equalToConstant: 15),
-            usedAmountColorView.leadingAnchor.constraint(equalTo: accountSummaryContainer.centerXAnchor, constant: 10),
-            usedAmountColorView.bottomAnchor.constraint(equalTo: pieChart.centerYAnchor, constant: -10),
-            
-            usedAmountLabel.leadingAnchor.constraint(equalTo: usedAmountColorView.trailingAnchor, constant: 10),
-            usedAmountLabel.centerYAnchor.constraint(equalTo: usedAmountColorView.centerYAnchor),
-            
-            balanceColorView.heightAnchor.constraint(equalToConstant: 15),
-            balanceColorView.widthAnchor.constraint(equalToConstant: 15),
-            balanceColorView.leadingAnchor.constraint(equalTo: accountSummaryContainer.centerXAnchor, constant: 10),
-            balanceColorView.bottomAnchor.constraint(equalTo: pieChart.centerYAnchor, constant: 10),
-            
-            balanceLabel.leadingAnchor.constraint(equalTo: balanceColorView.trailingAnchor, constant: 10),
-            balanceLabel.centerYAnchor.constraint(equalTo: balanceColorView.centerYAnchor),
-            
-            cover.topAnchor.constraint(equalTo: accountSummaryContainer.topAnchor),
-            cover.leadingAnchor.constraint(equalTo: accountSummaryContainer.leadingAnchor),
-            cover.trailingAnchor.constraint(equalTo: accountSummaryContainer.trailingAnchor),
-            cover.bottomAnchor.constraint(equalTo: accountSummaryContainer.bottomAnchor),
-            
-            coverStackView.widthAnchor.constraint(equalToConstant: 200),
-            coverStackView.centerXAnchor.constraint(equalTo: cover.contentView.centerXAnchor),
-            coverStackView.centerYAnchor.constraint(equalTo: cover.contentView.centerYAnchor),
-            
-            coverMessageTextView.heightAnchor.constraint(equalToConstant: 50),
-
-            gotoLoginButton.heightAnchor.constraint(equalToConstant: 30),
-            gotoLoginButton.widthAnchor.constraint(equalToConstant: 150),
-        ].forEach { $0.isActive = true }
+        accountSummaryContainer.snp.makeConstraints {
+            $0.height.equalTo(200)
+        }
+        
+        accountTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(accountSummaryContainer).offset(10)
+            $0.leading.equalTo(accountSummaryContainer).offset(15)
+        }
+        
+        accountMoreButton.snp.makeConstraints {
+            $0.trailing.equalTo(accountSummaryContainer).offset(-10)
+            $0.centerY.equalTo(accountTitleLabel)
+            $0.width.equalTo(60)
+        }
+        
+        pieChart.snp.makeConstraints {
+            $0.top.equalTo(accountTitleLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(accountTitleLabel)
+            $0.trailing.equalTo(accountSummaryContainer.snp.centerX).offset(-10)
+            $0.bottom.equalTo(accountSummaryContainer).offset(-10)
+        }
+        
+        usedAmountColorView.snp.makeConstraints {
+            $0.height.width.equalTo(15)
+            $0.leading.equalTo(accountSummaryContainer.snp.centerX).offset(10)
+            $0.bottom.equalTo(pieChart.snp.centerY).offset(-10)
+        }
+        
+        usedAmountLabel.snp.makeConstraints {
+            $0.leading.equalTo(usedAmountColorView.snp.trailing).offset(10)
+            $0.centerY.equalTo(usedAmountColorView)
+        }
+        
+        balanceColorView.snp.makeConstraints {
+            $0.height.width.equalTo(15)
+            $0.leading.equalTo(accountSummaryContainer.snp.centerX).offset(10)
+            $0.bottom.equalTo(pieChart.snp.centerY).offset(10)
+        }
+        
+        balanceLabel.snp.makeConstraints {
+            $0.leading.equalTo(balanceColorView.snp.trailing).offset(10)
+            $0.centerY.equalTo(balanceColorView)
+        }
+        
+        cover.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(accountSummaryContainer)
+        }
+        
+        coverStackView.snp.makeConstraints {
+            $0.width.equalTo(200)
+            $0.center.equalTo(cover.contentView)
+        }
+        
+        coverMessageTextView.snp.makeConstraints {
+            $0.height.equalTo(50)
+        }
+        
+        gotoLoginButton.snp.makeConstraints {
+            $0.height.equalTo(30)
+        }
     }
     
     func hideMoreButton() {
