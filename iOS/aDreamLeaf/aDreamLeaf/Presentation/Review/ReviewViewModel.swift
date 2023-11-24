@@ -7,62 +7,53 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-struct ReviewViewModel: LoadingViewModel {
-    var loading: PublishSubject<Bool>
-    
+struct ReviewViewModel {
+    private let repository: ReviewRepository
     private let disposeBag = DisposeBag()
     private let storeId: Int
-
-    let editData : Review? // 리뷰 수정 시 리뷰 데이터, 신규 작성시 nil
-    let rating = BehaviorSubject<Int>(value: 5)
-    let body = BehaviorSubject<String>(value: "")
-    let image = BehaviorSubject<UIImage?>(value: nil)
-    let saveBtnTap = PublishSubject<Void>()
+    private let editData: Review?
     
-    let reviewRequestResult = PublishSubject<RequestResult<Void>>()
+    struct Input {
+        let trigger: Driver<Void>
+        let rating: Driver<Int>
+        let body: Driver<String>
+        let image: Driver<UIImage?>
+    }
     
-    init(storeId: Int, editData: Review?, _ repo: ReviewRepository = ReviewRepository()) {
+    struct Output {
+        let isEdit: Bool
+        let editData: Review?
+        let loading: Driver<Bool>
+        let result: Driver<RequestResult<Void>>
+    }
+    
+    
+    init(storeId: Int, editData: Review? = nil, _ repo: ReviewRepository = ReviewRepository()) {
+        self.repository = repo
         self.storeId = storeId
         self.editData = editData
-        self.loading = PublishSubject<Bool>()
+    }
+    
+    func transform(input: Input) -> Output {
+        let loading = PublishSubject<Bool>()
         
-        // 신규 리뷰 작성
-        saveBtnTap
-            .filter { editData == nil }
-            .withLatestFrom(Observable.combineLatest(rating, body, image))
-            .flatMap{rating, body, img in repo.create(storeId: storeId, body: body, rating: rating, image: img)}
-            .bind(to: reviewRequestResult)
-            .disposed(by: disposeBag)
-        
-        // 기존 리뷰 수정
-        saveBtnTap
-            .filter { editData != nil }
-            .withLatestFrom(Observable.combineLatest(rating, body, image))
-            .flatMap{rating, body, img in repo.update(reviewId: editData!.reviewId, body: body, rating: rating, image: img)}
-            .bind(to: reviewRequestResult)
-            .disposed(by: disposeBag)
-        
-        // 리뷰 수정모드 시 초기값 설정
-        if let data = editData {
-            rating.onNext(data.rating)
-            body.onNext(data.body)
-            if let reviewImage = data.reviewImage { // 리뷰에 이미지가 포함 된 경우
-                image.onNext(Image.base64ToImg(with: reviewImage))
+        let result = input.trigger
+            .withLatestFrom(Driver.combineLatest(input.rating, input.body, input.image))
+            .do(onNext: { _ in loading.onNext(true)} )
+            .flatMapLatest { rating, body, image in
+                if editData == nil {
+                    repository.create(storeId: storeId, body: body, rating: rating, image: image)
+                        .do(onNext: { _ in loading.onNext(false)} )
+                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                } else {
+                    repository.update(reviewId: editData!.reviewId, body: body, rating: rating, image: image)
+                        .do(onNext: { _ in loading.onNext(false)} )
+                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                }
             }
-        }
         
-        //MARK: - Loading
-        
-        saveBtnTap
-            .map { return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        reviewRequestResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        return Output(isEdit: editData != nil, editData: editData, loading: loading.asDriver(onErrorJustReturn: false), result: result)
     }
 }
