@@ -29,12 +29,14 @@ struct ReviewRepository {
         return network.updateRequest(reviewId: reviewId, body: body, rating: rating, image: image)
     }
     
-    func fetchRecent(storeId: Int) -> Observable<RequestResult<[Review]>> {
+    func fetchRecent(storeId: Int) -> Observable<[Review]> {
         return network.fetchRecentReview(storeId: storeId)
+            .map { $0.data ?? []}
     }
     
-    func fetchReviews(storeId: Int) -> Observable<RequestResult<[Review]>> {
+    func fetchReviews(storeId: Int) -> Observable<[Review]> {
         return network.fetchAllReviews(storeId: storeId)
+            .map { $0.data ?? [] }
     }
     
     func deleteReview(reviewId: Int) -> Observable<RequestResult<Void>> {

@@ -46,15 +46,15 @@ class ReviewCell: UITableViewCell {
             })
             .disposed(by: disposeBag)
         
-        menu.selectionAction = { [unowned self] (index: Int, item: String) in
+        menu.selectionAction = { [weak self] (index: Int, item: String) in
+            guard let self = self else { return }
             switch index {
                 case 0:
                     parent.navigationController?.pushViewController(ReviewViewController(storeId: viewModel.storeId, editData: viewModel.reviewData), animated: true)
                 case 1:
                     let alert = UIAlertController(title: "확인", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
-                        // parent ViewController인 ReviewListViewController의 ViewModel에 리뷰 삭제 요청
-                        self.parent.viewModel.reviewDeleteRequest.onNext(self.viewModel.reviewId)
+                        self.parent.deleteRequest.onNext(self.viewModel.reviewId)
                     }
                     let cancel = UIAlertAction(title: "취소", style: .cancel)
                 

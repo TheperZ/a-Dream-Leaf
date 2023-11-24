@@ -16,8 +16,9 @@ struct StoreRepository {
             .map { result in result.data ?? []}
     }
     
-    func fetchDetail(storeId: Int) -> Observable<RequestResult<Store>> {
+    func fetchDetail(storeId: Int) -> Observable<Store?> {
         return network.fetchStoreDetail(storeId: storeId)
+            .map { $0.data }
     }
     
     func searchNearStore(lat: Double, long: Double) -> Observable<[SimpleStore]> {

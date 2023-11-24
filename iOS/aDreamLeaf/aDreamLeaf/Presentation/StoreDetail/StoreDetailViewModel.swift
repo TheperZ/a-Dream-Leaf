@@ -7,60 +7,55 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-struct StoreDetailViewModel: LoadingViewModel {
-    var loading: PublishSubject<Bool>
+struct StoreDetailViewModel {
+    private let disposeBag = DisposeBag()
+    private let storeRepo: StoreRepository
+    private let reviewRepo: ReviewRepository
+    private let storeId: Int
     
-    let disposeBag = DisposeBag()
-    let reviews = BehaviorSubject<[Review]>(value: [])
-    let storeId: Int
+    struct Input {
+        let trigger: Driver<Void>
+    }
     
-    let detail = PublishSubject<Store>()
-    let fetchDetailResult = PublishSubject<RequestResult<Store>>()
-    
-    let fetchReviewRequest = BehaviorSubject(value: Void())
-    let fetchReviewResult = PublishSubject<RequestResult<[Review]>>()
+    struct Output {
+        let login: Driver<Bool>
+        let loading: Driver<Bool>
+        let store: Driver<Store?>
+        let reviews: Driver<[Review]>
+    }
     
     init(storeId: Int, _ storeRepo: StoreRepository = StoreRepository(), _ reviewRepo: ReviewRepository = ReviewRepository()) {
+        self.storeRepo = storeRepo
+        self.reviewRepo = reviewRepo
         self.storeId = storeId
-        
-        loading = PublishSubject<Bool>()
-        
-        //가게 정보
-        storeRepo.fetchDetail(storeId: storeId)
-            .bind(to: fetchDetailResult)
-            .disposed(by: disposeBag)
-        
-        fetchDetailResult
-            .filter { $0.success }
-            .map { $0.data! }
-            .bind(to: detail)
-            .disposed(by: disposeBag)
-
-        //최근 리뷰 목록 업데이트 요청 시 불러오기
-        fetchReviewRequest
-            .flatMap{ reviewRepo.fetchRecent(storeId: storeId) }
-            .bind(to: fetchReviewResult)
-            .disposed(by: disposeBag)
-        
-        //최근 리뷰 목록 가져오기 결과에서 리뷰 목록 저장
-        fetchReviewResult
-            .filter { $0.success }
-            .map { $0.data! }
-            .bind(to: reviews)
-            .disposed(by: disposeBag)
+    }
     
-        //최근 리뷰 목록 요청 시 로딩 시작
-        fetchReviewRequest
-            .map { return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-
-        //최근 리뷰 목록 응답 시 로딩 종료
-        fetchReviewResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+    func transform(input: Input) -> Output {
+        let login = UserManager.getInstance().map { $0 != nil }.asDriver(onErrorJustReturn: false)
+        
+        let storeLoading = PublishSubject<Bool>()
+        let store = input.trigger
+            .do(onNext: { storeLoading.onNext(true)})
+            .flatMapLatest {
+                storeRepo.fetchDetail(storeId: storeId)
+                    .do(onNext: { _ in storeLoading.onNext(false)})
+                    .asDriver(onErrorJustReturn: nil)
+            }
+        
+        let reviewLoading = PublishSubject<Bool>()
+        let reviews = input.trigger
+            .do(onNext: { reviewLoading.onNext(true)})
+            .flatMapLatest {
+                reviewRepo.fetchRecent(storeId: storeId)
+                    .do(onNext: { _ in reviewLoading.onNext(false)})
+                    .asDriver(onErrorJustReturn: [])
+            }
+        
+        let loading = Observable.combineLatest(storeLoading, reviewLoading)
+            .map { $0 || $1 }
+        
+        return Output(login: login, loading: loading.asDriver(onErrorJustReturn: false), store: store, reviews: reviews)
     }
 }

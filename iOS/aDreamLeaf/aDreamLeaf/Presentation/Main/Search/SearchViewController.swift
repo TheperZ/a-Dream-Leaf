@@ -166,7 +166,7 @@ class SearchViewController: UIViewController {
         
         output.selectedStore
             .drive(onNext: { [weak self] store in
-                self?.navigationController?.pushViewController(StoreDetailViewController(storeId: store.storeId), animated: true)
+                self?.navigationController?.pushViewController(StoreDetailViewController(viewModel: StoreDetailViewModel(storeId: store.storeId)), animated: true)
             })
             .disposed(by: disposeBag)
 
