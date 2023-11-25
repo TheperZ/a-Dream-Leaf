@@ -16,33 +16,82 @@ class ReviewCell: UITableViewCell {
     private var parent: ReviewListViewController!
     
     private let mainView = UIView()
-    private let nicknameLabel = UILabel()
-    private let contentTextView = UITextView()
-    private let ratingLabel = UILabel()
-    private let reviewImageView = UIImageView()
+    private let nicknameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.textColor = .black
+        label.textAlignment = .left
+        return label
+    }()
     
-    private let menuButton = UIButton()
-    private let menu = DropDown()
+    private let contentTextView: UITextView = {
+        let textView = UITextView()
+        textView.backgroundColor = .white
+        textView.font = .systemFont(ofSize: 11, weight: .regular)
+        textView.textColor = .gray
+        textView.textAlignment = .left
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        return textView
+    }()
     
-    func setUp(_ parent: ReviewListViewController, with reviewData: Review) {
+    private let ratingLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 11, weight: .light)
+        label.textColor = .black
+        label.textAlignment = .left
+        return label
+    }()
+    
+    private let reviewImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let menuButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+    
+    private let menu: DropDown = {
+        let menu = DropDown()
+        menu.dataSource = ["리뷰 수정", "리뷰 삭제"]
+        return menu
+    }()
+    
+    func setUp(_ parent: ReviewListViewController, viewModel: ReviewCellVIewModel) {
         self.parent = parent
-        viewModel = ReviewCellVIewModel(reviewData)
+        self.viewModel = viewModel
         
         bind()
+        uiEvent()
         attribute()
         layout()
     }
     
     private func bind() {
-        UserManager.getInstance()
-            .map { $0 == nil ? true : $0!.userId != self.viewModel.reviewerId }
-            .bind(to: menuButton.rx.isHidden)
-            .disposed(by: disposeBag)
+        menuButton.isHidden = !viewModel.isMine
+        nicknameLabel.text = viewModel.nickname
+        contentTextView.text = viewModel.content
+        ratingLabel.text = "⭐️ \(viewModel.rating)"
+        reviewImageView.isHidden = viewModel.image == nil ? true : false
         
+        if let image = viewModel.image {
+            reviewImageView.image = image
+        } else {
+            reviewImageView.isHidden = true
+        }
+        
+    }
+    
+    private func uiEvent() {
         menuButton.rx.tap
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                self.menu.show()
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                self?.menu.show()
             })
             .disposed(by: disposeBag)
         
@@ -70,36 +119,6 @@ class ReviewCell: UITableViewCell {
     
     private func attribute() {
         contentView.backgroundColor = .white
-        
-        nicknameLabel.text = viewModel.nickname
-        nicknameLabel.font = .systemFont(ofSize: 12, weight: .regular)
-        nicknameLabel.textColor = .black
-        nicknameLabel.textAlignment = .left
-        
-        contentTextView.backgroundColor = .white
-        contentTextView.text = viewModel.content
-        contentTextView.font = .systemFont(ofSize: 11, weight: .regular)
-        contentTextView.textColor = .gray
-        contentTextView.textAlignment = .left
-        contentTextView.isEditable = false
-        contentTextView.isScrollEnabled = false
-        
-        ratingLabel.text = "⭐️ \(viewModel.rating)"
-        ratingLabel.font = .systemFont(ofSize: 11, weight: .light)
-        ratingLabel.textColor = .black
-        ratingLabel.textAlignment = .left
-        
-        reviewImageView.isHidden = viewModel.image == nil ? true : false
-        reviewImageView.image = viewModel.image
-        reviewImageView.contentMode = .scaleAspectFit
-        
-        menuButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        menuButton.tintColor = .black
-        
-        menu.dataSource = ["리뷰 수정", "리뷰 삭제"]
-        menu.anchorView = menuButton
-        menu.bottomOffset = CGPoint(x: -60, y:(menu.anchorView?.plainView.bounds.height)!)
-        
     }
     
     private func layout() {
@@ -112,45 +131,47 @@ class ReviewCell: UITableViewCell {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
-            
-            mainView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            mainView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            mainView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            mainView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            nicknameLabel.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 20),
-            nicknameLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 10),
-            nicknameLabel.widthAnchor.constraint(equalToConstant: 100),
-            
-            ratingLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 10),
-            ratingLabel.leadingAnchor.constraint(equalTo: nicknameLabel.leadingAnchor, constant: 5),
-            ratingLabel.trailingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor),
-            
-            contentTextView.topAnchor.constraint(equalTo: nicknameLabel.topAnchor, constant: -7),
-            contentTextView.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor),
-            contentTextView.trailingAnchor.constraint(equalTo: menuButton.leadingAnchor),
-            contentTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30),
-            
-            menuButton.topAnchor.constraint(equalTo: nicknameLabel.topAnchor, constant: -7),
-            menuButton.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
-            menuButton.heightAnchor.constraint(equalToConstant: 30),
-            menuButton.widthAnchor.constraint(equalToConstant: 30),
-            
-            reviewImageView.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 10),
-            reviewImageView.leadingAnchor.constraint(equalTo: contentTextView.leadingAnchor),
-            reviewImageView.trailingAnchor.constraint(equalTo: contentTextView.trailingAnchor),
-            reviewImageView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -10),
-            
-            
-        ].forEach { $0.isActive = true}
+        menu.anchorView = menuButton
+        menu.bottomOffset = CGPoint(x: -60, y:(menu.anchorView?.plainView.bounds.height)!)
         
-        if viewModel.image != nil {
-            reviewImageView.heightAnchor.constraint(equalTo: contentTextView.widthAnchor, constant: -50).isActive = true
+        mainView.snp.makeConstraints {
+            $0.top.equalTo(contentView).offset(20)
+            $0.leading.trailing.equalTo(contentView)
+            $0.bottom.equalTo(contentView).offset(-20)
         }
         
-        contentView.sizeToFit()
+        nicknameLabel.snp.makeConstraints {
+            $0.top.equalTo(mainView)
+            $0.leading.equalTo(mainView).offset(10)
+            $0.width.equalTo(100)
+        }
+        
+        ratingLabel.snp.makeConstraints {
+            $0.top.equalTo(nicknameLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(nicknameLabel).offset(5)
+            $0.trailing.equalTo(nicknameLabel)
+        }
+        
+        contentTextView.snp.makeConstraints {
+            $0.top.equalTo(nicknameLabel).offset(-7)
+            $0.leading.equalTo(nicknameLabel.snp.trailing)
+            $0.trailing.equalTo(menuButton.snp.leading)
+            $0.height.greaterThanOrEqualTo(30)
+        }
+        
+        menuButton.snp.makeConstraints {
+            $0.top.equalTo(nicknameLabel).offset(-7)
+            $0.trailing.equalTo(mainView)
+            $0.height.width.equalTo(30)
+        }
+        
+        reviewImageView.snp.makeConstraints {
+            $0.top.equalTo(contentTextView.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(contentTextView)
+            $0.bottom.equalTo(mainView)
+            $0.height.equalTo(viewModel.image != nil ? reviewImageView.snp.width : 0)
+        }
+
     }
     
 }

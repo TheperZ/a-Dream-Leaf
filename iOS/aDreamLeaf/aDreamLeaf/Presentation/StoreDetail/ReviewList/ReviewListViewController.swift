@@ -104,7 +104,7 @@ class ReviewListViewController : UIViewController {
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = tv.dequeueReusableCell(withIdentifier: K.TableViewCellID.ReviewCell, for: indexPath) as! ReviewCell
 
-                cell.setUp(self, with: review)
+                cell.setUp(self, viewModel: ReviewCellVIewModel(review))
 
                 return cell
             }

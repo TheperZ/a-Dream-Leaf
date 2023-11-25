@@ -113,11 +113,11 @@ class LocalRestaurantViewController : UIViewController {
         let output = viewModel.transform(input: input)
         
         output.stores
-            .drive(tableView.rx.items) { tv, row, element in
+            .drive(tableView.rx.items) { tv, row, store in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = self.tableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SearchCell, for: indexPath) as! SearchCell
                 
-                cell.setUp(with: element)
+                cell.setUp(viewModel: SearchCellViewModel(name: store.storeName, distance: store.curDist, rating: store.totalRating, type: store.storeType))
                 
                 return cell
             }

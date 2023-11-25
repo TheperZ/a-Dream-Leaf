@@ -8,16 +8,31 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SnapKit
 
 class SimpleReviewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
     private var viewModel: SimpleReviewCellViewModel!
     
-    private let nicknameLabel = UILabel()
-    private let contentLabel = UILabel()
+    private let nicknameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .black
+        label.textAlignment = .left
+        return label
+    }()
     
-    func setUp(with: Review) {
-        viewModel = SimpleReviewCellViewModel(with)
+    private let contentLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .gray
+        label.textAlignment = .left
+        return label
+    }()
+    
+    
+    func setUp(viewModel: SimpleReviewCellViewModel) {
+        self.viewModel = viewModel
         
         bind()
         attribute()
@@ -25,39 +40,31 @@ class SimpleReviewCell: UITableViewCell {
     }
     
     private func bind() {
-        
+        nicknameLabel.text = viewModel.nickname
+        contentLabel.text = viewModel.content
     }
     
     private func attribute() {
-        
         contentView.backgroundColor = .white
-        
-        nicknameLabel.text = viewModel.nickname
-        nicknameLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        nicknameLabel.textColor = .black
-        nicknameLabel.textAlignment = .left
-        
-        contentLabel.text = viewModel.content
-        contentLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        contentLabel.textColor = .gray
-        contentLabel.textAlignment = .left
     }
     
     private func layout() {
         [nicknameLabel, contentLabel].forEach {
             contentView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            nicknameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            nicknameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            nicknameLabel.widthAnchor.constraint(equalToConstant: 85),
-            
-            contentLabel.centerYAnchor.constraint(equalTo: nicknameLabel.centerYAnchor),
-            contentLabel.leadingAnchor.constraint(equalTo: nicknameLabel.trailingAnchor),
-            contentLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-        ].forEach { $0.isActive = true }
+        nicknameLabel.snp.makeConstraints {
+            $0.top.equalTo(contentView).offset(10)
+            $0.leading.equalTo(contentView)
+            $0.width.equalTo(85)
+        }
+        
+        contentLabel.snp.makeConstraints {
+            $0.centerY.equalTo(nicknameLabel)
+            $0.leading.equalTo(nicknameLabel.snp.trailing)
+            $0.trailing.equalTo(contentView)
+            $0.bottom.equalTo(contentView).offset(-10)
+        }
+        
     }
 }

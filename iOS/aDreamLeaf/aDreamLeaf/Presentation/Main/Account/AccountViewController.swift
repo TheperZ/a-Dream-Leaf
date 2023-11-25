@@ -151,7 +151,7 @@ class AccountViewController: UIChartViewController {
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = tv.dequeueReusableCell(withIdentifier: K.TableViewCellID.ExpenditureCell, for: indexPath) as! ExpenditureCell
                 
-                cell.setUp(with: element)
+                cell.setUp(viewModel: ExpenditureCellViewModel(expenditure: element))
                 
                 return cell
             }

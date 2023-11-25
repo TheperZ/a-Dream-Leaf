@@ -406,8 +406,8 @@
 		BF6761B829DD3ECF00A47207 /* ExpenditureCell */ = {
 			isa = PBXGroup;
 			children = (
-				BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */,
 				BF6761BB29DD3F5600A47207 /* ExpenditureCell.swift */,
+				BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */,
 			);
 			path = ExpenditureCell;
 			sourceTree = "<group>";

@@ -19,6 +19,16 @@ struct ReviewCellVIewModel {
     let content: String
     let rating: Int
     let image: UIImage?
+    var isMine: Bool {
+        get {
+            do {
+                let user = try UserManager.getInstance().value()
+                return user != nil && user!.userId == reviewerId
+            } catch {
+                return false
+            }
+        }
+    }
     
     init(_ reviewData: Review) {
         self.reviewData = reviewData

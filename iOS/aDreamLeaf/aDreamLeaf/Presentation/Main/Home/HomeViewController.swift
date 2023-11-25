@@ -162,10 +162,10 @@ class HomeViewController: UIChartViewController {
         let output = viewModel.transform(input: input)
         
         output.nearStores
-            .drive(nearRestCollectionView.rx.items) { collectionView, row, element in
+            .drive(nearRestCollectionView.rx.items) { collectionView, row, store in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CollectionViewCellID.RestaurantCell, for: indexPath) as! RestaurantCell
-                cell.setUp(with: element)
+                cell.setUp(viewModel: RestaurantCellViewModel(data: store))
                 return cell
             }
             .disposed(by: disposeBag)

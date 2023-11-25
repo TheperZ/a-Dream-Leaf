@@ -291,7 +291,7 @@ class StoreDetailViewController: UIViewController {
             .drive(reviewTableView.rx.items) { [weak self] tv, row, review in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = self?.reviewTableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SimpleReviewCell, for: indexPath) as! SimpleReviewCell
-                cell.setUp(with: review)
+                cell.setUp(viewModel: SimpleReviewCellViewModel(review))
                 return cell
             }
             .disposed(by: disposeBag)
