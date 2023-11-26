@@ -17,10 +17,10 @@ struct ExpenditureCellViewModel {
     let cost: Int
     let body: String
     
-    init(date: String, title: String, cost: Int, body: String) {
-        self.date = String(date.replacingOccurrences(of: "-", with: ".")[date.index(date.startIndex, offsetBy: 5)...])+"."
-        self.title = title
-        self.cost = cost
-        self.body = body
+    init(expenditure: Expenditure) {
+        self.date = String(expenditure.date.replacingOccurrences(of: "-", with: ".")[expenditure.date.index(expenditure.date.startIndex, offsetBy: 5)...])+"."
+        self.title = expenditure.restaurant
+        self.cost = expenditure.price
+        self.body = expenditure.body
     }
 }

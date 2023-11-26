@@ -26,6 +26,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>TEST_EMAIL</key>
+	<string>${TEST_EMAIL}</string>
+	<key>TEST_PASSWORD</key>
+	<string>${TEST_PASSWORD}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LINESeedKR-Bd.otf</string>

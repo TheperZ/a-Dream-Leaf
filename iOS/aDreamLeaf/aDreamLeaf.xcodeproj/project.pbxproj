@@ -47,6 +47,8 @@
 		BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */; };
 		BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */; };
 		BF83F17729F7F9A600EA07AD /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17629F7F9A600EA07AD /* ProfileRepository.swift */; };
+		BF9325622ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9325612ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift */; };
+		BF9325692ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9325682ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift */; };
 		BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */; };
 		BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */; };
 		BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */; };
@@ -107,6 +109,16 @@
 		BFF042F42A232A97001FCB88 /* AlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042F32A232A97001FCB88 /* AlarmRepository.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		BF9325632ABB1AF4004082A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFCF86A529CD56400075D5E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BFCF86AC29CD56400075D5E6;
+			remoteInfo = aDreamLeaf;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		0192F08C6E377D04B56FDC3F /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
 		17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,6 +162,37 @@
 		BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCellViewModel.swift; sourceTree = "<group>"; };
 		BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNetwork.swift; sourceTree = "<group>"; };
 		BF83F17629F7F9A600EA07AD /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
+		BF93251F2ABB1923004082A8 /* absl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = absl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325212ABB1923004082A8 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325232ABB1923004082A8 /* openssl_grpc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = openssl_grpc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325252ABB1923004082A8 /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Charts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325272ABB1923004082A8 /* DropDown.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DropDown.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325292ABB1923004082A8 /* FirebaseAppCheckInterop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseAppCheckInterop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93252B2ABB1923004082A8 /* FirebaseAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93252D2ABB1923004082A8 /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93252F2ABB1923004082A8 /* FirebaseCoreInternal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCoreInternal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325312ABB1923004082A8 /* FirebaseFirestore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseFirestore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325332ABB1923004082A8 /* FirebaseInstallations.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseInstallations.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325352ABB1923004082A8 /* FirebaseMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325372ABB1923004082A8 /* GoogleDataTransport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GoogleDataTransport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325392ABB1923004082A8 /* GoogleUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GoogleUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93253B2ABB1923004082A8 /* grpcpp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = grpcpp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93253D2ABB1923004082A8 /* grpc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = grpc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93253F2ABB1923004082A8 /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GTMSessionFetcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325412ABB1923004082A8 /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = leveldb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325432ABB1923004082A8 /* uv.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = uv.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325452ABB1923004082A8 /* MonthYearPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MonthYearPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325472ABB1923004082A8 /* nanopb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = nanopb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325492ABB1923004082A8 /* NMapsGeometry.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = NMapsGeometry.xcframework; path = Pods/NMapsGeometry/framework/NMapsGeometry.xcframework; sourceTree = "<group>"; };
+		BF93254B2ABB1923004082A8 /* NMapsMap.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = NMapsMap.xcframework; path = Pods/NMapsMap/framework/NMapsMap.xcframework; sourceTree = "<group>"; };
+		BF93254D2ABB1923004082A8 /* FBLPromises.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FBLPromises.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93254F2ABB1923004082A8 /* RxCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325512ABB1923004082A8 /* RxRelay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxRelay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325532ABB1923004082A8 /* RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325552ABB1923004082A8 /* Algorithms.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Algorithms.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF93255F2ABB1AF4004082A8 /* aDreamLeafNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aDreamLeafNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9325612ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aDreamLeafLoginNetworkTests.swift; sourceTree = "<group>"; };
+		BF9325682ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aDreamLeafKakaoNetworkTests.swift; sourceTree = "<group>"; };
 		BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -214,6 +257,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BF93255C2ABB1AF4004082A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFCF86AA29CD56400075D5E6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -228,6 +278,34 @@
 		84C0439267675780D1E6D44D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BF93251F2ABB1923004082A8 /* absl.framework */,
+				BF9325212ABB1923004082A8 /* Alamofire.framework */,
+				BF9325232ABB1923004082A8 /* openssl_grpc.framework */,
+				BF9325252ABB1923004082A8 /* Charts.framework */,
+				BF9325272ABB1923004082A8 /* DropDown.framework */,
+				BF9325292ABB1923004082A8 /* FirebaseAppCheckInterop.framework */,
+				BF93252B2ABB1923004082A8 /* FirebaseAuth.framework */,
+				BF93252D2ABB1923004082A8 /* FirebaseCore.framework */,
+				BF93252F2ABB1923004082A8 /* FirebaseCoreInternal.framework */,
+				BF9325312ABB1923004082A8 /* FirebaseFirestore.framework */,
+				BF9325332ABB1923004082A8 /* FirebaseInstallations.framework */,
+				BF9325352ABB1923004082A8 /* FirebaseMessaging.framework */,
+				BF9325372ABB1923004082A8 /* GoogleDataTransport.framework */,
+				BF9325392ABB1923004082A8 /* GoogleUtilities.framework */,
+				BF93253B2ABB1923004082A8 /* grpcpp.framework */,
+				BF93253D2ABB1923004082A8 /* grpc.framework */,
+				BF93253F2ABB1923004082A8 /* GTMSessionFetcher.framework */,
+				BF9325412ABB1923004082A8 /* leveldb.framework */,
+				BF9325432ABB1923004082A8 /* uv.framework */,
+				BF9325452ABB1923004082A8 /* MonthYearPicker.framework */,
+				BF9325472ABB1923004082A8 /* nanopb.framework */,
+				BF9325492ABB1923004082A8 /* NMapsGeometry.xcframework */,
+				BF93254B2ABB1923004082A8 /* NMapsMap.xcframework */,
+				BF93254D2ABB1923004082A8 /* FBLPromises.framework */,
+				BF93254F2ABB1923004082A8 /* RxCocoa.framework */,
+				BF9325512ABB1923004082A8 /* RxRelay.framework */,
+				BF9325532ABB1923004082A8 /* RxSwift.framework */,
+				BF9325552ABB1923004082A8 /* Algorithms.framework */,
 				17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */,
 			);
 			name = Frameworks;
@@ -328,8 +406,8 @@
 		BF6761B829DD3ECF00A47207 /* ExpenditureCell */ = {
 			isa = PBXGroup;
 			children = (
-				BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */,
 				BF6761BB29DD3F5600A47207 /* ExpenditureCell.swift */,
+				BF6761B929DD3F0300A47207 /* ExpenditureCellViewModel.swift */,
 			);
 			path = ExpenditureCell;
 			sourceTree = "<group>";
@@ -361,6 +439,15 @@
 				BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */,
 			);
 			path = SimpleReviewCell;
+			sourceTree = "<group>";
+		};
+		BF9325602ABB1AF4004082A8 /* aDreamLeafNetworkTests */ = {
+			isa = PBXGroup;
+			children = (
+				BF9325612ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift */,
+				BF9325682ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift */,
+			);
+			path = aDreamLeafNetworkTests;
 			sourceTree = "<group>";
 		};
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
@@ -549,6 +636,7 @@
 			isa = PBXGroup;
 			children = (
 				BFCF86AF29CD56400075D5E6 /* aDreamLeaf */,
+				BF9325602ABB1AF4004082A8 /* aDreamLeafNetworkTests */,
 				BFCF86AE29CD56400075D5E6 /* Products */,
 				9D2C06413A16DF0CA62D7221 /* Pods */,
 				84C0439267675780D1E6D44D /* Frameworks */,
@@ -559,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				BFCF86AD29CD56400075D5E6 /* aDreamLeaf.app */,
+				BF93255F2ABB1AF4004082A8 /* aDreamLeafNetworkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -673,6 +762,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		BF93255E2ABB1AF4004082A8 /* aDreamLeafNetworkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF9325652ABB1AF4004082A8 /* Build configuration list for PBXNativeTarget "aDreamLeafNetworkTests" */;
+			buildPhases = (
+				BF93255B2ABB1AF4004082A8 /* Sources */,
+				BF93255C2ABB1AF4004082A8 /* Frameworks */,
+				BF93255D2ABB1AF4004082A8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF9325642ABB1AF4004082A8 /* PBXTargetDependency */,
+			);
+			name = aDreamLeafNetworkTests;
+			productName = aDreamLeafNetworkTests;
+			productReference = BF93255F2ABB1AF4004082A8 /* aDreamLeafNetworkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		BFCF86AC29CD56400075D5E6 /* aDreamLeaf */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BFCF86C129CD56410075D5E6 /* Build configuration list for PBXNativeTarget "aDreamLeaf" */;
@@ -699,9 +806,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
+					BF93255E2ABB1AF4004082A8 = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = BFCF86AC29CD56400075D5E6;
+					};
 					BFCF86AC29CD56400075D5E6 = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -721,11 +832,19 @@
 			projectRoot = "";
 			targets = (
 				BFCF86AC29CD56400075D5E6 /* aDreamLeaf */,
+				BF93255E2ABB1AF4004082A8 /* aDreamLeafNetworkTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		BF93255D2ABB1AF4004082A8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFCF86AB29CD56400075D5E6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -784,6 +903,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BF93255B2ABB1AF4004082A8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF9325692ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift in Sources */,
+				BF9325622ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BFCF86A929CD56400075D5E6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -884,7 +1012,59 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		BF9325642ABB1AF4004082A8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BFCF86AC29CD56400075D5E6 /* aDreamLeaf */;
+			targetProxy = BF9325632ABB1AF4004082A8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		BF9325662ABB1AF4004082A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KB3R84Q4BQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.suneom.aDreamLeafNetworkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aDreamLeaf.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/aDreamLeaf";
+			};
+			name = Debug;
+		};
+		BF9325672ABB1AF4004082A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KB3R84Q4BQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.suneom.aDreamLeafNetworkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aDreamLeaf.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/aDreamLeaf";
+			};
+			name = Release;
+		};
 		BFCF86BF29CD56410075D5E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1076,6 +1256,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BF9325652ABB1AF4004082A8 /* Build configuration list for PBXNativeTarget "aDreamLeafNetworkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF9325662ABB1AF4004082A8 /* Debug */,
+				BF9325672ABB1AF4004082A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BFCF86A829CD56400075D5E6 /* Build configuration list for PBXProject "aDreamLeaf" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -7,25 +7,39 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
 struct UIChartViewModel {
     private let disposeBag = DisposeBag()
+    private let repository: AccountRepository
     
-    let dataValues = BehaviorSubject<[Int]>(value: [0, 0])
+    struct Input {
+        let trigger: Driver<Void>
+        let date: Driver<Date>
+    }
     
-    let date = BehaviorSubject(value: Date.dateToString(with: Date.now, format:"yyyy-MM"))
-    
-    let refresh = BehaviorSubject<Void>(value: Void())
+    struct Output {
+        let data: Driver<[Int]>
+        let login: Driver<Bool>
+    }
     
     init(_ repo: AccountRepository = AccountRepository()) {
+        self.repository = repo
+    }
+    
+    func transform(input: Input) -> Output {
+        let data = input.trigger
+            .withLatestFrom(input.date)
+            .flatMapLatest { date in
+                repository.getAccountSummary(yearMonth: Date.dateToString(with: date, format: "yyyy-MM"))
+                    .asDriver(onErrorJustReturn: [0,0])
+            }
         
-        Observable.combineLatest(date, refresh)
-            .flatMap{repo.getAccountSummary(yearMonth: $0.0)}
-            .map { $0.data != nil ? [$0.data!.charge, $0.data!.balance] : [0,0]}
-            .bind(to: dataValues)
-            .disposed(by: disposeBag)
-
+        let login = UserManager.getInstance().map { $0 != nil }
+            .asDriver(onErrorJustReturn: false)
+        
+        return Output(data: data, login: login)
+        
     }
     
 }

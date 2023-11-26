@@ -7,39 +7,40 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-struct LoginViewModel: LoadingViewModel {
-    var loading: PublishSubject<Bool>
+struct LoginViewModel {
+    private let repository: LoginRepository
+    private let disposeBag = DisposeBag()
     
-    let disposeBag = DisposeBag()
+    struct Input {
+        let trigger: Driver<Void>
+        let email: Driver<String>
+        let pwd: Driver<String>
+    }
     
-    let email = PublishRelay<String>()
-    let pwd = PublishRelay<String>()
-    let loginBtnTap = PublishRelay<Void>()
-    let loginResult = PublishSubject<RequestResult<User>>()
+    struct Output {
+        let loading: Driver<Bool>
+        let result: Driver<RequestResult<User>>
+    }
+    
     
     init(_ repo: LoginRepository = LoginRepository()) {
-        loading = PublishSubject<Bool>()
+        self.repository = repo
+    }
+    
+    func transform(input: Input) -> Output {
+        let loading = PublishSubject<Bool>()
         
-        loginBtnTap
-            .withLatestFrom(Observable.combineLatest(email, pwd))
-            .flatMap(repo.login)
-            .bind(to: loginResult)
-            .disposed(by: disposeBag)
+        let result = input.trigger
+            .withLatestFrom(Driver.combineLatest(input.email, input.pwd))
+            .do(onNext: { _ in loading.onNext(true)})
+            .flatMapLatest { email, pwd in
+                repository.login(email: email, pwd: pwd)
+                    .do(onNext: { _ in loading.onNext(false)})
+                    .asDriver(onErrorJustReturn: RequestResult<User>(success: false, msg: nil, data: nil))
+            }
         
-        //MARK: - Loading
-        
-        loginBtnTap
-            .map { return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        loginResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        
+        return Output(loading: loading.asDriver(onErrorJustReturn: false), result: result)
     }
 }

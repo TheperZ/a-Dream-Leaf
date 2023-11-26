@@ -16,10 +16,10 @@ struct RestaurantCellViewModel {
     let distance: Double
     let type: Int
     
-    init(name: String, rating: Double, distance: Double, type: Int) {
-        self.name = name
-        self.rating = rating
-        self.distance = distance
-        self.type = type
+    init(data: SimpleStore) {
+        self.name = data.storeName
+        self.rating = data.totalRating
+        self.distance = data.curDist
+        self.type = data.storeType
     }
 }

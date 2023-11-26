@@ -13,19 +13,90 @@ class SearchViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: SearchViewModel
     
-    private let searchTextField = UITextField()
-    private let searchButton = UIButton()
-    private let underLine = UIView()
-    private let checkBoxView = UIView()
-    private let buttonStackView = UIStackView()
-    private let allButton = UIButton()
-    private let cardButton = UIButton()
-    private let goodButton = UIButton()
-    private let tableView = UITableView()
-    private let searchListEmptyWarnLabel = UILabel()
+    private let searchTextField: UITextField = {
+        let textField = UITextField()
+        textField.textColor = .black
+        textField.font = .systemFont(ofSize: 16, weight: .regular)
+        textField.attributedPlaceholder =
+        NSAttributedString(string: "가게명, 행정구역, 주소 등을 입력하세요", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        return textField
+    }()
     
-    init() {
-        viewModel = SearchViewModel()
+    private let searchButton: UIButton = {
+        let button = UIButton()
+        let searchButtonConfig = UIImage.SymbolConfiguration(pointSize: 23, weight: .regular, scale: .default)
+        let searchButtonImg = UIImage(systemName: "magnifyingglass", withConfiguration: searchButtonConfig)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(searchButtonImg, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+    
+    private let underLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    
+    private let checkBoxView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        view.layer.cornerRadius = 5
+        return view
+    }()
+    
+    private let buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 15
+        return stackView
+    }()
+    
+    private let allButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("전체", for: .normal)
+        button.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+    
+    private let cardButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("아동급식카드 가맹점", for: .normal)
+        button.setImage(UIImage(systemName: "rectangle"), for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+    
+    private let goodButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("선한영향력 가게", for: .normal)
+        button.setImage(UIImage(systemName: "rectangle"), for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .white
+        tableView.register(SearchCell.self, forCellReuseIdentifier: K.TableViewCellID.SearchCell)
+        return tableView
+    }()
+    
+    private let searchListEmptyWarnLabel: UILabel = {
+        let label = UILabel()
+        label.text = "검색된 음식점이 없습니다 🥲"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.textAlignment = .center
+        return label
+    }()
+    
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "magnifyingglass"), tag: 2)
         tabBarItem.imageInsets = .init(top: 6, left: 0, bottom: -6, right: 0)
@@ -37,185 +108,124 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.register(SearchCell.self, forCellReuseIdentifier: K.TableViewCellID.SearchCell)
-        
-        bind()
+
+        bindViewModel()
         attribute()
         layout()
     }
     
-    private func bind() {
-        viewModel.tableItem
-            .bind(to: tableView.rx.items) { tv, row, element in
+    private func bindViewModel() {
+        
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:))).map { _ in ()}.asDriver(onErrorJustReturn: ())
+        
+        let input = SearchViewModel.Input(keyword: searchTextField.rx.text.orEmpty.asDriver(),
+                                          trigger: Driver.merge(viewWillAppear, searchButton.rx.tap.asDriver()),
+                                          allTrigger: allButton.rx.tap.asDriver(),
+                                          cardTrigger: cardButton.rx.tap.asDriver(),
+                                          goodTrigger: goodButton.rx.tap.asDriver(),
+                                          select: tableView.rx.itemSelected.asDriver())
+        
+        let output = viewModel.tranform(input: input)
+        
+        output.stores
+            .drive(tableView.rx.items) { tv, row, store in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = self.tableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SearchCell, for: indexPath) as! SearchCell
-                
-                cell.setUp(with: element)
-                
+                cell.setUp(viewModel: SearchCellViewModel(name: store.storeName, distance: store.curDist, rating: store.totalRating, type: store.storeType))
                 return cell
             }
             .disposed(by: disposeBag)
         
-        tableView.rx.itemSelected
-            .observe(on: MainScheduler.instance)
-            .withLatestFrom(viewModel.tableItem) { return ($0, $1)}
-            .subscribe(onNext: { indexPath, list in
-                self.tableView.cellForRow(at: indexPath)?.isSelected = false
-                self.navigationController?.pushViewController(StoreDetailViewController(storeId: (list[indexPath.row]).storeId), animated: true)
+        
+        output.mode
+            .drive(onNext: {[weak self] mode in
+                guard let self = self else { return }
+                if mode == 0 { // 선한 영향력
+                    self.allButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                    self.cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                    self.goodButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+                } else if mode == 1 { // 아동 급식카드
+                    self.allButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                    self.cardButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+                    self.goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                } else if mode == 2 { // 전체
+                    self.allButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
+                    self.cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                    self.goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
+                }
             })
             .disposed(by: disposeBag)
         
-        allButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.allButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
-                self.cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-                self.goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-                self.viewModel.allButtonTap.accept(Void())
-            })
-            .disposed(by: disposeBag)
-        
-        cardButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.cardButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
-                self.allButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-                self.goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-                self.viewModel.cardButtonTap.accept(Void())
-            })
-            .disposed(by: disposeBag)
-        
-        goodButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.goodButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
-                self.cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-                self.allButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-                self.viewModel.goodButtonTap.accept(Void())
-            })
-            .disposed(by: disposeBag)
-        
-        searchTextField.rx.text
-            .orEmpty
-            .bind(to: viewModel.keyword)
-            .disposed(by: disposeBag)
-        
-        searchButton.rx.tap
-            .bind(to: viewModel.searchButtonTap)
-            .disposed(by: disposeBag)
-        
-        viewModel.allList
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { _ in
-                self.allButton.sendActions(for: .touchUpInside)
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel.tableItem
+        output.stores
             .map { $0.count != 0 }
-            .observe(on: MainScheduler.instance)
+            .asObservable()
             .bind(to: searchListEmptyWarnLabel.rx.isHidden)
             .disposed(by: disposeBag)
+        
+        output.selectedStore
+            .drive(onNext: { [weak self] store in
+                self?.navigationController?.pushViewController(StoreDetailViewController(viewModel: StoreDetailViewModel(storeId: store.storeId)), animated: true)
+            })
+            .disposed(by: disposeBag)
+
         
     }    
     
     private func attribute() {
-    
         view.backgroundColor = .white
-        tableView.backgroundColor = .white
-        
-        searchTextField.textColor = .black
-        searchTextField.font = .systemFont(ofSize: 16, weight: .regular)
-        searchTextField.attributedPlaceholder =
-        NSAttributedString(string: "가게명, 행정구역, 주소 등을 입력하세요", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
-        
-        let searchButtonConfig = UIImage.SymbolConfiguration(pointSize: 23, weight: .regular, scale: .default)
-        let searchButtonImg = UIImage(systemName: "magnifyingglass", withConfiguration: searchButtonConfig)?.withRenderingMode(.alwaysTemplate)
-        searchButton.setImage(searchButtonImg, for: .normal)
-        searchButton.tintColor = .black
-        
-        underLine.backgroundColor = .lightGray
-        
-        checkBoxView.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        checkBoxView.layer.cornerRadius = 5
-        
-        buttonStackView.spacing = 15
-        
-        allButton.setTitle("전체", for: .normal)
-        allButton.setImage(UIImage(systemName: "checkmark.rectangle"), for: .normal)
-        allButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
-        allButton.setTitleColor(.black, for: .normal)
-        allButton.tintColor = .black
-        allButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
-        
-        cardButton.setTitle("아동급식카드 가맹점", for: .normal)
-        cardButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-        cardButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
-        cardButton.setTitleColor(.black, for: .normal)
-        cardButton.tintColor = .black
-        cardButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
-        
-        goodButton.setTitle("선한영향력 가게", for: .normal)
-        goodButton.setImage(UIImage(systemName: "rectangle"), for: .normal)
-        goodButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
-        goodButton.setTitleColor(.black, for: .normal)
-        goodButton.tintColor = .black
-        goodButton.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 0)
-        
-        searchListEmptyWarnLabel.text = "검색된 음식점이 없습니다 🥲"
-        searchListEmptyWarnLabel.textColor = .black
-        searchListEmptyWarnLabel.font = .systemFont(ofSize: 15, weight: .bold)
-        searchListEmptyWarnLabel.textAlignment = .center
     }
     
     private func layout() {
         [searchTextField, searchButton, underLine, tableView, checkBoxView, searchListEmptyWarnLabel].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         checkBoxView.addSubview(buttonStackView)
-        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         
         [ allButton, goodButton, cardButton].forEach {
             buttonStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            searchTextField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor),
-            
-            searchButton.topAnchor.constraint(equalTo: searchTextField.topAnchor),
-            searchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            searchButton.widthAnchor.constraint(equalToConstant: 40),
-            searchButton.heightAnchor.constraint(equalToConstant: 25),
-            
-            underLine.topAnchor.constraint(equalTo: searchButton.bottomAnchor, constant: 15),
-            underLine.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            underLine.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            underLine.heightAnchor.constraint(equalToConstant: 0.2),
-            
-            checkBoxView.heightAnchor.constraint(equalToConstant: 30),
-            checkBoxView.topAnchor.constraint(equalTo: underLine.bottomAnchor, constant: 20),
-            checkBoxView.leadingAnchor.constraint(equalTo: searchTextField.leadingAnchor),
-            checkBoxView.trailingAnchor.constraint(equalTo: searchButton.trailingAnchor),
-            
-            buttonStackView.centerXAnchor.constraint(equalTo: checkBoxView.centerXAnchor),
-            buttonStackView.centerYAnchor.constraint(equalTo: checkBoxView.centerYAnchor),
-            
-            tableView.topAnchor.constraint(equalTo: checkBoxView.bottomAnchor, constant: 10),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            searchListEmptyWarnLabel.topAnchor.constraint(equalTo: tableView.topAnchor),
-            searchListEmptyWarnLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            searchListEmptyWarnLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            searchListEmptyWarnLabel.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
-            
-        ].forEach { $0.isActive = true }
+        searchTextField.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.equalTo(view).offset(20)
+            $0.trailing.equalTo(searchButton.snp.leading)
+        }
+        
+        searchButton.snp.makeConstraints {
+            $0.top.equalTo(searchTextField)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-20)
+            $0.width.equalTo(40)
+            $0.height.equalTo(25)
+        }
+        
+        underLine.snp.makeConstraints {
+            $0.top.equalTo(searchButton.snp.bottom).offset(15)
+            $0.leading.trailing.equalTo(view)
+            $0.height.equalTo(0.2)
+        }
+        
+        checkBoxView.snp.makeConstraints {
+            $0.top.equalTo(underLine.snp.bottom).offset(20)
+            $0.leading.equalTo(searchTextField)
+            $0.trailing.equalTo(searchButton)
+            $0.height.equalTo(30)
+        }
+        
+        buttonStackView.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(checkBoxView)
+        }
+        
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(checkBoxView.snp.bottom).offset(10)
+            $0.leading.equalTo(view)
+            $0.trailing.equalTo(view).offset(-10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        searchListEmptyWarnLabel.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(tableView)
+        }
+    
     }
 }

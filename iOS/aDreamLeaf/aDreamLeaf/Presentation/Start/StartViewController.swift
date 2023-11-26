@@ -9,15 +9,28 @@ import UIKit
 import RxSwift
 import RxCocoa
 import CoreLocation
+import SnapKit
 
 class StartViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: StartViewModel
     
     
-    private let stackView = UIStackView()
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
     private let imageView = UIImageView(image: UIImage(named: "Icon"))
-    private let titleLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "꿈나무 한입"
+        label.textColor = .white
+        label.font = UIFont(name: "LINESeedSansKR-Bold", size: 35)
+        label.textAlignment = .center
+        return label
+    }()
     
     init() {
         viewModel = StartViewModel()
@@ -33,21 +46,21 @@ class StartViewController: UIViewController {
         
         LocationManager.config()
         
-        bind()
+        bindViewModel()
         attribute()
         layout()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    private func bindViewModel() {
         
-        viewModel.loginCheckRequest.accept(Void())
-    }
-    
-    private func bind() {
-        viewModel.isLogInChecked
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { _ in
+        let viewDidAppear = rx.sentMessage(#selector(UIViewController.viewDidAppear(_:))).map { _ in ()}.asDriver(onErrorJustReturn: ())
+        
+        let input = StartViewModel.Input(trigger: viewDidAppear)
+        
+        let output = viewModel.tranform(input: input)
+        
+        output.result
+            .drive(onNext: { _ in
                 let vc = MainViewController()
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
@@ -60,32 +73,21 @@ class StartViewController: UIViewController {
     
     private func attribute() {
         view.backgroundColor = UIColor(named: "launchColor")
-        
-        stackView.axis = .vertical
-        
-        titleLabel.text = "꿈나무 한입"
-        titleLabel.textColor = .white
-        titleLabel.font = UIFont(name: "LINESeedSansKR-Bold", size: 35)
-        titleLabel.textAlignment = .center
     }
     
     private func layout() {
         view.addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         
         [imageView, titleLabel].forEach {
             stackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            imageView.widthAnchor.constraint(equalToConstant: 280),
-            imageView.heightAnchor.constraint(equalToConstant: 280),
-        ].forEach { $0.isActive = true }
+        stackView.snp.makeConstraints {
+            $0.center.equalTo(view)
+        }
+        
+        imageView.snp.makeConstraints {
+            $0.width.height.equalTo(280)
+        }
     }
-    
-    
 }

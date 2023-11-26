@@ -7,61 +7,63 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
 struct LocalRestaurantViewModel {
     private let disposeBag = DisposeBag()
+    private let kakaoRepo: KakaoRepositroy
+    private let storeRepo: StoreRepository
     
-    let loading = BehaviorSubject<Bool>(value: true)
+    struct Input {
+        let trigger: Driver<Void>
+        let allTrigger: Driver<Void>
+        let cardTrigger: Driver<Void>
+        let goodTrigger: Driver<Void>
+        let select: Driver<IndexPath>
+    }
     
-    let address = BehaviorRelay<String>(value: "")
-    
-    let allList = BehaviorSubject<[SimpleStore]>(value: [])
-    
-    let tableItem = BehaviorSubject(value: [SimpleStore]())
-    
-    let allButtonTap = PublishRelay<Void>()
-    let cardButtonTap = PublishRelay<Void>()
-    let goodButtonTap = PublishRelay<Void>()
+    struct Output {
+        let address: Driver<String>
+        let stores: Driver<[SimpleStore]>
+        let selectedStore: Driver<SimpleStore>
+        let mode: Driver<Int>
+    }
     
     init(_ kakaoRepo: KakaoRepositroy = KakaoRepositroy(), _ storeRepo: StoreRepository = StoreRepository()) {
+        self.kakaoRepo = kakaoRepo
+        self.storeRepo = storeRepo
+    }
+    
+    func transform(input: Input) -> Output {
+        let address = input.trigger
+            .flatMapLatest {
+                kakaoRepo.getMyAddress()
+                    .asDriver(onErrorJustReturn: "")
+            }
         
-        address.distinctUntilChanged()
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        let mode = BehaviorSubject(value: 2)
+        input.goodTrigger.asObservable().map { 0 }.bind(to: mode).disposed(by: disposeBag)
+        input.cardTrigger.asObservable().map { 1 }.bind(to: mode).disposed(by: disposeBag)
+        input.allTrigger.asObservable().map { 2 }.bind(to: mode).disposed(by: disposeBag)
         
-
-        kakaoRepo.getMyAddress()
-            .bind(to: address)
-            .disposed(by: disposeBag)
+        let allStore = input.trigger
+            .flatMapLatest {
+                storeRepo.searchNearStore(lat: LocationManager.getLatitude(), long: LocationManager.getLongitude())
+                    .asDriver(onErrorJustReturn: [])
+            }
         
+        let stores = Driver.combineLatest(allStore, mode.asDriver(onErrorJustReturn: 2)).map { store, mode in
+            if mode == 0 {
+                return store.filter { $0.storeType == 2 || $0.storeType == 0 }
+            } else if mode == 1 {
+                return store.filter {  $0.storeType == 2 || $0.storeType == 1 }
+            } else {
+                return store
+            }
+        }
         
-        allButtonTap
-            .withLatestFrom(allList)
-            .bind(to: tableItem)
-            .disposed(by: disposeBag)
+        let selectedStore = input.select.withLatestFrom(stores) { indexPath, stores in stores[indexPath.row] }
         
-        cardButtonTap
-            .withLatestFrom(allList)
-            .map { $0.filter { $0.storeType == 2 || $0.storeType == 1 }}
-            .bind(to: tableItem)
-            .disposed(by: disposeBag)
-        
-        goodButtonTap
-            .withLatestFrom(allList)
-            .map { $0.filter { $0.storeType == 2 || $0.storeType == 0 }}
-            .bind(to: tableItem)
-            .disposed(by: disposeBag)
-        
-        allList
-            .bind(to: tableItem)
-            .disposed(by: disposeBag)
-        
-        storeRepo.searchNearStore(lat: LocationManager.getLatitude() ?? 0.0, long: LocationManager.getLongitude() ?? 0.0 )
-            .map { $0.data ?? [] }
-            .bind(to: allList)
-            .disposed(by: disposeBag)
-        
+        return Output(address: address, stores: stores, selectedStore: selectedStore, mode: mode.asDriver(onErrorJustReturn: 2))
     }
 }

@@ -9,37 +9,170 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class StoreDetailViewController: UIViewController, LoadingViewController {
-    var disposeBag = DisposeBag()
-    var loadingView = UIActivityIndicatorView(style: .medium)
-    var viewModel: StoreDetailViewModel
+class StoreDetailViewController: UIViewController {
+    private let disposeBag = DisposeBag()
+    private let viewModel: StoreDetailViewModel
+    private let loadingView = UIActivityIndicatorView(style: .medium)
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let nameLabel = UILabel()
-    private let addressStackView = UIStackView()
-    private let mapButton = UIButton()
-    private let distanceLabel = UILabel()
-    private let topStackView = UIStackView()
-    private let cardAvail = UILabel()
-    private let goodness = UILabel()
-    private let bottomStackView = UIStackView()
-    private let hygieneGradeLabel = UILabel()
-    private let ratingLabel = UILabel()
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 30, weight: .heavy)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
     
-    private let serviceLabel = UILabel()
-    private let serviceConditionLabel = UILabel()
+    private let addressStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
     
-    private let divider = UIView()
+    private let mapButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("지도 보기", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 10, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 5
+        button.layer.backgroundColor = UIColor(white: 0.90, alpha: 1).cgColor
+        return button
+    }()
     
-    private let reviewTitle = UIButton()
-    private let reviewTableView = UITableView()
-    private let reviewButton = UIButton()
-    private let reviewWarningLabel = UILabel()
+    private let distanceLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .gray
+        label.textAlignment = .center
+        return label
+    }()
     
-    init(storeId: Int) {
-        viewModel = StoreDetailViewModel(storeId: storeId)
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private let cardAvail: UILabel = {
+        let label = UILabel()
+        label.text = "아동급식카드 가맹점"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = UIColor(named: "subColor2")
+        label.layer.borderColor = UIColor(named: "subColor2")?.cgColor
+        label.layer.borderWidth = 1
+        label.layer.cornerRadius = 10
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let goodness: UILabel = {
+        let label = UILabel()
+        label.text = "선한 영향력 가게"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = UIColor(named: "subColor2")
+        label.layer.borderColor = UIColor(named: "subColor2")?.cgColor
+        label.layer.borderWidth = 1
+        label.layer.cornerRadius = 10
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let bottomStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private let hygieneGradeLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 10, weight: .semibold)
+        label.textColor = .black
+        label.layer.borderColor = UIColor.black.cgColor
+        label.layer.borderWidth = 1
+        label.layer.cornerRadius = 10
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let ratingLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.textColor = .black
+        label.layer.borderColor = UIColor.black.cgColor
+        label.layer.borderWidth = 1
+        label.layer.cornerRadius = 10
+        label.textAlignment = .center
+        return label
+    }()
+    
+    
+    private let serviceLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.textColor = .black
+        return label
+    }()
+    
+    private let serviceConditionLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.textColor = .black
+        return label
+    }()
+    
+    
+    private let divider: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    private let reviewTitle: UIButton = {
+        let button = UIButton()
+        button.setTitle("리뷰", for: .normal)
+        button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        button.tintColor = .black
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        button.setTitleColor(.black, for: .normal)
+        button.semanticContentAttribute = .forceRightToLeft
+        return button
+    }()
+    
+    private let reviewTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.isScrollEnabled = false
+        tableView.backgroundColor = .white
+        return tableView
+    }()
+    
+    private let reviewButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("리뷰 작성", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 10
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderWidth = 0.5
+        return button
+    }()
+    
+    private let reviewWarningLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.text = "작성된 리뷰가 없습니다"
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.backgroundColor = UIColor(white: 0.97, alpha: 1)
+        return label
+    }()
+    
+    
+    init(viewModel: StoreDetailViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,128 +184,59 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
         super.viewDidLoad()
         
         reviewTableView.register(SimpleReviewCell.self, forCellReuseIdentifier: K.TableViewCellID.SimpleReviewCell)
-        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
         bind()
         attribute()
         layout()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        viewModel.fetchReviewRequest.onNext(Void())
-    }
-    
-    
     private func bind() {
         
-        viewModel.fetchDetailResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                if $0.success == false {
-                    let alert = UIAlertController(title: "실패", message: $0.msg, preferredStyle: .alert)
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .map { _ in () }.asDriver(onErrorJustReturn: ())
+        
+        let input = StoreDetailViewModel.Input(trigger: viewWillAppear)
+        
+        let output = viewModel.transform(input: input)
+        
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
+                } else {
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        output.store
+            .drive(onNext: {[weak self] store in
+                guard let self = self, let store = store else {
+                    let alert = UIAlertController(title: "실패", message: "가게를 찾을 수 없습니다.", preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.navigationController?.popViewController(animated: true)
+                        self?.navigationController?.popViewController(animated: true)
                     }
                     alert.addAction(confirm)
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
+                    return
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel.reviews
-            .bind(to: reviewTableView.rx.items) { tv, row, review in
-                let indexPath = IndexPath(row: row, section: 0)
-                let cell = self.reviewTableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SimpleReviewCell, for: indexPath) as! SimpleReviewCell
+                self.nameLabel.text = store.storeName
+                self.distanceLabel.text = "[ 내 위치로 부터 \(store.curDist != 0.0 ? StringUtil.getRefinedDistance(with:store.curDist) : "-km") ]"
+                self.hygieneGradeLabel.text = "식약청 위생등급 : \(store.hygieneGrade == "" ? "없음" : store.hygieneGrade)"
+                self.ratingLabel.text = "⭐️ \(String(format: "%.1f", store.totalRating))"
                 
-                cell.setUp(with: review)
-                
-                return cell
-            }
-            .disposed(by: disposeBag)
-        
-        reviewTitle.rx.tap
-            .observe(on: MainScheduler.instance)
-            .withLatestFrom(viewModel.detail)
-            .subscribe(onNext: { storeData in
-                self.navigationController?.pushViewController(ReviewListViewController(storeData: storeData), animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        reviewButton.rx.tap
-            .asDriver()
-            .drive(onNext: {
-                self.navigationController?.pushViewController(ReviewViewController(storeId: self.viewModel.storeId), animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        mapButton.rx.tap
-            .observe(on: MainScheduler.instance)
-            .withLatestFrom(viewModel.detail)
-            .subscribe(onNext: {
-                let pvc = StoreMapViewController(data: $0)
-                pvc.modalPresentationStyle = .overCurrentContext
-                pvc.modalTransitionStyle = .coverVertical
-                self.present(pvc, animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        
-        UserManager.getInstance()
-            .observe(on: MainScheduler.instance)
-            .map { userData in
-                if userData != nil {
-                    self.reviewButton.alpha = 1
-                    return true
-                } else {
-                    self.reviewButton.alpha = 0.3
-                    return false
-                }
-            }
-            .bind(to: reviewButton.rx.isEnabled)
-            .disposed(by: disposeBag)
-        
-        viewModel.detail
-            .map { $0.storeName}
-            .bind(to: nameLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.detail
-            .map { "[ 내 위치로 부터 \($0.curDist != 0.0 ? StringUtil.getRefinedDistance(with:$0.curDist) : "-km") ]" }
-            .bind(to: distanceLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.detail
-            .map { "식약청 위생등급 : \($0.hygieneGrade == "" ? "없음" : $0.hygieneGrade)" }
-            .observe(on: MainScheduler.instance)
-            .bind(to: hygieneGradeLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.detail
-            .map { "⭐️ \(String(format: "%.1f", $0.totalRating))" }
-            .observe(on: MainScheduler.instance)
-            .bind(to: ratingLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.detail
-            .subscribe(onNext: { detailData in
-                if detailData.storeType == 1 {
+                if store.storeType == 1 {
                     self.serviceLabel.isHidden = true
                     self.serviceConditionLabel.isHidden = true
                 } else {
-                    self.serviceLabel.text = "🌱 제공 혜택 : \(detailData.prodName ?? "-")"
+                    self.serviceLabel.text = "🌱 제공 혜택 : \(store.prodName ?? "-")"
                     self.serviceLabel.isHidden = false
-                    self.serviceConditionLabel.text = "✅ 제공 조건 : \(detailData.prodTarget ?? "-")"
+                    self.serviceConditionLabel.text = "✅ 제공 조건 : \(store.prodTarget ?? "-")"
                     self.serviceConditionLabel.isHidden = false
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        
-        viewModel.detail
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                switch($0.storeType) {
+                
+                switch(store.storeType) {
                     case 0:
                         self.cardAvail.font = .systemFont(ofSize: 16, weight: .semibold)
                         self.cardAvail.textColor = .lightGray
@@ -180,7 +244,7 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
                         self.cardAvail.layer.borderWidth = 1
                         self.cardAvail.layer.cornerRadius = 10
                         self.cardAvail.textAlignment = .center
-                        
+
                     case 1:
                         self.goodness.font = .systemFont(ofSize: 16, weight: .semibold)
                         self.goodness.textColor = .lightGray
@@ -188,211 +252,185 @@ class StoreDetailViewController: UIViewController, LoadingViewController {
                         self.goodness.layer.borderWidth = 1
                         self.goodness.layer.cornerRadius = 10
                         self.goodness.textAlignment = .center
-                        
+
                     default:
                         return
-                        
+
                 }
             })
             .disposed(by: disposeBag)
         
-        viewModel.reviews
-            .map { $0.count == 0 ? false: true}
-            .bind(to: reviewWarningLabel.rx.isHidden)
+        output.reviews
+            .map { $0.count == 0 ? false: true }
+            .drive(reviewWarningLabel.rx.isHidden)
             .disposed(by: disposeBag)
         
         
+        reviewButton.rx.tap
+            .asDriver()
+            .withLatestFrom(output.store)
+            .drive(onNext: { [weak self] store in
+                guard let self = self, let store = store else { return }
+                self.navigationController?.pushViewController(ReviewViewController(storeId: store.storeId), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.login
+            .drive(onNext: { [weak self] login in
+                if login {
+                    self?.reviewButton.alpha = 1
+                    self?.reviewButton.isEnabled = true
+                } else {
+                    self?.reviewButton.alpha = 0.3
+                    self?.reviewButton.isEnabled = false
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        output.reviews
+            .drive(reviewTableView.rx.items) { [weak self] tv, row, review in
+                let indexPath = IndexPath(row: row, section: 0)
+                let cell = self?.reviewTableView.dequeueReusableCell(withIdentifier: K.TableViewCellID.SimpleReviewCell, for: indexPath) as! SimpleReviewCell
+                cell.setUp(viewModel: SimpleReviewCellViewModel(review))
+                return cell
+            }
+            .disposed(by: disposeBag)
+        
+        mapButton.rx.tap
+            .asDriver()
+            .withLatestFrom(output.store)
+            .drive(onNext: { [weak self] store in
+                guard let self = self, let store = store else { return }
+                let pvc = StoreMapViewController(viewModel: StoreMapViewModel(store))
+                pvc.modalPresentationStyle = .overCurrentContext
+                pvc.modalTransitionStyle = .coverVertical
+                self.present(pvc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        reviewTitle.rx.tap
+            .asDriver()
+            .withLatestFrom(output.store)
+            .drive(onNext: { [weak self] store in
+                guard let self = self, let store = store else { return }
+                self.navigationController?.pushViewController(ReviewListViewController(viewModel: ReviewListViewModel(storeData: store)), animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
         navigationController?.navigationBar.tintColor = .black
-        
         view.backgroundColor = .white
-        
-        nameLabel.font = .systemFont(ofSize: 30, weight: .heavy)
-        nameLabel.textColor = .black
-        nameLabel.textAlignment = .center
-        
-        addressStackView.spacing = 10
-        
-        mapButton.setTitle("지도 보기", for: .normal)
-        mapButton.titleLabel?.font = .systemFont(ofSize: 10, weight: .medium)
-        mapButton.setTitleColor(.black, for: .normal)
-        mapButton.layer.cornerRadius = 5
-        mapButton.layer.backgroundColor = UIColor(white: 0.90, alpha: 1).cgColor
-        
-        distanceLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        distanceLabel.textColor = .gray
-        distanceLabel.textAlignment = .center
-        
-        topStackView.spacing = 10
-        topStackView.distribution = .fillEqually
-        
-        cardAvail.text = "아동급식카드 가맹점"
-        cardAvail.font = .systemFont(ofSize: 16, weight: .semibold)
-        cardAvail.textColor = UIColor(named: "subColor2")
-        cardAvail.layer.borderColor = UIColor(named: "subColor2")?.cgColor
-        cardAvail.layer.borderWidth = 1
-        cardAvail.layer.cornerRadius = 10
-        cardAvail.textAlignment = .center
-        
-        goodness.text = "선한 영향력 가게"
-        goodness.font = .systemFont(ofSize: 16, weight: .semibold)
-        goodness.textColor = UIColor(named: "subColor2")
-        goodness.layer.borderColor = UIColor(named: "subColor2")?.cgColor
-        goodness.layer.borderWidth = 1
-        goodness.layer.cornerRadius = 10
-        goodness.textAlignment = .center
-        
-        bottomStackView.spacing = 10
-        bottomStackView.distribution = .fillEqually
-        
-        hygieneGradeLabel.font = .systemFont(ofSize: 10, weight: .semibold)
-        hygieneGradeLabel.textColor = .black
-        hygieneGradeLabel.layer.borderColor = UIColor.black.cgColor
-        hygieneGradeLabel.layer.borderWidth = 1
-        hygieneGradeLabel.layer.cornerRadius = 10
-        hygieneGradeLabel.textAlignment = .center
-        
-        ratingLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-        ratingLabel.textColor = .black
-        ratingLabel.layer.borderColor = UIColor.black.cgColor
-        ratingLabel.layer.borderWidth = 1
-        ratingLabel.layer.cornerRadius = 10
-        ratingLabel.textAlignment = .center
-        
-        divider.backgroundColor = .black
-        
-        reviewTitle.setTitle("리뷰", for: .normal)
-        reviewTitle.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        reviewTitle.tintColor = .black
-        reviewTitle.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
-        reviewTitle.setTitleColor(.black, for: .normal)
-        reviewTitle.semanticContentAttribute = .forceRightToLeft
-        
-        reviewTableView.isScrollEnabled = false
-        reviewTableView.backgroundColor = .white
-        
-        reviewButton.setTitle("리뷰 작성", for: .normal)
-        reviewButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        reviewButton.setTitleColor(.black, for: .normal)
-        reviewButton.layer.cornerRadius = 10
-        reviewButton.layer.borderColor = UIColor.black.cgColor
-        reviewButton.layer.borderWidth = 0.5
-        
-        reviewWarningLabel.font = .systemFont(ofSize: 14, weight: .bold)
-        reviewWarningLabel.text = "작성된 리뷰가 없습니다"
-        reviewWarningLabel.textColor = .gray
-        reviewWarningLabel.textAlignment = .center
-        reviewWarningLabel.backgroundColor = UIColor(white: 0.97, alpha: 1)
-        
-        serviceLabel.font = .systemFont(ofSize: 12, weight: .semibold)
-        serviceLabel.textColor = .black
-        
-        serviceConditionLabel.font = .systemFont(ofSize: 12, weight: .semibold)
-        serviceConditionLabel.textColor = .black
-        
-        
     }
     
     private func layout() {
         view.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         scrollView.addSubview(contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, serviceLabel, serviceConditionLabel, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel, loadingView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [distanceLabel, mapButton].forEach {
             addressStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [goodness, cardAvail].forEach {
             topStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [hygieneGradeLabel, ratingLabel].forEach {
             bottomStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo:scrollView.widthAnchor),
-            
-            nameLabel.widthAnchor.constraint(equalToConstant: 300),
-            nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
-            
-            addressStackView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 20),
-            addressStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            mapButton.widthAnchor.constraint(equalToConstant: 50),
-            
-            topStackView.topAnchor.constraint(equalTo: distanceLabel.bottomAnchor,constant: 20),
-            topStackView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            topStackView.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            
-            cardAvail.heightAnchor.constraint(equalToConstant: 40),
-            goodness.heightAnchor.constraint(equalToConstant: 40),
-            
-            bottomStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor,constant: 10),
-            bottomStackView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            bottomStackView.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            
-            hygieneGradeLabel.heightAnchor.constraint(equalToConstant: 40),
-            ratingLabel.heightAnchor.constraint(equalToConstant: 40),
-            
-            serviceLabel.topAnchor.constraint(equalTo: bottomStackView.bottomAnchor,constant: 20),
-            serviceLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            serviceLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            
-            serviceConditionLabel.topAnchor.constraint(equalTo: serviceLabel.bottomAnchor,constant: 5),
-            serviceConditionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            serviceConditionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            
-            divider.topAnchor.constraint(equalTo: serviceConditionLabel.bottomAnchor, constant: 30),
-            divider.leadingAnchor.constraint(equalTo: serviceConditionLabel.leadingAnchor),
-            divider.trailingAnchor.constraint(equalTo: serviceConditionLabel.trailingAnchor),
-            divider.heightAnchor.constraint(equalToConstant: 0.2),
-            
-            reviewTitle.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 30),
-            reviewTitle.leadingAnchor.constraint(equalTo: divider.leadingAnchor),
-            
-            reviewTableView.topAnchor.constraint(equalTo: reviewTitle.bottomAnchor, constant: 10),
-            reviewTableView.leadingAnchor.constraint(equalTo: divider.leadingAnchor),
-            reviewTableView.trailingAnchor.constraint(equalTo: divider.trailingAnchor),
-            reviewTableView.heightAnchor.constraint(equalToConstant: 150),
-            
-            reviewWarningLabel.topAnchor.constraint(equalTo: reviewTableView.topAnchor),
-            reviewWarningLabel.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
-            reviewWarningLabel.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),
-            reviewWarningLabel.bottomAnchor.constraint(equalTo: reviewTableView.bottomAnchor),
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
         
-            reviewButton.topAnchor.constraint(equalTo: reviewTableView.bottomAnchor, constant: 10),
-            reviewButton.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
-            reviewButton.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),
-            reviewButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
-            
-            loadingView.topAnchor.constraint(equalTo: reviewTableView.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: reviewTableView.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: reviewTableView.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: reviewTableView.bottomAnchor)
-            
-        ].forEach { $0.isActive = true }
+        contentView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.width.equalTo(scrollView)
+        }
+        
+        nameLabel.snp.makeConstraints {
+            $0.width.equalTo(300)
+            $0.centerX.equalTo(contentView)
+            $0.top.equalTo(contentView).offset(30)
+        }
+        
+        addressStackView.snp.makeConstraints {
+            $0.top.equalTo(nameLabel.snp.bottom).offset(20)
+            $0.centerX.equalTo(contentView)
+        }
+        
+        mapButton.snp.makeConstraints {
+            $0.width.equalTo(50)
+        }
+        
+        topStackView.snp.makeConstraints {
+            $0.top.equalTo(distanceLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(nameLabel)
+        }
+        
+        cardAvail.snp.makeConstraints {
+            $0.height.equalTo(40)
+        }
+        
+        goodness.snp.makeConstraints {
+            $0.height.equalTo(40)
+        }
+        
+        bottomStackView.snp.makeConstraints {
+            $0.top.equalTo(topStackView.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(nameLabel)
+        }
+        
+        hygieneGradeLabel.snp.makeConstraints {
+            $0.height.equalTo(40)
+        }
+        
+        ratingLabel.snp.makeConstraints {
+            $0.height.equalTo(40)
+        }
+        
+        serviceLabel.snp.makeConstraints {
+            $0.top.equalTo(bottomStackView.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(nameLabel)
+        }
+        
+        serviceConditionLabel.snp.makeConstraints {
+            $0.top.equalTo(serviceLabel.snp.bottom).offset(5)
+            $0.leading.trailing.equalTo(nameLabel)
+        }
+        
+        divider.snp.makeConstraints {
+            $0.top.equalTo(serviceConditionLabel.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(serviceConditionLabel)
+            $0.height.equalTo(0.2)
+        }
+        
+        reviewTitle.snp.makeConstraints {
+            $0.top.equalTo(divider.snp.bottom).offset(30)
+            $0.leading.equalTo(divider.snp.leading)
+        }
+        
+        reviewTableView.snp.makeConstraints {
+            $0.top.equalTo(reviewTitle.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(divider)
+            $0.height.equalTo(150)
+        }
+        
+        reviewWarningLabel.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(reviewTableView)
+        }
+        
+        reviewButton.snp.makeConstraints {
+            $0.top.equalTo(reviewTableView.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(reviewTableView)
+            $0.bottom.equalTo(contentView).offset(-30)
+        }
+        
+        loadingView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
     }
 }

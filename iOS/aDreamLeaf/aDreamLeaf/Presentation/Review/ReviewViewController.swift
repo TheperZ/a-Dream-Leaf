@@ -8,31 +8,96 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import AVFoundation
+import SnapKit
 
-class ReviewViewController: UIViewController, LoadingViewController {
+class ReviewViewController: UIViewController {
     var disposeBag = DisposeBag()
     var loadingView = UIActivityIndicatorView(style: .medium)
     
     private let viewModel: ReviewViewModel
+    private let selectedImage = BehaviorSubject<UIImage?>(value: nil)
     
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
-    private let starStackView = UIStackView()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "리뷰 작성"
+        label.font = .systemFont(ofSize: 30, weight: .heavy)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "맛은 어떠셨나요?"
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let starStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let starButton1 = UIButton()
     private let starButton2 = UIButton()
     private let starButton3 = UIButton()
     private let starButton4 = UIButton()
     private let starButton5 = UIButton()
     private let starButtonList: [UIButton]
-    private let textView = UITextView()
-    private let photoButton = UIButton()
-    private let saveButton = UIButton()
+    private let textView: UITextView = {
+        let textView = UITextView()
+        textView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        textView.textColor = .black
+        textView.layer.cornerRadius = 10
+        textView.contentInset = .init(top: 15, left: 15, bottom: 15, right: 15)
+        return textView
+    }()
     
-    private let textViewWarningLabel = UILabel()
+    private let photoButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "camera"), for: .normal)
+        button.setTitle("사진 추가", for: .normal)
+        button.tintColor = .black
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        button.titleEdgeInsets = .init(top: 0, left: 10, bottom: 0, right: 0)
+        return button
+    }()
+    
+    private let saveButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(named: "subColor")
+        button.setTitle("리뷰 작성 완료", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
+    
+    private let textViewWarningLabel: UILabel = {
+        let label = UILabel()
+        label.text = "최소 10글자 이상 입력해주세요."
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .gray
+        label.textAlignment = .left
+        return label
+    }()
+    
     
     private let imagePicker = UIImagePickerController()
-    private let imageView = UIImageView()
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .black
+        imageView.layer.cornerRadius = 5
+        imageView.layer.borderColor = UIColor.gray.cgColor
+        imageView.layer.borderWidth = 0.5
+        return imageView
+    }()
     
     init(storeId: Int, editData: Review? = nil) {
         viewModel = ReviewViewModel(storeId: storeId, editData: editData)
@@ -46,13 +111,16 @@ class ReviewViewController: UIViewController, LoadingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configLoadingView(viewModel: viewModel) // 로딩 화면 초기 설정
-        attribute()
+        
         bind()
+        uiEvent()
+        attribute()
         layout()
     }
     
     private func bind() {
+        
+        let selectedRatingBtnIdx = BehaviorSubject(value: 5)
         
         starButtonList.enumerated().forEach { idx, btn in
             btn.rx.tap
@@ -68,49 +136,50 @@ class ReviewViewController: UIViewController, LoadingViewController {
                         } else {
                             b.tintColor = .gray
                         }
-                        
+
                     }
                 })
                 .disposed(by: disposeBag)
-            
-            btn.rx.tap // 0번째 버튼 -> 1점
-                .map { return idx+1 }
-                .bind(to: viewModel.rating)
+                
+            btn.rx.tap
+                .map { idx + 1 }
+                .bind(to: selectedRatingBtnIdx)
                 .disposed(by: disposeBag)
         }
         
-        photoButton.rx.tap
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-                    return
+        let input = ReviewViewModel.Input(trigger: saveButton.rx.tap.asDriver(),
+                                          rating: selectedRatingBtnIdx.asDriver(onErrorJustReturn: 5),
+                                          body: textView.rx.text.orEmpty.asDriver(),
+                                          image: selectedImage.asDriver(onErrorJustReturn: nil))
+        
+        let output = viewModel.transform(input: input)
+        
+        if output.isEdit {
+            guard let data = output.editData else { return }
+            starButtonList[data.rating-1].sendActions(for: .touchUpInside)
+            textView.rx.text.onNext(data.body)
+            if let reviewImage = data.reviewImage { // 리뷰에 사진이 포함된 경우
+                selectedImage.onNext(Image.base64ToImg(with: reviewImage))
+            }
+        }
+    
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
+                } else {
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
                 }
-                self.imagePicker.sourceType = .photoLibrary
-                self.imagePicker.allowsEditing = true // 사진 편집 유무
-                self.present(self.imagePicker, animated: true)
             })
             .disposed(by: disposeBag)
         
-        textView.rx.text
-            .orEmpty
-            .map { $0.count != 0 ? true : false}
-            .bind(to: textViewWarningLabel.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        textView.rx.text
-            .orEmpty
-            .bind(to: viewModel.body)
-            .disposed(by: disposeBag)
-        
-        saveButton.rx.tap
-            .bind(to: viewModel.saveBtnTap)
-            .disposed(by: disposeBag)
-        
-        viewModel.reviewRequestResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in
+        output.result
+            .drive(onNext: { [weak self] result in
+                guard let self = self else { return }
                 if result.success {
-                    let alert = UIAlertController(title: "성공", message: "리뷰가 정상적으로 작성 되었습니다!", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "성공", message: output.isEdit ? "리뷰가 정상적으로 수정 되었습니다!" : "리뷰가 정상적으로 작성 되었습니다!", preferredStyle: .alert)
                     let cancel = UIAlertAction(title: "확인", style: .default) { _ in
                         self.navigationController?.popViewController(animated: true)
                     }
@@ -126,7 +195,10 @@ class ReviewViewController: UIViewController, LoadingViewController {
             })
             .disposed(by: disposeBag)
         
-        viewModel.image
+    }
+    
+    func uiEvent() {
+        selectedImage
             .map { img in
                 if img == nil { // 리뷰에 포함된 이미지가 없을 때 기본 이미지 ( 사진 모양 ) 표시
                     let photoImgConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .light, scale: .default)
@@ -140,24 +212,30 @@ class ReviewViewController: UIViewController, LoadingViewController {
             }
             .bind(to: imageView.rx.image)
             .disposed(by: disposeBag)
-    
+        
+        photoButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+                    return
+                }
+                self.imagePicker.sourceType = .photoLibrary
+                self.imagePicker.allowsEditing = true // 사진 편집 유무
+                self.present(self.imagePicker, animated: true)
+            })
+            .disposed(by: disposeBag)
+
+        textView.rx.text
+            .orEmpty
+            .map { $0.count != 0 ? true : false}
+            .bind(to: textViewWarningLabel.rx.isHidden)
+            .disposed(by: disposeBag)
     }
     
     private func attribute() {
         view.backgroundColor = .white
         view.addTapGesture()
-        
-        titleLabel.text = "리뷰 작성"
-        titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        
-        subtitleLabel.text = "맛은 어떠셨나요?"
-        subtitleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
-        subtitleLabel.textColor = .black
-        subtitleLabel.textAlignment = .center
-        
-        starStackView.spacing = 10
         
         [starButton1, starButton2, starButton3, starButton4, starButton5].forEach {
             $0.setImage(UIImage(systemName: "star.fill"), for: .normal)
@@ -165,98 +243,69 @@ class ReviewViewController: UIViewController, LoadingViewController {
             $0.adjustsImageWhenHighlighted = false
         }
         
-        // 수정인 경우 초기값 설정
-        if viewModel.editData != nil {
-            textView.text = viewModel.editData!.body
-            starButtonList[viewModel.editData!.rating-1].sendActions(for: .touchUpInside)
-            if let reviewImage = viewModel.editData!.reviewImage { // 리뷰에 사진이 포함된 경우
-                imageView.image = Image.base64ToImg(with: reviewImage)
-            }
-        }
-        
-        textViewWarningLabel.text = "최소 10글자 이상 입력해주세요."
-        textViewWarningLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        textViewWarningLabel.textColor = .gray
-        textViewWarningLabel.textAlignment = .left
-        
-        textView.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        textView.textColor = .black
-        textView.layer.cornerRadius = 10    
-        textView.contentInset = .init(top: 15, left: 15, bottom: 15, right: 15)
-        
-        photoButton.setImage(UIImage(systemName: "camera"), for: .normal)
-        photoButton.setTitle("사진 추가", for: .normal)
-        photoButton.tintColor = .black
-        photoButton.setTitleColor(.black, for: .normal)
-        photoButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        photoButton.titleEdgeInsets = .init(top: 0, left: 10, bottom: 0, right: 0)
-        
-        saveButton.backgroundColor = UIColor(named: "subColor")
-        saveButton.setTitle("리뷰 작성 완료", for: .normal)
-        saveButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
-        saveButton.setTitleColor(.white, for: .normal)
-        saveButton.layer.cornerRadius = 10
-        
         imagePicker.delegate = self
-        
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .black
-        imageView.layer.cornerRadius = 5
-        imageView.layer.borderColor = UIColor.gray.cgColor
-        imageView.layer.borderWidth = 0.5
+    
     }
     
     private func layout() {
         [ titleLabel, subtitleLabel, starStackView, textView, textViewWarningLabel, photoButton, saveButton, imageView, loadingView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [starButton1, starButton2, starButton3, starButton4, starButton5].forEach {
             starStackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            titleLabel.widthAnchor.constraint(equalToConstant: 300),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            subtitleLabel.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
-            
-            starStackView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 10),
-            starStackView.centerXAnchor.constraint(equalTo: subtitleLabel.centerXAnchor),
-            
-            textView.topAnchor.constraint(equalTo: starStackView.bottomAnchor, constant: 20),
-            textView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            textView.heightAnchor.constraint(equalToConstant: 200),
-            
-            textViewWarningLabel.topAnchor.constraint(equalTo: textView.topAnchor, constant: 23),
-            textViewWarningLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 20),
-            
-            photoButton.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 10),
-            photoButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            photoButton.heightAnchor.constraint(equalToConstant: 50),
-            photoButton.widthAnchor.constraint(equalToConstant: 100),
-            
-            imageView.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 10),
-            imageView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 50),
-            imageView.widthAnchor.constraint(equalToConstant: 50),
-            
-            saveButton.topAnchor.constraint(equalTo: photoButton.bottomAnchor, constant: 10),
-            saveButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            saveButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            saveButton.heightAnchor.constraint(equalToConstant: 40),
-            
-        ].forEach { $0.isActive = true}
+        loadingView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.leading.equalTo(view).offset(30)
+            $0.trailing.equalTo(view).offset(-30)
+        }
+        
+        subtitleLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        starStackView.snp.makeConstraints {
+            $0.top.equalTo(subtitleLabel.snp.bottom).offset(10)
+            $0.centerX.equalTo(subtitleLabel)
+        }
+        
+        textView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(200)
+        }
+        
+        textViewWarningLabel.snp.makeConstraints {
+            $0.top.equalTo(textView).offset(23)
+            $0.leading.equalTo(titleLabel).offset(20)
+            $0.trailing.equalTo(titleLabel)
+        }
+        
+        photoButton.snp.makeConstraints {
+            $0.top.equalTo(textView.snp.bottom).offset(10)
+            $0.leading.equalTo(titleLabel)
+            $0.height.equalTo(50)
+            $0.width.equalTo(100)
+        }
+        
+        imageView.snp.makeConstraints {
+            $0.top.equalTo(textView.snp.bottom).offset(10)
+            $0.trailing.equalTo(titleLabel)
+            $0.height.width.equalTo(50)
+        }
+        
+        saveButton.snp.makeConstraints {
+            $0.top.equalTo(photoButton.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(40)
+        }
     }
 }
 
@@ -267,14 +316,9 @@ extension ReviewViewController: UIImagePickerControllerDelegate, UINavigationCon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            self.imageView.image = image
-            viewModel.image.onNext(image)
+            selectedImage.onNext(image)
             dismiss(animated: true)
         }
     }
-    
-    // UIImagePickerController5. - 취소 버튼을 누르면 호출되는 메소드
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print(#function, "🦋 취소버튼 클릭 시")
-    }
+
 }

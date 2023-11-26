@@ -8,27 +8,82 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import SnapKit
 
-class AccountSettingViewController: UIViewController, LoadingViewController {
-    var disposeBag = DisposeBag()
-    var loadingView = UIActivityIndicatorView(style: .medium)
+class AccountSettingViewController: UIViewController {
+    private let disposeBag = DisposeBag()
+    private let loadingView = UIActivityIndicatorView(style: .medium)
     
     private let viewModel: AccountSettingViewModel
     
-    private let titleLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "가계부 설정"
+        label.font = .systemFont(ofSize: 25, weight: .bold)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
     
-    private let contentView = UIView()
-    private let budgetLabel = UILabel()
-    private let budgetTextField = UITextField()
-    private let underLine = UIView()
-    private let wonLabel = UILabel()
-    private let budgetButton = UIButton()
     
-    private let alarmLabel = UILabel()
+    private let contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.98, alpha: 1)
+        return view
+    }()
+    private let budgetLabel: UILabel = {
+        let label = UILabel()
+        label.text = "이번 달 예산 설정"
+        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        label.textColor = .black
+        return label
+    }()
+    
+    private let budgetTextField: UITextField = {
+        let textField = UITextField()
+        
+        textField.keyboardType = .decimalPad
+        textField.font = .systemFont(ofSize: 16, weight: .semibold)
+        textField.textColor = .black
+        textField.textAlignment = .right
+        return textField
+    }()
+    
+    private let underLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    private let wonLabel: UILabel = {
+        let label = UILabel()
+        label.text = "원"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .black
+        return label
+    }()
+    
+    private let budgetButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("저장", for: .normal)
+        button.backgroundColor = UIColor(named: "subColor2")
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
+        button.layer.cornerRadius = 5
+        return button
+    }()
+    
+    private let alarmLabel: UILabel = {
+        let label = UILabel()
+        label.text = "지출 내역 추가 알림 받기"
+        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        label.textColor = .black
+        return label
+    }()
+    
     private let alarmSwitch = UISwitch()
     
-    init() {
-        viewModel = AccountSettingViewModel()
+    init(viewModel: AccountSettingViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -38,151 +93,128 @@ class AccountSettingViewController: UIViewController, LoadingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
-        bind()
+        bindViewModel()
         attribute()
         layout()
     }
     
-    private func bind() {
-        budgetButton.rx.tap
-            .bind(to: viewModel.saveBtnTap)
+    private func bindViewModel() {
+        
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .map { _ in () }.asDriver(onErrorJustReturn: ())
+        
+        let input = AccountSettingViewModel.Input(trigger: viewWillAppear,
+                                                  budget: budgetTextField.rx.text.orEmpty.map { Int($0) ?? 0 }.asDriver(onErrorJustReturn: 0),
+                                                  budgetTrigger: budgetButton.rx.tap.asDriver(),
+                                                  alarmTrigger: alarmSwitch.rx.controlEvent(.valueChanged).asDriver())
+        
+        let output = viewModel.transform(input: input)
+        
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
+                } else {
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
+                }
+            })
             .disposed(by: disposeBag)
         
-        budgetTextField.rx.text
-            .orEmpty
-            .map { Int($0) ?? -1 }
-            .bind(to: viewModel.amount)
+
+        output.alarm
+            .drive(alarmSwitch.rx.isOn)
             .disposed(by: disposeBag)
         
-        viewModel.budgetSettingResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in
+        output.budgetResult
+            .drive(onNext: { [weak self] result in
                 if result.success {
                     let alert = UIAlertController(title: "성공", message: "예산이 정상적으로 저장되었습니다!", preferredStyle: .alert)
                     let cancel = UIAlertAction(title: "확인", style: .default)
                     alert.addAction(cancel)
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                 } else {
                     let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
                     let cancel = UIAlertAction(title: "확인", style: .default)
                     alert.addAction(cancel)
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                 }
-                
             })
-            .disposed(by: disposeBag)
-        
-        viewModel.alarmState
-            .bind(to: alarmSwitch.rx.isOn)
-            .disposed(by: disposeBag)
-        
-        alarmSwitch.rx
-            .controlEvent(.valueChanged)
-            .map { self.alarmSwitch.isOn }
-            .bind(to: viewModel.alarmSwitchChanged)
             .disposed(by: disposeBag)
     }
     
     private func attribute() {
         view.backgroundColor = .white
-        
-        setActivityIndicatorViewAlpha(to: UIColor(white: 1, alpha: 0.3))
-        
-        titleLabel.text = "가계부 설정"
-        titleLabel.font = .systemFont(ofSize: 25, weight: .bold)
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        
-        contentView.backgroundColor = UIColor(white: 0.98, alpha: 1)
-        
-        budgetLabel.text = "이번 달 예산 설정"
-        budgetLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-        budgetLabel.textColor = .black
-        
         budgetTextField.delegate = self
-        budgetTextField.keyboardType = .decimalPad
-        budgetTextField.font = .systemFont(ofSize: 16, weight: .semibold)
-        budgetTextField.textColor = .black
-        budgetTextField.textAlignment = .right
-        
-        wonLabel.text = "원"
-        wonLabel.font = .systemFont(ofSize: 16, weight: .semibold)
-        wonLabel.textColor = .black
-        
-        underLine.backgroundColor = .lightGray
-        
-        budgetButton.setTitle("저장", for: .normal)
-        budgetButton.backgroundColor = UIColor(named: "subColor2")
-        budgetButton.setTitleColor(.white, for: .normal)
-        budgetButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
-        budgetButton.layer.cornerRadius = 5
-        
-        alarmLabel.text = "지출 내역 추가 알림 받기"
-        alarmLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-        alarmLabel.textColor = .black
-        
     }
     
     private func layout() {
         [titleLabel, contentView, alarmLabel, alarmSwitch, loadingView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         [budgetLabel, budgetTextField, underLine, wonLabel, budgetButton].forEach {
             contentView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
+        loadingView.snp.makeConstraints{
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
         
-        [
-            
-            loadingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.widthAnchor.constraint(equalToConstant: 320),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            contentView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            budgetLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            budgetLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            budgetLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            budgetTextField.topAnchor.constraint(equalTo: budgetLabel.bottomAnchor, constant: 10),
-            budgetTextField.trailingAnchor.constraint(equalTo: wonLabel.leadingAnchor),
-            budgetTextField.leadingAnchor.constraint(equalTo: budgetLabel.leadingAnchor),
-            
-            underLine.topAnchor.constraint(equalTo: budgetTextField.bottomAnchor),
-            underLine.leadingAnchor.constraint(equalTo: budgetTextField.leadingAnchor),
-            underLine.trailingAnchor.constraint(equalTo: budgetTextField.trailingAnchor),
-            underLine.heightAnchor.constraint(equalToConstant: 0.5),
-            
-            wonLabel.centerYAnchor.constraint(equalTo: budgetTextField.centerYAnchor),
-            wonLabel.trailingAnchor.constraint(equalTo: budgetButton.leadingAnchor, constant: -15),
-            wonLabel.widthAnchor.constraint(equalToConstant: 20),
-            
-            budgetButton.centerYAnchor.constraint(equalTo: wonLabel.centerYAnchor),
-            budgetButton.widthAnchor.constraint(equalToConstant: 50),
-            budgetButton.heightAnchor.constraint(equalToConstant: 30),
-            budgetButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            budgetButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
-            
-            alarmLabel.topAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 30),
-            alarmLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 5),
-            alarmLabel.trailingAnchor.constraint(equalTo: alarmSwitch.leadingAnchor),
-            
-            alarmSwitch.widthAnchor.constraint(equalToConstant: 40),
-            alarmSwitch.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: -10),
-            alarmSwitch.centerYAnchor.constraint(equalTo: alarmLabel.centerYAnchor),
-            
-        ].forEach { $0.isActive = true }
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.width.equalTo(320)
+            $0.centerX.equalTo(view)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        budgetLabel.snp.makeConstraints {
+            $0.top.equalTo(contentView).offset(15)
+            $0.leading.equalTo(titleLabel).offset(15)
+            $0.trailing.equalTo(titleLabel).offset(-15)
+        }
+        
+        budgetTextField.snp.makeConstraints {
+            $0.top.equalTo(budgetLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(budgetLabel)
+            $0.trailing.equalTo(wonLabel.snp.leading)
+        }
+        
+        underLine.snp.makeConstraints {
+            $0.top.equalTo(budgetTextField.snp.bottom)
+            $0.leading.trailing.equalTo(budgetTextField)
+            $0.height.equalTo(0.5)
+        }
+        
+        wonLabel.snp.makeConstraints {
+            $0.centerY.equalTo(budgetTextField)
+            $0.trailing.equalTo(budgetButton.snp.leading).offset(-15)
+            $0.width.equalTo(20)
+        }
+        
+        budgetButton.snp.makeConstraints {
+            $0.centerY.equalTo(wonLabel)
+            $0.width.equalTo(50)
+            $0.height.equalTo(30)
+            $0.trailing.bottom.equalTo(contentView).offset(-15)
+        }
+        
+        alarmLabel.snp.makeConstraints {
+            $0.top.equalTo(contentView.snp.bottom).offset(30)
+            $0.leading.equalTo(titleLabel).offset(5)
+            $0.trailing.equalTo(alarmSwitch.snp.leading)
+        }
+        
+        alarmSwitch.snp.makeConstraints {
+            $0.width.equalTo(40)
+            $0.trailing.equalTo(titleLabel).offset(-10)
+            $0.centerY.equalTo(alarmLabel)
+        }
     }
 }
 

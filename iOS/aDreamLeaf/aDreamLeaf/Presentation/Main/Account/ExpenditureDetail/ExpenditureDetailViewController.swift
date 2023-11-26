@@ -8,32 +8,90 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import SnapKit
 
-class ExpenditureDetailViewController: UIViewController, LoadingViewController {
+class ExpenditureDetailViewController: UIViewController {
     var disposeBag = DisposeBag()
     var loadingView = UIActivityIndicatorView(style: .medium)
     private let viewModel: ExpenditureDetailViewModel
     
-    private let titleLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 23, weight: .bold)
+        return label
+    }()
     
-    private let accountIdTitleLabel =  UILabel()
+    
+    private let accountIdStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    private let accountIdTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "지출번호"
+        return label
+    }()
+    
     private let accountIdLabel =  UILabel()
     
-    private let priceTitleLabel =  UILabel()
+    private let priceStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private let priceTitleLabel:  UILabel = {
+        let label = UILabel()
+        label.text = "지출액"
+        return label
+    }()
+    
     private let priceLabel =  UILabel()
     
-    private let dateTitleLabel =  UILabel()
+    
+    private let dateStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private let dateTitleLabel:  UILabel = {
+        let label = UILabel()
+        label.text = "날짜"
+        return label
+    }()
+    
     private let dateLabel =  UILabel()
     
-    private let bodyTitleLabel =  UILabel()
+    private let bodyStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private let bodyTitleLabel:  UILabel = {
+        let label = UILabel()
+        label.text = "항목"
+        return label
+    }()
+    
     private let bodyLabel =  UILabel()
     
     private let deleteButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: nil, action: nil)
-    private let editButton = UIButton()
+    private let editButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        button.setTitle("수정하기", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 10
+        return button
+    }()
     
     
-    init(data: Expenditure) {
-        viewModel = ExpenditureDetailViewModel(data: data)
+    init(viewModel: ExpenditureDetailViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,45 +101,63 @@ class ExpenditureDetailViewController: UIViewController, LoadingViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configLoadingView(viewModel: viewModel) // 리뷰 화면 초기 설정
-        bind()
+        bindViewModel()
         attribute()
         layout()
     }
     
-    private func bind() {
+    private func bindViewModel() {
+        let delete = PublishRelay<Void>()
         
-        viewModel.data
-            .map { String($0.accountId)}
-            .bind(to: accountIdLabel.rx.text)
+        let input = ExpenditureDetailViewModel.Input(deleteTrigger: delete.asDriver(onErrorJustReturn: ()))
+        
+        let output = viewModel.transform(input: input)
+        
+        accountIdLabel.text = "\(output.expenditure.accountId)"
+        titleLabel.text = output.expenditure.restaurant
+        priceLabel.text = "\(output.expenditure.price)"
+        dateLabel.text = output.expenditure.date
+        bodyLabel.text = output.expenditure.body
+        
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
+                } else {
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
+                }
+            })
             .disposed(by: disposeBag)
         
-        viewModel.data
-            .map { $0.restaurant}
-            .bind(to: titleLabel.rx.text)
+        output.result
+            .drive(onNext: { result in
+                let alert = UIAlertController(title: result.success ? "성공" : "실패", message: result.success ? "정상적으로 삭제되었습니다." : "오류가 발생했습니다.", preferredStyle: .alert)
+                
+                let confirm = UIAlertAction(title: "삭제", style: .destructive) {[weak self] _ in
+                    self?.navigationController?.popViewController(animated: true)
+                }
+                
+                let cancel = UIAlertAction(title: "확인", style: .cancel)
+                
+                if result.success {
+                    alert.addAction(confirm)
+                } else {
+                    alert.addAction(cancel)
+                }
+                
+                self.present(alert, animated: true)
+            })
             .disposed(by: disposeBag)
         
-        viewModel.data
-            .map { String($0.price)}
-            .bind(to: priceLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.data
-            .map { $0.date }
-            .bind(to: dateLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.data
-            .map { String($0.body)}
-            .bind(to: bodyLabel.rx.text)
-            .disposed(by: disposeBag)
         
         deleteButton.rx.tap
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { _ in
+            .asDriver()
+            .drive(onNext: { _ in
                 let alert = UIAlertController(title: "경고", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
                 let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
-                    self.viewModel.deleteButtonTap.accept(Void())
+                    delete.accept(())
                 }
                 let cancel = UIAlertAction(title: "취소", style: .cancel)
                 
@@ -93,42 +169,22 @@ class ExpenditureDetailViewController: UIViewController, LoadingViewController {
             })
             .disposed(by: disposeBag)
         
-        viewModel.deleteResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in
-                if result.success {
-                    let alert = UIAlertController(title: "성공", message: "지출 내역이 삭제되었습니다.", preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                    alert.addAction(confirm)
-                    self.present(alert, animated: true)
-                } else {
-                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self.present(alert, animated: true)
-                }
-            })
-            .disposed(by: disposeBag)
-        
         editButton.rx.tap
-            .observe(on: MainScheduler.instance)
-            .withLatestFrom(viewModel.data)
-            .subscribe(onNext: { expenditure in
-                self.navigationController?.pushViewController(NewPaymentViewController(data: expenditure), animated: true)
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                let vc = NewPaymentViewController(viewModel: NewPaymentViewModel(data: output.expenditure))
+                self?.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
     }
+    
     
     private func attribute() {
         view.backgroundColor = .white
         
         navigationItem.rightBarButtonItem = deleteButton
         navigationItem.rightBarButtonItem?.tintColor = .red
-    
-        titleLabel.font = .systemFont(ofSize: 23, weight: .bold)
         
         [
             accountIdTitleLabel,
@@ -139,11 +195,6 @@ class ExpenditureDetailViewController: UIViewController, LoadingViewController {
             $0.font = .systemFont(ofSize: 14, weight: .regular)
             $0.textAlignment = .left
         }
-     
-        accountIdTitleLabel.text = "지출번호"
-        priceTitleLabel.text = "지출액"
-        dateTitleLabel.text = "날짜"
-        bodyTitleLabel.text = "항목"
         
         [
             accountIdLabel,
@@ -156,11 +207,7 @@ class ExpenditureDetailViewController: UIViewController, LoadingViewController {
             $0.textColor = .gray
         }
         
-        editButton.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        editButton.setTitle("수정하기", for: .normal)
-        editButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
-        editButton.setTitleColor(.black, for: .normal)
-        editButton.layer.cornerRadius = 10
+
         
     }
     
@@ -168,63 +215,56 @@ class ExpenditureDetailViewController: UIViewController, LoadingViewController {
         [
             loadingView,
             titleLabel,
-            accountIdTitleLabel,
-            priceTitleLabel,
-            dateTitleLabel,
-            bodyTitleLabel,
-            accountIdLabel,
-            priceLabel,
-            dateLabel,
-            bodyLabel,
+            accountIdStackView,
+            priceStackView,
+            dateStackView,
+            bodyStackView,
             editButton
         ].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            
-            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
-            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
-            titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
-            
-            accountIdTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            accountIdTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
-            accountIdLabel.topAnchor.constraint(equalTo: accountIdTitleLabel.topAnchor),
-            accountIdLabel.leadingAnchor.constraint(equalTo: accountIdTitleLabel.trailingAnchor),
-            accountIdLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            priceTitleLabel.topAnchor.constraint(equalTo: accountIdTitleLabel.bottomAnchor, constant: 10),
-            priceTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
-            priceLabel.topAnchor.constraint(equalTo: priceTitleLabel.topAnchor),
-            priceLabel.leadingAnchor.constraint(equalTo: priceTitleLabel.trailingAnchor),
-            priceLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            dateTitleLabel.topAnchor.constraint(equalTo: priceTitleLabel.bottomAnchor, constant: 10),
-            dateTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
-            dateLabel.topAnchor.constraint(equalTo: dateTitleLabel.topAnchor),
-            dateLabel.leadingAnchor.constraint(equalTo: dateTitleLabel.trailingAnchor),
-            dateLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            bodyTitleLabel.topAnchor.constraint(equalTo: dateTitleLabel.bottomAnchor, constant: 10),
-            bodyTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
-            bodyLabel.topAnchor.constraint(equalTo: bodyTitleLabel.topAnchor),
-            bodyLabel.leadingAnchor.constraint(equalTo: bodyTitleLabel.trailingAnchor),
-            bodyLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            editButton.topAnchor.constraint(equalTo: bodyTitleLabel.bottomAnchor, constant: 20),
-            editButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            editButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-        ].forEach { $0.isActive = true }
+        [accountIdTitleLabel, accountIdLabel].forEach { accountIdStackView.addArrangedSubview($0) }
+        [priceTitleLabel, priceLabel].forEach { priceStackView.addArrangedSubview($0) }
+        [dateTitleLabel, dateLabel].forEach { dateStackView.addArrangedSubview($0) }
+        [bodyTitleLabel, bodyLabel].forEach { bodyStackView.addArrangedSubview($0) }
+        
+        loadingView.snp.makeConstraints {
+            $0.top.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalTo(view)
+        }
+        
+        titleLabel.snp.makeConstraints{
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(30)
+            $0.leading.equalTo(view).offset(30)
+            $0.trailing.equalTo(view).offset(-30)
+        }
+        
+        accountIdStackView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+    
+        priceStackView.snp.makeConstraints {
+            $0.top.equalTo(accountIdStackView.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        dateStackView.snp.makeConstraints {
+            $0.top.equalTo(priceStackView.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        bodyStackView.snp.makeConstraints {
+            $0.top.equalTo(dateStackView.snp.bottom).offset(10)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        editButton.snp.makeConstraints {
+            $0.top.equalTo(bodyStackView.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+    
     }
 }

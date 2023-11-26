@@ -6,37 +6,40 @@
 //
 
 import Foundation
-import RxRelay
 import RxSwift
+import RxCocoa
 
-struct PwdResetViewModel:LoadingViewModel {
-    var loading: PublishSubject<Bool>
+struct PwdResetViewModel {
+    private let disposeBag = DisposeBag()
+    private let repository: LoginRepository
     
-    var disposeBag = DisposeBag()
+    struct Input {
+        let email: Driver<String>
+        let trigger: Driver<Void>
+    }
     
-    let email = PublishRelay<String>()
-    let resetBtnTap = PublishRelay<Void>()
-    let resetResult = PublishSubject<RequestResult<Void>>()
+    struct Output {
+        let loading: Driver<Bool>
+        let result: Driver<RequestResult<Void>>
+    }
     
     init(_ repo: LoginRepository = LoginRepository()) {
-        loading = PublishSubject<Bool>()
+        self.repository = repo
+    }
+    
+    func transform(input: Input) -> Output {
+        let loading = PublishSubject<Bool>()
         
-        resetBtnTap
-            .withLatestFrom(email)
-            .flatMap(repo.sendPwdResetMail)
-            .bind(to: resetResult)
-            .disposed(by: disposeBag)
+        let result = input.trigger
+            .withLatestFrom(input.email)
+            .do(onNext: { _ in loading.onNext(true)})
+            .flatMapLatest { email in
+                repository.sendPwdResetMail(to: email)
+                    .do(onNext: { _ in loading.onNext(false)})
+                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+            }
         
-        //MARK: - Loading
         
-        resetBtnTap
-            .map { return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        resetResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        return Output(loading: loading.asDriver(onErrorJustReturn: false), result: result)
     }
 }

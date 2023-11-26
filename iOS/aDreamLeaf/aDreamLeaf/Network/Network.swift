@@ -25,6 +25,13 @@ enum NetworkType {
     case Alarm
 }
 
+enum NetworkError: String, Error {
+    case invalidURL = "잘못된 URL 입니다."
+    case invalidJSON = "잘못된 JSON 형식입니다."
+    case networkError = "네트워크 에러입니다."
+    case invalidQuery = "잘못된 Parameter 입니다."
+}
+
 class Network {
     
     let type: NetworkType
@@ -58,6 +65,8 @@ class Network {
         
         return request
     }
+    
+    
     
     // Decoding할 데이터가 포함된 응답 처리
     func handleResponse<T: Decodable>(response: AFDataResponse<Data>, observer: AnyObserver<RequestResult<T>>) {

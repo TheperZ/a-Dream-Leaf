@@ -8,25 +8,61 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SnapKit
 
-class ReviewListViewController : UIViewController, LoadingViewController {
-    var disposeBag = DisposeBag()
-    var loadingView = UIActivityIndicatorView(style: .medium)
-    let viewModel: ReviewListViewModel
+class ReviewListViewController : UIViewController {
+    private let disposeBag = DisposeBag()
+    private let viewModel: ReviewListViewModel
+    
+    let deleteRequest = PublishSubject<Int>()
+
+    private let loadingView:UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.backgroundColor = .white
+        return view
+    }()
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
-    private let tableView = UITableView()
-    private let leftButton = UIButton()
-    private let rightButton = UIButton()
-    private let reviewListEmptyWarnLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 30, weight: .heavy)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "리뷰"
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let tableView: ContentWrappingTableView = {
+        let tableView = ContentWrappingTableView()
+        tableView.backgroundColor = .white
+        tableView.register(ReviewCell.self, forCellReuseIdentifier: K.TableViewCellID.ReviewCell)
+        tableView.isScrollEnabled = false
+        return tableView
+    }()
+    
+    private let reviewListEmptyWarnLabel: UILabel = {
+        let label = UILabel()
+        label.text = "작성된 리뷰가 없습니다 🥲"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.textAlignment = .center
+        return label
+    }()
     
     
-    init(storeData: Store) {
-        viewModel = ReviewListViewModel(storeData: storeData)
+    
+    init(viewModel: ReviewListViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -37,136 +73,121 @@ class ReviewListViewController : UIViewController, LoadingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(ReviewCell.self, forCellReuseIdentifier: K.TableViewCellID.ReviewCell)
-        configLoadingView(viewModel: viewModel) // 로딩 화면을 위한 설정
         bind()
         attribute()
         layout()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        viewModel.reviewListUpdateRequest.onNext(Void())
-    }
     private func bind() {
         
-        tableView.rx.itemSelected
-            .asDriver()
-            .drive(onNext: {
-                self.tableView.cellForRow(at: $0)?.isSelected = false
+        let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:))).map { _ in ()}.asDriver(onErrorJustReturn: ())
+        
+        let input = ReviewListViewModel.Input(viewWillAppear: viewWillAppear,
+                                              deleteTrigger: deleteRequest.asDriver(onErrorJustReturn: -1))
+        
+        let output = viewModel.transfrom(input: input)
+        
+        output.loading
+            .drive(onNext: { [weak self] loading in
+                if loading {
+                    self?.loadingView.startAnimating()
+                    self?.loadingView.isHidden = false
+                } else {
+                    self?.loadingView.stopAnimating()
+                    self?.loadingView.isHidden = true
+                }
             })
             .disposed(by: disposeBag)
         
-        
-        viewModel.reviews
-            .bind(to: tableView.rx.items) { tv, row, review in
+        output.reviews
+            .drive(tableView.rx.items) { tv, row, review in
                 let indexPath = IndexPath(row: row, section: 0)
                 let cell = tv.dequeueReusableCell(withIdentifier: K.TableViewCellID.ReviewCell, for: indexPath) as! ReviewCell
-                
-                cell.setUp(self, with: review)
-                
+
+                cell.setUp(self, viewModel: ReviewCellVIewModel(review))
+
                 return cell
             }
             .disposed(by: disposeBag)
         
-        viewModel.reviews
+        output.reviews
             .map { "리뷰 (\($0.count))" }
-            .bind(to: subtitleLabel.rx.text)
+            .drive(subtitleLabel.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel.reviewDeleteResult
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in
-                let alert = UIAlertController(title: result.success ? "성공" : "실패", message: result.msg, preferredStyle: .alert)
-                let cancel = UIAlertAction(title: "확인", style: .default)
-                alert.addAction(cancel)
-                self.present(alert, animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel.reviews
+        output.reviews
             .map { $0.count != 0 }
-            .observe(on: MainScheduler.instance)
-            .bind(to: reviewListEmptyWarnLabel.rx.isHidden)
+            .drive(reviewListEmptyWarnLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        output.storeName
+            .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
         
     }
     
     private func attribute() {
         view.backgroundColor = .white
-        
-        titleLabel.text = viewModel.storeData.storeName
-        titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        
-        subtitleLabel.text = "리뷰"
-        subtitleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
-        subtitleLabel.textColor = .black
-        subtitleLabel.textAlignment = .center
-        
-        tableView.backgroundColor = .white
-        
-        reviewListEmptyWarnLabel.text = "작성된 리뷰가 없습니다 🥲"
-        reviewListEmptyWarnLabel.textColor = .black
-        reviewListEmptyWarnLabel.font = .systemFont(ofSize: 15, weight: .bold)
-        reviewListEmptyWarnLabel.textAlignment = .center
-
     }
     
     private func layout() {
         view.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(loadingView)
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
         
         scrollView.addSubview(contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         [titleLabel, subtitleLabel, tableView, reviewListEmptyWarnLabel].forEach {
             contentView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [
-            loadingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo:scrollView.widthAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
-            titleLabel.widthAnchor.constraint(equalToConstant: 300),
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            tableView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 15),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            tableView.heightAnchor.constraint(equalToConstant: 500),
-            
-            reviewListEmptyWarnLabel.topAnchor.constraint(equalTo: tableView.topAnchor),
-            reviewListEmptyWarnLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            reviewListEmptyWarnLabel.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            reviewListEmptyWarnLabel.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
-            
-        ].forEach { $0.isActive = true }
+        loadingView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.width.equalTo(scrollView)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(contentView).offset(30)
+            $0.width.equalTo(300)
+            $0.centerX.equalTo(contentView)
+        }
+        
+        subtitleLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalTo(titleLabel)
+        }
+        
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(subtitleLabel.snp.bottom).offset(15)
+            $0.leading.equalTo(contentView).offset(20)
+            $0.trailing.equalTo(contentView).offset(-20)
+            $0.bottom.equalTo(contentView).offset(-10)
+        }
+        
+        reviewListEmptyWarnLabel.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(tableView)
+        }
         
     }
     
+}
+
+
+class ContentWrappingTableView: UITableView {
+
+  override var intrinsicContentSize: CGSize {
+    return self.contentSize
+  }
+
+  override var contentSize: CGSize {
+    didSet {
+        self.invalidateIntrinsicContentSize()
+    }
+  }
 }

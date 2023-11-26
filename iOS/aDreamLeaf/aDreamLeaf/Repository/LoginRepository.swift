@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import FirebaseAuth
 
 struct LoginRepository {
     private let network = LoginNetwork(type: .Login)
@@ -48,6 +49,16 @@ struct LoginRepository {
         }
         
         return network.sendPwdResetMailFB(email)
+    }
+    
+    func logout() -> Observable<RequestResult<Void>> {
+        do {
+            try Auth.auth().signOut()
+            UserManager.logout()
+            return Observable.just(RequestResult(success: true, msg: "정상적으로 로그아웃 되었습니다."))
+        } catch {
+            return Observable.just(RequestResult(success: false, msg: "오류가 발생했습니다."))
+        }
     }
     
     private func validateInput(email: String, pwd: String) -> Observable<RequestResult<User>>? {

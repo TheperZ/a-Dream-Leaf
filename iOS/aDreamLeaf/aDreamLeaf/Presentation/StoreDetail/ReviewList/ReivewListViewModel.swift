@@ -7,63 +7,53 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-struct ReviewListViewModel: LoadingViewModel {
-    var loading: PublishSubject<Bool>
+struct ReviewListViewModel {
+    private let repository: ReviewRepository
+    private let disposeBag = DisposeBag()
+    private let store: Store
     
-    let disposeBag = DisposeBag()
-    let storeData : Store
+    struct Input {
+        let viewWillAppear: Driver<Void>
+        let deleteTrigger: Driver<Int>
+    }
     
-    let reviews = PublishSubject<[Review]>()
-    
-    //ReviewCell로 부터 온 리뷰 삭제 처리 Observe - 리뷰 ID를 전달받음
-    let reviewDeleteRequest = PublishSubject<Int>()
-    //리뷰 삭제 결과
-    let reviewDeleteResult = PublishSubject<RequestResult<Void>>()
-    
-    //리뷰 수정/삭제시 리스트 업데이트를 위한 Subject
-    let reviewListUpdateRequest = PublishSubject<Void>()
+    struct Output {
+        let storeName: Driver<String>
+        let loading: Driver<Bool>
+        let reviews: Driver<[Review]>
+    }
     
     init(storeData: Store, _ repo: ReviewRepository = ReviewRepository()) {
-        self.storeData = storeData
+        self.repository = repo
+        self.store = storeData
+    }
+    
+    func transfrom(input: Input) -> Output {
+        let loading = PublishSubject<Bool>()
         
-        loading = PublishSubject<Bool>()
+        let update = PublishSubject<Void>()
         
-        // 리뷰 목록 업데이트 요청 시 로딩 시작
-        reviewListUpdateRequest
-            .map { return true }
-            .bind(to: loading)
+        let reviews = Driver.merge(input.viewWillAppear, update.asDriver(onErrorJustReturn: ()))
+            .do(onNext: { loading.onNext(true) })
+            .flatMapLatest {
+                repository.fetchReviews(storeId: store.storeId)
+                    .do(onNext: { _ in loading.onNext(false) })
+                    .asDriver(onErrorJustReturn: [])
+            }
+        
+        input.deleteTrigger
+            .do(onNext: { _ in loading.onNext(true) })
+            .flatMapLatest { reviewId in
+                repository.deleteReview(reviewId: reviewId)
+                    .do(onNext: { _ in loading.onNext(false) })
+                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+            }
+            .map { _ in () }
+            .drive(update)
             .disposed(by: disposeBag)
         
-        // 리뷰 목록이 업데이트 되면 로딩 종료
-        reviews
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        
-        //리뷰 목록 업데이트 요청 시 목록 가져오기
-        reviewListUpdateRequest
-            .flatMap { repo.fetchReviews(storeId: storeData.storeId)}
-            .map { $0.data != nil ? $0.data! : []} // 에러 발생시 리뷰 빈 목록 
-            .bind(to: reviews)
-            .disposed(by: disposeBag)
-        
-        //초기 리뷰 목록 가져오기
-        reviewListUpdateRequest.onNext(Void())
-        
-        //리뷰 삭제 요청 처리
-        reviewDeleteRequest
-            .flatMap(repo.deleteReview)
-            .bind(to: reviewDeleteResult)
-            .disposed(by: disposeBag)
-        
-        //리뷰 삭제 성공 시 리뷰 목록 업데이트
-        reviewDeleteResult
-            .filter { $0.success == true }
-            .map { _ in Void() }
-            .bind(to: reviewListUpdateRequest)
-            .disposed(by: disposeBag)
+        return Output(storeName: Driver.just(store.storeName),loading: loading.asDriver(onErrorJustReturn: false), reviews: reviews)
     }
 }

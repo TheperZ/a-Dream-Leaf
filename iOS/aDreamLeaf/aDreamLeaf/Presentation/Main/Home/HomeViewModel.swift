@@ -7,20 +7,42 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
 struct HomeViewModel {
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    private let repository: StoreRepository
     
-    let nearStores = PublishSubject<[SimpleStore]>()
+    struct Input {
+        let trigger: Driver<Void>
+        let selectStore: Driver<IndexPath>
+    }
+    
+    struct Output {
+        let nearStores: Driver<[SimpleStore]>
+        let selectedStore: Driver<SimpleStore>
+        let login: Driver<Bool>
+    }
     
     init(_ storeRepo: StoreRepository = StoreRepository()) {
-        storeRepo
-            .searchNearStore(lat: LocationManager.getLatitude() ?? 0.0, long: LocationManager.getLongitude() ?? 0.0)
-            .map { $0.data ?? []}
-            .map { $0.count > 2 ? Array($0[...2]) : $0 }
-            .bind(to: nearStores)
-            .disposed(by: disposeBag)
+        self.repository = storeRepo
+    }
+    
+    func transform(input: Input) -> Output {
+        let nearStore = input.trigger
+            .flatMapLatest {
+                repository.searchNearStore(lat: LocationManager.getLatitude() ?? 0.0, long: LocationManager.getLatitude() ?? 0.0)
+                    .asDriver(onErrorJustReturn: [])
+            }
+        
+        let selectedStore = input.selectStore
+            .withLatestFrom(nearStore) { indexPath, list in list[indexPath.row] }
+        
+        let login = UserManager.getInstance()
+            .map { $0 != nil }
+            .asDriver(onErrorJustReturn: false)
+        
+        return Output(nearStores: nearStore, selectedStore: selectedStore, login: login)
     }
     
 }

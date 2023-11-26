@@ -7,48 +7,40 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-struct SignUpViewModel: LoadingViewModel {
-    var loading: PublishSubject<Bool>
+struct SignUpViewModel {
+    private let disposeBag = DisposeBag()
+    private let repository: SignUpRepository
     
-    let disposeBag = DisposeBag()
+    struct Input {
+        let email: Driver<String>
+        let passsword: Driver<String>
+        let passwordCheck: Driver<String>
+        let trigger: Driver<Void>
+    }
     
-    let email = PublishSubject<String>()
-    let password = PublishSubject<String>()
-    let passwordCheck = PublishSubject<String>()
-    
-    let signUpBtnTap = PublishRelay<Void>()
-    
-    let signUpResult = PublishSubject<RequestResult<Void>>()
+    struct Output {
+        let loading: Driver<Bool>
+        let result: Driver<RequestResult<Void>>
+    }
     
     init(_ repo: SignUpRepository = SignUpRepository()) {
-        loading = PublishSubject<Bool>()
+        self.repository = repo
+    }
+    
+    func transform(input: Input) -> Output {
+        let loading = PublishSubject<Bool>()
         
-        signUpBtnTap
-            .withLatestFrom(Observable.combineLatest(email, password, passwordCheck))
-            .flatMap(repo.signUp)
-            .bind(to: signUpResult)
-            .disposed(by: disposeBag)
+        let result = input.trigger
+            .withLatestFrom(Driver.combineLatest(input.email, input.passsword, input.passwordCheck))
+            .do(onNext: { _ in loading.onNext(true)})
+            .flatMapLatest { email, pwd, pwdCheck in
+                repository.signUp(email: email, pwd: pwd, pwdCheck: pwdCheck)
+                    .do(onNext: { _ in loading.onNext(false)})
+                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+            }
         
-        signUpResult
-            .filter { $0.success }
-            .withLatestFrom(Observable.combineLatest(email, password))
-            .subscribe(onNext: { (email, pwd) in
-                repo.sendEmailValification(email: email, pwd: pwd)
-            })
-            .disposed(by: disposeBag)
-        
-        //MARK: - Loading
-        
-        signUpBtnTap
-            .map { return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        signUpResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        return Output(loading: loading.asDriver(onErrorJustReturn: false), result: result)
     }
 }

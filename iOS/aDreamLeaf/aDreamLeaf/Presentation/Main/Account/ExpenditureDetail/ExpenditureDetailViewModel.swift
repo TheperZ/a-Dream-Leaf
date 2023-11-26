@@ -7,39 +7,41 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-struct ExpenditureDetailViewModel: LoadingViewModel {
-    var disposeBag = DisposeBag()
+struct ExpenditureDetailViewModel {
+    private let disposeBag = DisposeBag()
+    private let repository: AccountRepository
+    private let expenditure: Expenditure
     
-    var loading: PublishSubject<Bool>
+    struct Input {
+        let deleteTrigger: Driver<Void>
+    }
     
-    let data: BehaviorSubject<Expenditure>
-    private let expenditureId: Int
-    
-    let deleteButtonTap = PublishRelay<Void>()
-    let deleteResult = PublishSubject<RequestResult<Void>>()
+    struct Output {
+        let loading: Driver<Bool>
+        let expenditure: Expenditure
+        let result: Driver<RequestResult<Void>>
+    }
     
     init(data : Expenditure, _ repo: AccountRepository = AccountRepository()) {
-        self.data = BehaviorSubject(value: data)
-        self.expenditureId = data.accountId
-        self.loading = PublishSubject<Bool>()
+        self.repository = repo
+        self.expenditure = data
+    }
+    
+    func transform(input: Input) -> Output {
+        let loading = PublishSubject<Bool>()
         
-        deleteButtonTap
-            .flatMap{ repo.deleteExpenditure(accountId: data.accountId) }
-            .bind(to: deleteResult)
-            .disposed(by: disposeBag)
+        let result = input.deleteTrigger
+            .do(onNext: { loading.onNext(true) })
+            .flatMapLatest {
+                repository.deleteExpenditure(accountId: expenditure.accountId)
+                    .do(onNext: { _ in loading.onNext(false) })
+                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+            }
+            
+     
         
-        //MARK: - Loading
-        
-        deleteButtonTap
-            .map { return true }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
-        
-        deleteResult
-            .map { _ in return false }
-            .bind(to: loading)
-            .disposed(by: disposeBag)
+        return Output(loading: loading.asDriver(onErrorJustReturn: false), expenditure: expenditure, result: result)
     }
 }

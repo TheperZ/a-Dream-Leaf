@@ -7,17 +7,32 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
 struct StartViewModel {
     private let disposeBag = DisposeBag()
-    let loginCheckRequest = PublishRelay<Void>()
-    let isLogInChecked = PublishSubject<RequestResult<User>>()
+    private let repository: LoginRepository
+    
+    struct Input {
+        let trigger: Driver<Void>
+    }
+    
+    struct Output {
+        let result: Driver<Void>
+    }
     
     init(_ repo: LoginRepository = LoginRepository()) {
-        loginCheckRequest
-            .flatMap(repo.localLogIn)
-            .bind(to: isLogInChecked)
-            .disposed(by: disposeBag)
+        self.repository = repo
+    }
+    
+    func tranform(input: Input) -> Output {
+        let result = input.trigger
+            .flatMapLatest {
+                repository.localLogIn()
+                    .map { _ in ()}
+                    .asDriver(onErrorJustReturn: ())
+            }
+        
+        return Output(result: result)
     }
 }
