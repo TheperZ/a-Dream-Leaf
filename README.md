@@ -18,8 +18,8 @@
 * RxSwift
 * MVVM
 * Alamofire
-* AutoLayout Programatically
-* Firebase
+* SnapKit
+* Firebase Auth / Cloud Messaging
 * Kakao Address, Naver Map
 
 ### Backend
