@@ -23,7 +23,7 @@ struct AccountViewModel {
         let selectedExpenditure: Driver<Expenditure>
     }
     
-    init(_ repo: AccountRepository = AccountRepository()) {
+    init(_ repo: AccountRepository = NetworkAccountRepository()) {
         self.repository = repo
     }
     

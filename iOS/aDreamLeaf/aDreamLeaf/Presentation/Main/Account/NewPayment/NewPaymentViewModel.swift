@@ -29,7 +29,7 @@ struct NewPaymentViewModel {
     }
     
     
-    init(_ repo: AccountRepository = AccountRepository(), data: Expenditure? = nil) {
+    init(_ repo: AccountRepository = NetworkAccountRepository(), data: Expenditure? = nil) {
         self.repository = repo
         self.editData = data
     }

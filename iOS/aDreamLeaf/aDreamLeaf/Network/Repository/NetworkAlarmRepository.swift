@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-struct AlarmRepository {
+struct NetworkAlarmRepository: AlarmRepository {
     private let network = AlarmNetwork()
     
     func getState() -> Observable<Bool> {

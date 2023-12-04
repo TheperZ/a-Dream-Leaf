@@ -8,10 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		9F05C7DCF9273327BB618310 /* Pods_aDreamLeaf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */; };
-		BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */; };
+		BF02BA0E2B1DA36A00041B5F /* SignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA0D2B1DA36A00041B5F /* SignUpRepository.swift */; };
+		BF02BA102B1DA44D00041B5F /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA0F2B1DA44D00041B5F /* LoginRepository.swift */; };
+		BF02BA122B1DA8EC00041B5F /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA112B1DA8EC00041B5F /* ProfileRepository.swift */; };
+		BF02BA142B1DA94600041B5F /* AccountRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA132B1DA94600041B5F /* AccountRepository.swift */; };
+		BF02BA162B1DAA1700041B5F /* KakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA152B1DAA1700041B5F /* KakaoRepository.swift */; };
+		BF02BA182B1DAA7E00041B5F /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA172B1DAA7E00041B5F /* StoreRepository.swift */; };
+		BF02BA1A2B1DAAFA00041B5F /* ReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA192B1DAAFA00041B5F /* ReviewRepository.swift */; };
+		BF02BA1C2B1DABB300041B5F /* AlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA1B2B1DABB300041B5F /* AlarmRepository.swift */; };
+		BF087EF62A060F3700ADDA13 /* NetworkKakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */; };
 		BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB42A19309E0083880F /* StoreNetwork.swift */; };
 		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
-		BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB82A1931BC0083880F /* StoreRepository.swift */; };
+		BF09DBB92A1931BC0083880F /* NetworkStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB82A1931BC0083880F /* NetworkStoreRepository.swift */; };
 		BF0FCEAA2A4EDDFD0052B49C /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0FCEA92A4EDDFD0052B49C /* Image.swift */; };
 		BF0FCEBE2A5450CC0052B49C /* KakaoAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0FCEBD2A5450CC0052B49C /* KakaoAddress.swift */; };
 		BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */; };
@@ -27,7 +35,7 @@
 		BF3395862A8F56FD0053A935 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3395852A8F56FD0053A935 /* Network.swift */; };
 		BF3429CF2A82168600EF97CA /* LoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3429CE2A82168600EF97CA /* LoadingViewModel.swift */; };
 		BF3AACE22AAD95C000C9A938 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3AACE12AAD95C000C9A938 /* String.swift */; };
-		BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D529ED99EE008DB52A /* LoginRepository.swift */; };
+		BF6439D629ED99EE008DB52A /* NetworkLoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D529ED99EE008DB52A /* NetworkLoginRepository.swift */; };
 		BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439D729ED99FD008DB52A /* LoginNetwork.swift */; };
 		BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DA29EFFE97008DB52A /* UserManager.swift */; };
 		BF6439DD29EFFEED008DB52A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6439DC29EFFEED008DB52A /* User.swift */; };
@@ -46,7 +54,7 @@
 		BF6E4BD129D7E9C500D67F22 /* SimpleReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */; };
 		BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */; };
 		BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */; };
-		BF83F17729F7F9A600EA07AD /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17629F7F9A600EA07AD /* ProfileRepository.swift */; };
+		BF83F17729F7F9A600EA07AD /* NetworkProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17629F7F9A600EA07AD /* NetworkProfileRepository.swift */; };
 		BF9325622ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9325612ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift */; };
 		BF9325692ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9325682ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift */; };
 		BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */; };
@@ -72,7 +80,7 @@
 		BFBD102F2A128537002EE950 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD102E2A128537002EE950 /* Login.swift */; };
 		BFBD10322A131D5B002EE950 /* PwdResetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10312A131D5B002EE950 /* PwdResetViewModel.swift */; };
 		BFBD10342A131D7C002EE950 /* PwdResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10332A131D7C002EE950 /* PwdResetViewController.swift */; };
-		BFBD103E2A163FCB002EE950 /* AccountRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD103D2A163FCB002EE950 /* AccountRepository.swift */; };
+		BFBD103E2A163FCB002EE950 /* NetworkAccountRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD103D2A163FCB002EE950 /* NetworkAccountRepository.swift */; };
 		BFBD10402A163FD9002EE950 /* AccountNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD103F2A163FD9002EE950 /* AccountNetwork.swift */; };
 		BFBD10432A16530B002EE950 /* AccountRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10422A16530B002EE950 /* AccountRequest.swift */; };
 		BFBD10452A168C22002EE950 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD10442A168C22002EE950 /* Date.swift */; };
@@ -92,7 +100,7 @@
 		BFDF62392A7CC0870050DF48 /* LINESeedKR-Rg.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDF62362A7CC0870050DF48 /* LINESeedKR-Rg.otf */; };
 		BFDF623A2A7CC0870050DF48 /* LINESeedKR-Th.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDF62372A7CC0870050DF48 /* LINESeedKR-Th.otf */; };
 		BFDF623B2A7CC0870050DF48 /* LINESeedKR-Bd.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFDF62382A7CC0870050DF48 /* LINESeedKR-Bd.otf */; };
-		BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */; };
+		BFEB30CE29ECCAF400590CC0 /* NetworkSignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30CD29ECCAF400590CC0 /* NetworkSignUpRepository.swift */; };
 		BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */; };
 		BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D329ECCBA600590CC0 /* RequestResult.swift */; };
 		BFEB7CEE2A834E7F00F86BB1 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB7CED2A834E7F00F86BB1 /* LoadingViewController.swift */; };
@@ -100,13 +108,13 @@
 		BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */; };
 		BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */; };
 		BFF042E32A1BA183001FCB88 /* CreateReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */; };
-		BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */; };
+		BFF042E52A1BA373001FCB88 /* NetworkReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E42A1BA373001FCB88 /* NetworkReviewRepository.swift */; };
 		BFF042E72A1BA79D001FCB88 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E62A1BA79D001FCB88 /* Review.swift */; };
 		BFF042EB2A1BBCE4001FCB88 /* AccountSummaryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */; };
 		BFF042EE2A2065FB001FCB88 /* ExpenditureRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042ED2A2065FB001FCB88 /* ExpenditureRequest.swift */; };
 		BFF042F02A2328FB001FCB88 /* AlarmNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042EF2A2328FB001FCB88 /* AlarmNetwork.swift */; };
 		BFF042F22A2329EA001FCB88 /* AlarmState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042F12A2329EA001FCB88 /* AlarmState.swift */; };
-		BFF042F42A232A97001FCB88 /* AlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042F32A232A97001FCB88 /* AlarmRepository.swift */; };
+		BFF042F42A232A97001FCB88 /* NetworkAlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042F32A232A97001FCB88 /* NetworkAlarmRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,10 +131,18 @@
 		0192F08C6E377D04B56FDC3F /* Pods-aDreamLeaf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.debug.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.debug.xcconfig"; sourceTree = "<group>"; };
 		17E7A01635688AECBE16ADB3 /* Pods_aDreamLeaf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_aDreamLeaf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A44D9FCDECC8EAD7D6A77BB9 /* Pods-aDreamLeaf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aDreamLeaf.release.xcconfig"; path = "Target Support Files/Pods-aDreamLeaf/Pods-aDreamLeaf.release.xcconfig"; sourceTree = "<group>"; };
-		BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoRepository.swift; sourceTree = "<group>"; };
+		BF02BA0D2B1DA36A00041B5F /* SignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepository.swift; sourceTree = "<group>"; };
+		BF02BA0F2B1DA44D00041B5F /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
+		BF02BA112B1DA8EC00041B5F /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
+		BF02BA132B1DA94600041B5F /* AccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRepository.swift; sourceTree = "<group>"; };
+		BF02BA152B1DAA1700041B5F /* KakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoRepository.swift; sourceTree = "<group>"; };
+		BF02BA172B1DAA7E00041B5F /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
+		BF02BA192B1DAAFA00041B5F /* ReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRepository.swift; sourceTree = "<group>"; };
+		BF02BA1B2B1DABB300041B5F /* AlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmRepository.swift; sourceTree = "<group>"; };
+		BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkKakaoRepository.swift; sourceTree = "<group>"; };
 		BF09DBB42A19309E0083880F /* StoreNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreNetwork.swift; sourceTree = "<group>"; };
 		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
-		BF09DBB82A1931BC0083880F /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
+		BF09DBB82A1931BC0083880F /* NetworkStoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStoreRepository.swift; sourceTree = "<group>"; };
 		BF0FCEA92A4EDDFD0052B49C /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		BF0FCEBD2A5450CC0052B49C /* KakaoAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoAddress.swift; sourceTree = "<group>"; };
 		BF15AB2529D92F4600014E05 /* ReivewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReivewListViewModel.swift; sourceTree = "<group>"; };
@@ -142,7 +158,7 @@
 		BF3395852A8F56FD0053A935 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		BF3429CE2A82168600EF97CA /* LoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewModel.swift; sourceTree = "<group>"; };
 		BF3AACE12AAD95C000C9A938 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		BF6439D529ED99EE008DB52A /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
+		BF6439D529ED99EE008DB52A /* NetworkLoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLoginRepository.swift; sourceTree = "<group>"; };
 		BF6439D729ED99FD008DB52A /* LoginNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNetwork.swift; sourceTree = "<group>"; };
 		BF6439DA29EFFE97008DB52A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		BF6439DC29EFFEED008DB52A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -161,7 +177,7 @@
 		BF6E4BD029D7E9C500D67F22 /* SimpleReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCell.swift; sourceTree = "<group>"; };
 		BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReviewCellViewModel.swift; sourceTree = "<group>"; };
 		BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNetwork.swift; sourceTree = "<group>"; };
-		BF83F17629F7F9A600EA07AD /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
+		BF83F17629F7F9A600EA07AD /* NetworkProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProfileRepository.swift; sourceTree = "<group>"; };
 		BF93251F2ABB1923004082A8 /* absl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = absl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9325212ABB1923004082A8 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9325232ABB1923004082A8 /* openssl_grpc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = openssl_grpc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -216,7 +232,7 @@
 		BFBD102E2A128537002EE950 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		BFBD10312A131D5B002EE950 /* PwdResetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetViewModel.swift; sourceTree = "<group>"; };
 		BFBD10332A131D7C002EE950 /* PwdResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetViewController.swift; sourceTree = "<group>"; };
-		BFBD103D2A163FCB002EE950 /* AccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRepository.swift; sourceTree = "<group>"; };
+		BFBD103D2A163FCB002EE950 /* NetworkAccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAccountRepository.swift; sourceTree = "<group>"; };
 		BFBD103F2A163FD9002EE950 /* AccountNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNetwork.swift; sourceTree = "<group>"; };
 		BFBD10422A16530B002EE950 /* AccountRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRequest.swift; sourceTree = "<group>"; };
 		BFBD10442A168C22002EE950 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
@@ -239,7 +255,7 @@
 		BFDF62372A7CC0870050DF48 /* LINESeedKR-Th.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedKR-Th.otf"; sourceTree = "<group>"; };
 		BFDF62382A7CC0870050DF48 /* LINESeedKR-Bd.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LINESeedKR-Bd.otf"; sourceTree = "<group>"; };
 		BFEB30CB29EB89D400590CC0 /* aDreamLeaf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = aDreamLeaf.entitlements; sourceTree = "<group>"; };
-		BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepository.swift; sourceTree = "<group>"; };
+		BFEB30CD29ECCAF400590CC0 /* NetworkSignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSignUpRepository.swift; sourceTree = "<group>"; };
 		BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNetwork.swift; sourceTree = "<group>"; };
 		BFEB30D329ECCBA600590CC0 /* RequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestResult.swift; sourceTree = "<group>"; };
 		BFEB7CED2A834E7F00F86BB1 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
@@ -247,13 +263,13 @@
 		BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewController.swift; sourceTree = "<group>"; };
 		BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewNetwork.swift; sourceTree = "<group>"; };
 		BFF042E22A1BA183001FCB88 /* CreateReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReviewRequest.swift; sourceTree = "<group>"; };
-		BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRepository.swift; sourceTree = "<group>"; };
+		BFF042E42A1BA373001FCB88 /* NetworkReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkReviewRepository.swift; sourceTree = "<group>"; };
 		BFF042E62A1BA79D001FCB88 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		BFF042EA2A1BBCE4001FCB88 /* AccountSummaryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryRequest.swift; sourceTree = "<group>"; };
 		BFF042ED2A2065FB001FCB88 /* ExpenditureRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureRequest.swift; sourceTree = "<group>"; };
 		BFF042EF2A2328FB001FCB88 /* AlarmNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmNetwork.swift; sourceTree = "<group>"; };
 		BFF042F12A2329EA001FCB88 /* AlarmState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmState.swift; sourceTree = "<group>"; };
-		BFF042F32A232A97001FCB88 /* AlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmRepository.swift; sourceTree = "<group>"; };
+		BFF042F32A232A97001FCB88 /* NetworkAlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAlarmRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +334,30 @@
 				A44D9FCDECC8EAD7D6A77BB9 /* Pods-aDreamLeaf.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BF02BA0A2B1DA2DF00041B5F /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA0C2B1DA33400041B5F /* Repository */,
+				BFEB30D229ECCB9F00590CC0 /* Entity */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		BF02BA0C2B1DA33400041B5F /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA0D2B1DA36A00041B5F /* SignUpRepository.swift */,
+				BF02BA0F2B1DA44D00041B5F /* LoginRepository.swift */,
+				BF02BA112B1DA8EC00041B5F /* ProfileRepository.swift */,
+				BF02BA132B1DA94600041B5F /* AccountRepository.swift */,
+				BF02BA152B1DAA1700041B5F /* KakaoRepository.swift */,
+				BF02BA172B1DAA7E00041B5F /* StoreRepository.swift */,
+				BF02BA192B1DAAFA00041B5F /* ReviewRepository.swift */,
+				BF02BA1B2B1DABB300041B5F /* AlarmRepository.swift */,
+			);
+			path = Repository;
 			sourceTree = "<group>";
 		};
 		BF15AB2429D92F2500014E05 /* ReviewList */ = {
@@ -658,9 +698,8 @@
 				BFEB7CEF2A83664900F86BB1 /* Protocol */,
 				BFDF622F2A7CB3DB0050DF48 /* Font */,
 				BF6439D929EFFE8F008DB52A /* User */,
-				BFEB30D229ECCB9F00590CC0 /* Entity */,
+				BF02BA0A2B1DA2DF00041B5F /* Domain */,
 				BFEB30CF29ECCAF700590CC0 /* Network */,
-				BFEB30CC29ECCAE200590CC0 /* Repository */,
 				BFEB30CB29EB89D400590CC0 /* aDreamLeaf.entitlements */,
 				BFCC910F29DE9D6300A37470 /* Util */,
 				BFB0A90629D2C664003D3E6E /* Extension */,
@@ -688,14 +727,14 @@
 		BFEB30CC29ECCAE200590CC0 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				BFEB30CD29ECCAF400590CC0 /* SignUpRepository.swift */,
-				BF6439D529ED99EE008DB52A /* LoginRepository.swift */,
-				BF83F17629F7F9A600EA07AD /* ProfileRepository.swift */,
-				BFBD103D2A163FCB002EE950 /* AccountRepository.swift */,
-				BF087EF52A060F3700ADDA13 /* KakaoRepository.swift */,
-				BF09DBB82A1931BC0083880F /* StoreRepository.swift */,
-				BFF042E42A1BA373001FCB88 /* ReviewRepository.swift */,
-				BFF042F32A232A97001FCB88 /* AlarmRepository.swift */,
+				BFEB30CD29ECCAF400590CC0 /* NetworkSignUpRepository.swift */,
+				BF6439D529ED99EE008DB52A /* NetworkLoginRepository.swift */,
+				BF83F17629F7F9A600EA07AD /* NetworkProfileRepository.swift */,
+				BFBD103D2A163FCB002EE950 /* NetworkAccountRepository.swift */,
+				BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */,
+				BF09DBB82A1931BC0083880F /* NetworkStoreRepository.swift */,
+				BFF042E42A1BA373001FCB88 /* NetworkReviewRepository.swift */,
+				BFF042F32A232A97001FCB88 /* NetworkAlarmRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -703,6 +742,7 @@
 		BFEB30CF29ECCAF700590CC0 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				BFEB30CC29ECCAE200590CC0 /* Repository */,
 				BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */,
 				BF6439D729ED99FD008DB52A /* LoginNetwork.swift */,
 				BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */,
@@ -731,7 +771,8 @@
 				BFF042F12A2329EA001FCB88 /* AlarmState.swift */,
 				BF0FCEBD2A5450CC0052B49C /* KakaoAddress.swift */,
 			);
-			path = Entity;
+			name = Entity;
+			path = ../Entity;
 			sourceTree = "<group>";
 		};
 		BFEB7CEF2A83664900F86BB1 /* Protocol */ = {
@@ -953,7 +994,8 @@
 				BFBD10582A192345002EE950 /* UIChartViewModel.swift in Sources */,
 				BF6761B229DD316600A47207 /* AccountViewModel.swift in Sources */,
 				BFB0A90F29D5219A003D3E6E /* SignUpViewModel.swift in Sources */,
-				BFF042F42A232A97001FCB88 /* AlarmRepository.swift in Sources */,
+				BF02BA1A2B1DAAFA00041B5F /* ReviewRepository.swift in Sources */,
+				BFF042F42A232A97001FCB88 /* NetworkAlarmRepository.swift in Sources */,
 				BF6E4BCE29D7DB6800D67F22 /* StoreDetailViewController.swift in Sources */,
 				BFCC910C29DE92A300A37470 /* NewPaymentViewModel.swift in Sources */,
 				BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */,
@@ -967,46 +1009,53 @@
 				BF3429CF2A82168600EF97CA /* LoadingViewModel.swift in Sources */,
 				BF6CF62F2A27770C009E9E70 /* StoreMapViewModel.swift in Sources */,
 				BF6439D829ED99FD008DB52A /* LoginNetwork.swift in Sources */,
+				BF02BA0E2B1DA36A00041B5F /* SignUpRepository.swift in Sources */,
 				BFBD10432A16530B002EE950 /* AccountRequest.swift in Sources */,
 				BF6E4BCC29D7DB2E00D67F22 /* StoreDetailViewModel.swift in Sources */,
 				BF3AACE22AAD95C000C9A938 /* String.swift in Sources */,
+				BF02BA162B1DAA1700041B5F /* KakaoRepository.swift in Sources */,
 				BF6439DB29EFFE97008DB52A /* UserManager.swift in Sources */,
-				BF6439D629ED99EE008DB52A /* LoginRepository.swift in Sources */,
+				BF02BA1C2B1DABB300041B5F /* AlarmRepository.swift in Sources */,
+				BF6439D629ED99EE008DB52A /* NetworkLoginRepository.swift in Sources */,
 				BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */,
 				BFB0A91929D55870003D3E6E /* SearchViewController.swift in Sources */,
 				BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */,
-				BF087EF62A060F3700ADDA13 /* KakaoRepository.swift in Sources */,
-				BF09DBB92A1931BC0083880F /* StoreRepository.swift in Sources */,
+				BF087EF62A060F3700ADDA13 /* NetworkKakaoRepository.swift in Sources */,
+				BF09DBB92A1931BC0083880F /* NetworkStoreRepository.swift in Sources */,
+				BF02BA102B1DA44D00041B5F /* LoginRepository.swift in Sources */,
 				BFF042E32A1BA183001FCB88 /* CreateReviewRequest.swift in Sources */,
 				BF219DCB2A02108B005DBAC6 /* LocalRestaurantViewController.swift in Sources */,
 				BF15AB2629D92F4600014E05 /* ReivewListViewModel.swift in Sources */,
 				BFBD102F2A128537002EE950 /* Login.swift in Sources */,
 				BF15AB3129D93D1600014E05 /* ReviewCellVIewModel.swift in Sources */,
 				BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */,
+				BF02BA122B1DA8EC00041B5F /* ProfileRepository.swift in Sources */,
 				BFBD10322A131D5B002EE950 /* PwdResetViewModel.swift in Sources */,
 				BFF042F22A2329EA001FCB88 /* AlarmState.swift in Sources */,
 				BF15AB3729DA62FD00014E05 /* ReviewViewModel.swift in Sources */,
 				BF0FCEAA2A4EDDFD0052B49C /* Image.swift in Sources */,
 				BF6761BA29DD3F0300A47207 /* ExpenditureCellViewModel.swift in Sources */,
-				BFEB30CE29ECCAF400590CC0 /* SignUpRepository.swift in Sources */,
+				BFEB30CE29ECCAF400590CC0 /* NetworkSignUpRepository.swift in Sources */,
 				BFF042DD2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift in Sources */,
 				BFB0A90529D2B9D4003D3E6E /* LoginViewModel.swift in Sources */,
 				BF6439E529F40D13008DB52A /* StartViewController.swift in Sources */,
 				BFBD10522A18DB98002EE950 /* ExpenditureListRequest.swift in Sources */,
 				BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */,
-				BFBD103E2A163FCB002EE950 /* AccountRepository.swift in Sources */,
+				BFBD103E2A163FCB002EE950 /* NetworkAccountRepository.swift in Sources */,
 				BF6761B729DD33C600A47207 /* UIChartViewController.swift in Sources */,
 				BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */,
 				BF6CF6362A2BB11F009E9E70 /* ErrorResponse.swift in Sources */,
 				BFB0A91729D55851003D3E6E /* SearchViewModel.swift in Sources */,
 				BF219DC92A021044005DBAC6 /* LocalRestaurantViewModel.swift in Sources */,
 				BFF042EE2A2065FB001FCB88 /* ExpenditureRequest.swift in Sources */,
+				BF02BA142B1DA94600041B5F /* AccountRepository.swift in Sources */,
 				BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */,
 				BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */,
 				BFB0A90A29D2C6A7003D3E6E /* UITextField.swift in Sources */,
 				BF09DBB72A1930E40083880F /* Store.swift in Sources */,
-				BF83F17729F7F9A600EA07AD /* ProfileRepository.swift in Sources */,
-				BFF042E52A1BA373001FCB88 /* ReviewRepository.swift in Sources */,
+				BF83F17729F7F9A600EA07AD /* NetworkProfileRepository.swift in Sources */,
+				BF02BA182B1DAA7E00041B5F /* StoreRepository.swift in Sources */,
+				BFF042E52A1BA373001FCB88 /* NetworkReviewRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

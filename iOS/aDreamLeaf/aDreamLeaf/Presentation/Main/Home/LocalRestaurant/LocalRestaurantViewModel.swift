@@ -11,7 +11,7 @@ import RxCocoa
 
 struct LocalRestaurantViewModel {
     private let disposeBag = DisposeBag()
-    private let kakaoRepo: KakaoRepositroy
+    private let kakaoRepo: NetworkKakaoRepository
     private let storeRepo: StoreRepository
     
     struct Input {
@@ -29,7 +29,7 @@ struct LocalRestaurantViewModel {
         let mode: Driver<Int>
     }
     
-    init(_ kakaoRepo: KakaoRepositroy = KakaoRepositroy(), _ storeRepo: StoreRepository = StoreRepository()) {
+    init(_ kakaoRepo: NetworkKakaoRepository = NetworkKakaoRepository(), _ storeRepo: StoreRepository = NetworkStoreRepository()) {
         self.kakaoRepo = kakaoRepo
         self.storeRepo = storeRepo
     }

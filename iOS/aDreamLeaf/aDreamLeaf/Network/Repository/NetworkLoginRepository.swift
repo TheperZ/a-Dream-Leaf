@@ -1,5 +1,5 @@
 //
-//  LoginRepository.swift
+//  NetworkLoginRepository.swift
 //  aDreamLeaf
 //
 //  Created by 엄태양 on 2023/04/18.
@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import FirebaseAuth
 
-struct LoginRepository {
+struct NetworkLoginRepository:LoginRepository {
     private let network = LoginNetwork(type: .Login)
     
     func login(email: String, pwd: String) -> Observable<RequestResult<User>> {

@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-struct StoreRepository {
+struct NetworkStoreRepository: StoreRepository {
     private let network = StoreNetwork()
     
     func searchStores(with keyword: String) -> Observable<[SimpleStore]> {

@@ -24,7 +24,7 @@ struct ExpenditureDetailViewModel {
         let result: Driver<RequestResult<Void>>
     }
     
-    init(data : Expenditure, _ repo: AccountRepository = AccountRepository()) {
+    init(data : Expenditure, _ repo: AccountRepository = NetworkAccountRepository()) {
         self.repository = repo
         self.expenditure = data
     }

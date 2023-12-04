@@ -23,7 +23,7 @@ struct PwdResetViewModel {
         let result: Driver<RequestResult<Void>>
     }
     
-    init(_ repo: LoginRepository = LoginRepository()) {
+    init(_ repo: LoginRepository = NetworkLoginRepository()) {
         self.repository = repo
     }
     

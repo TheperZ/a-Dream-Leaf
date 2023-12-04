@@ -27,7 +27,7 @@ struct AccountSettingViewModel {
         let budgetResult: Driver<RequestResult<Void>>
     }
     
-    init(_ accountRepo: AccountRepository = AccountRepository(), _ alarmRepo: AlarmRepository = AlarmRepository()) {
+    init(_ accountRepo: AccountRepository = NetworkAccountRepository(), _ alarmRepo: AlarmRepository = NetworkAlarmRepository()) {
         self.accountRepo = accountRepo
         self.alarmRepo = alarmRepo
     }

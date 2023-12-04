@@ -25,7 +25,7 @@ struct SignUpViewModel {
         let result: Driver<RequestResult<Void>>
     }
     
-    init(_ repo: SignUpRepository = SignUpRepository()) {
+    init(_ repo: SignUpRepository = NetworkSignUpRepository()) {
         self.repository = repo
     }
     

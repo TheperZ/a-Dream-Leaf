@@ -24,14 +24,14 @@ struct HomeViewModel {
         let login: Driver<Bool>
     }
     
-    init(_ storeRepo: StoreRepository = StoreRepository()) {
+    init(_ storeRepo: StoreRepository = NetworkStoreRepository()) {
         self.repository = storeRepo
     }
     
     func transform(input: Input) -> Output {
         let nearStore = input.trigger
             .flatMapLatest {
-                repository.searchNearStore(lat: LocationManager.getLatitude() ?? 0.0, long: LocationManager.getLatitude() ?? 0.0)
+                repository.searchNearStore(lat: LocationManager.getLatitude(), long: LocationManager.getLatitude())
                     .asDriver(onErrorJustReturn: [])
             }
         

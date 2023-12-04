@@ -21,7 +21,7 @@ struct StartViewModel {
         let result: Driver<Void>
     }
     
-    init(_ repo: LoginRepository = LoginRepository()) {
+    init(_ repo: LoginRepository = NetworkLoginRepository()) {
         self.repository = repo
     }
     

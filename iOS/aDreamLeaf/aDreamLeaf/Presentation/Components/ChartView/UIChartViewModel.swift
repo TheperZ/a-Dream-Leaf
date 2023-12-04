@@ -23,7 +23,7 @@ struct UIChartViewModel {
         let login: Driver<Bool>
     }
     
-    init(_ repo: AccountRepository = AccountRepository()) {
+    init(_ repo: AccountRepository = NetworkAccountRepository()) {
         self.repository = repo
     }
     

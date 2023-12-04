@@ -25,7 +25,7 @@ struct ReviewListViewModel {
         let reviews: Driver<[Review]>
     }
     
-    init(storeData: Store, _ repo: ReviewRepository = ReviewRepository()) {
+    init(storeData: Store, _ repo: ReviewRepository = NetworkReviewRepository()) {
         self.repository = repo
         self.store = storeData
     }

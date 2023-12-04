@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-struct ProfileRepository {
+struct NetworkProfileRepository: ProfileRepository {
     private let network = ProfileNetwork()
     
     func deleteAccount() -> Observable<RequestResult<Void>> {
