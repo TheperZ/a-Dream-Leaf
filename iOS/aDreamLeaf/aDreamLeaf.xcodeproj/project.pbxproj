@@ -16,6 +16,10 @@
 		BF02BA182B1DAA7E00041B5F /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA172B1DAA7E00041B5F /* StoreRepository.swift */; };
 		BF02BA1A2B1DAAFA00041B5F /* ReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA192B1DAAFA00041B5F /* ReviewRepository.swift */; };
 		BF02BA1C2B1DABB300041B5F /* AlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA1B2B1DABB300041B5F /* AlarmRepository.swift */; };
+		BF02BA312B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */; };
+		BF02BA322B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */; };
+		BF02BA332B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */; };
+		BF02BA342B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */; };
 		BF087EF62A060F3700ADDA13 /* NetworkKakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */; };
 		BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB42A19309E0083880F /* StoreNetwork.swift */; };
 		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
@@ -55,8 +59,6 @@
 		BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */; };
 		BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */; };
 		BF83F17729F7F9A600EA07AD /* NetworkProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17629F7F9A600EA07AD /* NetworkProfileRepository.swift */; };
-		BF9325622ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9325612ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift */; };
-		BF9325692ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9325682ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift */; };
 		BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */; };
 		BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */; };
 		BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */; };
@@ -139,6 +141,8 @@
 		BF02BA172B1DAA7E00041B5F /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
 		BF02BA192B1DAAFA00041B5F /* ReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRepository.swift; sourceTree = "<group>"; };
 		BF02BA1B2B1DABB300041B5F /* AlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmRepository.swift; sourceTree = "<group>"; };
+		BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockStoreRepository.swift; sourceTree = "<group>"; };
+		BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewModelTest.swift; sourceTree = "<group>"; };
 		BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkKakaoRepository.swift; sourceTree = "<group>"; };
 		BF09DBB42A19309E0083880F /* StoreNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreNetwork.swift; sourceTree = "<group>"; };
 		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -207,8 +211,6 @@
 		BF9325532ABB1923004082A8 /* RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9325552ABB1923004082A8 /* Algorithms.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Algorithms.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF93255F2ABB1AF4004082A8 /* aDreamLeafNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aDreamLeafNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF9325612ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aDreamLeafLoginNetworkTests.swift; sourceTree = "<group>"; };
-		BF9325682ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aDreamLeafKakaoNetworkTests.swift; sourceTree = "<group>"; };
 		BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -360,6 +362,31 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		BF02BA2D2B1DC49500041B5F /* aDreamLeafTest */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA352B1DD72100041B5F /* MockRepository */,
+				BF02BA2E2B1DC4CE00041B5F /* SearchViewModel */,
+			);
+			path = aDreamLeafTest;
+			sourceTree = "<group>";
+		};
+		BF02BA2E2B1DC4CE00041B5F /* SearchViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */,
+			);
+			path = SearchViewModel;
+			sourceTree = "<group>";
+		};
+		BF02BA352B1DD72100041B5F /* MockRepository */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */,
+			);
+			path = MockRepository;
+			sourceTree = "<group>";
+		};
 		BF15AB2429D92F2500014E05 /* ReviewList */ = {
 			isa = PBXGroup;
 			children = (
@@ -479,15 +506,6 @@
 				BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */,
 			);
 			path = SimpleReviewCell;
-			sourceTree = "<group>";
-		};
-		BF9325602ABB1AF4004082A8 /* aDreamLeafNetworkTests */ = {
-			isa = PBXGroup;
-			children = (
-				BF9325612ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift */,
-				BF9325682ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift */,
-			);
-			path = aDreamLeafNetworkTests;
 			sourceTree = "<group>";
 		};
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
@@ -676,7 +694,7 @@
 			isa = PBXGroup;
 			children = (
 				BFCF86AF29CD56400075D5E6 /* aDreamLeaf */,
-				BF9325602ABB1AF4004082A8 /* aDreamLeafNetworkTests */,
+				BF02BA2D2B1DC49500041B5F /* aDreamLeafTest */,
 				BFCF86AE29CD56400075D5E6 /* Products */,
 				9D2C06413A16DF0CA62D7221 /* Pods */,
 				84C0439267675780D1E6D44D /* Frameworks */,
@@ -852,6 +870,7 @@
 				TargetAttributes = {
 					BF93255E2ABB1AF4004082A8 = {
 						CreatedOnToolsVersion = 14.3;
+						LastSwiftMigration = 1500;
 						TestTargetID = BFCF86AC29CD56400075D5E6;
 					};
 					BFCF86AC29CD56400075D5E6 = {
@@ -948,8 +967,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF9325692ABB3627004082A8 /* aDreamLeafKakaoNetworkTests.swift in Sources */,
-				BF9325622ABB1AF4004082A8 /* aDreamLeafLoginNetworkTests.swift in Sources */,
+				BF02BA342B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */,
+				BF02BA322B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,6 +987,7 @@
 				BF6761BC29DD3F5600A47207 /* ExpenditureCell.swift in Sources */,
 				BFB0A8FC29D288FA003D3E6E /* RestaurantCell.swift in Sources */,
 				BFBD10542A18DE94002EE950 /* Expenditure.swift in Sources */,
+				BF02BA312B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */,
 				BF15AB2D29D93CEE00014E05 /* ReviewCell.swift in Sources */,
 				BFCC911429DEDE1C00A37470 /* AccountSettingViewModel.swift in Sources */,
 				BFBD10452A168C22002EE950 /* Date.swift in Sources */,
@@ -986,6 +1006,7 @@
 				BF3395862A8F56FD0053A935 /* Network.swift in Sources */,
 				BFB0A90029D28DA7003D3E6E /* Constant.swift in Sources */,
 				BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */,
+				BF02BA332B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */,
 				BFBD10402A163FD9002EE950 /* AccountNetwork.swift in Sources */,
 				BFB0A91F29D6B513003D3E6E /* SearchCellViewModel.swift in Sources */,
 				BF219DD02A060C70005DBAC6 /* KakaoNetwork.swift in Sources */,
@@ -1074,6 +1095,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KB3R84Q4BQ;
@@ -1086,6 +1108,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aDreamLeaf.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/aDreamLeaf";
@@ -1096,6 +1119,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KB3R84Q4BQ;
