@@ -8,6 +8,15 @@
 import Foundation
 
 class Expenditure: Decodable {
+    init(userId: Int, accountId: Int, restaurant: String, price: Int, date: String, body: String) {
+        self.userId = userId
+        self.accountId = accountId
+        self.restaurant = restaurant
+        self.price = price
+        self.date = date
+        self.body = body
+    }
+    
     let userId: Int
     let accountId: Int
     let restaurant: String

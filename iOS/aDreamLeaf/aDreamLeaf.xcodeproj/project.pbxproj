@@ -20,6 +20,12 @@
 		BF02BA322B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */; };
 		BF02BA332B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */; };
 		BF02BA342B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */; };
+		BF02BA392B1DDA7E00041B5F /* AccountViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA382B1DDA7E00041B5F /* AccountViewModelTest.swift */; };
+		BF02BA3B2B1DDABF00041B5F /* MockAccountRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA3A2B1DDABF00041B5F /* MockAccountRepository.swift */; };
+		BF02BA3E2B1EC04300041B5F /* NewPaymentViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA3D2B1EC04300041B5F /* NewPaymentViewModelTest.swift */; };
+		BF02BA4A2B20541400041B5F /* AccountSettingViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA492B20541400041B5F /* AccountSettingViewModelTest.swift */; };
+		BF02BA4C2B20548500041B5F /* MockAlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */; };
+		BF02BA4E2B20675600041B5F /* ExpenditureDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA4D2B20675600041B5F /* ExpenditureDetailViewModelTest.swift */; };
 		BF087EF62A060F3700ADDA13 /* NetworkKakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */; };
 		BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB42A19309E0083880F /* StoreNetwork.swift */; };
 		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
@@ -143,6 +149,12 @@
 		BF02BA1B2B1DABB300041B5F /* AlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmRepository.swift; sourceTree = "<group>"; };
 		BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockStoreRepository.swift; sourceTree = "<group>"; };
 		BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewModelTest.swift; sourceTree = "<group>"; };
+		BF02BA382B1DDA7E00041B5F /* AccountViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModelTest.swift; sourceTree = "<group>"; };
+		BF02BA3A2B1DDABF00041B5F /* MockAccountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAccountRepository.swift; sourceTree = "<group>"; };
+		BF02BA3D2B1EC04300041B5F /* NewPaymentViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaymentViewModelTest.swift; sourceTree = "<group>"; };
+		BF02BA492B20541400041B5F /* AccountSettingViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingViewModelTest.swift; sourceTree = "<group>"; };
+		BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAlarmRepository.swift; sourceTree = "<group>"; };
+		BF02BA4D2B20675600041B5F /* ExpenditureDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewModelTest.swift; sourceTree = "<group>"; };
 		BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkKakaoRepository.swift; sourceTree = "<group>"; };
 		BF09DBB42A19309E0083880F /* StoreNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreNetwork.swift; sourceTree = "<group>"; };
 		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -366,25 +378,55 @@
 			isa = PBXGroup;
 			children = (
 				BF02BA352B1DD72100041B5F /* MockRepository */,
-				BF02BA2E2B1DC4CE00041B5F /* SearchViewModel */,
+				BF02BA362B1DDA6400041B5F /* Presentaion */,
 			);
 			path = aDreamLeafTest;
 			sourceTree = "<group>";
 		};
-		BF02BA2E2B1DC4CE00041B5F /* SearchViewModel */ = {
+		BF02BA2E2B1DC4CE00041B5F /* Search */ = {
 			isa = PBXGroup;
 			children = (
 				BF02BA302B1DC4FB00041B5F /* SearchViewModelTest.swift */,
 			);
-			path = SearchViewModel;
+			path = Search;
 			sourceTree = "<group>";
 		};
 		BF02BA352B1DD72100041B5F /* MockRepository */ = {
 			isa = PBXGroup;
 			children = (
 				BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */,
+				BF02BA3A2B1DDABF00041B5F /* MockAccountRepository.swift */,
+				BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */,
 			);
 			path = MockRepository;
+			sourceTree = "<group>";
+		};
+		BF02BA362B1DDA6400041B5F /* Presentaion */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA372B1DDA6D00041B5F /* Main */,
+			);
+			path = Presentaion;
+			sourceTree = "<group>";
+		};
+		BF02BA372B1DDA6D00041B5F /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA2E2B1DC4CE00041B5F /* Search */,
+				BF02BA3C2B1EC02800041B5F /* Account */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		BF02BA3C2B1EC02800041B5F /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA382B1DDA7E00041B5F /* AccountViewModelTest.swift */,
+				BF02BA3D2B1EC04300041B5F /* NewPaymentViewModelTest.swift */,
+				BF02BA492B20541400041B5F /* AccountSettingViewModelTest.swift */,
+				BF02BA4D2B20675600041B5F /* ExpenditureDetailViewModelTest.swift */,
+			);
+			name = Account;
 			sourceTree = "<group>";
 		};
 		BF15AB2429D92F2500014E05 /* ReviewList */ = {
@@ -967,7 +1009,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF02BA392B1DDA7E00041B5F /* AccountViewModelTest.swift in Sources */,
+				BF02BA3B2B1DDABF00041B5F /* MockAccountRepository.swift in Sources */,
+				BF02BA3E2B1EC04300041B5F /* NewPaymentViewModelTest.swift in Sources */,
+				BF02BA4E2B20675600041B5F /* ExpenditureDetailViewModelTest.swift in Sources */,
+				BF02BA4A2B20541400041B5F /* AccountSettingViewModelTest.swift in Sources */,
 				BF02BA342B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */,
+				BF02BA4C2B20548500041B5F /* MockAlarmRepository.swift in Sources */,
 				BF02BA322B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
