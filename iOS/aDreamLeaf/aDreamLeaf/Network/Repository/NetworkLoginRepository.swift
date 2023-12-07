@@ -66,7 +66,7 @@ struct NetworkLoginRepository:LoginRepository {
             return Observable.just(RequestResult<User>(success: false, msg: "이메일을 입력해주세요."))
         } else if pwd == "" {
             return Observable.just(RequestResult<User>(success: false, msg: "비밀번호를 입력해주세요."))
-        } else if !email.contains("@") {
+        } else if !email.contains("@") || !email.contains(".") {
             return Observable.just(RequestResult<User>(success: false, msg: "올바르지 못한 이메일 형식입니다."))
         }  else if pwd.count < 6 {
             return Observable.just(RequestResult<User>(success: false, msg: "비밀번호는 최소 6자리 이상 입력해주세요."))
@@ -78,7 +78,7 @@ struct NetworkLoginRepository:LoginRepository {
     private func validateEmail(email: String) -> Observable<RequestResult<Void>>? {
         if email == "" {
             return Observable.just(RequestResult(success: false, msg: "이메일을 입력해주세요."))
-        } else if !email.contains("@") {
+        } else if !email.contains("@") || !email.contains(".") {
             return Observable.just(RequestResult(success: false, msg: "올바르지 못한 이메일 형식입니다."))
         } else {
             return nil

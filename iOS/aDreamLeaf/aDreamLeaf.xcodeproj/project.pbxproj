@@ -26,6 +26,9 @@
 		BF02BA4A2B20541400041B5F /* AccountSettingViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA492B20541400041B5F /* AccountSettingViewModelTest.swift */; };
 		BF02BA4C2B20548500041B5F /* MockAlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */; };
 		BF02BA4E2B20675600041B5F /* ExpenditureDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA4D2B20675600041B5F /* ExpenditureDetailViewModelTest.swift */; };
+		BF02BA592B219AA600041B5F /* LoginViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA582B219AA600041B5F /* LoginViewModelTest.swift */; };
+		BF02BA5B2B219AFC00041B5F /* MockLoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA5A2B219AFC00041B5F /* MockLoginRepository.swift */; };
+		BF02BA5D2B21A2B300041B5F /* PwdResetViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02BA5C2B21A2B300041B5F /* PwdResetViewModelTest.swift */; };
 		BF087EF62A060F3700ADDA13 /* NetworkKakaoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */; };
 		BF09DBB52A19309E0083880F /* StoreNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB42A19309E0083880F /* StoreNetwork.swift */; };
 		BF09DBB72A1930E40083880F /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF09DBB62A1930E40083880F /* Store.swift */; };
@@ -155,6 +158,9 @@
 		BF02BA492B20541400041B5F /* AccountSettingViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingViewModelTest.swift; sourceTree = "<group>"; };
 		BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAlarmRepository.swift; sourceTree = "<group>"; };
 		BF02BA4D2B20675600041B5F /* ExpenditureDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewModelTest.swift; sourceTree = "<group>"; };
+		BF02BA582B219AA600041B5F /* LoginViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTest.swift; sourceTree = "<group>"; };
+		BF02BA5A2B219AFC00041B5F /* MockLoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginRepository.swift; sourceTree = "<group>"; };
+		BF02BA5C2B21A2B300041B5F /* PwdResetViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetViewModelTest.swift; sourceTree = "<group>"; };
 		BF087EF52A060F3700ADDA13 /* NetworkKakaoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkKakaoRepository.swift; sourceTree = "<group>"; };
 		BF09DBB42A19309E0083880F /* StoreNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreNetwork.swift; sourceTree = "<group>"; };
 		BF09DBB62A1930E40083880F /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -397,6 +403,7 @@
 				BF02BA2F2B1DC4FB00041B5F /* MockStoreRepository.swift */,
 				BF02BA3A2B1DDABF00041B5F /* MockAccountRepository.swift */,
 				BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */,
+				BF02BA5A2B219AFC00041B5F /* MockLoginRepository.swift */,
 			);
 			path = MockRepository;
 			sourceTree = "<group>";
@@ -404,6 +411,7 @@
 		BF02BA362B1DDA6400041B5F /* Presentaion */ = {
 			isa = PBXGroup;
 			children = (
+				BF02BA572B219A9C00041B5F /* Login */,
 				BF02BA372B1DDA6D00041B5F /* Main */,
 			);
 			path = Presentaion;
@@ -427,6 +435,15 @@
 				BF02BA4D2B20675600041B5F /* ExpenditureDetailViewModelTest.swift */,
 			);
 			name = Account;
+			sourceTree = "<group>";
+		};
+		BF02BA572B219A9C00041B5F /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				BF02BA582B219AA600041B5F /* LoginViewModelTest.swift */,
+				BF02BA5C2B21A2B300041B5F /* PwdResetViewModelTest.swift */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		BF15AB2429D92F2500014E05 /* ReviewList */ = {
@@ -1013,10 +1030,13 @@
 				BF02BA3B2B1DDABF00041B5F /* MockAccountRepository.swift in Sources */,
 				BF02BA3E2B1EC04300041B5F /* NewPaymentViewModelTest.swift in Sources */,
 				BF02BA4E2B20675600041B5F /* ExpenditureDetailViewModelTest.swift in Sources */,
+				BF02BA5B2B219AFC00041B5F /* MockLoginRepository.swift in Sources */,
 				BF02BA4A2B20541400041B5F /* AccountSettingViewModelTest.swift in Sources */,
 				BF02BA342B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */,
 				BF02BA4C2B20548500041B5F /* MockAlarmRepository.swift in Sources */,
+				BF02BA592B219AA600041B5F /* LoginViewModelTest.swift in Sources */,
 				BF02BA322B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */,
+				BF02BA5D2B21A2B300041B5F /* PwdResetViewModelTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
