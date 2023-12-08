@@ -68,6 +68,10 @@
 		BF6E4BD329D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */; };
 		BF83F17529F7F98600EA07AD /* ProfileNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17429F7F98600EA07AD /* ProfileNetwork.swift */; };
 		BF83F17729F7F9A600EA07AD /* NetworkProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83F17629F7F9A600EA07AD /* NetworkProfileRepository.swift */; };
+		BF9A11F42B22E6EA00CCE56C /* MockProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A11F32B22E6EA00CCE56C /* MockProfileRepository.swift */; };
+		BF9A11F72B22E74200CCE56C /* MyPageViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A11F62B22E74200CCE56C /* MyPageViewModelTest.swift */; };
+		BF9A11F92B22EBC800CCE56C /* MockSignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A11F82B22EBC800CCE56C /* MockSignUpRepository.swift */; };
+		BF9A11FC2B22EC2F00CCE56C /* SignUpViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A11FB2B22EC2F00CCE56C /* SignUpViewModelTest.swift */; };
 		BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */; };
 		BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */; };
 		BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */; };
@@ -229,6 +233,10 @@
 		BF9325532ABB1923004082A8 /* RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF9325552ABB1923004082A8 /* Algorithms.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Algorithms.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF93255F2ABB1AF4004082A8 /* aDreamLeafNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = aDreamLeafNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9A11F32B22E6EA00CCE56C /* MockProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProfileRepository.swift; sourceTree = "<group>"; };
+		BF9A11F62B22E74200CCE56C /* MyPageViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModelTest.swift; sourceTree = "<group>"; };
+		BF9A11F82B22EBC800CCE56C /* MockSignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpRepository.swift; sourceTree = "<group>"; };
+		BF9A11FB2B22EC2F00CCE56C /* SignUpViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModelTest.swift; sourceTree = "<group>"; };
 		BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -404,6 +412,8 @@
 				BF02BA3A2B1DDABF00041B5F /* MockAccountRepository.swift */,
 				BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */,
 				BF02BA5A2B219AFC00041B5F /* MockLoginRepository.swift */,
+				BF9A11F32B22E6EA00CCE56C /* MockProfileRepository.swift */,
+				BF9A11F82B22EBC800CCE56C /* MockSignUpRepository.swift */,
 			);
 			path = MockRepository;
 			sourceTree = "<group>";
@@ -411,6 +421,8 @@
 		BF02BA362B1DDA6400041B5F /* Presentaion */ = {
 			isa = PBXGroup;
 			children = (
+				BF9A11FA2B22EC2300CCE56C /* SignUp */,
+				BF9A11F52B22E73200CCE56C /* MyPage */,
 				BF02BA572B219A9C00041B5F /* Login */,
 				BF02BA372B1DDA6D00041B5F /* Main */,
 			);
@@ -565,6 +577,22 @@
 				BF6E4BD229D7E9CF00D67F22 /* SimpleReviewCellViewModel.swift */,
 			);
 			path = SimpleReviewCell;
+			sourceTree = "<group>";
+		};
+		BF9A11F52B22E73200CCE56C /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				BF9A11F62B22E74200CCE56C /* MyPageViewModelTest.swift */,
+			);
+			name = MyPage;
+			sourceTree = "<group>";
+		};
+		BF9A11FA2B22EC2300CCE56C /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				BF9A11FB2B22EC2F00CCE56C /* SignUpViewModelTest.swift */,
+			);
+			name = SignUp;
 			sourceTree = "<group>";
 		};
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
@@ -1027,16 +1055,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF02BA392B1DDA7E00041B5F /* AccountViewModelTest.swift in Sources */,
+				BF9A11F42B22E6EA00CCE56C /* MockProfileRepository.swift in Sources */,
 				BF02BA3B2B1DDABF00041B5F /* MockAccountRepository.swift in Sources */,
 				BF02BA3E2B1EC04300041B5F /* NewPaymentViewModelTest.swift in Sources */,
 				BF02BA4E2B20675600041B5F /* ExpenditureDetailViewModelTest.swift in Sources */,
 				BF02BA5B2B219AFC00041B5F /* MockLoginRepository.swift in Sources */,
+				BF9A11FC2B22EC2F00CCE56C /* SignUpViewModelTest.swift in Sources */,
 				BF02BA4A2B20541400041B5F /* AccountSettingViewModelTest.swift in Sources */,
+				BF9A11F72B22E74200CCE56C /* MyPageViewModelTest.swift in Sources */,
 				BF02BA342B1DC4FB00041B5F /* SearchViewModelTest.swift in Sources */,
 				BF02BA4C2B20548500041B5F /* MockAlarmRepository.swift in Sources */,
 				BF02BA592B219AA600041B5F /* LoginViewModelTest.swift in Sources */,
 				BF02BA322B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */,
 				BF02BA5D2B21A2B300041B5F /* PwdResetViewModelTest.swift in Sources */,
+				BF9A11F92B22EBC800CCE56C /* MockSignUpRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

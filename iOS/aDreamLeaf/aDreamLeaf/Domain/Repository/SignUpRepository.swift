@@ -18,7 +18,7 @@ extension SignUpRepository {
     func validateInput(email: String, pwd: String, pwdCheck: String) -> Observable<RequestResult<Void>>? {
         if email == "" {
             return Observable.just(RequestResult(success: false, msg: "이메일을 입력해주세요."))
-        } else if !email.contains("@") {
+        } else if !email.contains("@") || !email.contains(".") {
             return Observable.just(RequestResult(success: false, msg: "올바르지 못한 이메일 형식입니다."))
         } else if pwd != pwdCheck {
             return Observable.just(RequestResult(success: false, msg: "비밀번호가 일치하지 않습니다."))
