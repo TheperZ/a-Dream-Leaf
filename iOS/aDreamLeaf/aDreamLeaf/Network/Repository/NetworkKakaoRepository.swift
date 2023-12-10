@@ -1,5 +1,5 @@
 //
-//  KakaoRepository.swift
+//  NetworkKakaoRepository.swift
 //  aDreamLeaf
 //
 //  Created by 엄태양 on 2023/05/06.
@@ -8,12 +8,12 @@
 import Foundation
 import RxSwift
 
-struct KakaoRepositroy {
+struct NetworkKakaoRepository {
     private let network = KakaoNetwork()
     
     func getMyAddress() -> Observable<String> {
         if LocationManager.permitionCheck() {
-            return network.getAddress(lat: LocationManager.getLatitude() ?? 0.0, lon: LocationManager.getLongitude() ?? 0.0)
+            return network.getAddress(lat: LocationManager.getLatitude(), lon: LocationManager.getLongitude())
                 .map { result in
                     switch result.success {
                         case true:

@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import FirebaseAuth
 
-struct AccountRepository {
+struct NetworkAccountRepository: AccountRepository {
     private let network = AccountNetwork()
     
     func setBudget(to budget: Int) -> Observable<RequestResult<Void>> {

@@ -132,7 +132,7 @@ class SignUpViewController: UIViewController {
     private func bindViewModel() {
         
         let input = SignUpViewModel.Input(email: emailTextField.rx.text.orEmpty.asDriver(),
-                                          passsword: pwdTextField.rx.text.orEmpty.asDriver(),
+                                          password: pwdTextField.rx.text.orEmpty.asDriver(),
                                           passwordCheck: pwdCheckTextField.rx.text.orEmpty.asDriver(),
                                           trigger: signUpButton.rx.tap.asDriver())
         

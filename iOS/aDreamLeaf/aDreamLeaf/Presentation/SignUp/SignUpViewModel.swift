@@ -15,7 +15,7 @@ struct SignUpViewModel {
     
     struct Input {
         let email: Driver<String>
-        let passsword: Driver<String>
+        let password: Driver<String>
         let passwordCheck: Driver<String>
         let trigger: Driver<Void>
     }
@@ -25,7 +25,7 @@ struct SignUpViewModel {
         let result: Driver<RequestResult<Void>>
     }
     
-    init(_ repo: SignUpRepository = SignUpRepository()) {
+    init(_ repo: SignUpRepository = NetworkSignUpRepository()) {
         self.repository = repo
     }
     
@@ -33,7 +33,7 @@ struct SignUpViewModel {
         let loading = PublishSubject<Bool>()
         
         let result = input.trigger
-            .withLatestFrom(Driver.combineLatest(input.email, input.passsword, input.passwordCheck))
+            .withLatestFrom(Driver.combineLatest(input.email, input.password, input.passwordCheck))
             .do(onNext: { _ in loading.onNext(true)})
             .flatMapLatest { email, pwd, pwdCheck in
                 repository.signUp(email: email, pwd: pwd, pwdCheck: pwdCheck)

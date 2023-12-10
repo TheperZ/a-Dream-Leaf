@@ -30,7 +30,7 @@ struct ReviewViewModel {
     }
     
     
-    init(storeId: Int, editData: Review? = nil, _ repo: ReviewRepository = ReviewRepository()) {
+    init(storeId: Int, editData: Review? = nil, _ repo: ReviewRepository = NetworkReviewRepository()) {
         self.repository = repo
         self.storeId = storeId
         self.editData = editData

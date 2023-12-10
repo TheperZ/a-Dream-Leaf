@@ -30,7 +30,7 @@ struct MyPageViewModel: LoadingViewModel {
     var loading = PublishSubject<Bool>()
 
     
-    init(_ profileRepo: ProfileRepository = ProfileRepository(), _ loginRepo: LoginRepository = LoginRepository()) {
+    init(_ profileRepo: ProfileRepository = NetworkProfileRepository(), _ loginRepo: LoginRepository = NetworkLoginRepository()) {
         self.profileRepo = profileRepo
         self.loginRepo = loginRepo
     }

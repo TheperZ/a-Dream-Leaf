@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-struct ReviewRepository {
+struct NetworkReviewRepository: ReviewRepository {
     private let network = ReviewNetwork()
     
     func create(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {

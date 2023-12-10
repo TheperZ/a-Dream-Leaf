@@ -29,7 +29,7 @@ struct NewPaymentViewModel {
     }
     
     
-    init(_ repo: AccountRepository = AccountRepository(), data: Expenditure? = nil) {
+    init(_ repo: AccountRepository = NetworkAccountRepository(), data: Expenditure? = nil) {
         self.repository = repo
         self.editData = data
     }
@@ -37,8 +37,28 @@ struct NewPaymentViewModel {
     func transform(input: Input) -> Output {
         let loading = PublishSubject<Bool>()
         
+        let date = BehaviorSubject<Date>(value: .now)
+        input.date.drive(date).disposed(by: disposeBag)
+        
+        let store = BehaviorSubject<String>(value: "")
+        input.store.drive(store).disposed(by: disposeBag)
+        
+        let content = BehaviorSubject<String>(value: "")
+        input.content.drive(content).disposed(by: disposeBag)
+        
+        let cost =  BehaviorSubject<Int>(value: -1)
+        input.cost.drive(cost).disposed(by: disposeBag)
+        
+        if let editData = editData {
+            date.onNext(Date.stringToDate(str: editData.date)!)
+            store.onNext(editData.restaurant)
+            content.onNext(editData.body)
+            cost.onNext(editData.price)
+        }
+        
         let result = input.trigger
-            .withLatestFrom(Driver.combineLatest(input.date, input.store, input.content, input.cost))
+            .asObservable()
+            .withLatestFrom(Observable.combineLatest(date, store, content, cost))
             .do(onNext: { _ in loading.onNext(true) })
             .flatMapLatest { (date, store, content, cost) in
                 
@@ -55,6 +75,7 @@ struct NewPaymentViewModel {
                 }
                 
             }
+            .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
         
         
         return Output(loading: loading.asDriver(onErrorJustReturn: false), result: result, editData: editData)

@@ -28,7 +28,7 @@ struct SearchViewModel {
         let mode: Driver<Int>
     }
     
-    init(_ repo: StoreRepository = StoreRepository()) {
+    init(_ repo: StoreRepository = NetworkStoreRepository()) {
         self.repository = repo
     }
     

@@ -119,10 +119,10 @@ class NewPaymentViewController: UIViewController {
         let output = viewModel.transform(input: input)
         
         if let editData = output.editData {
-            datePicker.rx.date.onNext(Date.stringToDate(str: editData.date) ?? .now)
-            storeNameTextField.rx.text.onNext(editData.restaurant)
-            contentTextField.rx.text.onNext(editData.body)
-            costTextField.rx.text.onNext("\(editData.price)")
+            datePicker.date = Date.stringToDate(str: editData.date) ?? .now
+            storeNameTextField.text = editData.restaurant
+            contentTextField.text = editData.body
+            costTextField.text = "\(editData.price)"
         }
         
         output.loading
