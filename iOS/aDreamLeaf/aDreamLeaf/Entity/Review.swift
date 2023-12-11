@@ -8,6 +8,18 @@
 import Foundation
 
 class Review: Decodable {
+    init(userId: Int, userName: String, reviewId: Int, storeId: Int, storeName: String, date: String, body: String, rating: Int, reviewImage: String? = nil) {
+        self.userId = userId
+        self.userName = userName
+        self.reviewId = reviewId
+        self.storeId = storeId
+        self.storeName = storeName
+        self.date = date
+        self.body = body
+        self.rating = rating
+        self.reviewImage = reviewImage
+    }
+    
     
     let userId: Int
     let userName: String

@@ -72,6 +72,8 @@
 		BF9A11F72B22E74200CCE56C /* MyPageViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A11F62B22E74200CCE56C /* MyPageViewModelTest.swift */; };
 		BF9A11F92B22EBC800CCE56C /* MockSignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A11F82B22EBC800CCE56C /* MockSignUpRepository.swift */; };
 		BF9A11FC2B22EC2F00CCE56C /* SignUpViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A11FB2B22EC2F00CCE56C /* SignUpViewModelTest.swift */; };
+		BF9A12052B26F27900CCE56C /* ReviewViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A12042B26F27900CCE56C /* ReviewViewModelTest.swift */; };
+		BF9A12072B26F33400CCE56C /* MockReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A12062B26F33400CCE56C /* MockReviewRepository.swift */; };
 		BFB0A8F029D13593003D3E6E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */; };
 		BFB0A8F229D1359D003D3E6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */; };
 		BFB0A8F629D13AC2003D3E6E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */; };
@@ -237,6 +239,8 @@
 		BF9A11F62B22E74200CCE56C /* MyPageViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModelTest.swift; sourceTree = "<group>"; };
 		BF9A11F82B22EBC800CCE56C /* MockSignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSignUpRepository.swift; sourceTree = "<group>"; };
 		BF9A11FB2B22EC2F00CCE56C /* SignUpViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModelTest.swift; sourceTree = "<group>"; };
+		BF9A12042B26F27900CCE56C /* ReviewViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewModelTest.swift; sourceTree = "<group>"; };
+		BF9A12062B26F33400CCE56C /* MockReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReviewRepository.swift; sourceTree = "<group>"; };
 		BFB0A8EF29D13593003D3E6E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		BFB0A8F129D1359D003D3E6E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		BFB0A8F529D13AC2003D3E6E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -412,6 +416,7 @@
 				BF02BA3A2B1DDABF00041B5F /* MockAccountRepository.swift */,
 				BF02BA4B2B20548500041B5F /* MockAlarmRepository.swift */,
 				BF02BA5A2B219AFC00041B5F /* MockLoginRepository.swift */,
+				BF9A12062B26F33400CCE56C /* MockReviewRepository.swift */,
 				BF9A11F32B22E6EA00CCE56C /* MockProfileRepository.swift */,
 				BF9A11F82B22EBC800CCE56C /* MockSignUpRepository.swift */,
 			);
@@ -421,6 +426,7 @@
 		BF02BA362B1DDA6400041B5F /* Presentaion */ = {
 			isa = PBXGroup;
 			children = (
+				BF9A12032B26F26D00CCE56C /* Review */,
 				BF9A11FA2B22EC2300CCE56C /* SignUp */,
 				BF9A11F52B22E73200CCE56C /* MyPage */,
 				BF02BA572B219A9C00041B5F /* Login */,
@@ -593,6 +599,14 @@
 				BF9A11FB2B22EC2F00CCE56C /* SignUpViewModelTest.swift */,
 			);
 			name = SignUp;
+			sourceTree = "<group>";
+		};
+		BF9A12032B26F26D00CCE56C /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				BF9A12042B26F27900CCE56C /* ReviewViewModelTest.swift */,
+			);
+			name = Review;
 			sourceTree = "<group>";
 		};
 		BFB0A8ED29D13577003D3E6E /* Presentation */ = {
@@ -1056,6 +1070,7 @@
 			files = (
 				BF02BA392B1DDA7E00041B5F /* AccountViewModelTest.swift in Sources */,
 				BF9A11F42B22E6EA00CCE56C /* MockProfileRepository.swift in Sources */,
+				BF9A12052B26F27900CCE56C /* ReviewViewModelTest.swift in Sources */,
 				BF02BA3B2B1DDABF00041B5F /* MockAccountRepository.swift in Sources */,
 				BF02BA3E2B1EC04300041B5F /* NewPaymentViewModelTest.swift in Sources */,
 				BF02BA4E2B20675600041B5F /* ExpenditureDetailViewModelTest.swift in Sources */,
@@ -1069,6 +1084,7 @@
 				BF02BA322B1DC4FB00041B5F /* MockStoreRepository.swift in Sources */,
 				BF02BA5D2B21A2B300041B5F /* PwdResetViewModelTest.swift in Sources */,
 				BF9A11F92B22EBC800CCE56C /* MockSignUpRepository.swift in Sources */,
+				BF9A12072B26F33400CCE56C /* MockReviewRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

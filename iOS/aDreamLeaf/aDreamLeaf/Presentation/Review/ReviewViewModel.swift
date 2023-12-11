@@ -39,8 +39,26 @@ struct ReviewViewModel {
     func transform(input: Input) -> Output {
         let loading = PublishSubject<Bool>()
         
+        let rating = BehaviorSubject<Int>(value: 5)
+        input.rating.drive(rating).disposed(by: disposeBag)
+        
+        let body = BehaviorSubject<String>(value: "")
+        input.body.drive(body).disposed(by: disposeBag)
+        
+        let image = BehaviorSubject<UIImage?>(value: nil)
+        input.image.drive(image).disposed(by: disposeBag)
+        
+        if let editData = editData {
+            rating.onNext(editData.rating)
+            body.onNext(editData.body)
+            if let reviewImage = editData.reviewImage { // 리뷰에 사진이 포함된 경우
+                image.onNext(Image.base64ToImg(with: reviewImage))
+            }
+        }
+        
         let result = input.trigger
-            .withLatestFrom(Driver.combineLatest(input.rating, input.body, input.image))
+            .asObservable()
+            .withLatestFrom(Observable.combineLatest(rating, body, image))
             .do(onNext: { _ in loading.onNext(true)} )
             .flatMapLatest { rating, body, image in
                 if editData == nil {
@@ -53,6 +71,8 @@ struct ReviewViewModel {
                         .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
                 }
             }
+            .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+        
         
         return Output(isEdit: editData != nil, editData: editData, loading: loading.asDriver(onErrorJustReturn: false), result: result)
     }
