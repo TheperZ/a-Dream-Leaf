@@ -121,6 +121,7 @@
 		BFEB30D129ECCB0100590CC0 /* SignUpNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */; };
 		BFEB30D429ECCBA600590CC0 /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB30D329ECCBA600590CC0 /* RequestResult.swift */; };
 		BFEB7CEE2A834E7F00F86BB1 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEB7CED2A834E7F00F86BB1 /* LoadingViewController.swift */; };
+		BFED372A2B2864EA00C30408 /* StoreDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFED37282B2864D300C30408 /* StoreDetailViewModelTest.swift */; };
 		BFF042DD2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */; };
 		BFF042DF2A1B950D001FCB88 /* ExpenditureDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */; };
 		BFF042E12A1BA13D001FCB88 /* ReviewNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */; };
@@ -291,6 +292,7 @@
 		BFEB30D029ECCB0100590CC0 /* SignUpNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNetwork.swift; sourceTree = "<group>"; };
 		BFEB30D329ECCBA600590CC0 /* RequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestResult.swift; sourceTree = "<group>"; };
 		BFEB7CED2A834E7F00F86BB1 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		BFED37282B2864D300C30408 /* StoreDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailViewModelTest.swift; sourceTree = "<group>"; };
 		BFF042DC2A1B9447001FCB88 /* ExpenditureDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewModel.swift; sourceTree = "<group>"; };
 		BFF042DE2A1B950D001FCB88 /* ExpenditureDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenditureDetailViewController.swift; sourceTree = "<group>"; };
 		BFF042E02A1BA13D001FCB88 /* ReviewNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewNetwork.swift; sourceTree = "<group>"; };
@@ -426,6 +428,7 @@
 		BF02BA362B1DDA6400041B5F /* Presentaion */ = {
 			isa = PBXGroup;
 			children = (
+				BFED37272B2864BC00C30408 /* StoreDetail */,
 				BF9A12032B26F26D00CCE56C /* Review */,
 				BF9A11FA2B22EC2300CCE56C /* SignUp */,
 				BF9A11F52B22E73200CCE56C /* MyPage */,
@@ -902,6 +905,14 @@
 			path = Protocol;
 			sourceTree = "<group>";
 		};
+		BFED37272B2864BC00C30408 /* StoreDetail */ = {
+			isa = PBXGroup;
+			children = (
+				BFED37282B2864D300C30408 /* StoreDetailViewModelTest.swift */,
+			);
+			name = StoreDetail;
+			sourceTree = "<group>";
+		};
 		BFF042DB2A1B943A001FCB88 /* ExpenditureDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1075,6 +1086,7 @@
 				BF02BA3E2B1EC04300041B5F /* NewPaymentViewModelTest.swift in Sources */,
 				BF02BA4E2B20675600041B5F /* ExpenditureDetailViewModelTest.swift in Sources */,
 				BF02BA5B2B219AFC00041B5F /* MockLoginRepository.swift in Sources */,
+				BFED372A2B2864EA00C30408 /* StoreDetailViewModelTest.swift in Sources */,
 				BF9A11FC2B22EC2F00CCE56C /* SignUpViewModelTest.swift in Sources */,
 				BF02BA4A2B20541400041B5F /* AccountSettingViewModelTest.swift in Sources */,
 				BF9A11F72B22E74200CCE56C /* MyPageViewModelTest.swift in Sources */,
