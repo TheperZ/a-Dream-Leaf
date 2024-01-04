@@ -11,10 +11,36 @@ import RxCocoa
 import SnapKit
 
 class HomeViewController: UIChartViewController {
-    let disposeBag = DisposeBag()
-    var viewModel: HomeViewModel!
+    private let disposeBag = DisposeBag()
+    private var viewModel: HomeViewModel!
     
-    let titleLabel: UILabel = {
+    private let scrollView = UIScrollView()
+    
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 50
+        return stackView
+    }()
+    
+    private let titleStackView: UIStackView = {
+        let stackView = UIStackView()
+        return stackView
+    }()
+    
+    private let nearRestStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 15
+        return stackView
+    }()
+    
+    private let nearRestTitleStackView: UIStackView = {
+        let stackView = UIStackView()
+        return stackView
+    }()
+    
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "꿈나무 한입"
         label.font = UIFont(name: "LINESeedSansKR-Bold", size: 28)
@@ -22,12 +48,13 @@ class HomeViewController: UIChartViewController {
         return label
     }()
     
-    let profileButton: UIButton = {
+    private let profileButton: UIButton = {
         let button = UIButton()
         let profileButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
         let profileButtonImg = UIImage(systemName: "person.circle", withConfiguration: profileButtonConfig)?.withRenderingMode(.alwaysTemplate)
         button.setImage(profileButtonImg, for: .normal)
         button.tintColor = .black
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return button
     }()
     
@@ -51,6 +78,7 @@ class HomeViewController: UIChartViewController {
         button.setTitle("더보기", for: .normal)
         button.setTitleColor(.gray, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return button
     }()
     
@@ -88,12 +116,14 @@ class HomeViewController: UIChartViewController {
         collectionView.isScrollEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
         return collectionView
     }()
     
     private let infoStackView: UIStackView = {
         let stackView = UIStackView()
+        let view = UIView() // 오른쪽 정렬을 위한 View
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        stackView.addArrangedSubview(view)
         stackView.axis = .horizontal
         stackView.spacing = 5
         return stackView
@@ -218,73 +248,42 @@ class HomeViewController: UIChartViewController {
     }
     
     private func layout() {
-        [titleLabel, profileButton, accountSummaryContainer, nearRestSummaryContainer, infoStackView].forEach {
-            view.addSubview($0)
+        view.addSubview(scrollView)
+        scrollView.addSubview(topStackView)
+        
+        [titleStackView, accountSummaryContainer, nearRestStackView].forEach {
+            topStackView.addArrangedSubview($0)
         }
-    
-        [nearRestTitleLabel, nearRestMoreButon, nearRestSubTitleLabel, nearRestCollectionView, nearRestEmptyAlertLabel].forEach {
-            nearRestSummaryContainer.addSubview($0)
+        
+        [titleLabel, profileButton].forEach {
+            titleStackView.addArrangedSubview($0)
+        }
+        
+        [nearRestTitleStackView, nearRestSubTitleLabel, nearRestCollectionView, infoStackView].forEach {
+            nearRestStackView.addArrangedSubview($0)
+        }
+        
+        [nearRestTitleLabel, nearRestMoreButon].forEach {
+            nearRestTitleStackView.addArrangedSubview($0)
         }
         
         [goodInfoImageView, goodInfoTextLabel, cardInfoImageView, cardInfoTextLabel].forEach {
             infoStackView.addArrangedSubview($0)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.equalTo(view).offset(20)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
-        profileButton.snp.makeConstraints {
-            $0.centerY.equalTo(titleLabel)
-            $0.trailing.equalTo(view).offset(-20)
-        }
-        
-        accountSummaryContainer.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(50)
-            $0.leading.equalTo(view).offset(20)
-            $0.trailing.equalTo(view).offset(-20)
-        }
-        
-        nearRestSummaryContainer.snp.makeConstraints {
-            $0.top.equalTo(accountSummaryContainer.snp.bottom).offset(40)
-            $0.leading.trailing.equalTo(view)
-            $0.height.equalTo(200)
-        }
-        
-        nearRestTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(nearRestSummaryContainer).offset(20)
-            $0.leading.equalTo(nearRestSummaryContainer).offset(30)
-        }
-        
-        nearRestMoreButon.snp.makeConstraints {
-            $0.trailing.equalTo(nearRestSummaryContainer).offset(-15)
-            $0.centerY.equalTo(nearRestTitleLabel)
-            $0.width.equalTo(60)
-        }
-        
-        nearRestSubTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(nearRestTitleLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(nearRestTitleLabel)
+    
+        topStackView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.width.equalToSuperview().offset(-60)
+            $0.centerX.equalToSuperview()
         }
         
         nearRestCollectionView.snp.makeConstraints {
-            $0.top.equalTo(nearRestSubTitleLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(nearRestSummaryContainer)
-            $0.bottom.equalTo(nearRestSummaryContainer).offset(-10)
-        }
-        
-        nearRestEmptyAlertLabel.snp.makeConstraints {
-            $0.top.bottom.equalTo(nearRestCollectionView)
-            $0.leading.equalTo(nearRestCollectionView).offset(20)
-            $0.trailing.equalTo(nearRestCollectionView).offset(-20)
-        }
-        
-        infoStackView.snp.makeConstraints {
-            $0.top.equalTo(nearRestSummaryContainer.snp.bottom).offset(5)
-            $0.trailing.equalTo(nearRestSummaryContainer).offset(-15)
+            $0.height.equalTo(100)
         }
         
     }
-    
 }
