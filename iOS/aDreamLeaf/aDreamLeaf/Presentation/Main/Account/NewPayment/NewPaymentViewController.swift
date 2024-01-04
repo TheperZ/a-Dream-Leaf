@@ -16,6 +16,44 @@ class NewPaymentViewController: UIViewController {
     
     private let viewModel: NewPaymentViewModel
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        return stackView
+    }()
+    
+    private let inputStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private let dateStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let storeStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let contentStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let costStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "지출내역 추가"
@@ -35,6 +73,7 @@ class NewPaymentViewController: UIViewController {
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.text = "날짜"
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -52,6 +91,7 @@ class NewPaymentViewController: UIViewController {
     private let storeNameLabel: UILabel = {
         let label = UILabel()
         label.text = "가게명"
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -66,6 +106,7 @@ class NewPaymentViewController: UIViewController {
     private let contentLabel: UILabel = {
         let label = UILabel()
         label.text = "항목"
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -80,6 +121,7 @@ class NewPaymentViewController: UIViewController {
     private let costLabel: UILabel = {
         let label = UILabel()
         label.text = "지출 비용"
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -183,101 +225,77 @@ class NewPaymentViewController: UIViewController {
     
     private func layout() {
         
-        [loadingView, titleLabel, contentView].forEach {
+        [loadingView, topStackView].forEach {
             view.addSubview($0)
         }
         
+        [titleLabel, contentView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
         
-        [dateLabel, datePicker, divider1, storeNameLabel, storeNameTextField, divider2, contentLabel, contentTextField, divider3, costLabel, costTextField].forEach {
+        [inputStackView, divider1, divider2, divider3].forEach {
             contentView.addSubview($0)
         }
+        
+        
+        [dateStackView, storeStackView, contentStackView, costStackView].forEach {
+            inputStackView.addArrangedSubview($0)
+        }
+        
+        [dateLabel, datePicker].forEach {
+            dateStackView.addArrangedSubview($0)
+        }
+        
+        [storeNameLabel, storeNameTextField].forEach {
+            storeStackView.addArrangedSubview($0)
+        }
+        
+        [contentLabel, contentTextField].forEach {
+            contentStackView.addArrangedSubview($0)
+        }
+        
+        [costLabel, costTextField].forEach {
+            costStackView.addArrangedSubview($0)
+        }
+        
         
         loadingView.snp.makeConstraints {
             $0.top.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalTo(view)
         }
         
-        titleLabel.snp.makeConstraints {
+        topStackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.trailing.leading.equalTo(view)
+            $0.leading.equalToSuperview().offset(30)
+            $0.trailing.equalToSuperview().offset(-30)
         }
         
-        contentView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(25)
-            $0.leading.equalTo(titleLabel).offset(20)
-            $0.trailing.equalTo(titleLabel).offset(-20)
-        }
-        
-        dateLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(15)
-            $0.leading.equalTo(contentView).offset(15)
-            $0.width.equalTo(50)
-            $0.height.equalTo(20)
+        inputStackView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
         }
         
         datePicker.snp.makeConstraints {
-            $0.centerY.equalTo(dateLabel)
-            $0.leading.equalTo(dateLabel.snp.trailing)
-            $0.trailing.equalTo(contentView).offset(-5)
             $0.height.equalTo(50)
         }
         
         divider1.snp.makeConstraints {
-            $0.height.equalTo(0.5)
-            $0.top.equalTo(dateLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(contentView)
-        }
-        
-        storeNameLabel.snp.makeConstraints {
-            $0.top.equalTo(divider1.snp.bottom).offset(15)
-            $0.leading.equalTo(contentView).offset(15)
-            $0.width.equalTo(70)
-            $0.height.equalTo(20)
-        }
-        
-        storeNameTextField.snp.makeConstraints {
-            $0.centerY.equalTo(storeNameLabel)
-            $0.leading.equalTo(storeNameLabel.snp.trailing)
-            $0.trailing.equalTo(contentView).offset(-15)
+            $0.height.equalTo(1)
+            $0.width.equalToSuperview()
+            $0.top.equalTo(storeStackView)
         }
         
         divider2.snp.makeConstraints {
-            $0.height.equalTo(0.5)
-            $0.top.equalTo(storeNameLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(contentView)
-        }
-        
-        contentLabel.snp.makeConstraints {
-            $0.top.equalTo(divider2.snp.bottom).offset(15)
-            $0.leading.equalTo(contentView).offset(15)
-            $0.width.equalTo(50)
-            $0.height.equalTo(20)
-        }
-        
-        contentTextField.snp.makeConstraints {
-            $0.centerY.equalTo(contentLabel)
-            $0.leading.equalTo(storeNameLabel.snp.trailing)
-            $0.trailing.equalTo(contentView).offset(-15)
+            $0.height.equalTo(1)
+            $0.width.equalToSuperview()
+            $0.top.equalTo(contentStackView)
         }
         
         divider3.snp.makeConstraints {
-            $0.height.equalTo(0.5)
-            $0.top.equalTo(contentLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(contentView)
-        }
-        
-        costLabel.snp.makeConstraints {
-            $0.top.equalTo(divider3.snp.bottom).offset(15)
-            $0.leading.equalTo(contentView).offset(15)
-            $0.width.equalTo(70)
-            $0.height.equalTo(20)
-        }
-        
-        costTextField.snp.makeConstraints {
-            $0.centerY.equalTo(costLabel)
-            $0.leading.equalTo(costLabel.snp.trailing)
-            $0.trailing.equalTo(contentView).offset(-15)
-            $0.bottom.equalTo(contentView).offset(-15)
+            $0.height.equalTo(1)
+            $0.width.equalToSuperview()
+            $0.top.equalTo(costStackView)
         }
         
     }
