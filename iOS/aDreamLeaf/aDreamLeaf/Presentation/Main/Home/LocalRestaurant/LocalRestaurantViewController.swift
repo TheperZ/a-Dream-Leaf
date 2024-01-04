@@ -13,12 +13,26 @@ class LocalRestaurantViewController : UIViewController {
     private let disposeBag = DisposeBag()
     private var viewModel: LocalRestaurantViewModel!
         
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        return stackView
+    }()
+    
+    private let addressStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let imageView = UIImageView(image: UIImage(systemName: "location.fill"))
     
     private let addressLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.textAlignment = .left
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -167,8 +181,16 @@ class LocalRestaurantViewController : UIViewController {
     
     private func layout() {
         
-        [imageView, addressLabel, tableView, buttonStackView, checkBoxView, nearListEmptyWarnLabel].forEach {
+        [ topStackView, tableView, nearListEmptyWarnLabel].forEach {
             view.addSubview($0)
+        }
+        
+        [addressStackView, checkBoxView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
+        
+        [imageView, addressLabel].forEach {
+            addressStackView.addArrangedSubview($0)
         }
         
         checkBoxView.addSubview(buttonStackView)
@@ -177,27 +199,17 @@ class LocalRestaurantViewController : UIViewController {
             buttonStackView.addArrangedSubview($0)
         }
         
-        imageView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(15)
+        topStackView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.equalTo(view).offset(30)
-            $0.height.width.equalTo(25)
-        }
-        
-        addressLabel.snp.makeConstraints {
-            $0.centerY.equalTo(imageView)
-            $0.leading.equalTo(imageView.snp.trailing).offset(10)
             $0.trailing.equalTo(view).offset(-30)
         }
         
-        checkBoxView.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(imageView.snp.bottom).offset(20)
-            $0.leading.equalTo(imageView)
-            $0.trailing.equalTo(addressLabel)
-        }
-        
         buttonStackView.snp.makeConstraints {
-            $0.centerX.centerY.equalTo(checkBoxView)
+            $0.top.equalToSuperview().offset(5)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-5)
         }
         
         tableView.snp.makeConstraints {
