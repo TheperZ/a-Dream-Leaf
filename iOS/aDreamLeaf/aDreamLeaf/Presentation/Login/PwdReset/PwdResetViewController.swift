@@ -14,6 +14,21 @@ class PwdResetViewController: UIViewController {
     var disposeBag = DisposeBag()
     var loadingView = UIActivityIndicatorView(style: .medium)
     private var viewModel: PwdResetViewModel!
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 25
+        return stackView
+    }()
+    
+    private let emailStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "비밀번호 재설정"
@@ -121,40 +136,31 @@ class PwdResetViewController: UIViewController {
     
     private func layout() {
         
-        [titleLabel, emailLabel, emailTextField, emailUnderLine, resetButton, loadingView].forEach {
+        [stackView, loadingView].forEach {
             view.addSubview($0)
+        }
+        
+        [titleLabel, emailStackView, resetButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        
+        [emailLabel, emailTextField, emailUnderLine].forEach {
+            emailStackView.addArrangedSubview($0)
         }
         
         loadingView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(50)
+        stackView.snp.makeConstraints {
+            $0.leading.equalTo(view).offset(30)
+            $0.trailing.equalTo(view).offset(-30)
             $0.centerX.equalTo(view)
-            $0.width.equalTo(300)
-        }
-        
-        emailLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
-        
-        emailTextField.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(titleLabel)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(40)
         }
         
         emailUnderLine.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(1)
-        }
-        
-        resetButton.snp.makeConstraints {
-            $0.top.equalTo(emailUnderLine.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(45)
         }
         
     }
