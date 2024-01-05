@@ -28,6 +28,45 @@ class UIChartViewController: UIViewController {
         return stackView
     }()
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
+    private let titleStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private let chartStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.alignment = .center
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private let chartInfoStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let chartInfoSubStackView1: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 5
+        return stackView
+    }()
+    
+    private let chartInfoSubStackView2: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 5
+        return stackView
+    }()
+    
     private let coverMessageTextView: UITextView = {
         let textView = UITextView()
         textView.isScrollEnabled = false
@@ -196,10 +235,54 @@ class UIChartViewController: UIViewController {
     }
     
     private func chartLayout() {
+        view.addSubview(accountSummaryContainer)
         
-        [accountTitleLabel, accountMoreButton, pieChart, usedAmountColorView, usedAmountLabel, balanceColorView, balanceLabel, cover].forEach {
+        [topStackView, cover].forEach {
             accountSummaryContainer.addSubview($0)
         }
+        
+        [titleStackView, chartStackView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
+        
+        [accountTitleLabel, accountMoreButton].forEach {
+            titleStackView.addArrangedSubview($0)
+        }
+        
+        [pieChart, chartInfoStackView].forEach {
+            chartStackView.addArrangedSubview($0)
+        }
+        
+        [chartInfoSubStackView1, chartInfoSubStackView2].forEach {
+            chartInfoStackView.addArrangedSubview($0)
+        }
+        
+        [usedAmountColorView, usedAmountLabel].forEach {
+            chartInfoSubStackView1.addArrangedSubview($0)
+        }
+        
+        [balanceColorView, balanceLabel].forEach {
+            chartInfoSubStackView2.addArrangedSubview($0)
+        }
+        
+        topStackView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.bottom.equalToSuperview().offset(-10)
+        }
+        
+        pieChart.snp.makeConstraints {
+            $0.height.equalTo(150)
+        }
+        
+        usedAmountColorView.snp.makeConstraints{
+            $0.width.height.equalTo(15)
+        }
+        
+        balanceColorView.snp.makeConstraints {
+            $0.width.height.equalTo(15)
+        }
+        
         
         cover.contentView.addSubview(coverStackView)
         
@@ -207,49 +290,6 @@ class UIChartViewController: UIViewController {
             coverStackView.addArrangedSubview($0)
         }
         
-        accountSummaryContainer.snp.makeConstraints {
-            $0.height.equalTo(200)
-        }
-        
-        accountTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(accountSummaryContainer).offset(10)
-            $0.leading.equalTo(accountSummaryContainer).offset(15)
-        }
-        
-        accountMoreButton.snp.makeConstraints {
-            $0.trailing.equalTo(accountSummaryContainer).offset(-10)
-            $0.centerY.equalTo(accountTitleLabel)
-            $0.width.equalTo(60)
-        }
-        
-        pieChart.snp.makeConstraints {
-            $0.top.equalTo(accountTitleLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(accountTitleLabel)
-            $0.trailing.equalTo(accountSummaryContainer.snp.centerX).offset(-10)
-            $0.bottom.equalTo(accountSummaryContainer).offset(-10)
-        }
-        
-        usedAmountColorView.snp.makeConstraints {
-            $0.height.width.equalTo(15)
-            $0.leading.equalTo(accountSummaryContainer.snp.centerX).offset(10)
-            $0.bottom.equalTo(pieChart.snp.centerY).offset(-10)
-        }
-        
-        usedAmountLabel.snp.makeConstraints {
-            $0.leading.equalTo(usedAmountColorView.snp.trailing).offset(10)
-            $0.centerY.equalTo(usedAmountColorView)
-        }
-        
-        balanceColorView.snp.makeConstraints {
-            $0.height.width.equalTo(15)
-            $0.leading.equalTo(accountSummaryContainer.snp.centerX).offset(10)
-            $0.bottom.equalTo(pieChart.snp.centerY).offset(10)
-        }
-        
-        balanceLabel.snp.makeConstraints {
-            $0.leading.equalTo(balanceColorView.snp.trailing).offset(10)
-            $0.centerY.equalTo(balanceColorView)
-        }
         
         cover.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(accountSummaryContainer)
