@@ -16,6 +16,31 @@ class AccountSettingViewController: UIViewController {
     
     private let viewModel: AccountSettingViewModel
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        return stackView
+    }()
+    
+    private let accountStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let accountInputStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let alarmStackView: UIStackView = {
+        let stackView = UIStackView()
+        return stackView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가계부 설정"
@@ -41,7 +66,8 @@ class AccountSettingViewController: UIViewController {
     
     private let budgetTextField: UITextField = {
         let textField = UITextField()
-        
+        textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         textField.keyboardType = .decimalPad
         textField.font = .systemFont(ofSize: 16, weight: .semibold)
         textField.textColor = .black
@@ -69,6 +95,8 @@ class AccountSettingViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
         button.layer.cornerRadius = 5
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return button
     }()
     
@@ -77,6 +105,8 @@ class AccountSettingViewController: UIViewController {
         label.text = "지출 내역 추가 알림 받기"
         label.font = .systemFont(ofSize: 15, weight: .semibold)
         label.textColor = .black
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -150,70 +180,54 @@ class AccountSettingViewController: UIViewController {
     }
     
     private func layout() {
-        [titleLabel, contentView, alarmLabel, alarmSwitch, loadingView].forEach {
+        [topStackView, contentView, alarmStackView, loadingView].forEach {
             view.addSubview($0)
         }
         
-        [budgetLabel, budgetTextField, underLine, wonLabel, budgetButton].forEach {
+        [titleLabel, contentView, alarmStackView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
+        
+        [accountStackView, underLine].forEach {
             contentView.addSubview($0)
         }
         
+        [budgetLabel, accountInputStackView].forEach {
+            accountStackView.addArrangedSubview($0)
+        }
+        
+        [budgetTextField, wonLabel, budgetButton].forEach {
+            accountInputStackView.addArrangedSubview($0)
+        }
+        
+        [alarmLabel, alarmSwitch].forEach {
+            alarmStackView.addArrangedSubview($0)
+        }
+        
+        
         loadingView.snp.makeConstraints{
-            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.width.equalTo(320)
-            $0.centerX.equalTo(view)
+        topStackView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
         }
         
-        contentView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(titleLabel)
+        accountStackView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().offset(20)
+            $0.trailing.bottom.equalToSuperview().offset(-20)
         }
-        
-        budgetLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(15)
-            $0.leading.equalTo(titleLabel).offset(15)
-            $0.trailing.equalTo(titleLabel).offset(-15)
-        }
-        
-        budgetTextField.snp.makeConstraints {
-            $0.top.equalTo(budgetLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(budgetLabel)
-            $0.trailing.equalTo(wonLabel.snp.leading)
+       
+        budgetButton.snp.makeConstraints {
+            $0.width.equalTo(60)
         }
         
         underLine.snp.makeConstraints {
-            $0.top.equalTo(budgetTextField.snp.bottom)
+            $0.bottom.equalTo(budgetTextField)
             $0.leading.trailing.equalTo(budgetTextField)
-            $0.height.equalTo(0.5)
-        }
-        
-        wonLabel.snp.makeConstraints {
-            $0.centerY.equalTo(budgetTextField)
-            $0.trailing.equalTo(budgetButton.snp.leading).offset(-15)
-            $0.width.equalTo(20)
-        }
-        
-        budgetButton.snp.makeConstraints {
-            $0.centerY.equalTo(wonLabel)
-            $0.width.equalTo(50)
-            $0.height.equalTo(30)
-            $0.trailing.bottom.equalTo(contentView).offset(-15)
-        }
-        
-        alarmLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.bottom).offset(30)
-            $0.leading.equalTo(titleLabel).offset(5)
-            $0.trailing.equalTo(alarmSwitch.snp.leading)
-        }
-        
-        alarmSwitch.snp.makeConstraints {
-            $0.width.equalTo(40)
-            $0.trailing.equalTo(titleLabel).offset(-10)
-            $0.centerY.equalTo(alarmLabel)
+            $0.height.equalTo(1)
         }
     }
 }
