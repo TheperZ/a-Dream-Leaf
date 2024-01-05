@@ -23,7 +23,13 @@ class ReviewListViewController : UIViewController {
     }()
     
     private let scrollView = UIScrollView()
-    private let contentView = UIView()
+    
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        return stackView
+    }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -56,6 +62,7 @@ class ReviewListViewController : UIViewController {
         label.textColor = .black
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.textAlignment = .center
+        label.isHidden = true
         return label
     }()
     
@@ -131,13 +138,15 @@ class ReviewListViewController : UIViewController {
     }
     
     private func layout() {
-        view.addSubview(scrollView)
-        view.addSubview(loadingView)
         
-        scrollView.addSubview(contentView)
+        [scrollView, loadingView, reviewListEmptyWarnLabel].forEach {
+            view.addSubview($0)
+        }
         
-        [titleLabel, subtitleLabel, tableView, reviewListEmptyWarnLabel].forEach {
-            contentView.addSubview($0)
+        scrollView.addSubview(topStackView)
+        
+        [titleLabel, subtitleLabel, tableView].forEach {
+            topStackView.addArrangedSubview($0)
         }
         
         loadingView.snp.makeConstraints {
@@ -145,33 +154,19 @@ class ReviewListViewController : UIViewController {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
-        contentView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.width.equalTo(scrollView)
-        }
-        
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(30)
-            $0.width.equalTo(300)
-            $0.centerX.equalTo(contentView)
-        }
-        
-        subtitleLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
-        
-        tableView.snp.makeConstraints {
-            $0.top.equalTo(subtitleLabel.snp.bottom).offset(15)
-            $0.leading.equalTo(contentView).offset(20)
-            $0.trailing.equalTo(contentView).offset(-20)
-            $0.bottom.equalTo(contentView).offset(-10)
+        topStackView.snp.makeConstraints {
+            $0.top.equalTo(scrollView)
+            $0.width.equalTo(scrollView).offset(-20)
+            $0.leading.equalTo(scrollView).offset(10)
+            $0.trailing.equalTo(scrollView).offset(-10)
+            $0.bottom.equalTo(scrollView).offset(-20)
         }
         
         reviewListEmptyWarnLabel.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(tableView)
+            $0.edges.equalTo(tableView)
         }
         
     }

@@ -27,9 +27,25 @@ class StoreMapViewController: UIViewController {
         return view
     }()
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 15
+        return stackView
+    }()
+    
+    private let titleStackView = UIStackView()
+    
+    private let addressStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         label.text = "음식점 위치"
         label.textAlignment = .center
         label.textColor = .black
@@ -126,8 +142,20 @@ class StoreMapViewController: UIViewController {
             view.addSubview($0)
         }
         
-        [titleLabel, closeButton, mapView, storeNameLabel, addressLabel, loadingView].forEach {
+        [topStackView, loadingView].forEach {
             contentView.addSubview($0)
+        }
+        
+        [titleStackView, mapView, addressStackView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
+        
+        [titleLabel, closeButton].forEach {
+            titleStackView.addArrangedSubview($0)
+        }
+        
+        [storeNameLabel, addressLabel].forEach {
+            addressStackView.addArrangedSubview($0)
         }
         
         loadingView.snp.makeConstraints {
@@ -145,33 +173,21 @@ class StoreMapViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(20)
-            $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(20)
-        }
-        
         closeButton.snp.makeConstraints {
             $0.centerY.equalTo(titleLabel)
             $0.trailing.equalTo(contentView).offset(-10)
             $0.height.width.equalTo(30)
         }
         
+        topStackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.bottom.equalToSuperview().offset(-30)
+        }
+        
         mapView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.leading.equalTo(contentView).offset(20)
-            $0.trailing.equalTo(contentView).offset(-20)
-            $0.bottom.equalTo(contentView).offset(-150)
-        }
-        
-        storeNameLabel.snp.makeConstraints {
-            $0.top.equalTo(mapView.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(mapView)
-        }
-        
-        addressLabel.snp.makeConstraints {
-            $0.top.equalTo(storeNameLabel.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(storeNameLabel)
+            $0.height.equalTo(300)
         }
     
     }
