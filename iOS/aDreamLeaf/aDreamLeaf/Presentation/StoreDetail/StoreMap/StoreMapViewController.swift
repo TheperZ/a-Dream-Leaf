@@ -173,14 +173,8 @@ class StoreMapViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        closeButton.snp.makeConstraints {
-            $0.centerY.equalTo(titleLabel)
-            $0.trailing.equalTo(contentView).offset(-10)
-            $0.height.width.equalTo(30)
-        }
-        
         topStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(20)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
             $0.bottom.equalToSuperview().offset(-30)

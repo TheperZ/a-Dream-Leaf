@@ -205,6 +205,10 @@ class LocalRestaurantViewController : UIViewController {
             $0.trailing.equalTo(view).offset(-30)
         }
         
+        imageView.snp.makeConstraints {
+            $0.width.height.equalTo(30)
+        }
+        
         buttonStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(5)
             $0.leading.equalToSuperview()
