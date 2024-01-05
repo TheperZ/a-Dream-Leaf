@@ -17,6 +17,28 @@ class ReviewViewController: UIViewController {
     private let viewModel: ReviewViewModel
     private let selectedImage = BehaviorSubject<UIImage?>(value: nil)
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        stackView.alignment = .center
+        return stackView
+    }()
+    
+    private let ratingStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let imageStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "리뷰 작성"
@@ -49,6 +71,7 @@ class ReviewViewController: UIViewController {
     private let starButtonList: [UIButton]
     private let textView: UITextView = {
         let textView = UITextView()
+        textView.setContentHuggingPriority(.defaultLow, for: .vertical)
         textView.backgroundColor = UIColor(white: 0.95, alpha: 1)
         textView.textColor = .black
         textView.layer.cornerRadius = 10
@@ -248,64 +271,63 @@ class ReviewViewController: UIViewController {
     }
     
     private func layout() {
-        [ titleLabel, subtitleLabel, starStackView, textView, textViewWarningLabel, photoButton, saveButton, imageView, loadingView].forEach {
+        
+        [loadingView, topStackView].forEach {
             view.addSubview($0)
+        }
+        
+        [ titleLabel, ratingStackView, textView, imageStackView, saveButton].forEach {
+            topStackView.addArrangedSubview($0)
+        }
+        
+        [subtitleLabel, starStackView].forEach {
+            ratingStackView.addArrangedSubview($0)
         }
         
         [starButton1, starButton2, starButton3, starButton4, starButton5].forEach {
             starStackView.addArrangedSubview($0)
         }
         
-        loadingView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-        
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            $0.leading.equalTo(view).offset(30)
-            $0.trailing.equalTo(view).offset(-30)
-        }
-        
-        subtitleLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
-        
-        starStackView.snp.makeConstraints {
-            $0.top.equalTo(subtitleLabel.snp.bottom).offset(10)
-            $0.centerX.equalTo(subtitleLabel)
-        }
+        textView.addSubview(textViewWarningLabel)
         
         textView.snp.makeConstraints {
-            $0.top.equalTo(starStackView.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(200)
+            $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
         }
         
-        textViewWarningLabel.snp.makeConstraints {
-            $0.top.equalTo(textView).offset(23)
-            $0.leading.equalTo(titleLabel).offset(20)
-            $0.trailing.equalTo(titleLabel)
+        [photoButton, imageView, ].forEach {
+            imageStackView.addArrangedSubview($0)
+        }
+        
+        loadingView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        topStackView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.leading.equalToSuperview().offset(30)
+            $0.trailing.equalToSuperview().offset(-30)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+        }
+        
+        imageStackView.snp.makeConstraints {
+            $0.width.equalTo(textView)
         }
         
         photoButton.snp.makeConstraints {
-            $0.top.equalTo(textView.snp.bottom).offset(10)
-            $0.leading.equalTo(titleLabel)
-            $0.height.equalTo(50)
-            $0.width.equalTo(100)
+            $0.width.equalTo(120)
+            $0.height.equalTo(40)
         }
         
-        imageView.snp.makeConstraints {
-            $0.top.equalTo(textView.snp.bottom).offset(10)
-            $0.trailing.equalTo(titleLabel)
-            $0.height.width.equalTo(50)
+        imageView.snp.makeConstraints{
+            $0.width.height.equalTo(40)
         }
         
         saveButton.snp.makeConstraints {
-            $0.top.equalTo(photoButton.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(40)
+            $0.width.equalTo(textView)
         }
+        
     }
 }
 
