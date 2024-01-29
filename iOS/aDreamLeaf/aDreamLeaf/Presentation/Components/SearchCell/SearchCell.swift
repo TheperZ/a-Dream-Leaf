@@ -10,10 +10,30 @@ import RxSwift
 import RxCocoa
 
 class SearchCell: UITableViewCell {
-    let disposeBag = DisposeBag()
-    var viewModel: SearchCellViewModel!
+    private let disposeBag = DisposeBag()
+    private var viewModel: SearchCellViewModel!
     
-    let nameLabel: UILabel = {
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.alignment = .leading
+        return stackView
+    }()
+    
+    private let rateDistStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let goodCardStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.textColor = .black
@@ -21,7 +41,7 @@ class SearchCell: UITableViewCell {
         return label
     }()
     
-    let ratingLabel: UILabel = {
+    private let ratingLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .medium)
         label.textColor = .black
@@ -30,7 +50,7 @@ class SearchCell: UITableViewCell {
         return label
     }()
     
-    let distanceLabel: UILabel = {
+    private let distanceLabel: UILabel = {
         let label = UILabel()
         if LocationManager.permitionCheck() == false { // 위치 정보 비동의시 거리 표기 X
             label.isHidden = true
@@ -41,15 +61,7 @@ class SearchCell: UITableViewCell {
         return label
     }()
     
-
-    
-    let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.spacing = 15
-        return stackView
-    }()
-    
-    let cardAvail: UILabel = {
+    private let cardAvail: UILabel = {
         let label = UILabel()
         label.text = "아동급식카드 가맹점"
         label.font = .systemFont(ofSize: 13, weight: .heavy)
@@ -60,7 +72,7 @@ class SearchCell: UITableViewCell {
         return label
     }()
     
-    let goodness: UILabel = {
+    private let goodness: UILabel = {
         let label = UILabel()
         label.text = "선한영향력"
         label.font = .systemFont(ofSize: 13, weight: .heavy)
@@ -93,42 +105,32 @@ class SearchCell: UITableViewCell {
     }
     
     private func layout() {
-        [nameLabel, distanceLabel, ratingLabel, stackView].forEach {
-            contentView.addSubview($0)
-        }
+        contentView.addSubview(stackView)
         
-        [cardAvail, goodness].forEach {
+        [nameLabel, rateDistStackView, goodCardStackView].forEach {
             stackView.addArrangedSubview($0)
         }
         
-        nameLabel.snp.makeConstraints {
-            $0.top.leading.equalTo(contentView).offset(10)
-            $0.trailing.equalTo(contentView)
+        [distanceLabel, ratingLabel].forEach {
+            rateDistStackView.addArrangedSubview($0)
         }
         
-        ratingLabel.snp.makeConstraints{
-            $0.top.equalTo(nameLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(nameLabel)
-        }
-        
-        distanceLabel.snp.makeConstraints{
-            $0.top.equalTo(ratingLabel)
-            $0.leading.equalTo(ratingLabel.snp.trailing).offset(5)
-            $0.trailing.equalTo(contentView).offset(-10)
+        [goodness, cardAvail].forEach {
+            goodCardStackView.addArrangedSubview($0)
         }
         
         stackView.snp.makeConstraints {
-            $0.top.equalTo(ratingLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(nameLabel)
-            $0.height.equalTo(23)
-            $0.bottom.equalTo(contentView).offset(-15)
+            $0.top.leading.equalToSuperview().offset(10)
+            $0.trailing.bottom.equalToSuperview().offset(-10)
         }
         
         cardAvail.snp.makeConstraints {
+            $0.height.equalTo(25)
             $0.width.equalTo(120)
         }
         
         goodness.snp.makeConstraints {
+            $0.height.equalTo(25)
             $0.width.equalTo(120)
         }
         

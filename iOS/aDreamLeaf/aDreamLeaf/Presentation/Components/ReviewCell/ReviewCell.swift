@@ -15,7 +15,27 @@ class ReviewCell: UITableViewCell {
     private var viewModel: ReviewCellVIewModel!
     private var parent: ReviewListViewController!
     
-    private let mainView = UIView()
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        stackView.alignment = .top
+        return stackView
+    }()
+    
+    private let nickRateStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let bodyImageStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let nicknameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .regular)
@@ -122,56 +142,34 @@ class ReviewCell: UITableViewCell {
     }
     
     private func layout() {
+        contentView.addSubview(stackView)
         
-        contentView.addSubview(mainView)
-        mainView.translatesAutoresizingMaskIntoConstraints = false
-        
-        [nicknameLabel, contentTextView, ratingLabel, reviewImageView, menuButton].forEach {
-            mainView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
+        [nickRateStackView, bodyImageStackView, menuButton].forEach{
+            stackView.addArrangedSubview($0)
         }
         
-        menu.anchorView = menuButton
-        menu.bottomOffset = CGPoint(x: -60, y:(menu.anchorView?.plainView.bounds.height)!)
-        
-        mainView.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(20)
-            $0.leading.trailing.equalTo(contentView)
-            $0.bottom.equalTo(contentView).offset(-20)
+        [nicknameLabel, ratingLabel].forEach{
+            nickRateStackView.addArrangedSubview($0)
         }
         
-        nicknameLabel.snp.makeConstraints {
-            $0.top.equalTo(mainView)
-            $0.leading.equalTo(mainView).offset(10)
+        [contentTextView, reviewImageView].forEach {
+            bodyImageStackView.addArrangedSubview($0)
+        }
+        
+        stackView.snp.makeConstraints {
+            $0.top.leading.equalTo(contentView).offset(10)
+            $0.trailing.bottom.equalTo(contentView).offset(-10)
+        }
+        
+        nickRateStackView.snp.makeConstraints {
             $0.width.equalTo(100)
         }
         
-        ratingLabel.snp.makeConstraints {
-            $0.top.equalTo(nicknameLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(nicknameLabel).offset(5)
-            $0.trailing.equalTo(nicknameLabel)
-        }
-        
-        contentTextView.snp.makeConstraints {
-            $0.top.equalTo(nicknameLabel).offset(-7)
-            $0.leading.equalTo(nicknameLabel.snp.trailing)
-            $0.trailing.equalTo(menuButton.snp.leading)
-            $0.height.greaterThanOrEqualTo(30)
-        }
-        
-        menuButton.snp.makeConstraints {
-            $0.top.equalTo(nicknameLabel).offset(-7)
-            $0.trailing.equalTo(mainView)
-            $0.height.width.equalTo(30)
-        }
-        
         reviewImageView.snp.makeConstraints {
-            $0.top.equalTo(contentTextView.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(contentTextView)
-            $0.bottom.equalTo(mainView)
-            $0.height.equalTo(viewModel.image != nil ? reviewImageView.snp.width : 0)
+            $0.height.lessThanOrEqualTo(bodyImageStackView.snp.width)
         }
-
+        
+        
     }
     
 }

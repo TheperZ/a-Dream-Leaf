@@ -14,8 +14,15 @@ class SimpleReviewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
     private var viewModel: SimpleReviewCellViewModel!
     
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 5
+        return stackView
+    }()
     private let nicknameLabel: UILabel = {
         let label = UILabel()
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         label.font = .systemFont(ofSize: 13, weight: .semibold)
         label.textColor = .black
         label.textAlignment = .left
@@ -49,21 +56,16 @@ class SimpleReviewCell: UITableViewCell {
     }
     
     private func layout() {
+        contentView.addSubview(stackView)
+        
         [nicknameLabel, contentLabel].forEach {
-            contentView.addSubview($0)
+            stackView.addArrangedSubview($0)
         }
         
-        nicknameLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(10)
-            $0.leading.equalTo(contentView)
-            $0.width.equalTo(85)
-        }
-        
-        contentLabel.snp.makeConstraints {
-            $0.centerY.equalTo(nicknameLabel)
-            $0.leading.equalTo(nicknameLabel.snp.trailing)
-            $0.trailing.equalTo(contentView)
-            $0.bottom.equalTo(contentView).offset(-10)
+        stackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-10)
         }
         
     }
