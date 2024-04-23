@@ -22,7 +22,7 @@ final class SignUpViewModelTest:XCTestCase {
     var trigger: PublishSubject<Void>!
     
     //Output
-    var result: TestableObserver<RequestResult<Void>>!
+    var result: TestableObserver<Result<Void, Error>>!
     
     override func setUp() {
         disposeBag = DisposeBag()
@@ -35,7 +35,7 @@ final class SignUpViewModelTest:XCTestCase {
         trigger = PublishSubject<Void>()
         
         let testScheduler = TestScheduler(initialClock: 0)
-        result = testScheduler.createObserver(RequestResult<Void>.self)
+        result = testScheduler.createObserver(Result<Void, Error>.self)
         
         let input = SignUpViewModel.Input(email: email.asDriver(onErrorJustReturn: ""),
                                           password: password.asDriver(onErrorJustReturn: ""),
@@ -53,7 +53,14 @@ final class SignUpViewModelTest:XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockSignUpRepository.MockLoginRepositoryError, MockSignUpRepository.MockLoginRepositoryError.emptyEmail)
+            default:
+                break
+        }
     }
     
     func test_Trigger_withEmailOnly() {
@@ -63,7 +70,14 @@ final class SignUpViewModelTest:XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockSignUpRepository.MockLoginRepositoryError, MockSignUpRepository.MockLoginRepositoryError.emptyPassword)
+            default:
+                break
+        }
     }
     
     func test_Trigger_withDifferentPassword() {
@@ -75,7 +89,14 @@ final class SignUpViewModelTest:XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockSignUpRepository.MockLoginRepositoryError, MockSignUpRepository.MockLoginRepositoryError.differentPassword)
+            default:
+                break
+        }
     }
     
     func test_Trigger_withWrongFormatEmail() {
@@ -85,7 +106,14 @@ final class SignUpViewModelTest:XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockSignUpRepository.MockLoginRepositoryError, MockSignUpRepository.MockLoginRepositoryError.invalidEmailFormat)
+            default:
+                break
+        }
     }
     
     func test_Trigger_withWrongFormatEmail2() {
@@ -95,19 +123,33 @@ final class SignUpViewModelTest:XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockSignUpRepository.MockLoginRepositoryError, MockSignUpRepository.MockLoginRepositoryError.invalidEmailFormat)
+            default:
+                break
+        }
     }
     
     func test_Trigger_withShortPassword() {
         //when
-        email.onNext("asdasdawd")
+        email.onNext("asdasdawd@naver.com")
         password.onNext("123")
         passwordCheck.onNext("123")
         trigger.onNext(())
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockSignUpRepository.MockLoginRepositoryError, MockSignUpRepository.MockLoginRepositoryError.shortPassword)
+            default:
+                break
+        }
     }
     
     func test_Trigger_withPerfectInput() {
@@ -119,7 +161,12 @@ final class SignUpViewModelTest:XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
+        switch result.events[0].value.element {
+            case let .failure(error):
+                XCTFail()
+            default:
+                break
+        }
     }
     
     

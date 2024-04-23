@@ -15,8 +15,8 @@ class StoreNetwork: Network {
         super.init(type: .Store)
     }
     
-    func searchStore(with keyword: String) -> Observable<RequestResult<[SimpleStore]>> {
-        return Observable<RequestResult<[SimpleStore]>>.create { observer in
+    func searchStore(with keyword: String) -> Observable<Result<[SimpleStore], Error>> {
+        return Observable.create { observer in
             
             let params = ["curLat": LocationManager.getLatitude(), "curLogt": LocationManager.getLongitude() ]
             
@@ -30,7 +30,7 @@ class StoreNetwork: Network {
         }
     }
     
-    func searchWithLocation(lat: Double, long: Double) -> Observable<RequestResult<[SimpleStore]>> {
+    func searchWithLocation(lat: Double, long: Double) -> Observable<Result<[SimpleStore], Error>> {
         return Observable.create { observer in
                 
             let params = ["curLat": LocationManager.getLatitude(), "curLogt": LocationManager.getLongitude()]
@@ -45,7 +45,7 @@ class StoreNetwork: Network {
         }
     }
     
-    func fetchStoreDetail(storeId: Int) -> Observable<RequestResult<Store>> {
+    func fetchStoreDetail(storeId: Int) -> Observable<Result<Store, Error>> {
         return Observable.create { observer in
         
             let params = ["curLat": LocationManager.getLatitude(), "curLogt": LocationManager.getLongitude() ]

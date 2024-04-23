@@ -180,20 +180,21 @@ class NewPaymentViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.result
-            .drive(onNext: { result in
-                if result.success {
-                    let alert = UIAlertController(title: "성공", message: output.editData == nil ? "가계부에 추가되었습니다." : "정상적으로 수정되었습니다." , preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.navigationController?.popToRootViewController(animated: true)
-                    }
-                    alert.addAction(confirm)
-                    self.present(alert, animated: true)
-                } else {
-                    self.loadingView.stopAnimating()
-                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self.present(alert, animated: true)
+            .drive(onNext: { [weak self] result in
+                switch result {
+                    case .success:
+                        let alert = UIAlertController(title: "성공", message: output.editData == nil ? "가계부에 추가되었습니다." : "정상적으로 수정되었습니다." , preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                            self?.navigationController?.popToRootViewController(animated: true)
+                        }
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
+                    case let .failure(error):
+                        self?.loadingView.stopAnimating()
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription, preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
                 }
             })
             .disposed(by: disposeBag)

@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 struct MockProfileRepository: ProfileRepository {
-    func deleteAccount() -> RxSwift.Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: nil))
+    func deleteAccount() -> RxSwift.Observable<Result<Void, Error>> {
+        return Observable.just(.success(()))
     }
 }

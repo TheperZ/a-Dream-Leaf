@@ -26,7 +26,7 @@ struct ReviewViewModel {
         let isEdit: Bool
         let editData: Review?
         let loading: Driver<Bool>
-        let result: Driver<RequestResult<Void>>
+        let result: Driver<Result<Void, Error>>
     }
     
     
@@ -64,14 +64,14 @@ struct ReviewViewModel {
                 if editData == nil {
                     repository.create(storeId: storeId, body: body, rating: rating, image: image)
                         .do(onNext: { _ in loading.onNext(false)} )
-                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                        .asDriver(onErrorJustReturn: .success(()))
                 } else {
                     repository.update(reviewId: editData!.reviewId, body: body, rating: rating, image: image)
                         .do(onNext: { _ in loading.onNext(false)} )
-                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                        .asDriver(onErrorJustReturn: .success(()))
                 }
             }
-            .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+            .asDriver(onErrorJustReturn: .success(()))
         
         
         return Output(isEdit: editData != nil, editData: editData, loading: loading.asDriver(onErrorJustReturn: false), result: result)

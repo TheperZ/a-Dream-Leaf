@@ -9,5 +9,5 @@ import Foundation
 import RxSwift
 
 protocol ProfileRepository {
-    func deleteAccount() -> Observable<RequestResult<Void>>
+    func deleteAccount() -> Observable<Result<Void, Error>>
 }

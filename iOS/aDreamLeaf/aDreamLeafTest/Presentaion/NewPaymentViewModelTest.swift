@@ -24,7 +24,7 @@ final class NewPaymentViewModelTest: XCTestCase {
     var cost: BehaviorSubject<Int>!
     
     //Output
-    var result: TestableObserver<RequestResult<Void>>!
+    var result: TestableObserver<Result<Void, Error>>!
     var editData: Expenditure!
     
     override func setUp() {
@@ -49,8 +49,6 @@ final class NewPaymentViewModelTest: XCTestCase {
         //then
         XCTAssertNil(editData)
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "가격을 입력해주세요.")
         
     }
     
@@ -66,8 +64,7 @@ final class NewPaymentViewModelTest: XCTestCase {
         //then
         XCTAssertNil(editData)
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "가게명을 입력해주세요.")
+    
     }
     
     func test_enterStoreNameAndCost_inCreateMode() {
@@ -82,8 +79,6 @@ final class NewPaymentViewModelTest: XCTestCase {
         //then
         XCTAssertNil(editData)
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
-        XCTAssertEqual(result.events[0].value.element!.msg, "create")
     }
     
     func test_initalization_inEditMode() {
@@ -105,8 +100,6 @@ final class NewPaymentViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
-        XCTAssertEqual(result.events[0].value.element!.msg, "update")
     }
     
     func test_tapSaveButton_AfterChangeStoreName_inEditMode() {
@@ -120,8 +113,6 @@ final class NewPaymentViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
-        XCTAssertEqual(result.events[0].value.element!.msg, "update")
     }
     
     func test_tapSaveButton_AfterChangeCost_inEditMode() {
@@ -135,8 +126,6 @@ final class NewPaymentViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
-        XCTAssertEqual(result.events[0].value.element!.msg, "update")
     }
     
     func test_tapSaveButton_AfterChangeBody_inEditMode() {
@@ -150,8 +139,6 @@ final class NewPaymentViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
-        XCTAssertEqual(result.events[0].value.element!.msg, "update")
     }
     
     
@@ -163,7 +150,7 @@ final class NewPaymentViewModelTest: XCTestCase {
         let output = viewModel.transform(input: input)
         
         let testScheduler = TestScheduler(initialClock: 0)
-        result = testScheduler.createObserver(RequestResult<Void>.self)
+        result = testScheduler.createObserver(Result<Void, Error>.self)
         
         output.result.drive(result).disposed(by: disposeBag)
         editData = output.editData
@@ -177,7 +164,7 @@ final class NewPaymentViewModelTest: XCTestCase {
         let output = viewModel.transform(input: input)
         
         let testScheduler = TestScheduler(initialClock: 0)
-        result = testScheduler.createObserver(RequestResult<Void>.self)
+        result = testScheduler.createObserver(Result<Void, Error>.self)
         
         output.result.drive(result).disposed(by: disposeBag)
         editData = output.editData

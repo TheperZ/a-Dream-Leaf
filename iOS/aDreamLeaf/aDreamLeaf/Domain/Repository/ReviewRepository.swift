@@ -9,9 +9,9 @@ import Foundation
 import RxSwift
 
 protocol ReviewRepository {
-    func create(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>>
-    func update(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>>
+    func create(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<Result<Void, Error>>
+    func update(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<Result<Void, Error>>
     func fetchRecent(storeId: Int) -> Observable<[Review]>
     func fetchReviews(storeId: Int) -> Observable<[Review]>
-    func deleteReview(reviewId: Int) -> Observable<RequestResult<Void>>
+    func deleteReview(reviewId: Int) -> Observable<Result<Void, Error>>
 }

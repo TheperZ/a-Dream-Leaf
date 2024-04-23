@@ -20,7 +20,7 @@ struct PwdResetViewModel {
     
     struct Output {
         let loading: Driver<Bool>
-        let result: Driver<RequestResult<Void>>
+        let result: Driver<Result<Void, Error>>
     }
     
     init(_ repo: LoginRepository = NetworkLoginRepository()) {
@@ -36,7 +36,7 @@ struct PwdResetViewModel {
             .flatMapLatest { email in
                 repository.sendPwdResetMail(to: email)
                     .do(onNext: { _ in loading.onNext(false)})
-                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
         
         

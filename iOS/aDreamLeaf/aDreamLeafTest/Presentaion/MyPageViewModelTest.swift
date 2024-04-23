@@ -21,8 +21,8 @@ final class MyPageViewModelTest: XCTestCase {
     var deleteTrigger: PublishSubject<Void>!
     
     //output
-    var logoutResult: TestableObserver<RequestResult<Void>>!
-    var deleteResult: TestableObserver<RequestResult<Void>>!
+    var logoutResult: TestableObserver<Result<Void, Error>>!
+    var deleteResult: TestableObserver<Result<Void, Error>>!
     
     override func setUp() {
         disposeBag = DisposeBag()
@@ -34,8 +34,8 @@ final class MyPageViewModelTest: XCTestCase {
         deleteTrigger = PublishSubject<Void>()
         
         let testScheduler = TestScheduler(initialClock: 0)
-        logoutResult = testScheduler.createObserver(RequestResult<Void>.self)
-        deleteResult = testScheduler.createObserver(RequestResult<Void>.self)
+        logoutResult = testScheduler.createObserver(Result<Void, Error>.self)
+        deleteResult = testScheduler.createObserver(Result<Void, Error>.self)
         
         let input = MyPageViewModel.Input(logoutTrigger: logoutTrigger.asDriver(onErrorJustReturn: ()),
                                           deleteTrigger: deleteTrigger.asDriver(onErrorJustReturn: ()))

@@ -23,7 +23,7 @@ final class ExpenditureDetailViewModelTest: XCTestCase {
     
     //Output
     var expenditure: Expenditure!
-    var result: TestableObserver<RequestResult<Void>>!
+    var result: TestableObserver<Result<Void, Error>>!
     
     override func setUp() {
         disposeBag = DisposeBag()
@@ -33,7 +33,7 @@ final class ExpenditureDetailViewModelTest: XCTestCase {
         deleteTrigger = PublishSubject<Void>()
         
         let testScheduler = TestScheduler(initialClock: 0)
-        result = testScheduler.createObserver(RequestResult<Void>.self)
+        result = testScheduler.createObserver(Result<Void, Error>.self)
         
         let input = ExpenditureDetailViewModel.Input(deleteTrigger: deleteTrigger.asDriver(onErrorJustReturn: ()))
         

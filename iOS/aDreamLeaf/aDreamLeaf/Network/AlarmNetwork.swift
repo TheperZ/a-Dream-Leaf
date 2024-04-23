@@ -13,18 +13,22 @@ import FirebaseMessaging
 
 class AlarmNetwork: Network {
     
+    enum AlarmNetworkError: String, Error {
+        case tokenError = "토큰을 가져오는 과정에서 에러가 발생했습니다."
+    }
+    
     init() {
         super.init(type: .Alarm)
     }
     
-    func checkState() -> Observable<RequestResult<AlarmState>> {
+    func checkState() -> Observable<Result<AlarmState, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult<AlarmState>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AlarmNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -44,14 +48,14 @@ class AlarmNetwork: Network {
         }
     }
     
-    func register() -> Observable<RequestResult<Void>> {
+    func register() -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AlarmNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -71,14 +75,14 @@ class AlarmNetwork: Network {
         }
     }
     
-    func deregister() -> Observable<RequestResult<Void>> {
+    func deregister() -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "오류가 발생했습니다.\n잠시후에 다시 시도해주세요."))
+                    observer.onNext(.failure(AlarmNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }

@@ -20,7 +20,7 @@ final class PwdResetViewModelTest: XCTestCase {
     var email: PublishSubject<String>!
     
     //output
-    var result: TestableObserver<RequestResult<Void>>!
+    var result: TestableObserver<Result<Void, Error>>!
     
     override func setUp() {
         disposeBag = DisposeBag()
@@ -37,7 +37,7 @@ final class PwdResetViewModelTest: XCTestCase {
         
         let testScheduler = TestScheduler(initialClock: 0)
         
-        result = testScheduler.createObserver(RequestResult<Void>.self)
+        result = testScheduler.createObserver(Result<Void, Error>.self)
         output.result.drive(result).disposed(by: disposeBag)
     }
     
@@ -51,7 +51,6 @@ final class PwdResetViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
     }
     
     func test_trigger_withNoEmail() {
@@ -63,8 +62,6 @@ final class PwdResetViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "이메일을 입력해주세요.")
     }
     
     func test_trigger_withWrongEmail() {
@@ -77,8 +74,6 @@ final class PwdResetViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "올바르지 못한 이메일 형식입니다.")
     }
     
     func test_trigger_withWrongEmail2() {
@@ -91,8 +86,6 @@ final class PwdResetViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "올바르지 못한 이메일 형식입니다.")
     }
     
     

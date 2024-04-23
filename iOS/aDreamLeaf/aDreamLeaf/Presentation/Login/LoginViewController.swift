@@ -183,13 +183,14 @@ class LoginViewController: UIViewController {
         
         output.result
             .drive(onNext: {[weak self] result in
-                if result.success {
-                    self?.dismiss(animated: true)
-                } else {
-                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
+                switch result {
+                    case .success:
+                        self?.dismiss(animated: true)
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription, preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
                 }
             })
             .disposed(by: disposeBag)

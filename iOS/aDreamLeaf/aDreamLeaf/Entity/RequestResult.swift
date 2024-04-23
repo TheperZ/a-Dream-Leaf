@@ -6,21 +6,21 @@
 //
 
 import Foundation
-
-struct RequestResult<T> {
-    let success: Bool
-    let msg: String?
-    let data: T?
-    
-    init(success: Bool, msg: String?) {
-        self.success = success
-        self.msg = msg
-        self.data = nil
-    }
-    
-    init(success: Bool, msg: String?, data: T?) {
-        self.success = success
-        self.msg = msg
-        self.data = data
-    }
-}
+//
+//struct RequestResult<T> {
+//    let success: Bool
+//    let msg: String?
+//    let data: T?
+//    
+//    init(success: Bool, msg: String?) {
+//        self.success = success
+//        self.msg = msg
+//        self.data = nil
+//    }
+//    
+//    init(success: Bool, msg: String?, data: T?) {
+//        self.success = success
+//        self.msg = msg
+//        self.data = data
+//    }
+//}

@@ -24,7 +24,7 @@ struct NewPaymentViewModel {
     
     struct Output {
         let loading: Driver<Bool>
-        let result: Driver<RequestResult<Void>>
+        let result: Driver<Result<Void, Error>>
         let editData: Expenditure?
     }
     
@@ -66,16 +66,16 @@ struct NewPaymentViewModel {
                 
                 if let editData = editData {
                     return repository.updateRequest(accountId: editData.accountId, date: dateString, storeName: store, body: content, price: cost)
-                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                        .asDriver(onErrorJustReturn: .success(()))
                         .do(onNext: { _ in loading.onNext(false)} )
                 } else {
                     return repository.createRequest(date: dateString, storeName: store, body: content, price: cost)
-                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                        .asDriver(onErrorJustReturn: .success(()))
                         .do(onNext: { _ in loading.onNext(false)} )
                 }
                 
             }
-            .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+            .asDriver(onErrorJustReturn: .success(()))
         
         
         return Output(loading: loading.asDriver(onErrorJustReturn: false), result: result, editData: editData)

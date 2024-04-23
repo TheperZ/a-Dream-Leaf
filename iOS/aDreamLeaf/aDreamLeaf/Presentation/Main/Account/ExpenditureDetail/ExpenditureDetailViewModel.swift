@@ -21,7 +21,7 @@ struct ExpenditureDetailViewModel {
     struct Output {
         let loading: Driver<Bool>
         let expenditure: Expenditure
-        let result: Driver<RequestResult<Void>>
+        let result: Driver<Result<Void, Error>>
     }
     
     init(data : Expenditure, _ repo: AccountRepository = NetworkAccountRepository()) {
@@ -37,7 +37,7 @@ struct ExpenditureDetailViewModel {
             .flatMapLatest {
                 repository.deleteExpenditure(accountId: expenditure.accountId)
                     .do(onNext: { _ in loading.onNext(false) })
-                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
             
      

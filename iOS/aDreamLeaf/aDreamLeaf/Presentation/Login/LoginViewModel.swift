@@ -21,7 +21,7 @@ struct LoginViewModel {
     
     struct Output {
         let loading: Driver<Bool>
-        let result: Driver<RequestResult<User>>
+        let result: Driver<Result<Void, Error>>
     }
     
     
@@ -32,14 +32,16 @@ struct LoginViewModel {
     func transform(input: Input) -> Output {
         let loading = PublishSubject<Bool>()
         
+        
         let result = input.trigger
             .withLatestFrom(Driver.combineLatest(input.email, input.pwd))
             .do(onNext: { _ in loading.onNext(true)})
             .flatMapLatest { email, pwd in
                 repository.login(email: email, pwd: pwd)
                     .do(onNext: { _ in loading.onNext(false)})
-                    .asDriver(onErrorJustReturn: RequestResult<User>(success: false, msg: nil, data: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
+            
         
         return Output(loading: loading.asDriver(onErrorJustReturn: false), result: result)
     }

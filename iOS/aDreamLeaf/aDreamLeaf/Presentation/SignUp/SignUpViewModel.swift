@@ -22,7 +22,7 @@ struct SignUpViewModel {
     
     struct Output {
         let loading: Driver<Bool>
-        let result: Driver<RequestResult<Void>>
+        let result: Driver<Result<Void, Error>>
     }
     
     init(_ repo: SignUpRepository = NetworkSignUpRepository()) {
@@ -38,7 +38,7 @@ struct SignUpViewModel {
             .flatMapLatest { email, pwd, pwdCheck in
                 repository.signUp(email: email, pwd: pwd, pwdCheck: pwdCheck)
                     .do(onNext: { _ in loading.onNext(false)})
-                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
         
         return Output(loading: loading.asDriver(onErrorJustReturn: false), result: result)

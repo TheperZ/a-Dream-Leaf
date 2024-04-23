@@ -200,19 +200,20 @@ class ReviewViewController: UIViewController {
         
         output.result
             .drive(onNext: { [weak self] result in
-                guard let self = self else { return }
-                if result.success {
-                    let alert = UIAlertController(title: "성공", message: output.isEdit ? "리뷰가 정상적으로 수정 되었습니다!" : "리뷰가 정상적으로 작성 되었습니다!", preferredStyle: .alert)
-                    let cancel = UIAlertAction(title: "확인", style: .default) { _ in
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                    alert.addAction(cancel)
-                    self.present(alert, animated: true)
-                } else {
-                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
-                    let cancel = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(cancel)
-                    self.present(alert, animated: true)
+                
+                switch result {
+                    case .success:
+                        let alert = UIAlertController(title: "성공", message: output.isEdit ? "리뷰가 정상적으로 수정 되었습니다!" : "리뷰가 정상적으로 작성 되었습니다!", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "확인", style: .default) { _ in
+                            self?.navigationController?.popViewController(animated: true)
+                        }
+                        alert.addAction(cancel)
+                        self?.present(alert, animated: true)
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription, preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(cancel)
+                        self?.present(alert, animated: true)
                 }
                 
             })

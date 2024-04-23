@@ -12,18 +12,22 @@ import Alamofire
 
 class AccountNetwork: Network {
     
+    enum AccountNetwork: String, Error {
+        case tokenError = "토큰을 가져오는 과정에서 에러가 발생했습니다."
+    }
+    
     init() {
         super.init(type: .Account)
     }
     
-    func deleteExpenditure(accountId: Int) -> Observable<RequestResult<Void>> {
+    func deleteExpenditure(accountId: Int) -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AccountNetwork.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -43,14 +47,14 @@ class AccountNetwork: Network {
         }
     }
     
-    func setAccountBudget(to budget: Int) -> Observable<RequestResult<Void>> {
+    func setAccountBudget(to budget: Int) -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AccountNetwork.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -70,14 +74,14 @@ class AccountNetwork: Network {
         }
     }
     
-    func createExpenditure(date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult<Void>> {
+    func createExpenditure(date: String, storeName: String, body: String, price: Int) -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AccountNetwork.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -97,14 +101,14 @@ class AccountNetwork: Network {
         }
     }
     
-    func updateExpenditure(accountId: Int,date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult<Void>> {
+    func updateExpenditure(accountId: Int,date: String, storeName: String, body: String, price: Int) -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AccountNetwork.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -125,14 +129,14 @@ class AccountNetwork: Network {
         }
     }
     
-    func getExpenditureList(when : String) -> Observable<RequestResult<[Expenditure]>> {
+    func getExpenditureList(when : String) -> Observable<Result<[Expenditure], Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AccountNetwork.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -152,14 +156,14 @@ class AccountNetwork: Network {
         }
     }
     
-    func getAccountSummary(yearMonth: String) -> Observable<RequestResult<AccountSummary>> {
+    func getAccountSummary(yearMonth: String) -> Observable<Result<AccountSummary, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(AccountNetwork.tokenError))
                 }
                 
                 guard let token = token else { return }

@@ -9,8 +9,8 @@ import Foundation
 import RxSwift
 
 protocol LoginRepository {
-    func login(email: String, pwd: String) -> Observable<RequestResult<User>>
-    func localLogIn() -> Observable<RequestResult<User>>
-    func sendPwdResetMail(to email: String) -> Observable<RequestResult<Void>>
-    func logout() -> Observable<RequestResult<Void>>
+    func login(email: String, pwd: String) -> Observable<Result<Void, Error>>
+    func localLogIn() -> Observable<Result<Void, Error>>
+    func sendPwdResetMail(to email: String) -> Observable<Result<Void, Error>>
+    func logout() -> Observable<Result<Void, Error>>
 }

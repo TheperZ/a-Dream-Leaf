@@ -11,6 +11,11 @@ import RxSwift
 
 struct MockAccountRepository: AccountRepository {
     
+    enum MockNetworkAccountRepositoryError: String, Error {
+        case emptyName = "가게명을 입력해주세요."
+        case emptyPrice = "가격을 입력해주세요"
+    }
+    
     let expenditureList = [
         Expenditure(userId: 1, accountId: 1, restaurant: "피자", price: 123, date: "2023-11", body: "점심"),
         Expenditure(userId: 2, accountId: 2, restaurant: "치킨", price: 123, date: "2023-12", body: "점심"),
@@ -18,11 +23,11 @@ struct MockAccountRepository: AccountRepository {
         Expenditure(userId: 4, accountId: 4, restaurant: "카페", price: 123, date: "2023-12", body: "점심"),
     ]
     
-    func setBudget(to budget: Int) -> Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: nil))
+    func setBudget(to budget: Int) -> Observable<Result<Void, Error>> {
+        return Observable.just(.success(()))
     }
     
-    func createRequest(date: String, storeName: String, body: String, price: Int) -> Observable<aDreamLeaf.RequestResult<Void>> {
+    func createRequest(date: String, storeName: String, body: String, price: Int) -> Observable<Result<Void, Error>> {
         
         if let inputValidationResult = inputValidation(date: date, storeName: storeName, body: body, price: price) {
             return inputValidationResult
@@ -33,10 +38,10 @@ struct MockAccountRepository: AccountRepository {
         print("\tstoreName", storeName)
         print("\tbody", body)
         
-        return Observable.just(RequestResult(success: true, msg: "create"))
+        return Observable.just(.success(()))
     }
     
-    func updateRequest(accountId: Int, date: String, storeName: String, body: String, price: Int) -> Observable<aDreamLeaf.RequestResult<Void>> {
+    func updateRequest(accountId: Int, date: String, storeName: String, body: String, price: Int) -> Observable<Result<Void, Error>> {
         
         print("\tupdateRequest")
         print("\taccountId", accountId)
@@ -49,7 +54,7 @@ struct MockAccountRepository: AccountRepository {
             return inputValidationResult
         }
         
-        return Observable.just(RequestResult(success: true, msg: "update"))
+        return Observable.just(.success(()))
     }
     
     func getExpenditureList(when: String) -> Observable<[aDreamLeaf.Expenditure]> {
@@ -60,15 +65,15 @@ struct MockAccountRepository: AccountRepository {
         return Observable.just([100, 200])
     }
     
-    func deleteExpenditure(accountId: Int) -> Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: nil))
+    func deleteExpenditure(accountId: Int) -> Observable<Result<Void, Error>> {
+        return Observable.just(.success(()))
     }
     
-    private func inputValidation(date: String, storeName: String, body: String, price: Int) -> Observable<RequestResult<Void>>? {
+    private func inputValidation(date: String, storeName: String, body: String, price: Int) -> Observable<Result<Void, Error>>? {
         if storeName == "" {
-            return Observable.just(RequestResult(success: false, msg: "가게명을 입력해주세요."))
+            return Observable.just(.failure(MockNetworkAccountRepositoryError.emptyName))
         } else if price < 0 {
-            return Observable.just(RequestResult(success: false, msg: "가격을 입력해주세요."))
+            return Observable.just(.failure(MockNetworkAccountRepositoryError.emptyPrice))
         } else {
             return nil
         }

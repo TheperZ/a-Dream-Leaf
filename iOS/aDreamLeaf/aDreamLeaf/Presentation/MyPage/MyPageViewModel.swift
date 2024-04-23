@@ -23,8 +23,8 @@ struct MyPageViewModel: LoadingViewModel {
         let loading: Driver<Bool>
         let email: Driver<String>
         let nickname: Driver<String>
-        let logoutResult: Driver<RequestResult<Void>>
-        let deleteResult: Driver<RequestResult<Void>>
+        let logoutResult: Driver<Result<Void, Error>>
+        let deleteResult: Driver<Result<Void, Error>>
     }
     
     var loading = PublishSubject<Bool>()
@@ -46,7 +46,7 @@ struct MyPageViewModel: LoadingViewModel {
             .flatMapLatest {
                 loginRepo.logout()
                     .do(onNext: { _ in loading.onNext(true) })
-                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
         
         let deleteResult = input.deleteTrigger
@@ -54,7 +54,7 @@ struct MyPageViewModel: LoadingViewModel {
             .flatMapLatest {
                 profileRepo.deleteAccount()
                     .do(onNext: { _ in loading.onNext(true) })
-                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
         
         return Output(loading: loading.asDriver(onErrorJustReturn: false), email: email, nickname: nickname, logoutResult: logoutResult, deleteResult: deleteResult)
