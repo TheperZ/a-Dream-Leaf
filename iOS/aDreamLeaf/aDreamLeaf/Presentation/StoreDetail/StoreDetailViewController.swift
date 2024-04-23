@@ -17,6 +17,56 @@ class StoreDetailViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        stackView.alignment = .center
+        return stackView
+    }()
+    
+    private let addressStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let infoStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let infoSubStackView1: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private let infoSubStackView2: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private let serviceStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let reviewStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.alignment = .leading
+        return stackView
+    }()
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 30, weight: .heavy)
@@ -25,11 +75,6 @@ class StoreDetailViewController: UIViewController {
         return label
     }()
     
-    private let addressStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.spacing = 10
-        return stackView
-    }()
     
     private let mapButton: UIButton = {
         let button = UIButton()
@@ -47,13 +92,6 @@ class StoreDetailViewController: UIViewController {
         label.textColor = .gray
         label.textAlignment = .center
         return label
-    }()
-    
-    private let topStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        return stackView
     }()
     
     private let cardAvail: UILabel = {
@@ -79,17 +117,10 @@ class StoreDetailViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-    
-    private let bottomStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
-    
+
     private let hygieneGradeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 10, weight: .semibold)
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
         label.textColor = .black
         label.layer.borderColor = UIColor.black.cgColor
         label.layer.borderWidth = 1
@@ -124,13 +155,6 @@ class StoreDetailViewController: UIViewController {
         return label
     }()
     
-    
-    private let divider: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
-    }()
-    
     private let reviewTitle: UIButton = {
         let button = UIButton()
         button.setTitle("리뷰", for: .normal)
@@ -156,7 +180,7 @@ class StoreDetailViewController: UIViewController {
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = 10
         button.layer.borderColor = UIColor.black.cgColor
-        button.layer.borderWidth = 0.5
+        button.layer.borderWidth = 1
         return button
     }()
     
@@ -324,113 +348,83 @@ class StoreDetailViewController: UIViewController {
     }
     
     private func layout() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        
-        [nameLabel, addressStackView, distanceLabel, topStackView, bottomStackView, serviceLabel, serviceConditionLabel, divider, reviewTitle, reviewTableView, reviewButton, reviewWarningLabel, loadingView].forEach {
+        [scrollView, reviewWarningLabel, loadingView].forEach {
             view.addSubview($0)
+        }
+        
+        scrollView.addSubview(topStackView)
+        
+        [nameLabel, addressStackView, infoStackView, serviceStackView, reviewStackView].forEach {
+            topStackView.addArrangedSubview($0)
         }
         
         [distanceLabel, mapButton].forEach {
             addressStackView.addArrangedSubview($0)
         }
         
+        [infoSubStackView1, infoSubStackView2].forEach {
+            infoStackView.addArrangedSubview($0)
+        }
+        
         [goodness, cardAvail].forEach {
-            topStackView.addArrangedSubview($0)
+            infoSubStackView1.addArrangedSubview($0)
         }
         
         [hygieneGradeLabel, ratingLabel].forEach {
-            bottomStackView.addArrangedSubview($0)
+            infoSubStackView2.addArrangedSubview($0)
+        }
+        
+        [serviceLabel, serviceConditionLabel].forEach {
+            serviceStackView.addArrangedSubview($0)
+        }
+        
+        [reviewTitle, reviewTableView,reviewButton].forEach {
+            reviewStackView.addArrangedSubview($0)
         }
         
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        contentView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.width.equalTo(scrollView)
-        }
-        
-        nameLabel.snp.makeConstraints {
-            $0.width.equalTo(300)
-            $0.centerX.equalTo(contentView)
-            $0.top.equalTo(contentView).offset(30)
-        }
-        
-        addressStackView.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(20)
-            $0.centerX.equalTo(contentView)
+        topStackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(30)
+            $0.leading.trailing.width.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-30)
         }
         
         mapButton.snp.makeConstraints {
-            $0.width.equalTo(50)
+            $0.width.equalTo(60)
         }
         
-        topStackView.snp.makeConstraints {
-            $0.top.equalTo(distanceLabel.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(nameLabel)
-        }
-        
-        cardAvail.snp.makeConstraints {
+        infoSubStackView1.snp.makeConstraints {
             $0.height.equalTo(40)
+            $0.width.equalTo(300)
         }
         
-        goodness.snp.makeConstraints {
+        infoSubStackView2.snp.makeConstraints {
             $0.height.equalTo(40)
+            $0.width.equalTo(300)
         }
         
-        bottomStackView.snp.makeConstraints {
-            $0.top.equalTo(topStackView.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(nameLabel)
+        serviceStackView.snp.makeConstraints {
+            $0.width.equalTo(infoStackView)
         }
         
-        hygieneGradeLabel.snp.makeConstraints {
-            $0.height.equalTo(40)
-        }
-        
-        ratingLabel.snp.makeConstraints {
-            $0.height.equalTo(40)
-        }
-        
-        serviceLabel.snp.makeConstraints {
-            $0.top.equalTo(bottomStackView.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(nameLabel)
-        }
-        
-        serviceConditionLabel.snp.makeConstraints {
-            $0.top.equalTo(serviceLabel.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(nameLabel)
-        }
-        
-        divider.snp.makeConstraints {
-            $0.top.equalTo(serviceConditionLabel.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(serviceConditionLabel)
-            $0.height.equalTo(0.2)
-        }
-        
-        reviewTitle.snp.makeConstraints {
-            $0.top.equalTo(divider.snp.bottom).offset(30)
-            $0.leading.equalTo(divider.snp.leading)
+        reviewStackView.snp.makeConstraints {
+            $0.width.equalTo(infoStackView)
         }
         
         reviewTableView.snp.makeConstraints {
-            $0.top.equalTo(reviewTitle.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(divider)
-            $0.height.equalTo(150)
+            $0.height.equalTo(120)
+            $0.width.equalToSuperview()
+        }
+        reviewButton.snp.makeConstraints {
+            $0.height.equalTo(40)
+            $0.width.equalToSuperview()
         }
         
         reviewWarningLabel.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(reviewTableView)
-        }
-        
-        reviewButton.snp.makeConstraints {
-            $0.top.equalTo(reviewTableView.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(reviewTableView)
-            $0.bottom.equalTo(contentView).offset(-30)
-        }
-        
-        loadingView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalTo(reviewTableView)
         }
     }
 }

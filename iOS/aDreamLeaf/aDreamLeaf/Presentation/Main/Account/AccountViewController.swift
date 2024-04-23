@@ -53,6 +53,14 @@ class AccountViewController: UIChartViewController {
     
     private let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: nil, action: nil)
     
+    private let scrollView = UIScrollView()
+    
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "가계부"
@@ -209,8 +217,15 @@ class AccountViewController: UIChartViewController {
     }
     
     private func layout() {
-        [titleLabel, datePicker, accountSummaryContainer,divider, tableView, addButton, cover, emptyWarningLabel].forEach {
+        
+        [scrollView, cover, emptyWarningLabel].forEach {
             view.addSubview($0)
+        }
+        
+        scrollView.addSubview(topStackView)
+        
+        [titleLabel, datePicker, accountSummaryContainer,divider, tableView, addButton].forEach {
+            topStackView.addArrangedSubview($0)
         }
         
         cover.contentView.addSubview(coverStackView)
@@ -219,39 +234,32 @@ class AccountViewController: UIChartViewController {
             coverStackView.addArrangedSubview($0)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.equalTo(view).offset(20)
-            $0.trailing.equalTo(view).offset(-20)
-            $0.height.equalTo(30)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        topStackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.width.equalToSuperview().offset(-60)
+            $0.leading.equalToSuperview().offset(30)
+            $0.trailing.equalToSuperview().offset(-30)
+            $0.bottom.equalToSuperview().offset(-60)
         }
         
         datePicker.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(70)
         }
         
-        accountSummaryContainer.snp.makeConstraints {
-            $0.top.equalTo(datePicker.snp.bottom).offset(20)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
         
         divider.snp.makeConstraints {
-            $0.top.equalTo(accountSummaryContainer.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(0.5)
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(divider.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.bottom.equalTo(addButton.snp.top).offset(-20)
+            $0.height.equalTo(300)
         }
         
         addButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(40)
         }
         

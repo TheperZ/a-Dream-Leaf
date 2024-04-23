@@ -10,6 +10,6 @@ import RxSwift
 
 protocol AlarmRepository {
     func getState() -> Observable<Bool>
-    func register() -> Observable<RequestResult<Void>>
-    func deregister() -> Observable<RequestResult<Void>>
+    func register() -> Observable<Result<Void, Error>>
+    func deregister() -> Observable<Result<Void, Error>>
 }

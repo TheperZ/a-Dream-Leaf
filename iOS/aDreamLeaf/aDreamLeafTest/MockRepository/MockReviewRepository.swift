@@ -18,12 +18,12 @@ struct MockReviewRepository: ReviewRepository {
         Review(userId: 6, userName: "name6", reviewId: 6, storeId: 6, storeName: "Store6", date: "2023-03-11", body: "좋아요!", rating: 3),
     ]
     
-    func create(storeId: Int, body: String, rating: Int, image: UIImage?) -> RxSwift.Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: "create"))
+    func create(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<Result<Void, Error>> {
+        return Observable.just(.success(()))
     }
     
-    func update(reviewId: Int, body: String, rating: Int, image: UIImage?) -> RxSwift.Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: "update"))
+    func update(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<Result<Void, Error>> {
+        return Observable.just(.success(()))
     }
     
     func fetchRecent(storeId: Int) -> RxSwift.Observable<[aDreamLeaf.Review]> {
@@ -34,8 +34,8 @@ struct MockReviewRepository: ReviewRepository {
         return Observable.just(reviews.filter { $0.storeId == storeId })
     }
     
-    func deleteReview(reviewId: Int) -> RxSwift.Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: "delete"))
+    func deleteReview(reviewId: Int) -> Observable<Result<Void, Error>> {
+        return Observable.just(.success(()))
     }
     
     

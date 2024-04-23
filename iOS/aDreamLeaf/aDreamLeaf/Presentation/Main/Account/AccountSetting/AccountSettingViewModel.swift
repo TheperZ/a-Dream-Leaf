@@ -24,7 +24,7 @@ struct AccountSettingViewModel {
     struct Output {
         let loading: Driver<Bool>
         let alarm: Driver<Bool>
-        let budgetResult: Driver<RequestResult<Void>>
+        let budgetResult: Driver<Result<Void, Error>>
     }
     
     init(_ accountRepo: AccountRepository = NetworkAccountRepository(), _ alarmRepo: AlarmRepository = NetworkAlarmRepository()) {
@@ -41,7 +41,7 @@ struct AccountSettingViewModel {
             .flatMapLatest {
                 accountRepo.setBudget(to: $0)
                     .do(onNext: { _ in loading.onNext(false) })
-                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
     
         
@@ -58,10 +58,10 @@ struct AccountSettingViewModel {
             .flatMapLatest { state in
                 if state {
                     alarmRepo.deregister()
-                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                        .asDriver(onErrorJustReturn: .success(()))
                 } else {
                     alarmRepo.register()
-                        .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                        .asDriver(onErrorJustReturn: .success(()))
                 }
             }
             .map { _ in () }

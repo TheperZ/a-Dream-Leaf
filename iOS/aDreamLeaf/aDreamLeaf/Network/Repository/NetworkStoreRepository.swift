@@ -13,16 +13,37 @@ struct NetworkStoreRepository: StoreRepository {
     
     func searchStores(with keyword: String) -> Observable<[SimpleStore]> {
         return network.searchStore(with: keyword)
-            .map { result in result.data ?? []}
+            .map { result in
+                switch result {
+                    case let .success(data):
+                        return data
+                    case .failure(let failure):
+                        return []
+                }}
+            
     }
     
     func fetchDetail(storeId: Int) -> Observable<Store?> {
         return network.fetchStoreDetail(storeId: storeId)
-            .map { $0.data }
+            .map { result in
+                switch result {
+                    case let .success(data):
+                        return data
+                    case .failure:
+                        return nil
+                }
+            }
+            
     }
     
     func searchNearStore(lat: Double, long: Double) -> Observable<[SimpleStore]> {
         return network.searchWithLocation(lat: lat, long: long)
-            .map { result in result.data ?? []}
+            .map { result in
+                switch result {
+                    case let .success(data):
+                        return data
+                    case .failure(let failure):
+                        return []
+                }}
     }
 }

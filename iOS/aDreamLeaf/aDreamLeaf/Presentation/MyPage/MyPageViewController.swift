@@ -15,6 +15,39 @@ class MyPageViewController: UIViewController, LoadingViewController {
     var loadingView = UIActivityIndicatorView(style: .medium)
     private let viewModel: MyPageViewModel
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 50
+        return stackView
+    }()
+    
+    private let infoStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        return stackView
+    }()
+    
+    private let nicknameStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 5
+        return stackView
+    }()
+    
+    private let emailStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 5
+        return stackView
+    }()
+    
+    private let buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let backButton: UIButton = {
         let button = UIButton()
         let backButtonConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
@@ -34,14 +67,10 @@ class MyPageViewController: UIViewController, LoadingViewController {
         return label
     }()
     
-    private let nicknameStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .equalSpacing
-        return stackView
-    }()
-    
     private let nicknameLabel: UILabel = {
         let label = UILabel()
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         label.text = "닉네임"
         return label
     }()
@@ -49,14 +78,9 @@ class MyPageViewController: UIViewController, LoadingViewController {
     private let nicknameContentLabel = UILabel()
     private let nicknameUnderLine = UIView()
     
-    private let emailStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .equalSpacing
-        return stackView
-    }()
-    
     private let emailLabel: UILabel = {
         let label = UILabel()
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         label.text = "이메일"
         return label
     }()
@@ -151,31 +175,35 @@ class MyPageViewController: UIViewController, LoadingViewController {
         
         output.logoutResult
             .drive(onNext: {[weak self] result in
-                if result.success {
-                    self?.dismiss(animated: true)
-                } else {
-                    let alert = UIAlertController(title: "실패", message: result.msg , preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
+                switch result {
+                    case .success:
+                        self?.dismiss(animated: true)
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription , preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
                 }
+                
             })
             .disposed(by: disposeBag)
         
         output.deleteResult
             .drive(onNext: { [weak self] result in
-                if result.success {
-                    let alert = UIAlertController(title: "성공", message: "그 동안 이용해주셔서 감사합니다.", preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self?.dismiss(animated: true)
-                    }
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
-                } else {
-                    let alert = UIAlertController(title: "실패", message: result.msg , preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
+                
+                switch result {
+                    case .success:
+                        let alert = UIAlertController(title: "성공", message: "그 동안 이용해주셔서 감사합니다.", preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                            self?.dismiss(animated: true)
+                        }
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription , preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
                 }
             })
             .disposed(by: disposeBag)
@@ -211,11 +239,29 @@ class MyPageViewController: UIViewController, LoadingViewController {
     
     private func layout() {
         
-        [nicknameLabel, nicknameContentLabel].forEach { nicknameStackView.addArrangedSubview($0) }
-        [emailLabel, emailContentLabel].forEach { emailStackView.addArrangedSubview($0) }
         
-        [loadingView, backButton,titleLabel, nicknameStackView, nicknameUnderLine, emailStackView, emailUnderLine, logoutButton, exitButton].forEach {
+        [loadingView, backButton, topStackView].forEach {
             view.addSubview($0)
+        }
+        
+        [titleLabel, infoStackView, buttonStackView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
+        
+        [nicknameStackView, nicknameUnderLine, emailStackView, emailUnderLine].forEach {
+            infoStackView.addArrangedSubview($0)
+        }
+        
+        [nicknameLabel, nicknameContentLabel].forEach {
+            nicknameStackView.addArrangedSubview($0)
+        }
+        
+        [emailLabel, emailContentLabel].forEach {
+            emailStackView.addArrangedSubview($0)
+        }
+        
+        [logoutButton, exitButton].forEach {
+            buttonStackView.addArrangedSubview($0)
         }
         
         loadingView.snp.makeConstraints {
@@ -223,50 +269,25 @@ class MyPageViewController: UIViewController, LoadingViewController {
         }
         
         backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.equalTo(view).offset(20)
+            $0.width.height.equalTo(30)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(backButton.snp.bottom).offset(40)
-            $0.width.equalTo(300)
-            $0.centerX.equalTo(view)
-        }
-        
-        nicknameStackView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(50)
-            $0.leading.trailing.equalTo(titleLabel)
+        topStackView.snp.makeConstraints {
+            $0.top.equalTo(backButton.snp.bottom).offset(30)
+            $0.leading.equalTo(view).offset(30)
+            $0.trailing.equalTo(view).offset(-30)
         }
         
         nicknameUnderLine.snp.makeConstraints {
-            $0.top.equalTo(nicknameContentLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(0.5)
-        }
-        
-        emailStackView.snp.makeConstraints {
-            $0.top.equalTo(nicknameUnderLine.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
+            $0.height.equalTo(1)
         }
         
         emailUnderLine.snp.makeConstraints {
-            $0.top.equalTo(emailContentLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(0.5)
+            $0.height.equalTo(1)
         }
-        
-        logoutButton.snp.makeConstraints {
-            $0.top.equalTo(emailUnderLine.snp.bottom).offset(40)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(40)
-        }
-        
-        exitButton.snp.makeConstraints {
-            $0.top.equalTo(logoutButton.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(40)
-        }
-
+    
     }
     
 }

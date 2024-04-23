@@ -26,7 +26,7 @@ final class ReviewViewModelTest: XCTestCase {
     //Output
     var isEdit: Bool!
     var editData: Review?
-    var result: TestableObserver<RequestResult<Void>>!
+    var result: TestableObserver<Result<Void, Error>>!
     
     override func setUp() {
         disposeBag = DisposeBag()
@@ -43,7 +43,7 @@ final class ReviewViewModelTest: XCTestCase {
         viewModel = ReviewViewModel(storeId: 1, repository)
         
         let testScheduelr = TestScheduler(initialClock: 0)
-        result = testScheduelr.createObserver(RequestResult<Void>.self)
+        result = testScheduelr.createObserver(Result<Void, Error>.self)
         
         let input = ReviewViewModel.Input(trigger: trigger.asDriver(onErrorJustReturn: ()),
                                           rating: rating.asDriver(onErrorJustReturn: 0),
@@ -60,7 +60,7 @@ final class ReviewViewModelTest: XCTestCase {
         viewModel = ReviewViewModel(storeId: 1, editData: tempReview, repository)
         
         let testScheduelr = TestScheduler(initialClock: 0)
-        result = testScheduelr.createObserver(RequestResult<Void>.self)
+        result = testScheduelr.createObserver(Result<Void, Error>.self)
         
         let input = ReviewViewModel.Input(trigger: trigger.asDriver(onErrorJustReturn: ()),
                                           rating: rating.asDriver(onErrorJustReturn: 0),
@@ -96,7 +96,12 @@ final class ReviewViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.msg, "create")
+        switch result.events[0].value.element {
+            case .success:
+                break
+            default:
+                XCTFail()
+        }
     }
     
     //MARK: - Edit Mode
@@ -119,7 +124,12 @@ final class ReviewViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.msg, "update")
+        switch result.events[0].value.element {
+            case .success:
+                break
+            default:
+                XCTFail()
+        }
     }
     
     func test_trigger_withInput_InEditMode() {
@@ -134,8 +144,12 @@ final class ReviewViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.msg, "update")
+        switch result.events[0].value.element {
+            case .success:
+                break
+            default:
+                XCTFail()
+        }
     }
-    
     
 }

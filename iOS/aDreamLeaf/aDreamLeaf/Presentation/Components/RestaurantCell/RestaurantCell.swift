@@ -13,6 +13,14 @@ class RestaurantCell: UICollectionViewCell {
     private let disposeBag = DisposeBag()
     private var viewModel: RestaurantCellViewModel!
     
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        stackView.alignment = .leading
+        return stackView
+    }()
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .semibold)
@@ -35,7 +43,7 @@ class RestaurantCell: UICollectionViewCell {
     }()
     
     
-    private let stackView: UIStackView = {
+    private let badgeStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.spacing = 10
         return stackView
@@ -89,32 +97,22 @@ class RestaurantCell: UICollectionViewCell {
     }
     
     private func layout() {
-        [nameLabel, ratingLabel, distanceLabel, stackView].forEach {
-            self.contentView.addSubview($0)
-        }
+        contentView.addSubview(stackView)
         
-        [goodImageView, cardImageView].forEach {
+        [nameLabel, ratingLabel, distanceLabel, badgeStackView].forEach {
             stackView.addArrangedSubview($0)
         }
         
-        nameLabel.snp.makeConstraints {
-            $0.top.leading.equalTo(contentView).offset(15)
-            $0.trailing.equalTo(contentView).offset(-15)
-        }
-        
-        ratingLabel.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(nameLabel)
-        }
-        
-        distanceLabel.snp.makeConstraints {
-            $0.top.equalTo(ratingLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(nameLabel)
+        [goodImageView, cardImageView].forEach {
+            badgeStackView.addArrangedSubview($0)
         }
         
         stackView.snp.makeConstraints {
-            $0.top.equalTo(distanceLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(contentView).offset(15)
+            $0.top.leading.equalToSuperview().offset(10)
+            $0.trailing.bottom.equalToSuperview().offset(-10)
+        }
+        
+        badgeStackView.snp.makeConstraints {
             $0.height.equalTo(25)
         }
         

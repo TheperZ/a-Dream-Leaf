@@ -11,23 +11,30 @@ import RxSwift
 struct NetworkProfileRepository: ProfileRepository {
     private let network = ProfileNetwork()
     
-    func deleteAccount() -> Observable<RequestResult<Void>> {
+    func deleteAccount() -> Observable<Result<Void, Error>> {
         
         //Server -> FB 순으로 삭제 요청 : Firebase Uid가 필요하기 때문...
         return network.deleteAccountServer() // 서버측에 정보 삭제 요청
             .flatMap { result in
-                if result.success {// 서버측 정보 삭제 성공
-                    return network.deleteAccountFB()
-                        .map { result in
-                            if result.success {// Firebase 계정 삭제에 성공
-                                UserManager.logout() // Firebase 계정 삭제 성공시 로그아웃 처리
+                switch result {
+                    case .success:
+                        return network.deleteAccountFB()
+                            .map { result in
+                                
+                                switch result {
+                                    case .success:
+                                        UserManager.logout() // Firebase 계정 삭제 성공시 로그아웃 처리
+                                    case .failure(let failure):
+                                        break
+                                        
+                                }
+                                return result
+                                
                             }
-                            
-                            return result
-                        }
-                } else { // 서버측에 정보 삭제 요청 실패
-                    return Observable.just(result)
+                    case let .failure(error):
+                        return Observable.just(result)
                 }
+                
             }
     }
 }

@@ -15,15 +15,15 @@ struct NetworkKakaoRepository {
         if LocationManager.permitionCheck() {
             return network.getAddress(lat: LocationManager.getLatitude(), lon: LocationManager.getLongitude())
                 .map { result in
-                    switch result.success {
-                        case true:
-                            if let addressData = result.data, addressData.documents.count >= 1 {
+                    
+                    switch result {
+                        case let .success(addressData):
+                            if addressData.documents.count >= 1 {
                                 return addressData.documents[0].address?.address_name ?? addressData.documents[0].road_address?.address_name ?? "위치를 찾을 수 없습니다."
                             } else {
                                 return "주소 정보를 찾을 수 없습니다."
                             }
-                            
-                        case false:
+                        case .failure(let failure):
                             return "오류가 발생했습니다. 잠시 후 다시 시도해주세요."
                     }
                 }

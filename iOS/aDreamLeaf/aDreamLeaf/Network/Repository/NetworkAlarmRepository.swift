@@ -14,20 +14,21 @@ struct NetworkAlarmRepository: AlarmRepository {
     func getState() -> Observable<Bool> {
         return network.checkState()
             .map { result in
-                if result.success {
-                    guard let state = result.data?.exist else { return false }
-                    return state
-                } else {
-                    return false
+                
+                switch result {
+                    case let .success(data):
+                        return data.exist
+                    case .failure(let failure):
+                        return false
                 }
             }
     }
     
-    func register() -> Observable<RequestResult<Void>> {
+    func register() -> Observable<Result<Void, Error>> {
         return network.register()
     }
     
-    func deregister() -> Observable<RequestResult<Void>> {
+    func deregister() -> Observable<Result<Void, Error>> {
         return network.deregister()
     }
 }

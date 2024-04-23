@@ -16,6 +16,34 @@ class SignUpViewController: UIViewController {
     
     private let loadingView = UIActivityIndicatorView(style: .medium)
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 25  
+        return stackView
+    }()
+    
+    private let emailStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    
+    private let pwdStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    
+    private let pwdCheckStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "회원가입"
@@ -152,19 +180,23 @@ class SignUpViewController: UIViewController {
         
         output.result
             .drive(onNext: {[weak self] result in
-                if result.success {
-                    let alert = UIAlertController(title: "성공", message: "이메일 인증 후 로그인 해주세요", preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self?.navigationController?.popViewController(animated: true)
-                    }
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
-                } else {
-
-                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
+                
+                switch result {
+                        
+                    case .success:
+                        let alert = UIAlertController(title: "성공", message: "이메일 인증 후 로그인 해주세요", preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                            self?.navigationController?.popViewController(animated: true)
+                        }
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
+                        
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription, preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
+                        
                 }
             })
             .disposed(by: disposeBag)
@@ -178,12 +210,30 @@ class SignUpViewController: UIViewController {
     }
     
     private func layout() {
-        self.view.addSubview(scrollView)
+        
+        [scrollView, loadingView].forEach {
+            view.addSubview($0)
+        }
+        
         self.scrollView.addSubview(contentView)
         
-        [loadingView, titleLabel, emailLabel, emailTextField, emailUnderLine, pwdLabel, pwdTextField, pwdUnderLine, pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine, signUpButton].forEach {
-            contentView.addSubview($0)
+        [titleLabel, emailStackView, pwdStackView, pwdCheckStackView, signUpButton].forEach {
+            topStackView.addArrangedSubview($0)
         }
+        
+        [emailLabel, emailTextField, emailUnderLine].forEach {
+            emailStackView.addArrangedSubview($0)
+        }
+        
+        [pwdLabel, pwdTextField, pwdUnderLine].forEach {
+            pwdStackView.addArrangedSubview($0)
+        }
+        
+        [pwdCheckLabel, pwdCheckTextField, pwdCheckUnderLine].forEach {
+            pwdCheckStackView.addArrangedSubview($0)
+        }
+        
+        contentView.addSubview(topStackView)
         
         loadingView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -194,70 +244,29 @@ class SignUpViewController: UIViewController {
         }
         
         contentView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.width.equalTo(scrollView)
+            $0.top.leading.trailing.width.equalTo(scrollView)
         }
         
-        titleLabel.snp.makeConstraints {
+        topStackView.snp.makeConstraints {
             $0.top.equalTo(contentView).offset(50)
-            $0.centerX.equalTo(view)
-            $0.width.equalTo(300)
-        }
-        
-        emailLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
-        
-        emailTextField.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(titleLabel)
+            $0.leading.equalTo(contentView).offset(30)
+            $0.trailing.equalTo(contentView).offset(-30)
+            $0.bottom.equalTo(contentView).offset(-30)
         }
 
         emailUnderLine.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(1)
-        }
-        
-        pwdLabel.snp.makeConstraints {
-            $0.top.equalTo(emailUnderLine.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
-        
-        pwdTextField.snp.makeConstraints {
-            $0.top.equalTo(pwdLabel.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(titleLabel)
         }
 
         pwdUnderLine.snp.makeConstraints {
-            $0.top.equalTo(pwdTextField.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(1)
-        }
-        
-        pwdCheckLabel.snp.makeConstraints {
-            $0.top.equalTo(pwdUnderLine.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
-        
-        pwdCheckTextField.snp.makeConstraints {
-            $0.top.equalTo(pwdCheckLabel.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(titleLabel)
         }
 
         pwdCheckUnderLine.snp.makeConstraints {
-            $0.top.equalTo(pwdCheckTextField.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(1)
         }
         
-        signUpButton.snp.makeConstraints {
-            $0.top.equalTo(pwdCheckUnderLine.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(45)
-            $0.bottom.equalTo(contentView).offset(-20)
-        }
-    
+
     }
 
 }

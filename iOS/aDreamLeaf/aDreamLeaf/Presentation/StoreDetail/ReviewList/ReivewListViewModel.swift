@@ -48,7 +48,7 @@ struct ReviewListViewModel {
             .flatMapLatest { reviewId in
                 repository.deleteReview(reviewId: reviewId)
                     .do(onNext: { _ in loading.onNext(false) })
-                    .asDriver(onErrorJustReturn: RequestResult(success: false, msg: nil))
+                    .asDriver(onErrorJustReturn: .success(()))
             }
             .map { _ in () }
             .drive(update)

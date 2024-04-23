@@ -14,11 +14,27 @@ class ExpenditureCell: UITableViewCell {
     private let disposeBag = DisposeBag()
     private var viewModel: ExpenditureCellViewModel!
     
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 15
+        stackView.alignment = .top
+        return stackView
+    }()
+    
+    private let contentStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    
+    
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .gray
         label.textAlignment = .left
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -35,6 +51,7 @@ class ExpenditureCell: UITableViewCell {
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = UIColor(named: "subColor")
         label.textAlignment = .right
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -66,34 +83,23 @@ class ExpenditureCell: UITableViewCell {
     }
     
     private func layout() {
-        [dateLabel, titleLabel, costLabel, bodyLabel].forEach{
-            contentView.addSubview($0)
+        contentView.addSubview(stackView)
+        
+        [dateLabel, contentStackView, costLabel].forEach{
+            stackView.addArrangedSubview($0)
         }
         
-        dateLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(15)
-            $0.leading.equalTo(contentView)
-            $0.width.equalTo(70)
+        [titleLabel, bodyLabel].forEach {
+            contentStackView.addArrangedSubview($0)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(dateLabel)
-            $0.leading.equalTo(dateLabel.snp.trailing)
-            $0.trailing.equalTo(costLabel.snp.leading)
+        stackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-20)
         }
         
-        costLabel.snp.makeConstraints {
-            $0.top.equalTo(dateLabel)
-            $0.trailing.equalTo(contentView)
-            $0.width.equalTo(120)
-        }
-        
-        bodyLabel.snp.makeConstraints {
-            $0.top.equalTo(costLabel.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.bottom.equalTo(contentView).offset(-15)
-        }
-
     }
     
 }

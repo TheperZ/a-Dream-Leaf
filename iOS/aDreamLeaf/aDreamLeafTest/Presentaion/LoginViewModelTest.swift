@@ -21,7 +21,7 @@ final class LoginViewModelTest: XCTestCase {
     var pwd: PublishSubject<String>!
     
     //output
-    var result: TestableObserver<RequestResult<User>>!
+    var result: TestableObserver<Result<Void, Error>>!
     
     override func setUp() {
         disposeBag = DisposeBag()
@@ -39,7 +39,7 @@ final class LoginViewModelTest: XCTestCase {
         let output = viewModel.transform(input: input)
         
         let testScheduler = TestScheduler(initialClock: 0)
-        result = testScheduler.createObserver(RequestResult<User>.self)
+        result = testScheduler.createObserver(Result<Void, Error>.self)
         
         output.result.drive(result).disposed(by: disposeBag)
     }
@@ -54,8 +54,14 @@ final class LoginViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "이메일을 입력해주세요.")
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockLoginRepository.MockLoginRepositoryError, MockLoginRepository.MockLoginRepositoryError.emptyEmail)
+            default:
+                break
+        }
     }
     
     func test_trigger_withRightEmailAndNoPassword() {
@@ -69,8 +75,14 @@ final class LoginViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "비밀번호를 입력해주세요.")
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockLoginRepository.MockLoginRepositoryError, MockLoginRepository.MockLoginRepositoryError.emptyPassword)
+            default:
+                break
+        }
     }
     
     
@@ -86,8 +98,14 @@ final class LoginViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "올바르지 못한 이메일 형식입니다.")
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockLoginRepository.MockLoginRepositoryError, MockLoginRepository.MockLoginRepositoryError.invalidEmailFormat)
+            default:
+                break
+        }
     }
     
     func test_trigger_withNoEmailAndShortPassword() {
@@ -102,8 +120,14 @@ final class LoginViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "이메일을 입력해주세요.")
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockLoginRepository.MockLoginRepositoryError, MockLoginRepository.MockLoginRepositoryError.emptyEmail)
+            default:
+                break
+        }
     }
     
     func test_trigger_withRightEmailAndShortPassword() {
@@ -118,8 +142,14 @@ final class LoginViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, false)
-        XCTAssertEqual(result.events[0].value.element!.msg, "비밀번호는 최소 6자리 이상 입력해주세요.")
+        switch result.events[0].value.element {
+            case .success:
+                XCTFail()
+            case let .failure(error):
+                XCTAssertEqual(error as! MockLoginRepository.MockLoginRepositoryError, MockLoginRepository.MockLoginRepositoryError.shortPassword)
+            default:
+                break
+        }
     }
     
     func test_trigger_withRightEmailAndPassword() {
@@ -134,7 +164,5 @@ final class LoginViewModelTest: XCTestCase {
         
         //then
         XCTAssertEqual(result.events.count, 1)
-        XCTAssertEqual(result.events[0].value.element!.success, true)
-        XCTAssertEqual(result.events[0].value.element!.msg, "login")
     }
 }

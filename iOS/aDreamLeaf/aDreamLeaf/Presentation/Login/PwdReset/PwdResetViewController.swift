@@ -14,6 +14,21 @@ class PwdResetViewController: UIViewController {
     var disposeBag = DisposeBag()
     var loadingView = UIActivityIndicatorView(style: .medium)
     private var viewModel: PwdResetViewModel!
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 25
+        return stackView
+    }()
+    
+    private let emailStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "비밀번호 재설정"
@@ -95,20 +110,21 @@ class PwdResetViewController: UIViewController {
         
         output.result
             .drive(onNext: {[weak self] result in
-                if result.success {
-                    let alert = UIAlertController(title: "성공", message: "재설정을 위한 링크를 보냈습니다.\n이메일을 확인해주세요!", preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        self?.navigationController?.popViewController(animated: true)
-                    }
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
-                } else {
-
-                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
+                switch result {
+                    case .success:
+                        let alert = UIAlertController(title: "성공", message: "재설정을 위한 링크를 보냈습니다.\n이메일을 확인해주세요!", preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                            self?.navigationController?.popViewController(animated: true)
+                        }
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription, preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
                 }
+                
             })
             .disposed(by: disposeBag)
     }
@@ -121,40 +137,31 @@ class PwdResetViewController: UIViewController {
     
     private func layout() {
         
-        [titleLabel, emailLabel, emailTextField, emailUnderLine, resetButton, loadingView].forEach {
+        [stackView, loadingView].forEach {
             view.addSubview($0)
+        }
+        
+        [titleLabel, emailStackView, resetButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        
+        [emailLabel, emailTextField, emailUnderLine].forEach {
+            emailStackView.addArrangedSubview($0)
         }
         
         loadingView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(50)
+        stackView.snp.makeConstraints {
+            $0.leading.equalTo(view).offset(30)
+            $0.trailing.equalTo(view).offset(-30)
             $0.centerX.equalTo(view)
-            $0.width.equalTo(300)
-        }
-        
-        emailLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-        }
-        
-        emailTextField.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(titleLabel)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(40)
         }
         
         emailUnderLine.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(titleLabel)
             $0.height.equalTo(1)
-        }
-        
-        resetButton.snp.makeConstraints {
-            $0.top.equalTo(emailUnderLine.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(titleLabel)
-            $0.height.equalTo(45)
         }
         
     }

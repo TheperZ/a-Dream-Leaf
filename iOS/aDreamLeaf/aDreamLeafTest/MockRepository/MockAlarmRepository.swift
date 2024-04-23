@@ -15,12 +15,12 @@ struct MockAlarmRepository: AlarmRepository {
         return Observable.just(true)
     }
     
-    func register() -> RxSwift.Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: "register"))
+    func register() -> Observable<Result<Void, Error>> {
+        return .just(.success(()))
     }
     
-    func deregister() -> RxSwift.Observable<aDreamLeaf.RequestResult<Void>> {
-        return Observable.just(RequestResult(success: true, msg: "deregister"))
+    func deregister() -> Observable<Result<Void, Error>> {
+        return .just(.success(()))
     }
     
     

@@ -132,22 +132,26 @@ class ExpenditureDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.result
-            .drive(onNext: { result in
-                let alert = UIAlertController(title: result.success ? "성공" : "실패", message: result.success ? "정상적으로 삭제되었습니다." : "오류가 발생했습니다.", preferredStyle: .alert)
-                
-                let confirm = UIAlertAction(title: "삭제", style: .destructive) {[weak self] _ in
-                    self?.navigationController?.popViewController(animated: true)
+            .drive(onNext: { [weak self] result in
+                switch result {
+                    case .success:
+                        let alert = UIAlertController(title: "성공", message: "정상적으로 삭제되었습니다.", preferredStyle: .alert)
+                        
+                        let confirm = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                            self?.navigationController?.popViewController(animated: true)
+                        }
+                        
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
+                        
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: "오류가 발생했습니다.", preferredStyle: .alert)
+                        
+                        let cancel = UIAlertAction(title: "확인", style: .cancel)
+                        alert.addAction(cancel)
+                        self?.present(alert, animated: true)
                 }
                 
-                let cancel = UIAlertAction(title: "확인", style: .cancel)
-                
-                if result.success {
-                    alert.addAction(confirm)
-                } else {
-                    alert.addAction(cancel)
-                }
-                
-                self.present(alert, animated: true)
             })
             .disposed(by: disposeBag)
         

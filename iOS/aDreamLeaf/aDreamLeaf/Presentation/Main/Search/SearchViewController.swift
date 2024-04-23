@@ -13,6 +13,20 @@ class SearchViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: SearchViewModel
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 15
+        stackView.alignment = .center
+        return stackView
+    }()
+    
+    private let searchStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let searchTextField: UITextField = {
         let textField = UITextField()
         textField.textColor = .black
@@ -28,6 +42,8 @@ class SearchViewController: UIViewController {
         let searchButtonImg = UIImage(systemName: "magnifyingglass", withConfiguration: searchButtonConfig)?.withRenderingMode(.alwaysTemplate)
         button.setImage(searchButtonImg, for: .normal)
         button.tintColor = .black
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return button
     }()
     
@@ -176,8 +192,16 @@ class SearchViewController: UIViewController {
     }
     
     private func layout() {
-        [searchTextField, searchButton, underLine, tableView, checkBoxView, searchListEmptyWarnLabel].forEach {
+        [topStackView, tableView, searchListEmptyWarnLabel].forEach {
             view.addSubview($0)
+        }
+        
+        [searchStackView, underLine, checkBoxView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
+        
+        [searchTextField, searchButton].forEach {
+            searchStackView.addArrangedSubview($0)
         }
         
         checkBoxView.addSubview(buttonStackView)
@@ -186,34 +210,33 @@ class SearchViewController: UIViewController {
             buttonStackView.addArrangedSubview($0)
         }
         
-        searchTextField.snp.makeConstraints {
+        topStackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.equalTo(view).offset(20)
-            $0.trailing.equalTo(searchButton.snp.leading)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        searchStackView.snp.makeConstraints {
+            $0.width.equalToSuperview().offset(-60)
         }
         
         searchButton.snp.makeConstraints {
-            $0.top.equalTo(searchTextField)
-            $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-20)
-            $0.width.equalTo(40)
-            $0.height.equalTo(25)
+            $0.width.equalTo(30)
         }
         
         underLine.snp.makeConstraints {
-            $0.top.equalTo(searchButton.snp.bottom).offset(15)
-            $0.leading.trailing.equalTo(view)
-            $0.height.equalTo(0.2)
+            $0.height.equalTo(1)
+            $0.width.equalToSuperview()
         }
         
         checkBoxView.snp.makeConstraints {
-            $0.top.equalTo(underLine.snp.bottom).offset(20)
-            $0.leading.equalTo(searchTextField)
-            $0.trailing.equalTo(searchButton)
-            $0.height.equalTo(30)
+            $0.width.equalToSuperview().offset(-60)
         }
         
         buttonStackView.snp.makeConstraints {
-            $0.centerX.centerY.equalTo(checkBoxView)
+            $0.top.equalToSuperview().offset(5)
+            $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-5)
         }
         
         tableView.snp.makeConstraints {

@@ -15,7 +15,7 @@ class KakaoNetwork: Network{
         super.init(type: .Kakao)
     }
     
-    func getAddress(lat: Double, lon: Double) -> Observable<RequestResult<KakaoAddressResponse>> {
+    func getAddress(lat: Double, lon: Double) -> Observable<Result<KakaoAddressResponse, Error>> {
         return Observable.create { observer in
             
             let urlString = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=\(lon)&y=\(lat)"

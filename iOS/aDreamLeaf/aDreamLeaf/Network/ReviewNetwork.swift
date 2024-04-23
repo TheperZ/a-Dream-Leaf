@@ -12,18 +12,22 @@ import FirebaseAuth
 
 class ReviewNetwork: Network {
     
+    enum ReviewNetworkError: String, Error {
+        case tokenError = "토큰을 가져오는 과정에서 에러가 발생했습니다."
+    }
+    
     init() {
         super.init(type: .Review)
     }
     
-    func createReview(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {
+    func createReview(storeId: Int, body: String, rating: Int, image: UIImage?) -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult<Void>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(ReviewNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -43,14 +47,14 @@ class ReviewNetwork: Network {
         }
     }
     
-    func fetchRecentReview(storeId: Int) -> Observable<RequestResult<[Review]>> {
+    func fetchRecentReview(storeId: Int) -> Observable<Result<[Review], Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult<[Review]>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(ReviewNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -69,14 +73,14 @@ class ReviewNetwork: Network {
         }
     }
     
-    func fetchAllReviews(storeId: Int) -> Observable<RequestResult<[Review]>> {
+    func fetchAllReviews(storeId: Int) -> Observable<Result<[Review], Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult<[Review]>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(ReviewNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -93,14 +97,14 @@ class ReviewNetwork: Network {
         }
     }
     
-    func deleteReview(reviewId: Int) -> Observable<RequestResult<Void>> {
+    func deleteReview(reviewId: Int) -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult<Void>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(ReviewNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }
@@ -120,14 +124,14 @@ class ReviewNetwork: Network {
         }
     }
     
-    func updateRequest(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<RequestResult<Void>> {
+    func updateRequest(reviewId: Int, body: String, rating: Int, image: UIImage?) -> Observable<Result<Void, Error>> {
         return Observable.create { observer in
             
             Auth.auth().currentUser?.getIDToken() { token, error in
                 
                 if error != nil {
                     print(error)
-                    observer.onNext(RequestResult<Void>(success: false, msg: "토큰을 가져오는 과정에서 오류가 발생했습니다.\n잠시후에 다시 시도해주세요.", data: nil))
+                    observer.onNext(.failure(ReviewNetworkError.tokenError))
                 }
                 
                 guard let token = token else { return }

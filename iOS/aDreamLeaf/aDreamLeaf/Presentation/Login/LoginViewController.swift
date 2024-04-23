@@ -24,7 +24,39 @@ class LoginViewController: UIViewController {
         return button
     }()
     
-    private let contentView = UIView()
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 50
+        return stackView
+    }()
+    
+    private let inputStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+    private let emailStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    private let passwordStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
+    
+    private let buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 15
+        return stackView
+    }()
+    
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -151,13 +183,14 @@ class LoginViewController: UIViewController {
         
         output.result
             .drive(onNext: {[weak self] result in
-                if result.success {
-                    self?.dismiss(animated: true)
-                } else {
-                    let alert = UIAlertController(title: "실패", message: result.msg, preferredStyle: .alert)
-                    let confirm = UIAlertAction(title: "확인", style: .default)
-                    alert.addAction(confirm)
-                    self?.present(alert, animated: true)
+                switch result {
+                    case .success:
+                        self?.dismiss(animated: true)
+                    case let .failure(error):
+                        let alert = UIAlertController(title: "실패", message: error.localizedDescription, preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(confirm)
+                        self?.present(alert, animated: true)
                 }
             })
             .disposed(by: disposeBag)
@@ -195,78 +228,47 @@ class LoginViewController: UIViewController {
     
     private func layout() {
         
-        [contentView].forEach {
+        [topStackView, loadingView].forEach {
             view.addSubview($0)
         }
         
+        [titleLabel, inputStackView, buttonStackView].forEach {
+            topStackView.addArrangedSubview($0)
+        }
         
-        [loadingView, titleLabel, emailLabel, emailTextField, emailUnderLine, passwordLabel, passwordTextField, passwordUnderLine, loginButton, signInButton, pwdFindButton].forEach {
-            contentView.addSubview($0)
+        [emailStackView, passwordStackView].forEach {
+            inputStackView.addArrangedSubview($0)
+        }
+        
+        [emailLabel, emailTextField, emailUnderLine].forEach {
+            emailStackView.addArrangedSubview($0)
+        }
+        
+        [passwordLabel, passwordTextField, passwordUnderLine].forEach {
+            passwordStackView.addArrangedSubview($0)
+        }
+        
+        [loginButton, signInButton, pwdFindButton].forEach {
+            buttonStackView.addArrangedSubview($0)
         }
         
         loadingView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        contentView.snp.makeConstraints {
+        topStackView.snp.makeConstraints {
             $0.width.equalTo(300)
-            $0.centerX.centerY.equalTo(view)
-        }
-        
-        titleLabel.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(contentView)
-        }
-        
-        emailLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(50)
-            $0.leading.trailing.equalTo(contentView)
-        }
-        
-        emailTextField.snp.makeConstraints {
-            $0.top.equalTo(emailLabel.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(contentView)
+            $0.center.equalTo(view)
         }
         
         emailUnderLine.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom)
-            $0.leading.trailing.equalTo(contentView)
             $0.height.equalTo(1)
-        }
-        
-        passwordLabel.snp.makeConstraints {
-            $0.top.equalTo(emailUnderLine.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(contentView)
-        }
-        
-        passwordTextField.snp.makeConstraints {
-            $0.top.equalTo(passwordLabel.snp.bottom).offset(5)
-            $0.leading.trailing.equalTo(contentView)
         }
         
         passwordUnderLine.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField.snp.bottom)
-            $0.leading.trailing.equalTo(contentView)
             $0.height.equalTo(1)
         }
-        
-        loginButton.snp.makeConstraints {
-            $0.top.equalTo(passwordUnderLine.snp.bottom).offset(40)
-            $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(45)
-        }
-        
-        signInButton.snp.makeConstraints {
-            $0.top.equalTo(loginButton.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(45)
-        }
-        
-        pwdFindButton.snp.makeConstraints {
-            $0.top.equalTo(signInButton.snp.bottom).offset(10)
-            $0.bottom.equalTo(contentView)
-            $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(45)
-        }
+    
         
     }
 }
