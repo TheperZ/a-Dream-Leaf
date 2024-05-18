@@ -105,16 +105,31 @@ public class ApiManager {
                     logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
                 }
 
-                StoreReq checkFor1=new StoreReq((String) temp.get("FACLT_NM"),
-                        zipcd,
-                        (String) temp.get("REFINE_ROADNM_ADDR"),
-                        lotno,
-                        lat, logt, 0, "", "");
-                StoreReq checkFor2=new StoreReq((String) temp.get("FACLT_NM"),
-                        zipcd,
-                        (String) temp.get("REFINE_ROADNM_ADDR"),
-                        lotno,
-                        lat, logt, 2, "", "");
+
+                StoreReq checkFor1 = StoreReq.builder()
+                        .storeName((String) temp.get("FACLT_NM"))
+                        .zipCode(zipcd)
+                        .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
+                        .lotAddr(lotno)
+                        .wgs84Lat(lat)
+                        .wgs84Logt(logt)
+                        .payment(0)
+                        .prodName("")
+                        .prodTarget("")
+                        .build();
+
+
+                StoreReq checkFor2 = StoreReq.builder()
+                        .storeName((String) temp.get("FACLT_NM"))
+                        .zipCode(zipcd)
+                        .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
+                        .lotAddr(lotno)
+                        .wgs84Lat(lat)
+                        .wgs84Logt(logt)
+                        .payment(2)
+                        .prodName("")
+                        .prodTarget("")
+                        .build();
                 if(storeRepository.hasAnotherType(checkFor1)){
                     storeRepository.updatePaymentTo2(checkFor1);
                 }
@@ -122,11 +137,18 @@ public class ApiManager {
 
                 }
                 else{
-                    StoreReq infoObj = new StoreReq((String) temp.get("FACLT_NM"),
-                            zipcd,
-                            (String) temp.get("REFINE_ROADNM_ADDR"),
-                            lotno,
-                            lat, logt, 1, "", "");
+
+                    StoreReq infoObj = StoreReq.builder()
+                            .storeName((String) temp.get("FACLT_NM"))
+                            .zipCode(zipcd)
+                            .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
+                            .lotAddr(lotno)
+                            .wgs84Lat(lat)
+                            .wgs84Logt(logt)
+                            .payment(1)
+                            .prodName("")
+                            .prodTarget("")
+                            .build();
                     storeRepository.save(infoObj);
                 }
             }
@@ -234,16 +256,33 @@ public class ApiManager {
                         prodTarget+=(String)temp.get("PROVSN_TRGT_NM2");
                     }
 
-                    StoreReq checkFor1=new StoreReq((String)temp.get("CMPNM_NM"),
-                            zipcd,
-                            roadno,
-                            lotno,
-                            lat, logt,1, prodName, prodTarget);
-                    StoreReq checkFor2=new StoreReq((String)temp.get("CMPNM_NM"),
-                            zipcd,
-                            roadno,
-                            lotno,
-                            lat, logt,2, prodName, prodTarget);
+
+                    StoreReq checkFor1 = StoreReq.builder()
+                            .storeName((String) temp.get("CMPNM_NM"))
+                            .zipCode(zipcd)
+                            .roadAddr(roadno)
+                            .lotAddr(lotno)
+                            .wgs84Lat(lat)
+                            .wgs84Logt(logt)
+                            .payment(1)
+                            .prodName(prodName)
+                            .prodTarget(prodTarget)
+                            .build();
+
+                    StoreReq checkFor2 = StoreReq.builder()
+                            .storeName((String) temp.get("CMPNM_NM"))
+                            .zipCode(zipcd)
+                            .roadAddr(roadno)
+                            .lotAddr(lotno)
+                            .wgs84Lat(lat)
+                            .wgs84Logt(logt)
+                            .payment(2)
+                            .prodName(prodName)
+                            .prodTarget(prodTarget)
+                            .build();
+
+
+
                     if(storeRepository.hasAnotherType(checkFor1)){
                         storeRepository.updatePaymentTo2(checkFor1);
                     }
@@ -336,11 +375,15 @@ public class ApiManager {
                         logt=Double.parseDouble((String)temp.get("REFINE_WGS84_LOGT"));
                     }
 
-                    StoreHygradeReq infoObj=new StoreHygradeReq((String)temp.get("ENTRPS_NM"),
-                            (String)temp.get("APPONT_GRAD"),
-                            roadno,
-                            lotno,
-                            lat, logt);
+
+                    StoreHygradeReq infoObj = StoreHygradeReq.builder()
+                            .storeName((String) temp.get("ENTRPS_NM"))
+                            .grade((String) temp.get("APPONT_GRAD"))
+                            .roadAddr(roadno)
+                            .lotAddr(lotno)
+                            .wgs84Lat(lat)
+                            .wgs84Logt(logt)
+                            .build();
 
                     storeHygradeRepository.save(infoObj);
 

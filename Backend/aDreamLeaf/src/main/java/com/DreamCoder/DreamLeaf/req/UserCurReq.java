@@ -1,8 +1,9 @@
 package com.DreamCoder.DreamLeaf.req;
 
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class UserCurReq {
     private Double curLat;
     private Double curLogt;
