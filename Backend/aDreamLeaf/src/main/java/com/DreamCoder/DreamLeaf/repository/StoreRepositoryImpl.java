@@ -25,52 +25,13 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class StoreRepositoryImpl implements StoreRepository{
+public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
     @Autowired
     private JdbcTemplate template;
 
 
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Optional<StoreDto> save(StoreReq storeReq) {
-
-        //음식점명, 위경도가 동일한 데이터가 있는지 확인(이 경우 임시로 같은 가게인 경우로 간주)
-        String checkSql="select * from store where storeName=? and wgs84Lat=? and wgs84Logt=?";
-        List<StoreDto> checkForDuplicate=template.query(checkSql, storeDtoRowMapper,
-                storeReq.getStoreName(),
-                storeReq.getWgs84Lat(),
-                storeReq.getWgs84Logt());
-        if(checkForDuplicate.size()>0){
-            log.info("no insert={}", storeReq.getStoreName());
-            return Optional.empty();
-        }
-
-
-        String sql="insert into store(storeName, zipCode, roadAddr, lotAddr, wgs84Lat, wgs84Logt, payment, prodName, prodTarget) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        template.update(sql,
-                storeReq.getStoreName(),
-                storeReq.getZipCode(),
-                storeReq.getRoadAddr(),
-                storeReq.getLotAddr(),
-                storeReq.getWgs84Lat(),
-                storeReq.getWgs84Logt(),
-                storeReq.getPayment(),
-                storeReq.getProdName(),
-                storeReq.getProdTarget());
-
-        String resultSql="select * from store where storeName=? and zipCode=? and roadAddr=? and lotAddr=? and wgs84Lat=? and wgs84Logt=? and payment=? and prodName=? and prodTarget=?";
-        return Optional.of(template.queryForObject(resultSql, storeDtoRowMapper, storeReq.getStoreName(),
-                storeReq.getZipCode(),
-                storeReq.getRoadAddr(),
-                storeReq.getLotAddr(),
-                storeReq.getWgs84Lat(),
-                storeReq.getWgs84Logt(),
-                storeReq.getPayment(),
-                storeReq.getProdName(),
-                storeReq.getProdTarget()));
-    }
     @Override
     public Boolean hasAnotherType(StoreReq forCheck){
         String resultSql="select * from store where storeName=? and wgs84Lat=? and wgs84Logt=? and payment=?";
@@ -99,6 +60,7 @@ public class StoreRepositoryImpl implements StoreRepository{
                 storeReq.getPayment());
 
     }
+
 
     //사용자 위치 정보가 없을 때에 대한 처리
     @Override
