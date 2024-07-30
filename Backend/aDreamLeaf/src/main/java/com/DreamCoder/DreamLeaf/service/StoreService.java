@@ -26,7 +26,7 @@ public class StoreService {
 
     public void save(StoreReq storeReq){
 
-        //음식점명, 위경도가 동일한 데이터가 있는지 확인(이 경우 임시로 같은 가게인 경우로 간주)
+        //음식점명, 위경도가 동일한 데이터가 있는지 확인(이 경우 임시로 같은 가게인 경우로 간)
         if(storeRepository.existsByStoreNameAndWgs84LatAndWgs84Logt(storeReq.getStoreName(), storeReq.getWgs84Lat(), storeReq.getWgs84Logt())){
             log.info("no insert={}", storeReq.getStoreName());
             return;
