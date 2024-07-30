@@ -6,10 +6,10 @@ on:
       - master
 
 env:
-  AWS_REGION: ap-southeast-2
-  AWS_S3_BUCKET: adreamleaf-bucket-test
-  AWS_CODE_DEPLOY_APPLICATION: adreamleaf-test-cd
-  AWS_CODE_DEPLOY_GROUP: cicd-test-cd-group
+  AWS_REGION: ap-northeast-2
+  AWS_S3_BUCKET: adreamleaf-cicd-tets-bucket
+  AWS_CODE_DEPLOY_APPLICATION: adreamleaf-cicd-test
+  AWS_CODE_DEPLOY_GROUP: adreamleaf-cicd-test-group
 
 jobs:
   build-with-gradle:
@@ -26,7 +26,7 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: gradlew 실행 권한 부
+      - name: gradlew 실행 권한 부여
         run: chmod +x ./gradlew
 
       - name: 프로젝트 빌드(테스트 코드 제외)
