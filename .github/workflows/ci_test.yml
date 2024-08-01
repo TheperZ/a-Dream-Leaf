@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: adreamleaf-cicd-tets-bucket
+  AWS_S3_BUCKET: adreamleaf-cicd-test-bucket
   AWS_CODE_DEPLOY_APPLICATION: adreamleaf-cicd-test
   AWS_CODE_DEPLOY_GROUP: adreamleaf-cicd-test-group
   working-directory: ./Backend/aDreamLeaf
