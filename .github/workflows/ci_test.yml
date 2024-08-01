@@ -3,7 +3,7 @@ run-name: Running
 on:
   push:
     paths:
-      - "Backend/**"
+      - "Backend/aDreamLeaf/**"
     branches:
       - main
 
