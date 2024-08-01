@@ -2,6 +2,8 @@ name: CICD Test
 run-name: Running
 on:
   push:
+    paths:
+      - "Backend"
     branches:
       - main
 
