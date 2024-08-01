@@ -2,8 +2,6 @@ name: CICD Test
 run-name: Running
 on:
   push:
-    paths:
-      - "Backend/aDreamLeaf/**"
     branches:
       - main
 
@@ -12,6 +10,7 @@ env:
   AWS_S3_BUCKET: adreamleaf-cicd-tets-bucket
   AWS_CODE_DEPLOY_APPLICATION: adreamleaf-cicd-test
   AWS_CODE_DEPLOY_GROUP: adreamleaf-cicd-test-group
+  working-directory: ./Backend/aDreamLeaf
 
 jobs:
   build-with-gradle:
@@ -30,9 +29,12 @@ jobs:
 
       - name: gradlew 실행 권한 부여
         run: chmod +x ./gradlew
+        working-directory: ${{ env.working-directory }}
 
       - name: 프로젝트 빌드(테스트 코드 제외)
         run: ./gradlew clean build --exclude-task test
+        working-directory: ${{ env.working-directory }}
+
 
       - name: AWS credential 설정
         uses: aws-actions/configure-aws-credentials@v1
@@ -40,11 +42,16 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
+        working-directory: ${{ env.working-directory }}
+
 
       - name: S3에 업로드
         run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip --source .
+        working-directory: ${{ env.working-directory }}
+
 
       - name: EC2에 배포
         run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=cicdtest/$GITHUB_SHA.zip,bundleType=zip
+        working-directory: ${{ env.working-directory }}
 
 
