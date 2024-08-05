@@ -34,6 +34,11 @@ dependencies {
 
 }
 
+task copyGitSubmodule(type: Copy) {
+	from './config'
+	into './src/main/resources'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

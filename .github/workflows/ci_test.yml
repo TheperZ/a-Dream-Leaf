@@ -32,7 +32,9 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: 프로젝트 빌드(테스트 코드 제외)
-        run: ./gradlew clean build --exclude-task test
+        run: |
+          ./gradlew copyGitSubmodule
+          ./gradlew clean build --exclude-task test
         working-directory: ${{ env.working-directory }}
 
 
