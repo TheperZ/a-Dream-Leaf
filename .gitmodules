@@ -1,0 +1,3 @@
+[submodule "Backend/aDreamLeaf/config"]
+	path = Backend/aDreamLeaf/config
+	url = https://github.com/TheperZ/a-Dream-Leaf-config.git
