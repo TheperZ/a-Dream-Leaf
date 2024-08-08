@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
-    @Autowired
+
     private JdbcTemplate template;
 
 
