@@ -5,6 +5,7 @@ import com.DreamCoder.DreamLeaf.domain.StoreHygrade;
 import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
+import com.DreamCoder.DreamLeaf.parser.ApiParser;
 import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
@@ -24,7 +25,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final StoreHygradeRepository storeHygradeRepository;
-    private final ApiManager apiManager;
+    private final ApiParser apiParser;
 
 
     public void save(StoreReq storeReq){
@@ -81,13 +82,13 @@ public class StoreService {
     }
 
     public void saveApi(){
-        apiManager.saveGoodStoreApi();
-        apiManager.saveGDreamCardApi();
+        apiParser.saveGoodStoreApi();
+        apiParser.saveGDreamCardApi();
         storeRepository.checkAndMerge();
     }
 
     public void saveHyApi(){
-        List<StoreHygrade> storeHygrades = apiManager.parseHygieneApi();
+        List<StoreHygrade> storeHygrades = apiParser.parseHygieneApi();
 
         for (StoreHygrade storeHygrade : storeHygrades) {
             storeHygradeRepository.save(storeHygrade);

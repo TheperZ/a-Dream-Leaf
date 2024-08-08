@@ -4,7 +4,6 @@ package com.DreamCoder.DreamLeaf.controller;
 import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
-import com.DreamCoder.DreamLeaf.service.ApiManager;
 import com.DreamCoder.DreamLeaf.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

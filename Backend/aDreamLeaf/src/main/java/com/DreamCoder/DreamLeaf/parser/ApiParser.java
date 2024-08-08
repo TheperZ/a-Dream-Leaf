@@ -1,10 +1,9 @@
-package com.DreamCoder.DreamLeaf.service;
+package com.DreamCoder.DreamLeaf.parser;
 
 
 
 import com.DreamCoder.DreamLeaf.domain.Store;
 import com.DreamCoder.DreamLeaf.domain.StoreHygrade;
-import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ApiManager {
+public class ApiParser {
 
     private final StoreRepository storeRepository;
 
