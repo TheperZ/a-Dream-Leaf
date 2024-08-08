@@ -43,10 +43,13 @@ public class ApiParser {
         return sb.toString();
     }
 
-    public void saveGDreamCardApi(){
+    public List<Store> saveGDreamCardApi(){
         String result="";
         int pIndex=1;
         Long totalCnt;
+
+        List<Store> stores = new ArrayList<>();
+
         try{
             do{
             URL url=new URL(makeUrl("GDreamCard", "e67be2abc4464ffcb547fe1fecc6d138","json", pIndex, 1000));
@@ -148,7 +151,7 @@ public class ApiParser {
                             .prodName("")
                             .prodTarget("")
                             .build();
-                    storeRepository.save(infoObj);
+                    stores.add(infoObj);
                 }
             }
             pIndex++;
@@ -159,12 +162,17 @@ public class ApiParser {
         }catch(Exception e){
             e.printStackTrace();
         }
+
+        return stores;
     }
 
-    public void saveGoodStoreApi(){
+    public List<Store> saveGoodStoreApi(){
         String result="";
         int pIndex=1;
         Long totalCnt;
+
+        List<Store> stores = new ArrayList<>();
+
         try{
             do{
                 URL url=new URL(makeUrl("GGGOODINFLSTOREST", "fb1025fa7b1145fbbbc2a843c0d8c10e","json", pIndex, 1000));
@@ -289,7 +297,7 @@ public class ApiParser {
 
                     }
                     else{
-                        Store info=Store.builder()
+                        Store store=Store.builder()
                                 .storeName((String)temp.get("CMPNM_NM"))
                                 .zipCode(zipcd)
                                 .roadAddr(roadno)
@@ -301,7 +309,7 @@ public class ApiParser {
                                 .prodTarget(prodTarget)
                                 .build();
 
-                        storeRepository.save(info);
+                        stores.add(store);
                     }
                 }
                 pIndex++;
@@ -309,6 +317,8 @@ public class ApiParser {
         }catch(Exception e){
             e.printStackTrace();
         }
+
+        return stores;
 
     }
 

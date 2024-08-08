@@ -82,8 +82,18 @@ public class StoreService {
     }
 
     public void saveApi(){
-        apiParser.saveGoodStoreApi();
-        apiParser.saveGDreamCardApi();
+        List<Store> goodStores = apiParser.saveGoodStoreApi();
+
+        for (Store goodStore : goodStores) {
+            storeRepository.save(goodStore);
+        }
+
+
+        List<Store> gDreamCardStores = apiParser.saveGDreamCardApi();
+
+        for (Store gDreamCardStore : gDreamCardStores) {
+            storeRepository.save(gDreamCardStore);
+        }
         storeRepository.checkAndMerge();
     }
 
