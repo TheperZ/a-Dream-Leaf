@@ -28,7 +28,7 @@ public class StoreService {
     private final ApiParser apiParser;
 
 
-    public void save(StoreReq storeReq){
+/*    public void save(StoreReq storeReq){
 
         //음식점명, 위경도가 동일한 데이터가 있는지 확인(이 경우 임시로 같은 가게인 경우로 간)
         if(storeRepository.existsByStoreNameAndWgs84LatAndWgs84Logt(storeReq.getStoreName(), storeReq.getWgs84Lat(), storeReq.getWgs84Logt())){
@@ -48,7 +48,7 @@ public class StoreService {
                 .prodTarget(storeReq.getProdTarget())
                 .build();
        storeRepository.save(store);
-    }
+    }*/
 
     public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq){
         if(userCurReq.getCurLat()==null && userCurReq.getCurLogt()==null){
@@ -85,14 +85,20 @@ public class StoreService {
         List<Store> goodStores = apiParser.saveGoodStoreApi();
 
         for (Store goodStore : goodStores) {
-            storeRepository.save(goodStore);
+            if (storeRepository.existsByStoreNameAndWgs84LatAndWgs84Logt(goodStore.getStoreName(), goodStore.getWgs84Lat(), goodStore.getWgs84Logt())) {
+                storeRepository.save(goodStore);
+            }
+
         }
 
 
         List<Store> gDreamCardStores = apiParser.saveGDreamCardApi();
 
         for (Store gDreamCardStore : gDreamCardStores) {
-            storeRepository.save(gDreamCardStore);
+            if (storeRepository.existsByStoreNameAndWgs84LatAndWgs84Logt(gDreamCardStore.getStoreName(), gDreamCardStore.getWgs84Lat(), gDreamCardStore.getWgs84Logt())) {
+                storeRepository.save(gDreamCardStore);
+            }
+
         }
         storeRepository.checkAndMerge();
     }
