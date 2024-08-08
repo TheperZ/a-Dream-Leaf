@@ -116,8 +116,6 @@ public class ApiParser {
                         .wgs84Lat(lat)
                         .wgs84Logt(logt)
                         .payment(0)
-                        .prodName("")
-                        .prodTarget("")
                         .build();
 
 
@@ -129,8 +127,6 @@ public class ApiParser {
                         .wgs84Lat(lat)
                         .wgs84Logt(logt)
                         .payment(2)
-                        .prodName("")
-                        .prodTarget("")
                         .build();
                 if(storeRepository.hasAnotherType(checkFor1)){
                     storeRepository.updatePaymentTo2(checkFor1);
@@ -148,8 +144,6 @@ public class ApiParser {
                             .wgs84Lat(lat)
                             .wgs84Logt(logt)
                             .payment(1)
-                            .prodName("")
-                            .prodTarget("")
                             .build();
                     stores.add(infoObj);
                 }
