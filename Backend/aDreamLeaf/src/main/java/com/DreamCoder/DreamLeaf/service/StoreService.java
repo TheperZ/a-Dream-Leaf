@@ -1,9 +1,11 @@
 package com.DreamCoder.DreamLeaf.service;
 
 import com.DreamCoder.DreamLeaf.domain.Store;
+import com.DreamCoder.DreamLeaf.domain.StoreHygrade;
 import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
+import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
@@ -21,6 +23,7 @@ public class StoreService {
 
 
     private final StoreRepository storeRepository;
+    private final StoreHygradeRepository storeHygradeRepository;
     private final ApiManager apiManager;
 
 
@@ -81,11 +84,14 @@ public class StoreService {
         apiManager.saveGoodStoreApi();
         apiManager.saveGDreamCardApi();
         storeRepository.checkAndMerge();
-        apiManager.saveHygieneApi();
     }
 
     public void saveHyApi(){
-        apiManager.saveHygieneApi();
+        List<StoreHygrade> storeHygrades = apiManager.parseHygieneApi();
+
+        for (StoreHygrade storeHygrade : storeHygrades) {
+            storeHygradeRepository.save(storeHygrade);
+        }
     }
 
 

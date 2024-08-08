@@ -3,9 +3,9 @@ package com.DreamCoder.DreamLeaf.service;
 
 
 import com.DreamCoder.DreamLeaf.domain.Store;
+import com.DreamCoder.DreamLeaf.domain.StoreHygrade;
 import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
-import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -25,7 +27,6 @@ import java.net.URL;
 public class ApiManager {
 
     private final StoreRepository storeRepository;
-    private final StoreHygradeRepository storeHygradeRepository;
 
     private String makeUrl(String storeType, String key, String dataType, int pIndex, int pSize){
         StringBuffer sb=new StringBuffer();
@@ -312,10 +313,12 @@ public class ApiManager {
 
     }
 
-    public void saveHygieneApi(){
+    public List<StoreHygrade> parseHygieneApi(){
         String result="";
         int pIndex=1;
         Long totalCnt;
+
+        List<StoreHygrade> stores = new ArrayList<>();
         try{
             do{
                 URL url=new URL(makeUrl("RestrtSanittnGradStus", "1cbb5970a6a3461b8e4282e78a548c30","json", pIndex, 1000));
@@ -382,7 +385,7 @@ public class ApiManager {
                     }
 
 
-                    StoreHygradeReq infoObj = StoreHygradeReq.builder()
+                    StoreHygrade storeHygrade=StoreHygrade.builder()
                             .storeName((String) temp.get("ENTRPS_NM"))
                             .grade((String) temp.get("APPONT_GRAD"))
                             .roadAddr(roadno)
@@ -391,7 +394,8 @@ public class ApiManager {
                             .wgs84Logt(logt)
                             .build();
 
-                    storeHygradeRepository.save(infoObj);
+
+                    stores.add(storeHygrade);
 
                 }
                 pIndex++;
@@ -399,6 +403,8 @@ public class ApiManager {
         }catch(Exception e){
             e.printStackTrace();
         }
+
+        return stores;
 
     }
 
