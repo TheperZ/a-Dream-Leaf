@@ -62,17 +62,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     }
 
 
-    //사용자 위치 정보가 없을 때에 대한 처리
-    @Override
-    public Optional<DetailStoreDto> findById(int storeId){
-        String sql="select store.*, 0.0 as distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeId=?";
-        try{
-            DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper, storeId);
-            return Optional.of(result);
-        }catch(EmptyResultDataAccessException e){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
-    }
 
     //사용자 위치 정보가 있을 때에 대한 처리
     @Override

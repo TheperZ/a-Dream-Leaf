@@ -26,7 +26,7 @@ public class StoreController {
 
 
     @PostMapping("/api")
-    public ResponseEntity saveApi(){
+    public ResponseEntity<String> saveApi(){
 
         storeService.saveApi();
         return ResponseEntity.status(HttpStatus.CREATED).body("");
@@ -34,13 +34,13 @@ public class StoreController {
     }
 
     @PostMapping("/api/hygiene")
-    public ResponseEntity saveHygiene(){
+    public ResponseEntity<String> saveHygiene(){
         storeService.saveHyApi();
         return ResponseEntity.status(201).body("위생정보 저장이 완료 되었습니다.");
     }
 
     @PostMapping("/{storeId}")
-    public Optional<DetailStoreDto> showStoreDetail(@PathVariable int storeId, @RequestBody(required = false) UserCurReq userCurReq){
+    public Optional<DetailStoreDto> showStoreDetail(@PathVariable Long storeId, @RequestBody(required = false) UserCurReq userCurReq){
         return storeService.findById(storeId, userCurReq);
     }
 
