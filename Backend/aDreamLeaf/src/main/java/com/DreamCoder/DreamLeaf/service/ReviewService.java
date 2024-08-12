@@ -1,7 +1,7 @@
 package com.DreamCoder.DreamLeaf.service;
 
 import com.DreamCoder.DreamLeaf.dto.*;
-import com.DreamCoder.DreamLeaf.repository.ReviewRepository;
+import com.DreamCoder.DreamLeaf.repository.ReviewRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +14,19 @@ import java.util.List;
 public class ReviewService {
 
     @Autowired
-    private final ReviewRepository reviewRepositoryImpl;
+    private final ReviewRepositoryCustom reviewRepositoryCustomImpl;
 
-    public ReviewDto create(ReviewCreateDto reviewCreateDto) { return reviewRepositoryImpl.save(reviewCreateDto); }
+    public ReviewDto create(ReviewCreateDto reviewCreateDto) { return reviewRepositoryCustomImpl.save(reviewCreateDto); }
 
-    public String update(ReviewUpDto reviewUpDto) {return reviewRepositoryImpl.update(reviewUpDto);}
+    public String update(ReviewUpDto reviewUpDto) {return reviewRepositoryCustomImpl.update(reviewUpDto);}
 
-    public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto){ return reviewRepositoryImpl.findReviewPage(reviewSearchDto);}
+    public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto){ return reviewRepositoryCustomImpl.findReviewPage(reviewSearchDto);}
 
-    public List<ReviewDto> findAllReview(int storeId){ return reviewRepositoryImpl.findAllReview(storeId); }
+    public List<ReviewDto> findAllReview(int storeId){ return reviewRepositoryCustomImpl.findAllReview(storeId); }
 
     public String delete(ReviewDelDto reviewDelDto) {
-        return reviewRepositoryImpl.delete(reviewDelDto);
+        return reviewRepositoryCustomImpl.delete(reviewDelDto);
     }
 
-    public ReviewImageDto getReviewImage(int reviewId) { return reviewRepositoryImpl.getReviewImage(reviewId); }
+    public ReviewImageDto getReviewImage(int reviewId) { return reviewRepositoryCustomImpl.getReviewImage(reviewId); }
 }

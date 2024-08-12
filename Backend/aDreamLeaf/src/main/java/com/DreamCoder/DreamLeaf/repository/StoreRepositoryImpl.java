@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.similarity.LevenshteinDistance;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -62,21 +61,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     }
 
 
-
-    //사용자 위치 정보가 있을 때에 대한 처리
-    @Override
-    public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq) {
-        String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
-                "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
-                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeId=?";
-        try{
-            DetailStoreDto result = template.queryForObject(sql, detailStoreDtoRowMapper,userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(), storeId);
-            return Optional.of(result);
-        }catch(EmptyResultDataAccessException e){
-            throw new StoreException("가게를 찾을 수 없습니다.", 404);
-        }
-
-    }
 
     //사용자 위치 정보가 없을 때에 대한 처리
     @Override
@@ -165,6 +149,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         template.update(dsql, s.getBStore(), s.getWgs84Lat(), s.getWgs84Logt());
     }
 
+    @Override
     public String checkHygrade(String storeName, double wgs84Lat, double wgs84Logt){
         String checkSql="select a.storeName, a.grade, a.wgs84Lat, a.wgs84Logt from storehygrade as a where wgs84Lat=? and wgs84Logt=?";
         List<CheckSameStoreHygrade> res=template.query(checkSql, checkSameStoreHygradeRowMapper, wgs84Lat, wgs84Logt);
@@ -285,7 +270,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
     private RowMapper<DetailStoreDto> detailStoreDtoRowMapper=(rs, rowNum)->
             DetailStoreDto.builder()
-                    .storeId(rs.getInt("storeId"))
+                    .storeId(rs.getLong("storeId"))
                     .storeName(rs.getString("storeName"))
                     .hygieneGrade(checkHygrade(rs.getString("storeName"), rs.getDouble("wgs84Lat"), rs.getDouble("wgs84Logt")))
                     .refinezipCd(rs.getInt("zipCode"))

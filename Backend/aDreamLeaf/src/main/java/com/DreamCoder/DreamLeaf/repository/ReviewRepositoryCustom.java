@@ -1,13 +1,10 @@
 package com.DreamCoder.DreamLeaf.repository;
 
 import com.DreamCoder.DreamLeaf.dto.*;
-import com.DreamCoder.DreamLeaf.req.ReviewDelReq;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 
-public interface ReviewRepository {
+public interface ReviewRepositoryCustom {
     public ReviewDto save(ReviewCreateDto reviewCreateDto);
     public List<ReviewDto> findReviewPage(ReviewSearchDto reviewSearchDto);
     List<ReviewDto> findAllReview(int storeId);
@@ -25,4 +22,6 @@ public interface ReviewRepository {
     public String validateImageUrl(String rootPath, String date);
     public int countReviewImage(int reviewId);
     public int getStoreId(int reviewId);
+
+    double getAvgScore(Long storeId);
 }

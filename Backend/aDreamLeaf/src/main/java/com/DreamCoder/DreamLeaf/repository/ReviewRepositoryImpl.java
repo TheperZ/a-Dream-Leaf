@@ -5,13 +5,11 @@ import com.DreamCoder.DreamLeaf.exception.ReviewException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +22,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class ReviewRepositoryImpl implements ReviewRepository{
+public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     @Autowired
     private final JdbcTemplate jdbcTemplate;
@@ -395,5 +393,11 @@ public class ReviewRepositoryImpl implements ReviewRepository{
             throw new ReviewException("리뷰를 작성한 가게가 존재하지 않습니다.", 404);
         }
         return storeId;
+    }
+
+    @Override
+    public double getAvgScore(Long storeId) {
+        return jdbcTemplate.queryForObject("select avg(rating) from review where storeId=?", double.class, storeId);
+
     }
 }

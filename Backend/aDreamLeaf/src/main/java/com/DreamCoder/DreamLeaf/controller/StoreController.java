@@ -40,8 +40,8 @@ public class StoreController {
     }
 
     @PostMapping("/{storeId}")
-    public Optional<DetailStoreDto> showStoreDetail(@PathVariable Long storeId, @RequestBody(required = false) UserCurReq userCurReq){
-        return storeService.findById(storeId, userCurReq);
+    public ResponseEntity<DetailStoreDto> showStoreDetail(@PathVariable Long storeId, @RequestBody(required = false) UserCurReq userCurReq){
+        return ResponseEntity.status(HttpStatus.OK).body(storeService.findById(storeId, userCurReq));
     }
 
     @PostMapping("/findByKeyword")
