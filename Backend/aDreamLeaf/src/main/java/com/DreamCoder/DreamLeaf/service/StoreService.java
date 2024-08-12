@@ -84,24 +84,8 @@ public class StoreService {
         return result;
     }
 
-    private double calcDist(double lat1, double lon1, double lat2, double lon2) {
-        final int R = 6371; // Radius of the earth
-
-        Double latDistance = toRad(lat2 - lat1);
-        Double lonDistance = toRad(lon2 - lon1);
-        Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
-                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                        Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-        return R * c;
-    }
-
-    private static Double toRad(Double value) {
-        return value * Math.PI / 180;
-    }
-
     //사용자가 위치 정보 제공에 동의하였을 때외 하지 않았을 때에 대한 처리
+
     public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq){
         if(userCurReq.getCurLat()==null && userCurReq.getCurLogt()==null){
             log.info("case1 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
@@ -114,7 +98,6 @@ public class StoreService {
         log.info("case3 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
         return storeRepository.findByKeyword(keyword, userCurReq);
     }
-
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산
         if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){
             throw new StoreException("잘못된 위치정보입니다.", 400);
@@ -150,6 +133,23 @@ public class StoreService {
         for (StoreHygrade storeHygrade : storeHygrades) {
             storeHygradeRepository.save(storeHygrade);
         }
+    }
+
+    private double calcDist(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Radius of the earth
+
+        Double latDistance = toRad(lat2 - lat1);
+        Double lonDistance = toRad(lon2 - lon1);
+        Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                        Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R * c;
+    }
+
+    private static Double toRad(Double value) {
+        return value * Math.PI / 180;
     }
 
 
