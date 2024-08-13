@@ -62,25 +62,6 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
 
 
-    //사용자 위치 정보가 없을 때에 대한 처리
-    @Override
-    public List<SimpleStoreDto> findByKeyword(String keyword){
-        String sql="select *, 0.0 AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by totalRating desc";
-        List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper,"%"+keyword+"%");
-        return result;
-    }
-
-    //사용자 위치 정보가 있을 때에 대한 처리
-    @Override
-    public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
-        String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
-                "-radians(?))+sin(radians(?))*sin(radians(wgs84Lat))))" +
-                "AS distance, (select avg(rating) from review where review.storeId=store.storeId) as totalRating from store where storeName like ? order by distance";
-        log.info("lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
-        List<SimpleStoreDto> result= template.query(sql, simpleStoreDtoRowMapper, userCurReq.getCurLat(), userCurReq.getCurLogt(), userCurReq.getCurLat(),"%"+keyword+"%");
-        return result;
-    }
-
     @Override
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq) {
         String sql="select *, (6371*acos(cos(radians(?))*cos(radians(wgs84Lat))*cos(radians(wgs84Logt)" +
@@ -261,7 +242,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
     private RowMapper<SimpleStoreDto> simpleStoreDtoRowMapper=(rs, rowNum)->
             SimpleStoreDto.builder()
-                    .storeId(rs.getInt("storeId"))
+                    .storeId(rs.getLong("storeId"))
                     .storeName(rs.getString("storeName"))
                     .storeType(rs.getInt("payment"))
                     .curDist(rs.getDouble("distance"))      //현재 이 column이 없을 경우 0.0으로 처리

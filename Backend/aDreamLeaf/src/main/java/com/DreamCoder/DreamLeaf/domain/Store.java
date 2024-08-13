@@ -16,7 +16,7 @@ public class Store{
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long storeId;
 
     private String storeName;       //store 이름
     private int zipCode;            //우편번호

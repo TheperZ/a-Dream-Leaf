@@ -11,9 +11,10 @@ import lombok.ToString;
 @ToString
 @Builder
 public class SimpleStoreDto {
-    private int storeId;
+    private Long storeId;
     private String storeName;
     private int storeType;
-    private double curDist;
+    @Builder.Default
+    private double curDist = 0;
     private double totalRating;
 }

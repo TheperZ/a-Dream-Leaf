@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,7 +59,7 @@ public class StoreService {
         );
 
         DetailStoreDto result = DetailStoreDto.builder()
-                .storeId(store.getId())
+                .storeId(store.getStoreId())
                 .storeName(store.getStoreName())
                 .storeType(store.getPayment())
                 .hygieneGrade(storeRepository.checkHygrade(store.getStoreName(), store.getWgs84Lat(), store.getWgs84Logt()))
@@ -69,7 +70,7 @@ public class StoreService {
                 .refineWGS84Logt(store.getWgs84Logt())
                 .prodName(store.getProdName())
                 .prodTarget(store.getProdTarget())
-                .totalRating(reviewRepository.getAvgScore(store.getId()))
+                .totalRating(reviewRepository.getAvgScore(store.getStoreId()))
                 .build();
 
         if(userCurReq.getCurLat()!=null && userCurReq.getCurLogt()!=null &&
@@ -86,18 +87,38 @@ public class StoreService {
 
     //사용자가 위치 정보 제공에 동의하였을 때외 하지 않았을 때에 대한 처리
 
-    public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq){
-        if(userCurReq.getCurLat()==null && userCurReq.getCurLogt()==null){
-            log.info("case1 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
-            return storeRepository.findByKeyword(keyword);
+    public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
+
+        List<Store> stores = storeRepository.findByKeyword(keyword);
+
+        List<SimpleStoreDto> result = new ArrayList<>();
+
+        for (Store store : stores) {
+
+            SimpleStoreDto storeDto = SimpleStoreDto.builder()
+                    .storeId(store.getStoreId())
+                    .storeName(store.getStoreName())
+                    .storeType(store.getPayment())
+                    .totalRating(reviewRepository.getAvgScore(store.getStoreId()))
+                    .build();
+
+            if (userCurReq.getCurLat() != null && userCurReq.getCurLogt() != null &&
+                    (userCurReq.getCurLat() < -90 || userCurReq.getCurLat() > 90 || userCurReq.getCurLogt() < -180 || userCurReq.getCurLogt() > 180)) {
+
+                throw new StoreException("잘못된 위치정보입니다.", 400);
+
+            } else {
+
+                storeDto.setCurDist(calcDist(userCurReq.getCurLat(), userCurReq.getCurLogt(), store.getWgs84Lat(), store.getWgs84Logt()));
+            }
+
+            result.add(storeDto);
         }
-        else if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){       //위치 정보가 wgs84 범위를 초과하였을 경우
-            log.info("case2 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
-            throw new StoreException("잘못된 위치정보입니다.", 400);
-        }
-        log.info("case3 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
-        return storeRepository.findByKeyword(keyword, userCurReq);
+
+        return result;
+
     }
+
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산
         if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){
             throw new StoreException("잘못된 위치정보입니다.", 400);

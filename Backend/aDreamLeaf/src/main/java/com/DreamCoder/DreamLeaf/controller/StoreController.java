@@ -45,7 +45,7 @@ public class StoreController {
     }
 
     @PostMapping("/findByKeyword")
-    public List<SimpleStoreDto> findByKeyword(@RequestParam String keyword, @RequestBody(required = false) UserCurReq userCurReq){       //위치 정보가 있을 경우 거리 순으로 정렬, 없을 경우 별점 순으로 정렬
+    public List<SimpleStoreDto> findByKeyword(@RequestParam(required = false) String keyword, @RequestBody(required = false) UserCurReq userCurReq){       //위치 정보가 있을 경우 거리 순으로 정렬, 없을 경우 별점 순으로 정렬
         return storeService.findByKeyword(keyword, userCurReq);
     }
 
