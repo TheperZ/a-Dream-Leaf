@@ -397,7 +397,14 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     @Override
     public double getAvgScore(Long storeId) {
-        return jdbcTemplate.queryForObject("select avg(rating) from review where storeId=?", double.class, storeId);
+        try {
+            double score = jdbcTemplate.queryForObject("select avg(rating) from review where storeId=?", double.class, storeId);
+            return score;
+        }catch (NullPointerException e){
+            return 0;
+        }
+
+
 
     }
 }

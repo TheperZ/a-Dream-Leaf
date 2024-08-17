@@ -73,15 +73,14 @@ public class StoreService {
                 .totalRating(reviewRepository.getAvgScore(store.getStoreId()))
                 .build();
 
-        if(userCurReq.getCurLat()!=null && userCurReq.getCurLogt()!=null &&
-                (userCurReq.getCurLat() < -90 || userCurReq.getCurLat() > 90 || userCurReq.getCurLogt() < -180 || userCurReq.getCurLogt() > 180)){
-
-            throw new StoreException("잘못된 위치정보입니다.", 400);
-
-        }  else {
-
-            result.setCurDist(calcDist(userCurReq.getCurLat(), userCurReq.getCurLogt(), result.getRefineWGS84Lat(), result.getRefineWGS84Logt()));
+        if(userCurReq!=null){
+            if (userCurReq.getCurLat() < -90 || userCurReq.getCurLat() > 90 || userCurReq.getCurLogt() < -180 || userCurReq.getCurLogt() > 180) {
+                throw new StoreException("잘못된 위치정보입니다.", 400);
+            } else {
+                result.setCurDist(calcDist(userCurReq.getCurLat(), userCurReq.getCurLogt(), result.getRefineWGS84Lat(), result.getRefineWGS84Logt()));
+            }
         }
+
         return result;
     }
 
@@ -102,14 +101,12 @@ public class StoreService {
                     .totalRating(reviewRepository.getAvgScore(store.getStoreId()))
                     .build();
 
-            if (userCurReq.getCurLat() != null && userCurReq.getCurLogt() != null &&
-                    (userCurReq.getCurLat() < -90 || userCurReq.getCurLat() > 90 || userCurReq.getCurLogt() < -180 || userCurReq.getCurLogt() > 180)) {
-
-                throw new StoreException("잘못된 위치정보입니다.", 400);
-
-            } else {
-
-                storeDto.setCurDist(calcDist(userCurReq.getCurLat(), userCurReq.getCurLogt(), store.getWgs84Lat(), store.getWgs84Logt()));
+            if(userCurReq!=null){
+                if (userCurReq.getCurLat() < -90 || userCurReq.getCurLat() > 90 || userCurReq.getCurLogt() < -180 || userCurReq.getCurLogt() > 180) {
+                    throw new StoreException("잘못된 위치정보입니다.", 400);
+                } else {
+                    storeDto.setCurDist(calcDist(userCurReq.getCurLat(), userCurReq.getCurLogt(), store.getWgs84Lat(), store.getWgs84Logt()));
+                }
             }
 
             result.add(storeDto);
