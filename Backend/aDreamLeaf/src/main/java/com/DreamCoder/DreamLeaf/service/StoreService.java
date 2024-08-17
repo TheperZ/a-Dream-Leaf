@@ -85,7 +85,7 @@ public class StoreService {
         return result;
     }
 
-    //사용자가 위치 정보 제공에 동의하였을 때외 하지 않았을 때에 대한 처리
+
 
     public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
 
@@ -120,9 +120,15 @@ public class StoreService {
     }
 
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산
-        if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){
+
+
+
+        if((userCurReq.getCurLat() == null || userCurReq.getCurLogt() == null)||
+                (userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180)){
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
+
+
         return storeRepository.findByCur(userCurReq);
     }
 
