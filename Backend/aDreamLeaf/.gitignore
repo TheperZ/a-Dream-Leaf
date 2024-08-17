@@ -42,6 +42,9 @@ src/main/resources/serviceAccountKey.json
 ### Properties ###
 src/main/resources/*.properties
 
+### Generated File ###
+src/main/generated
+
 ### Dockerfile ###
 Dockerfile
 
