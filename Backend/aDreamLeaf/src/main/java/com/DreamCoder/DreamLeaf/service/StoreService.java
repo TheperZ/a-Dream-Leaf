@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StoreService {
 
-    @Autowired
+
     private final StoreRepository storeRepository;
     private final ApiManager apiManager;
 
