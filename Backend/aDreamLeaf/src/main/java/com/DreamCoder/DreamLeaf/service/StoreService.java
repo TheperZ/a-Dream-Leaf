@@ -31,18 +31,20 @@ public class StoreService {
     }
 
     public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq){
-        if(userCurReq.getCurLat()==null && userCurReq.getCurLogt()==null){
+        if(isUserCurReqNull(userCurReq)){
             return storeRepository.findById(storeId);
         }
-        else if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){   //위치 정보가 wgs84 범위를 초과하였을 경우
+        else if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 ||
+                userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){   //위치 정보가 wgs84 범위를 초과하였을 경우
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
         return storeRepository.findById(storeId, userCurReq);
     }
 
     //사용자가 위치 정보 제공에 동의하였을 때외 하지 않았을 때에 대한 처리
+
     public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq){
-        if(userCurReq.getCurLat()==null && userCurReq.getCurLogt()==null){
+        if(isUserCurReqNull(userCurReq)){
             log.info("case1 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
             return storeRepository.findByKeyword(keyword);
         }
@@ -53,7 +55,6 @@ public class StoreService {
         log.info("case3 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
         return storeRepository.findByKeyword(keyword, userCurReq);
     }
-
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산
         if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){
             throw new StoreException("잘못된 위치정보입니다.", 400);
@@ -70,6 +71,10 @@ public class StoreService {
 
     public void saveHyApi(){
         apiManager.saveHygieneApi();
+    }
+
+    private static boolean isUserCurReqNull(UserCurReq userCurReq) {
+        return (userCurReq == null) || (userCurReq.getCurLat() == null && userCurReq.getCurLogt() == null);
     }
 
 
