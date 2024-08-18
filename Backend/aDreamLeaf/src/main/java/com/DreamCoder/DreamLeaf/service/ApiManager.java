@@ -2,7 +2,6 @@ package com.DreamCoder.DreamLeaf.service;
 
 
 
-import com.DreamCoder.DreamLeaf.domain.Store;
 import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
 import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
@@ -12,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -24,6 +24,7 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class ApiManager {
 
+    @Autowired
     private final StoreRepository storeRepository;
     private final StoreHygradeRepository storeHygradeRepository;
 
@@ -137,7 +138,7 @@ public class ApiManager {
                 }
                 else{
 
-                    Store infoObj = Store.builder()
+                    StoreReq infoObj = StoreReq.builder()
                             .storeName((String) temp.get("FACLT_NM"))
                             .zipCode(zipcd)
                             .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
@@ -289,19 +290,12 @@ public class ApiManager {
 
                     }
                     else{
-                        Store info=Store.builder()
-                                .storeName((String)temp.get("CMPNM_NM"))
-                                .zipCode(zipcd)
-                                .roadAddr(roadno)
-                                .lotAddr(lotno)
-                                .wgs84Lat(lat)
-                                .wgs84Logt(logt)
-                                .payment(0)
-                                .prodName(prodName)
-                                .prodTarget(prodTarget)
-                                .build();
-
-                        storeRepository.save(info);
+                        StoreReq infoObj=new StoreReq((String)temp.get("CMPNM_NM"),
+                                zipcd,
+                                roadno,
+                                lotno,
+                                lat, logt,0, prodName, prodTarget);
+                        storeRepository.save(infoObj);
                     }
                 }
                 pIndex++;

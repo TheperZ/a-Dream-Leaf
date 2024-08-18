@@ -1,14 +1,15 @@
 package com.DreamCoder.DreamLeaf.service;
 
-import com.DreamCoder.DreamLeaf.domain.Store;
 import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
+import com.DreamCoder.DreamLeaf.dto.StoreDto;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,31 +20,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StoreService {
 
-
+    @Autowired
     private final StoreRepository storeRepository;
     private final ApiManager apiManager;
 
 
-    public void save(StoreReq storeReq){
 
-        //음식점명, 위경도가 동일한 데이터가 있는지 확인(이 경우 임시로 같은 가게인 경우로 간)
-        if(storeRepository.existsByStoreNameAndWgs84LatAndWgs84Logt(storeReq.getStoreName(), storeReq.getWgs84Lat(), storeReq.getWgs84Logt())){
-            log.info("no insert={}", storeReq.getStoreName());
-            return;
-        }
-
-        Store store = Store.builder()
-                .storeName(storeReq.getStoreName())
-                .zipCode(storeReq.getZipCode())
-                .roadAddr(storeReq.getRoadAddr())
-                .lotAddr(storeReq.getLotAddr())
-                .wgs84Lat(storeReq.getWgs84Lat())
-                .wgs84Logt(storeReq.getWgs84Logt())
-                .payment(storeReq.getPayment())
-                .prodName(storeReq.getProdName())
-                .prodTarget(storeReq.getProdTarget())
-                .build();
-       storeRepository.save(store);
+    public Optional<StoreDto> save(StoreReq storeReq){
+        return storeRepository.save(storeReq);
     }
 
     public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq){
