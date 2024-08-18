@@ -34,8 +34,7 @@ public class StoreService {
         if(isUserCurReqNull(userCurReq)){
             return storeRepository.findById(storeId);
         }
-        else if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 ||
-                userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){   //위치 정보가 wgs84 범위를 초과하였을 경우
+        else if(isNotValidPosition(userCurReq)){   //위치 정보가 wgs84 범위를 초과하였을 경우
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
         return storeRepository.findById(storeId, userCurReq);
@@ -48,7 +47,7 @@ public class StoreService {
             log.info("case1 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
             return storeRepository.findByKeyword(keyword);
         }
-        else if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){       //위치 정보가 wgs84 범위를 초과하였을 경우
+        else if(isNotValidPosition(userCurReq)){       //위치 정보가 wgs84 범위를 초과하였을 경우
             log.info("case2 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
@@ -56,7 +55,7 @@ public class StoreService {
         return storeRepository.findByKeyword(keyword, userCurReq);
     }
     public List<SimpleStoreDto> findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산
-        if(userCurReq.getCurLat()<-90 || userCurReq.getCurLat()>90 || userCurReq.getCurLogt()<-180 || userCurReq.getCurLogt()>180){
+        if(isNotValidPosition(userCurReq)){
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
         return storeRepository.findByCur(userCurReq);
@@ -75,6 +74,10 @@ public class StoreService {
 
     private static boolean isUserCurReqNull(UserCurReq userCurReq) {
         return (userCurReq == null) || (userCurReq.getCurLat() == null && userCurReq.getCurLogt() == null);
+    }
+
+    private static boolean isNotValidPosition(UserCurReq userCurReq) {
+        return userCurReq.getCurLat() < -90 || userCurReq.getCurLat() > 90 || userCurReq.getCurLogt() < -180 || userCurReq.getCurLogt() > 180;
     }
 
 
