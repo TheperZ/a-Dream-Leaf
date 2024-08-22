@@ -24,7 +24,7 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class ApiManager {
 
-    @Autowired
+
     private final StoreRepository storeRepository;
     private final StoreHygradeRepository storeHygradeRepository;
 
