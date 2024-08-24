@@ -17,7 +17,11 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -273,73 +277,157 @@ public class UrlCallApiParser implements ApiParser{
 
     @TimeTrace
     public void saveHygieneApi(){
-        String result="";
         int pIndex=1;
-        Long totalCnt;
+        Long totalCnt = 0L;
+
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+        //pIndex=1
         try {
-            do {
-                URL url = new URL(makeUrl("RestrtSanittnGradStus", "1cbb5970a6a3461b8e4282e78a548c30", "json", pIndex, 1000));
-                BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-                result = bf.readLine();
+            URL url = new URL(makeUrl("RestrtSanittnGradStus", "1cbb5970a6a3461b8e4282e78a548c30", "json", pIndex, 1000));
+            BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+            String result = bf.readLine();
 
 
-                JSONParser jsonParser = new JSONParser();
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-                JSONArray goodStore = (JSONArray) jsonObject.get("RestrtSanittnGradStus");      //전체 json get(size=2(head, row))
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+            JSONArray goodStore = (JSONArray) jsonObject.get("RestrtSanittnGradStus");      //전체 json get(size=2(head, row))
 
-                //casting head
-                JSONObject head = (JSONObject) goodStore.get(0);
-                JSONArray head2 = (JSONArray) head.get("head");
-                log.info("head={}", head2);
-                totalCnt = (Long) ((JSONObject) head2.get(0)).get("list_total_count");
-                log.info("cnt={}", totalCnt);
-                JSONObject apiResult = (JSONObject) ((JSONObject) head2.get(1)).get("RESULT");
-                String resultCode = (String) apiResult.get("CODE");
-                log.info("resCode={}", resultCode);
+            //casting head
+            JSONObject head = (JSONObject) goodStore.get(0);
+            JSONArray head2 = (JSONArray) head.get("head");
+            log.info("head={}", head2);
+            totalCnt = (Long) ((JSONObject) head2.get(0)).get("list_total_count");
+            log.info("cnt={}", totalCnt);
+            JSONObject apiResult = (JSONObject) ((JSONObject) head2.get(1)).get("RESULT");
+            String resultCode = (String) apiResult.get("CODE");
+            log.info("resCode={}", resultCode);
 
-                //casting body(row)
-                JSONObject row = (JSONObject) goodStore.get(1);
-                JSONArray infoArr = (JSONArray) row.get("row");
-
-
-                for (int i = 0; i < infoArr.size(); i++) {
-                    JSONObject temp = (JSONObject) infoArr.get(i);
-
-                    //check location if null
-                    double lat, logt;
+            //casting body(row)
+            JSONObject row = (JSONObject) goodStore.get(1);
+            JSONArray infoArr = (JSONArray) row.get("row");
 
 
-                    //정보가 없는 가게에 대한 String 처리
-                    String roadno = temp.get("REFINE_ROADNM_ADDR") == null ? "" : (String) temp.get("REFINE_ROADNM_ADDR");
-                    String lotno = temp.get("REFINE_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
+            for (int i = 0; i < infoArr.size(); i++) {
+                JSONObject temp = (JSONObject) infoArr.get(i);
+
+                //check location if null
+                double lat, logt;
 
 
-                    //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
-                    if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
-                        continue;
-                    } else {
-                        lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
-                        logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
-                    }
+                //정보가 없는 가게에 대한 String 처리
+                String roadno = temp.get("REFINE_ROADNM_ADDR") == null ? "" : (String) temp.get("REFINE_ROADNM_ADDR");
+                String lotno = temp.get("REFINE_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
 
 
-                    StoreHygradeReq infoObj = StoreHygradeReq.builder()
-                            .storeName((String) temp.get("ENTRPS_NM"))
-                            .grade((String) temp.get("APPONT_GRAD"))
-                            .roadAddr(roadno)
-                            .lotAddr(lotno)
-                            .wgs84Lat(lat)
-                            .wgs84Logt(logt)
-                            .build();
-
-                    storeHygradeRepository.save(infoObj);
-
+                //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
+                if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
+                    continue;
+                } else {
+                    lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
+                    logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
                 }
-                pIndex++;
-            } while (pIndex <= (totalCnt / 1000) + 1);
-        } catch (Exception e) {
+
+
+                StoreHygradeReq infoObj = StoreHygradeReq.builder()
+                        .storeName((String) temp.get("ENTRPS_NM"))
+                        .grade((String) temp.get("APPONT_GRAD"))
+                        .roadAddr(roadno)
+                        .lotAddr(lotno)
+                        .wgs84Lat(lat)
+                        .wgs84Logt(logt)
+                        .build();
+
+                storeHygradeRepository.save(infoObj);
+
+            }
+
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
+
+        //pIndex>=2
+        for (pIndex = 2; pIndex <= (totalCnt / 1000) + 1; pIndex++) {
+            URL url = null;
+            try {
+                url = new URL(makeUrl("RestrtSanittnGradStus", "1cbb5970a6a3461b8e4282e78a548c30", "json", pIndex, 1000));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            URL finalUrl = url;
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                try (BufferedReader bf = new BufferedReader(
+                        new InputStreamReader(finalUrl.openStream(), "UTF-8"))){
+
+
+                    String result = bf.readLine();
+
+
+                    JSONParser jsonParser = new JSONParser();
+                    JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+                    JSONArray goodStore = (JSONArray) jsonObject.get("RestrtSanittnGradStus");      //전체 json get(size=2(head, row))
+
+                    //casting head
+                    JSONObject head = (JSONObject) goodStore.get(0);
+                    JSONArray head2 = (JSONArray) head.get("head");
+                    log.info("head={}", head2);
+                    JSONObject apiResult = (JSONObject) ((JSONObject) head2.get(1)).get("RESULT");
+                    String resultCode = (String) apiResult.get("CODE");
+                    log.info("resCode={}", resultCode);
+
+                    //casting body(row)
+                    JSONObject row = (JSONObject) goodStore.get(1);
+                    JSONArray infoArr = (JSONArray) row.get("row");
+
+
+                    for (int i = 0; i < infoArr.size(); i++) {
+                        JSONObject temp = (JSONObject) infoArr.get(i);
+
+                        //check location if null
+                        double lat, logt;
+
+
+                        //정보가 없는 가게에 대한 String 처리
+                        String roadno = temp.get("REFINE_ROADNM_ADDR") == null ? "" : (String) temp.get("REFINE_ROADNM_ADDR");
+                        String lotno = temp.get("REFINE_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
+
+
+                        //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
+                        if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
+                            continue;
+                        } else {
+                            lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
+                            logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
+                        }
+
+
+                        StoreHygradeReq infoObj = StoreHygradeReq.builder()
+                                .storeName((String) temp.get("ENTRPS_NM"))
+                                .grade((String) temp.get("APPONT_GRAD"))
+                                .roadAddr(roadno)
+                                .lotAddr(lotno)
+                                .wgs84Lat(lat)
+                                .wgs84Logt(logt)
+                                .build();
+
+                        storeHygradeRepository.save(infoObj);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }, executorService);
+
+            futures.add(future);
+        }
+
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
     }
 
