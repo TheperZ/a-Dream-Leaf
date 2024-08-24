@@ -28,7 +28,7 @@ public class TimeTraceAspect {
             return joinPoint.proceed(); // 실제 타겟 호출
         } finally {
             stopWatch.stop();
-            log.info("{} - Total time = {}s",
+            log.debug("{} - Total time = {}s",
                     joinPoint.getSignature().toShortString(),
                     stopWatch.getTotalTimeSeconds());
         }
