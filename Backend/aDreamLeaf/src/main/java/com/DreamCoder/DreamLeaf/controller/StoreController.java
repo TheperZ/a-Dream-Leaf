@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StoreController {
 
-    @Autowired
+
     private final StoreService storeService;
 
 

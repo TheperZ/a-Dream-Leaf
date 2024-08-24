@@ -24,24 +24,24 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class ApiManager {
 
-    @Autowired
+
     private final StoreRepository storeRepository;
     private final StoreHygradeRepository storeHygradeRepository;
 
     private String makeUrl(String storeType, String key, String dataType, int pIndex, int pSize){
-        StringBuffer sb=new StringBuffer();
-        sb.append("https://openapi.gg.go.kr/");
-        sb.append(storeType);
-        sb.append("?KEY=");
-        sb.append(key);
-        sb.append("&Type=");
-        sb.append(dataType);
-        sb.append("&pIndex=");
-        sb.append(pIndex);
-        sb.append("&pSize=");
-        sb.append(pSize);
+        StringBuffer urlBuffer=new StringBuffer();
+        urlBuffer.append("https://openapi.gg.go.kr/");
+        urlBuffer.append(storeType);
+        urlBuffer.append("?KEY=");
+        urlBuffer.append(key);
+        urlBuffer.append("&Type=");
+        urlBuffer.append(dataType);
+        urlBuffer.append("&pIndex=");
+        urlBuffer.append(pIndex);
+        urlBuffer.append("&pSize=");
+        urlBuffer.append(pSize);
 
-        return sb.toString();
+        return urlBuffer.toString();
     }
 
     public void saveGDreamCardApi(){
@@ -80,33 +80,27 @@ public class ApiManager {
                 JSONObject temp = (JSONObject) infoArr.get(i);
 
                 //check zip, location if null
-                int zipcd;
-                double lat, logt;
-                String lotno;
 
-                if ((String) temp.get("REFINE_LOTNO_ADDR") == null) {
-                    lotno = "";
-                } else {
-                    lotno = (String) temp.get("REFINE_LOTNO_ADDR");
-                }
-                if ((String) temp.get("REFINE_ZIP_CD") == null) {
-                    zipcd = 0;
-                } else {
-                    zipcd = Integer.parseInt((String) temp.get("REFINE_ZIP_CD"));
-                }
-                if ((String) temp.get("REFINE_WGS84_LAT") == null) {
+                double lat, logt;
+
+
+                String lotno=temp.get("REFIND_LOTNO_ADDR")==null?"":(String) temp.get("REFINE_LOTNO_ADDR");
+
+                int zipcd=temp.get("REFINE_ZIP_CD") == null?0:Integer.parseInt((String) temp.get("REFINE_ZIP_CD"));
+
+
+                //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
+                if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
                     continue;
-                } else {
+                }
+                else{
                     lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
-                }
-                if ((String) temp.get("REFINE_WGS84_LOGT") == null) {
-                    continue;
-                } else {
                     logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
                 }
 
 
-                StoreReq checkFor1 = StoreReq.builder()
+
+                StoreReq checkForGoodStore = StoreReq.builder()
                         .storeName((String) temp.get("FACLT_NM"))
                         .zipCode(zipcd)
                         .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
@@ -119,7 +113,7 @@ public class ApiManager {
                         .build();
 
 
-                StoreReq checkFor2 = StoreReq.builder()
+                StoreReq checkForAllType = StoreReq.builder()
                         .storeName((String) temp.get("FACLT_NM"))
                         .zipCode(zipcd)
                         .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
@@ -130,27 +124,26 @@ public class ApiManager {
                         .prodName("")
                         .prodTarget("")
                         .build();
-                if(storeRepository.hasAnotherType(checkFor1)){
-                    storeRepository.updatePaymentTo2(checkFor1);
+
+                if(storeRepository.hasAnotherType(checkForGoodStore)){
+                    storeRepository.updatePaymentTo2(checkForGoodStore);
                 }
-                else if(storeRepository.hasAnotherType(checkFor2)){
+                else if(!storeRepository.hasAnotherType(checkForAllType)){
+                        StoreReq infoObj = StoreReq.builder()
+                                .storeName((String) temp.get("FACLT_NM"))
+                                .zipCode(zipcd)
+                                .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
+                                .lotAddr(lotno)
+                                .wgs84Lat(lat)
+                                .wgs84Logt(logt)
+                                .payment(1)
+                                .prodName("")
+                                .prodTarget("")
+                                .build();
+                        storeRepository.save(infoObj);
 
                 }
-                else{
 
-                    StoreReq infoObj = StoreReq.builder()
-                            .storeName((String) temp.get("FACLT_NM"))
-                            .zipCode(zipcd)
-                            .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
-                            .lotAddr(lotno)
-                            .wgs84Lat(lat)
-                            .wgs84Logt(logt)
-                            .payment(1)
-                            .prodName("")
-                            .prodTarget("")
-                            .build();
-                    storeRepository.save(infoObj);
-                }
             }
             pIndex++;
             }while(pIndex<=(totalCnt/1000)+1);
@@ -198,9 +191,9 @@ public class ApiManager {
                     JSONObject temp=(JSONObject)infoArr.get(i);
 
                     //check zip, location if null
-                    int zipcd;
+
                     double lat, logt;
-                    String roadno,lotno,prodName, prodTarget;
+
 
                     //음식점이 아닌 가게는 추가하지 않음
                     if(!((String)temp.get("INDUTYPE_NM")).equals("식음료")){
@@ -208,51 +201,27 @@ public class ApiManager {
                     }
 
                     //정보가 없는 가게에 대한 String 처리
-                    if((String)temp.get("REFINE_ROADNM_ADDR")==null){
-                        roadno="";
+                    String roadno = temp.get("REFINE_ROADNM_ADDR") == null ? "" : (String) temp.get("REFINE_ROADNM_ADDR");
+
+                    String lotno = temp.get("REFINE_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
+
+                    int zipcd = temp.get("REFINE_ZIPNO") == null ? 0 : Integer.parseInt((String) temp.get("REFINE_ZIPNO"));
+
+
+                    //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
+                    if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
+                        continue;
                     }
                     else{
-                        roadno=(String)temp.get("REFINE_ROADNM_ADDR");
-                    }
-                    if((String)temp.get("REFINE_LOTNO_ADDR")==null){
-                        lotno="";
-                    }
-                    else{
-                        lotno=(String)temp.get("REFINE_LOTNO_ADDR");
-                    }
-                    if((String)temp.get("REFINE_ZIPNO")==null){
-                        zipcd=0;
-                    }
-                    else{
-                        zipcd=Integer.parseInt((String)temp.get("REFINE_ZIPNO"));
+                        lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
+                        logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
                     }
 
-                    //위치 정보가 없는 가게는 추가하지 않음
-                    if((String)temp.get("REFINE_WGS84_LAT")==null){
-                        continue;
-                    }
-                    else{
-                        lat=Double.parseDouble((String)temp.get("REFINE_WGS84_LAT"));
-                    }
-                    if((String)temp.get("REFINE_WGS84_LOGT")==null){
-                        continue;
-                    }
-                    else{
-                        logt=Double.parseDouble((String)temp.get("REFINE_WGS84_LOGT"));
-                    }
-                    if((String)temp.get("PROVSN_PRODLST_NM")==null){
-                        prodName="";
-                    }
-                    else{
-                        prodName=(String)temp.get("PROVSN_PRODLST_NM");
-                    }
-                    if((String)temp.get("PROVSN_TRGT_NM1")==null){
-                        prodTarget="";
-                    }
-                    else{
-                        prodTarget=(String)temp.get("PROVSN_TRGT_NM1");
-                    }
-                    if((String)temp.get("PROVSN_TRGT_NM2")!=null){
+                    String prodName = temp.get("PROVSN_PRODLST_NM") == null ? "" : (String) temp.get("PROVSN_PRODLST_NM");
+
+                    String prodTarget = temp.get("PROVSN_TRGT_NM1") == null ? "" : (String) temp.get("PROVSN_TRGT_NM1");
+
+                    if(temp.get("PROVSN_TRGT_NM2")!=null){
                         prodTarget+=(String)temp.get("PROVSN_TRGT_NM2");
                     }
 
@@ -286,10 +255,7 @@ public class ApiManager {
                     if(storeRepository.hasAnotherType(checkFor1)){
                         storeRepository.updatePaymentTo2(checkFor1);
                     }
-                    else if(storeRepository.hasAnotherType(checkFor2)){
-
-                    }
-                    else{
+                    else if(!storeRepository.hasAnotherType(checkFor2)){
                         StoreReq infoObj=new StoreReq((String)temp.get("CMPNM_NM"),
                                 zipcd,
                                 roadno,
@@ -343,36 +309,20 @@ public class ApiManager {
 
                     //check location if null
                     double lat, logt;
-                    String roadno,lotno;
 
 
                     //정보가 없는 가게에 대한 String 처리
-                    if((String)temp.get("REFINE_ROADNM_ADDR")==null){
-                        roadno="";
-                    }
-                    else{
-                        roadno=(String)temp.get("REFINE_ROADNM_ADDR");
-                    }
-                    if((String)temp.get("REFINE_LOTNO_ADDR")==null){
-                        lotno="";
-                    }
-                    else{
-                        lotno=(String)temp.get("REFINE_LOTNO_ADDR");
-                    }
+                    String roadno = temp.get("REFINE_ROADNM_ADDR") == null ? "" : (String) temp.get("REFINE_ROADNM_ADDR");
+                    String lotno = temp.get("REFINE_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
 
 
-                    //위치 정보가 없는 가게는 추가하지 않음
-                    if((String)temp.get("REFINE_WGS84_LAT")==null){
+                    //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
+                    if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
                         continue;
                     }
                     else{
-                        lat=Double.parseDouble((String)temp.get("REFINE_WGS84_LAT"));
-                    }
-                    if((String)temp.get("REFINE_WGS84_LOGT")==null){
-                        continue;
-                    }
-                    else{
-                        logt=Double.parseDouble((String)temp.get("REFINE_WGS84_LOGT"));
+                        lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
+                        logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
                     }
 
 
