@@ -29,19 +29,19 @@ public class ApiManager {
     private final StoreHygradeRepository storeHygradeRepository;
 
     private String makeUrl(String storeType, String key, String dataType, int pIndex, int pSize){
-        StringBuffer sb=new StringBuffer();
-        sb.append("https://openapi.gg.go.kr/");
-        sb.append(storeType);
-        sb.append("?KEY=");
-        sb.append(key);
-        sb.append("&Type=");
-        sb.append(dataType);
-        sb.append("&pIndex=");
-        sb.append(pIndex);
-        sb.append("&pSize=");
-        sb.append(pSize);
+        StringBuffer urlBuffer=new StringBuffer();
+        urlBuffer.append("https://openapi.gg.go.kr/");
+        urlBuffer.append(storeType);
+        urlBuffer.append("?KEY=");
+        urlBuffer.append(key);
+        urlBuffer.append("&Type=");
+        urlBuffer.append(dataType);
+        urlBuffer.append("&pIndex=");
+        urlBuffer.append(pIndex);
+        urlBuffer.append("&pSize=");
+        urlBuffer.append(pSize);
 
-        return sb.toString();
+        return urlBuffer.toString();
     }
 
     public void saveGDreamCardApi(){
