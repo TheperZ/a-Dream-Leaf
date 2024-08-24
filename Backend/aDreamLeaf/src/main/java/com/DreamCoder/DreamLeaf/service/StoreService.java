@@ -4,12 +4,12 @@ import com.DreamCoder.DreamLeaf.dto.DetailStoreDto;
 import com.DreamCoder.DreamLeaf.dto.SimpleStoreDto;
 import com.DreamCoder.DreamLeaf.dto.StoreDto;
 import com.DreamCoder.DreamLeaf.exception.StoreException;
+import com.DreamCoder.DreamLeaf.parser.UrlCallApiParser;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
 import com.DreamCoder.DreamLeaf.req.StoreReq;
 import com.DreamCoder.DreamLeaf.req.UserCurReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class StoreService {
 
 
     private final StoreRepository storeRepository;
-    private final ApiManager apiManager;
+    private final UrlCallApiParser urlCallApiParser;
 
 
 
@@ -62,14 +62,14 @@ public class StoreService {
     }
 
     public void saveApi(){
-        apiManager.saveGoodStoreApi();
-        apiManager.saveGDreamCardApi();
+        urlCallApiParser.saveGoodStoreApi();
+        urlCallApiParser.saveGDreamCardApi();
         storeRepository.checkAndMerge();
-        apiManager.saveHygieneApi();
+        urlCallApiParser.saveHygieneApi();
     }
 
     public void saveHyApi(){
-        apiManager.saveHygieneApi();
+        urlCallApiParser.saveHygieneApi();
     }
 
     private static boolean isUserCurReqNull(UserCurReq userCurReq) {

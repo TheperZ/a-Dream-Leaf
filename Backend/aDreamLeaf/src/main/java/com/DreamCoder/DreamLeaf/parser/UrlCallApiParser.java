@@ -1,4 +1,4 @@
-package com.DreamCoder.DreamLeaf.service;
+package com.DreamCoder.DreamLeaf.parser;
 
 
 
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -22,7 +21,7 @@ import java.net.URL;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ApiManager {
+public class UrlCallApiParser implements ApiParser{
 
 
     private final StoreRepository storeRepository;
