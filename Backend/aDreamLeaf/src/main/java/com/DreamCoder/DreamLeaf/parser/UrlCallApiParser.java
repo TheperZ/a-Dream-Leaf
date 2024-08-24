@@ -2,6 +2,7 @@ package com.DreamCoder.DreamLeaf.parser;
 
 
 
+import com.DreamCoder.DreamLeaf.aop.TimeTrace;
 import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
 import com.DreamCoder.DreamLeaf.req.StoreHygradeReq;
@@ -271,6 +272,7 @@ public class UrlCallApiParser implements ApiParser{
 
     }
 
+    @TimeTrace
     public void saveHygieneApi(){
         String result="";
         int pIndex=1;
