@@ -25,7 +25,7 @@ public class StoreController {
 
 
     @PostMapping("/api")
-    public ResponseEntity saveApi(){
+    public ResponseEntity saveApi() {
 
         storeService.saveApi();
         return ResponseEntity.status(HttpStatus.CREATED).body("");
@@ -33,26 +33,25 @@ public class StoreController {
     }
 
     @PostMapping("/api/hygiene")
-    public ResponseEntity saveHygiene(){
+    public ResponseEntity saveHygiene() {
         storeService.saveHyApi();
         return ResponseEntity.status(201).body("위생정보 저장이 완료 되었습니다.");
     }
 
     @PostMapping("/{storeId}")
-    public Optional<DetailStoreDto> showStoreDetail(@PathVariable int storeId, @RequestBody(required = false) UserCurReq userCurReq){
+    public Optional<DetailStoreDto> showStoreDetail(@PathVariable int storeId, @RequestBody(required = false) UserCurReq userCurReq) {
         return storeService.findById(storeId, userCurReq);
     }
 
     @PostMapping("/keyword")
-    public List<SimpleStoreDto> findByKeyword(@RequestParam String keyword, @RequestBody(required = false) UserCurReq userCurReq){       //위치 정보가 있을 경우 거리 순으로 정렬, 없을 경우 별점 순으로 정렬
+    public List<SimpleStoreDto> findByKeyword(@RequestParam String keyword, @RequestBody(required = false) UserCurReq userCurReq) {       //위치 정보가 있을 경우 거리 순으로 정렬, 없을 경우 별점 순으로 정렬
         return storeService.findByKeyword(keyword, userCurReq);
     }
 
     @PostMapping("/cur")
-    public List<SimpleStoreDto> findByCur(@RequestBody UserCurReq userCurReq){
+    public List<SimpleStoreDto> findByCur(@RequestBody UserCurReq userCurReq) {
         return storeService.findByCur(userCurReq);
     }
-
 
 
 }

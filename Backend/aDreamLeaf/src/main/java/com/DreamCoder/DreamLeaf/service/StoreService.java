@@ -25,16 +25,14 @@ public class StoreService {
     private final UrlCallApiParser urlCallApiParser;
 
 
-
-    public Optional<StoreDto> save(StoreReq storeReq){
+    public Optional<StoreDto> save(StoreReq storeReq) {
         return storeRepository.save(storeReq);
     }
 
-    public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq){
-        if(isUserCurReqNull(userCurReq)){
+    public Optional<DetailStoreDto> findById(int storeId, UserCurReq userCurReq) {
+        if (isUserCurReqNull(userCurReq)) {
             return storeRepository.findById(storeId);
-        }
-        else if(isNotValidPosition(userCurReq)){   //위치 정보가 wgs84 범위를 초과하였을 경우
+        } else if (isNotValidPosition(userCurReq)) {   //위치 정보가 wgs84 범위를 초과하였을 경우
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
         return storeRepository.findById(storeId, userCurReq);
@@ -42,33 +40,33 @@ public class StoreService {
 
     //사용자가 위치 정보 제공에 동의하였을 때외 하지 않았을 때에 대한 처리
 
-    public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq){
-        if(isUserCurReqNull(userCurReq)){
+    public List<SimpleStoreDto> findByKeyword(String keyword, UserCurReq userCurReq) {
+        if (isUserCurReqNull(userCurReq)) {
             log.info("case1 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
             return storeRepository.findByKeyword(keyword);
-        }
-        else if(isNotValidPosition(userCurReq)){       //위치 정보가 wgs84 범위를 초과하였을 경우
+        } else if (isNotValidPosition(userCurReq)) {       //위치 정보가 wgs84 범위를 초과하였을 경우
             log.info("case2 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
         log.info("case3 lat={}, logt={}", userCurReq.getCurLat(), userCurReq.getCurLogt());
         return storeRepository.findByKeyword(keyword, userCurReq);
     }
-    public List<SimpleStoreDto> findByCur(UserCurReq userCurReq){           //클라이언트에게 위치 정보를 받아서 거리 계산
-        if(isNotValidPosition(userCurReq)){
+
+    public List<SimpleStoreDto> findByCur(UserCurReq userCurReq) {           //클라이언트에게 위치 정보를 받아서 거리 계산
+        if (isNotValidPosition(userCurReq)) {
             throw new StoreException("잘못된 위치정보입니다.", 400);
         }
         return storeRepository.findByCur(userCurReq);
     }
 
-    public void saveApi(){
+    public void saveApi() {
         urlCallApiParser.saveGoodStoreApi();
         urlCallApiParser.saveGDreamCardApi();
         storeRepository.checkAndMerge();
         urlCallApiParser.saveHygieneApi();
     }
 
-    public void saveHyApi(){
+    public void saveHyApi() {
         urlCallApiParser.saveHygieneApi();
     }
 

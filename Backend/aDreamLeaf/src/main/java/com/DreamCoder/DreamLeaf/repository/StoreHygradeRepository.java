@@ -9,6 +9,5 @@ import java.util.Optional;
 public interface StoreHygradeRepository {
 
 
-
     public Optional<StoreHygradeDto> save(StoreHygradeReq storeHygieneReq);
 }

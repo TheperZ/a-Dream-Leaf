@@ -1,7 +1,6 @@
 package com.DreamCoder.DreamLeaf.parser;
 
 
-
 import com.DreamCoder.DreamLeaf.aop.TimeTrace;
 import com.DreamCoder.DreamLeaf.repository.StoreHygradeRepository;
 import com.DreamCoder.DreamLeaf.repository.StoreRepository;
@@ -29,7 +28,7 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 @Component
-public class UrlCallApiParser implements ApiParser{
+public class UrlCallApiParser implements ApiParser {
 
 
     private final StoreRepository storeRepository;
@@ -42,8 +41,8 @@ public class UrlCallApiParser implements ApiParser{
         this.executorService = Executors.newFixedThreadPool(10);
     }
 
-    private String makeUrl(String storeType, String key, String dataType, int pIndex, int pSize){
-        StringBuffer urlBuffer=new StringBuffer();
+    private String makeUrl(String storeType, String key, String dataType, int pIndex, int pSize) {
+        StringBuffer urlBuffer = new StringBuffer();
         urlBuffer.append("https://openapi.gg.go.kr/");
         urlBuffer.append(storeType);
         urlBuffer.append("?KEY=");
@@ -58,109 +57,108 @@ public class UrlCallApiParser implements ApiParser{
         return urlBuffer.toString();
     }
 
-    public void saveGDreamCardApi(){
-        int pIndex=1;
-        Long totalCnt=0L;
+    public void saveGDreamCardApi() {
+        int pIndex = 1;
+        Long totalCnt = 0L;
 
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
-        try{
+        try {
 
-                URL url = new URL(makeUrl("GDreamCard", "e67be2abc4464ffcb547fe1fecc6d138", "json", pIndex, 1000));
-                BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-                String result = bf.readLine();
-
-
-                JSONParser jsonParser = new JSONParser();
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-                JSONArray gDreamCard = (JSONArray) jsonObject.get("GDreamCard");      //전체 json get(size=2(head, row))
-
-                //casting head
-                JSONObject head = (JSONObject) gDreamCard.get(0);
-                JSONArray head2 = (JSONArray) head.get("head");
-                log.info("head={}", head2);
-                totalCnt = (Long) ((JSONObject) head2.get(0)).get("list_total_count");
-                log.info("cnt={}", totalCnt);
-                JSONObject apiResult = (JSONObject) ((JSONObject) head2.get(1)).get("RESULT");
-                String resultCode = (String) apiResult.get("CODE");
-                log.info("resCode={}", resultCode);
-
-                //casting body(row)
-                JSONObject row = (JSONObject) gDreamCard.get(1);
-                JSONArray infoArr = (JSONArray) row.get("row");
+            URL url = new URL(makeUrl("GDreamCard", "e67be2abc4464ffcb547fe1fecc6d138", "json", pIndex, 1000));
+            BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+            String result = bf.readLine();
 
 
-                for (int i = 0; i < infoArr.size(); i++) {
-                    JSONObject temp = (JSONObject) infoArr.get(i);
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+            JSONArray gDreamCard = (JSONArray) jsonObject.get("GDreamCard");      //전체 json get(size=2(head, row))
 
-                    //check zip, location if null
+            //casting head
+            JSONObject head = (JSONObject) gDreamCard.get(0);
+            JSONArray head2 = (JSONArray) head.get("head");
+            log.info("head={}", head2);
+            totalCnt = (Long) ((JSONObject) head2.get(0)).get("list_total_count");
+            log.info("cnt={}", totalCnt);
+            JSONObject apiResult = (JSONObject) ((JSONObject) head2.get(1)).get("RESULT");
+            String resultCode = (String) apiResult.get("CODE");
+            log.info("resCode={}", resultCode);
 
-                    double lat, logt;
-
-
-                    String lotno = temp.get("REFIND_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
-
-                    int zipcd = temp.get("REFINE_ZIP_CD") == null ? 0 : Integer.parseInt((String) temp.get("REFINE_ZIP_CD"));
-
-
-                    //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
-                    if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
-                        continue;
-                    } else {
-                        lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
-                        logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
-                    }
+            //casting body(row)
+            JSONObject row = (JSONObject) gDreamCard.get(1);
+            JSONArray infoArr = (JSONArray) row.get("row");
 
 
-                    StoreReq checkForGoodStore = StoreReq.builder()
-                            .storeName((String) temp.get("FACLT_NM"))
-                            .zipCode(zipcd)
-                            .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
-                            .lotAddr(lotno)
-                            .wgs84Lat(lat)
-                            .wgs84Logt(logt)
-                            .payment(0)
-                            .prodName("")
-                            .prodTarget("")
-                            .build();
+            for (int i = 0; i < infoArr.size(); i++) {
+                JSONObject temp = (JSONObject) infoArr.get(i);
+
+                //check zip, location if null
+
+                double lat, logt;
 
 
-                    StoreReq checkForAllType = StoreReq.builder()
-                            .storeName((String) temp.get("FACLT_NM"))
-                            .zipCode(zipcd)
-                            .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
-                            .lotAddr(lotno)
-                            .wgs84Lat(lat)
-                            .wgs84Logt(logt)
-                            .payment(2)
-                            .prodName("")
-                            .prodTarget("")
-                            .build();
+                String lotno = temp.get("REFIND_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
 
-                    if (storeRepository.hasAnotherType(checkForGoodStore)) {
-                        storeRepository.updatePaymentTo2(checkForGoodStore);
-                    } else if (!storeRepository.hasAnotherType(checkForAllType)) {
-                        StoreReq infoObj = StoreReq.builder()
-                                .storeName((String) temp.get("FACLT_NM"))
-                                .zipCode(zipcd)
-                                .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
-                                .lotAddr(lotno)
-                                .wgs84Lat(lat)
-                                .wgs84Logt(logt)
-                                .payment(1)
-                                .prodName("")
-                                .prodTarget("")
-                                .build();
+                int zipcd = temp.get("REFINE_ZIP_CD") == null ? 0 : Integer.parseInt((String) temp.get("REFINE_ZIP_CD"));
 
-                        storeRepository.save(infoObj);
 
-                    }
-
+                //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
+                if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
+                    continue;
+                } else {
+                    lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
+                    logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
                 }
 
 
+                StoreReq checkForGoodStore = StoreReq.builder()
+                        .storeName((String) temp.get("FACLT_NM"))
+                        .zipCode(zipcd)
+                        .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
+                        .lotAddr(lotno)
+                        .wgs84Lat(lat)
+                        .wgs84Logt(logt)
+                        .payment(0)
+                        .prodName("")
+                        .prodTarget("")
+                        .build();
 
-        }catch(Exception e){
+
+                StoreReq checkForAllType = StoreReq.builder()
+                        .storeName((String) temp.get("FACLT_NM"))
+                        .zipCode(zipcd)
+                        .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
+                        .lotAddr(lotno)
+                        .wgs84Lat(lat)
+                        .wgs84Logt(logt)
+                        .payment(2)
+                        .prodName("")
+                        .prodTarget("")
+                        .build();
+
+                if (storeRepository.hasAnotherType(checkForGoodStore)) {
+                    storeRepository.updatePaymentTo2(checkForGoodStore);
+                } else if (!storeRepository.hasAnotherType(checkForAllType)) {
+                    StoreReq infoObj = StoreReq.builder()
+                            .storeName((String) temp.get("FACLT_NM"))
+                            .zipCode(zipcd)
+                            .roadAddr((String) temp.get("REFINE_ROADNM_ADDR"))
+                            .lotAddr(lotno)
+                            .wgs84Lat(lat)
+                            .wgs84Logt(logt)
+                            .payment(1)
+                            .prodName("")
+                            .prodTarget("")
+                            .build();
+
+                    storeRepository.save(infoObj);
+
+                }
+
+            }
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -173,7 +171,7 @@ public class UrlCallApiParser implements ApiParser{
             }
             URL finalUrl = url;
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                try{
+                try {
                     BufferedReader bf = new BufferedReader(new InputStreamReader(finalUrl.openStream(), "UTF-8"));
                     String result = bf.readLine();
 
@@ -264,7 +262,7 @@ public class UrlCallApiParser implements ApiParser{
                     }
 
 
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }, executorService);
@@ -274,111 +272,111 @@ public class UrlCallApiParser implements ApiParser{
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
     }
 
-    public void saveGoodStoreApi(){
+    public void saveGoodStoreApi() {
         int pIndex = 1;
         Long totalCnt = 0L;
 
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
         try {
-                URL url = new URL(makeUrl("GGGOODINFLSTOREST", "fb1025fa7b1145fbbbc2a843c0d8c10e", "json", pIndex, 1000));
-                BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-                String result = bf.readLine();
+            URL url = new URL(makeUrl("GGGOODINFLSTOREST", "fb1025fa7b1145fbbbc2a843c0d8c10e", "json", pIndex, 1000));
+            BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+            String result = bf.readLine();
 
 
-                JSONParser jsonParser = new JSONParser();
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-                JSONArray goodStore = (JSONArray) jsonObject.get("GGGOODINFLSTOREST");      //전체 json get(size=2(head, row))
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+            JSONArray goodStore = (JSONArray) jsonObject.get("GGGOODINFLSTOREST");      //전체 json get(size=2(head, row))
 
-                //casting head
-                JSONObject head = (JSONObject) goodStore.get(0);
-                JSONArray head2 = (JSONArray) head.get("head");
-                log.info("head={}", head2);
-                totalCnt = (Long) ((JSONObject) head2.get(0)).get("list_total_count");
-                log.info("cnt={}", totalCnt);
-                JSONObject apiResult = (JSONObject) ((JSONObject) head2.get(1)).get("RESULT");
-                String resultCode = (String) apiResult.get("CODE");
-                log.info("resCode={}", resultCode);
+            //casting head
+            JSONObject head = (JSONObject) goodStore.get(0);
+            JSONArray head2 = (JSONArray) head.get("head");
+            log.info("head={}", head2);
+            totalCnt = (Long) ((JSONObject) head2.get(0)).get("list_total_count");
+            log.info("cnt={}", totalCnt);
+            JSONObject apiResult = (JSONObject) ((JSONObject) head2.get(1)).get("RESULT");
+            String resultCode = (String) apiResult.get("CODE");
+            log.info("resCode={}", resultCode);
 
-                //casting body(row)
-                JSONObject row = (JSONObject) goodStore.get(1);
-                JSONArray infoArr = (JSONArray) row.get("row");
-
-
-                for (int i = 0; i < infoArr.size(); i++) {
-                    JSONObject temp = (JSONObject) infoArr.get(i);
-
-                    //check zip, location if null
-
-                    double lat, logt;
+            //casting body(row)
+            JSONObject row = (JSONObject) goodStore.get(1);
+            JSONArray infoArr = (JSONArray) row.get("row");
 
 
-                    //음식점이 아닌 가게는 추가하지 않음
-                    if (!((String) temp.get("INDUTYPE_NM")).equals("식음료")) {
-                        continue;
-                    }
+            for (int i = 0; i < infoArr.size(); i++) {
+                JSONObject temp = (JSONObject) infoArr.get(i);
 
-                    //정보가 없는 가게에 대한 String 처리
-                    String roadno = temp.get("REFINE_ROADNM_ADDR") == null ? "" : (String) temp.get("REFINE_ROADNM_ADDR");
+                //check zip, location if null
 
-                    String lotno = temp.get("REFINE_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
-
-                    int zipcd = temp.get("REFINE_ZIPNO") == null ? 0 : Integer.parseInt((String) temp.get("REFINE_ZIPNO"));
+                double lat, logt;
 
 
-                    //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
-                    if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
-                        continue;
-                    } else {
-                        lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
-                        logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
-                    }
-
-                    String prodName = temp.get("PROVSN_PRODLST_NM") == null ? "" : (String) temp.get("PROVSN_PRODLST_NM");
-
-                    String prodTarget = temp.get("PROVSN_TRGT_NM1") == null ? "" : (String) temp.get("PROVSN_TRGT_NM1");
-
-                    if (temp.get("PROVSN_TRGT_NM2") != null) {
-                        prodTarget += (String) temp.get("PROVSN_TRGT_NM2");
-                    }
-
-
-                    StoreReq checkFor1 = StoreReq.builder()
-                            .storeName((String) temp.get("CMPNM_NM"))
-                            .zipCode(zipcd)
-                            .roadAddr(roadno)
-                            .lotAddr(lotno)
-                            .wgs84Lat(lat)
-                            .wgs84Logt(logt)
-                            .payment(1)
-                            .prodName(prodName)
-                            .prodTarget(prodTarget)
-                            .build();
-
-                    StoreReq checkFor2 = StoreReq.builder()
-                            .storeName((String) temp.get("CMPNM_NM"))
-                            .zipCode(zipcd)
-                            .roadAddr(roadno)
-                            .lotAddr(lotno)
-                            .wgs84Lat(lat)
-                            .wgs84Logt(logt)
-                            .payment(2)
-                            .prodName(prodName)
-                            .prodTarget(prodTarget)
-                            .build();
-
-
-                    if (storeRepository.hasAnotherType(checkFor1)) {
-                        storeRepository.updatePaymentTo2(checkFor1);
-                    } else if (!storeRepository.hasAnotherType(checkFor2)) {
-                        StoreReq infoObj = new StoreReq((String) temp.get("CMPNM_NM"),
-                                zipcd,
-                                roadno,
-                                lotno,
-                                lat, logt, 0, prodName, prodTarget);
-                        storeRepository.save(infoObj);
-                    }
+                //음식점이 아닌 가게는 추가하지 않음
+                if (!((String) temp.get("INDUTYPE_NM")).equals("식음료")) {
+                    continue;
                 }
+
+                //정보가 없는 가게에 대한 String 처리
+                String roadno = temp.get("REFINE_ROADNM_ADDR") == null ? "" : (String) temp.get("REFINE_ROADNM_ADDR");
+
+                String lotno = temp.get("REFINE_LOTNO_ADDR") == null ? "" : (String) temp.get("REFINE_LOTNO_ADDR");
+
+                int zipcd = temp.get("REFINE_ZIPNO") == null ? 0 : Integer.parseInt((String) temp.get("REFINE_ZIPNO"));
+
+
+                //위치기반 서비스이므로 위치 정보가 없는 가게는 추가하지 않기로 함
+                if ((String) temp.get("REFINE_WGS84_LAT") == null || (String) temp.get("REFINE_WGS84_LOGT") == null) {
+                    continue;
+                } else {
+                    lat = Double.parseDouble((String) temp.get("REFINE_WGS84_LAT"));
+                    logt = Double.parseDouble((String) temp.get("REFINE_WGS84_LOGT"));
+                }
+
+                String prodName = temp.get("PROVSN_PRODLST_NM") == null ? "" : (String) temp.get("PROVSN_PRODLST_NM");
+
+                String prodTarget = temp.get("PROVSN_TRGT_NM1") == null ? "" : (String) temp.get("PROVSN_TRGT_NM1");
+
+                if (temp.get("PROVSN_TRGT_NM2") != null) {
+                    prodTarget += (String) temp.get("PROVSN_TRGT_NM2");
+                }
+
+
+                StoreReq checkFor1 = StoreReq.builder()
+                        .storeName((String) temp.get("CMPNM_NM"))
+                        .zipCode(zipcd)
+                        .roadAddr(roadno)
+                        .lotAddr(lotno)
+                        .wgs84Lat(lat)
+                        .wgs84Logt(logt)
+                        .payment(1)
+                        .prodName(prodName)
+                        .prodTarget(prodTarget)
+                        .build();
+
+                StoreReq checkFor2 = StoreReq.builder()
+                        .storeName((String) temp.get("CMPNM_NM"))
+                        .zipCode(zipcd)
+                        .roadAddr(roadno)
+                        .lotAddr(lotno)
+                        .wgs84Lat(lat)
+                        .wgs84Logt(logt)
+                        .payment(2)
+                        .prodName(prodName)
+                        .prodTarget(prodTarget)
+                        .build();
+
+
+                if (storeRepository.hasAnotherType(checkFor1)) {
+                    storeRepository.updatePaymentTo2(checkFor1);
+                } else if (!storeRepository.hasAnotherType(checkFor2)) {
+                    StoreReq infoObj = new StoreReq((String) temp.get("CMPNM_NM"),
+                            zipcd,
+                            roadno,
+                            lotno,
+                            lat, logt, 0, prodName, prodTarget);
+                    storeRepository.save(infoObj);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -502,8 +500,8 @@ public class UrlCallApiParser implements ApiParser{
     }
 
     @TimeTrace
-    public void saveHygieneApi(){
-        int pIndex=1;
+    public void saveHygieneApi() {
+        int pIndex = 1;
         Long totalCnt = 0L;
 
         List<CompletableFuture<Void>> futures = new ArrayList<>();
@@ -568,8 +566,7 @@ public class UrlCallApiParser implements ApiParser{
 
             }
 
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -585,7 +582,7 @@ public class UrlCallApiParser implements ApiParser{
             URL finalUrl = url;
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 try (BufferedReader bf = new BufferedReader(
-                        new InputStreamReader(finalUrl.openStream(), "UTF-8"))){
+                        new InputStreamReader(finalUrl.openStream(), "UTF-8"))) {
 
 
                     String result = bf.readLine();
@@ -656,11 +653,6 @@ public class UrlCallApiParser implements ApiParser{
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
     }
-
-
-
-
-
 
 
 }
