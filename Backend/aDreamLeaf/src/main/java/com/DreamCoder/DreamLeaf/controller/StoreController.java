@@ -43,12 +43,12 @@ public class StoreController {
         return storeService.findById(storeId, userCurReq);
     }
 
-    @PostMapping("/findByKeyword")
+    @PostMapping("/keyword")
     public List<SimpleStoreDto> findByKeyword(@RequestParam String keyword, @RequestBody(required = false) UserCurReq userCurReq){       //위치 정보가 있을 경우 거리 순으로 정렬, 없을 경우 별점 순으로 정렬
         return storeService.findByKeyword(keyword, userCurReq);
     }
 
-    @PostMapping("/findByCur")
+    @PostMapping("/cur")
     public List<SimpleStoreDto> findByCur(@RequestBody UserCurReq userCurReq){
         return storeService.findByCur(userCurReq);
     }
